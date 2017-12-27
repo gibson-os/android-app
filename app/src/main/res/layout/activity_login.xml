@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/alias"/>
+            android:hint="@string/login_alias"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/user"/>
+            android:hint="@string/login_user"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -46,7 +46,7 @@
         android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:passwordToggleContentDescription="@string/password"
+        app:passwordToggleContentDescription="@string/login_password"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@android:color/darker_gray">
 
@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="@string/password" />
+            android:hint="@string/login_password" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textUri"
-            android:hint="@string/url"/>
+            android:hint="@string/login_url"/>
 
     </android.support.design.widget.TextInputLayout>
 
