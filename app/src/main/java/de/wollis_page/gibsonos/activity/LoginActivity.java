@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                 List<Account> accounts = Account.find(Account.class, "alias = ?", s.toString());
 
                 if (accounts.size() > 0) {
-                    etAlias.setError(getString(R.string.login_error_alias_exists));
+                    etAlias.setError(getString(R.string.account_error_alias_exists));
                 }
             }
 
@@ -73,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 for (EditText editText : editTexts) {
                     if (editText.getText().toString().length() == 0) {
-                        editText.setError(getString(R.string.login_error_value_empty));
+                        editText.setError(getString(R.string.account_error_value_empty));
                     }
 
                     if (editText.getError() != null && editText.getError().toString().length() > 0) {
@@ -160,6 +161,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 Account account = new Account(alias, user, password, url);
                 account.save();
+
+                activity.finish();
+                activity.startActivity(new Intent(activity, MainActivity.class));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

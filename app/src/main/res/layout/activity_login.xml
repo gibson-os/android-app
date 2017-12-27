@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/login_alias"/>
+            android:hint="@string/account_alias"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/login_user"/>
+            android:hint="@string/account_user"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -46,7 +46,7 @@
         android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:passwordToggleContentDescription="@string/login_password"
+        app:passwordToggleContentDescription="@string/account_password"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@android:color/darker_gray">
 
@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="@string/login_password" />
+            android:hint="@string/account_password" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -70,13 +70,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textUri"
-            android:hint="@string/login_url"/>
+            android:hint="@string/account_url"/>
 
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/login"
-        android:text="@string/login"
+        android:text="@string/account_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
