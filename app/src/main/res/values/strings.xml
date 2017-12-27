@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Gibson OS</string>
+    <string name="alias">Alias</string>
+    <string name="user">User</string>
+    <string name="password">Password</string>
+    <string name="url">Url</string>
+    <string name="login">Login</string>
 </resources>
