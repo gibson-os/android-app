@@ -47,6 +47,15 @@ public class DataStore {
 	public DataStore(Context context, String url) {
 		
 		this.context = context;
+
+		if (!url.endsWith("/")) {
+			url += '/';
+		}
+
+		if (!url.startsWith("http://") && !url.startsWith("https://")) {
+			url = "http://" + url;
+		}
+
 		this.url = url;
 		deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		

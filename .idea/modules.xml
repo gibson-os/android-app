@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\dieter.thiess\StudioProjects\gibsonOsApp\GibsonOSApp.iml" filepath="C:\Users\dieter.thiess\StudioProjects\gibsonOsApp\GibsonOSApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GibsonOSApp.iml" filepath="$PROJECT_DIR$/GibsonOSApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\dieter.thiess\StudioProjects\gibsonOsApp\app\app.iml" filepath="C:\Users\dieter.thiess\StudioProjects\gibsonOsApp\app\app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/gibsonOsApp.iml" filepath="$PROJECT_DIR$/.idea/gibsonOsApp.iml" />
     </modules>
   </component>
 </project>
