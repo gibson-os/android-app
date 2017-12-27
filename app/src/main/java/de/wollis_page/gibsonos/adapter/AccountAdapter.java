@@ -39,7 +39,9 @@ public class AccountAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = inflater.inflate(R.layout.account_list_item, parent, false);
-        ((TextView) view.findViewById(R.id.account_list_item_alias)).setText(accounts.get(position).getAlias());
+        ((TextView) view.findViewById(R.id.alias)).setText(accounts.get(position).getAlias());
+        ((TextView) view.findViewById(R.id.url)).setText(accounts.get(position).getUrl());
+        ((TextView) view.findViewById(R.id.user)).setText(accounts.get(position).getUser());
 
         return view;
     }
