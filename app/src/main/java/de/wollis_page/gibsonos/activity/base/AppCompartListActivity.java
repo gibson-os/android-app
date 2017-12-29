@@ -4,11 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-/**
- * Created by Meins on 27.12.2017.
- */
-
-public class AppCompartListActivity extends AppCompatActivity {
+public abstract class AppCompartListActivity extends AppCompatActivity {
     private ListView listView;
 
     protected ListView getListView() {
