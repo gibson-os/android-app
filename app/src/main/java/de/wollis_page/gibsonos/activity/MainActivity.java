@@ -70,7 +70,6 @@ public class MainActivity extends AppCompartListActivity implements NavigationVi
         //int id = item.getItemId();
         Toast.makeText(getApplicationContext(), "Selected: " + item.getTitle(), Toast.LENGTH_LONG).show();
 
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public abstract class AppCompartListActivity extends AppCompatActivity {
+public abstract class AppCompartListActivity extends GibsonOsActivity {
     private ListView listView;
 
     protected ListView getListView() {

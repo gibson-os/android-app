@@ -1,9 +1,14 @@
 package de.wollis_page.gibsonos.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.orm.SugarRecord;
 
 
-public class Account extends SugarRecord {
+public class Account extends SugarRecord implements Parcelable {
+
+    public static final String EXTRA_ACCOUNT = "account";
 
     private String alias;
     private String user;
@@ -21,6 +26,9 @@ public class Account extends SugarRecord {
         setUrl(url);
     }
 
+    private Account(Parcel in) {
+        readFromParcel(in);
+    }
 
     public String getAlias() {
         return alias;
@@ -52,5 +60,35 @@ public class Account extends SugarRecord {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(getId());
+        dest.writeString(getAlias());
+        dest.writeString(getUser());
+        dest.writeString(getPassword());
+        dest.writeString(getUrl());
+    }
+
+    private void readFromParcel(Parcel in) {
+        setId(in.readLong());
+        setAlias(in.readString());
+        setUser(in.readString());
+        setPassword(in.readString());
+        setUrl(in.readString());
+    }
+
+    public static final Parcelable.Creator<Account> CREATOR = new Parcelable.Creator<Account>() {
+        public Account createFromParcel(Parcel in) {
+            return new Account(in);
+        }
+
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
+
+    public int describeContents() {
+        return 0;
     }
 }

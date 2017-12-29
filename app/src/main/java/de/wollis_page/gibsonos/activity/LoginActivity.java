@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,11 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.wollis_page.gibsonos.R;
+import de.wollis_page.gibsonos.activity.base.GibsonOsActivity;
 import de.wollis_page.gibsonos.helper.Config;
 import de.wollis_page.gibsonos.helper.DataStore;
 import de.wollis_page.gibsonos.model.Account;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends GibsonOsActivity {
 
     private List<EditText> editTexts;
     private EditText etAlias, etUser, etPassword, etUrl;
