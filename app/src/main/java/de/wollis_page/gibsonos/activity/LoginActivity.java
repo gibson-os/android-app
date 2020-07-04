@@ -1,34 +1,26 @@
 package de.wollis_page.gibsonos.activity;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 import de.wollis_page.gibsonos.R;
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity;
-import de.wollis_page.gibsonos.helper.Config;
-import de.wollis_page.gibsonos.helper.DataStore;
 import de.wollis_page.gibsonos.model.Account;
+import de.wollis_page.gibsonos.task.UserTask;
 
 public class LoginActivity extends GibsonOsActivity {
 
     private List<EditText> editTexts;
     private EditText etAlias, etUser, etPassword, etUrl;
-    private Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,109 +59,50 @@ public class LoginActivity extends GibsonOsActivity {
             }
         });
 
-        btnLogin = findViewById(R.id.login);
+        final LoginActivity activity = this;
+        Button btnLogin = findViewById(R.id.login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                boolean hasErrors = false;
+            public void onClick(final View v) {
+            boolean hasErrors = false;
 
-                for (EditText editText : editTexts) {
-                    if (editText.getText().toString().length() == 0) {
-                        editText.setError(getString(R.string.account_error_value_empty));
-                    }
-
-                    if (editText.getError() != null && editText.getError().toString().length() > 0) {
-                        hasErrors = true;
-                    }
+            for (EditText editText : editTexts) {
+                if (editText.getText().toString().length() == 0) {
+                    editText.setError(getString(R.string.account_error_value_empty));
                 }
 
-                if (hasErrors) {
-                    return;
+                if (editText.getError() != null && editText.getError().toString().length() > 0) {
+                    hasErrors = true;
                 }
+            }
 
-                new LoginTask(LoginActivity.this).execute();
+            if (hasErrors) {
+                return;
+            }
+
+            CompletableFuture.supplyAsync(new Supplier<Object>() {
+                @Override
+                public Object get() {
+                    //v.setEnabled(false);
+                    Account account = UserTask.login(
+                        activity,
+                        etUrl.getText().toString(),
+                        etUser.getText().toString(),
+                        etPassword.getText().toString()
+                    );
+                    assert account != null;
+                    account.setAlias(etAlias.getText().toString());
+                    account.setUrl(etUrl.getText().toString());
+                    account.save();
+
+                    //v.setEnabled(true);
+                    setResult(RESULT_OK);
+                    activity.finish();
+
+                    return null;
+                }
+            });
             }
         });
-    }
-
-    private static class LoginTask extends AsyncTask<Void, Void, JSONObject> {
-
-        private WeakReference<LoginActivity> activityReference;
-        private String alias, user, password, url;
-
-        LoginTask(LoginActivity context) {
-            activityReference = new WeakReference<>(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            LoginActivity activity = activityReference.get();
-            if (activity == null) return;
-
-            alias = activity.etAlias.getText().toString();
-            user = activity.etUser.getText().toString();
-            password = activity.etPassword.getText().toString();
-            url = activity.etUrl.getText().toString();
-
-            activity.btnLogin.setEnabled(false);
-        }
-
-        @Override
-        protected JSONObject doInBackground(Void... params) {
-            LoginActivity activity = activityReference.get();
-            if (activity == null) return null;
-
-            DataStore dataStore = new DataStore(activity, url);
-            dataStore.setRoute("system", "user", "login");
-            dataStore.addParam("username", user);
-            dataStore.addParam("password", password);
-            dataStore.addParam("model", Build.MODEL);
-
-            String response = dataStore.getData();
-
-            try {
-                return new JSONObject(response);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            LoginActivity activity = activityReference.get();
-            if (activity == null) return;
-
-            activity.btnLogin.setEnabled(true);
-
-            if (result == null) return;
-
-            try {
-                if (result.has("failure") && result.getBoolean("failure")) {
-                    return;
-                }
-
-                if (result.has("success") && !result.getBoolean("success")) {
-                    return;
-                }
-
-                if (result.has("device") && result.getBoolean("device")) {
-                    return;
-                }
-
-                Account account = new Account(alias, user, password, url);
-                account.save();
-
-                activity.finish();
-                activity.startActivity(new Intent(activity, MainActivity.class));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            Log.i(Config.LOG_TAG, result.toString());
-        }
     }
 }

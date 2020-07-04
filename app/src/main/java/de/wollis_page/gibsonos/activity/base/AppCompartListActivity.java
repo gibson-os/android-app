@@ -1,6 +1,5 @@
 package de.wollis_page.gibsonos.activity.base;
 
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 

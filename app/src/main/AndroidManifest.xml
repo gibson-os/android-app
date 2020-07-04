@@ -43,7 +43,7 @@
 
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/account_title"/>
+            android:label="@string/login_title"/>
 
         <activity
             android:name=".activity.MainActivity"
@@ -56,6 +56,10 @@
             </intent-filter>
 
         </activity>
+
+        <activity
+            android:name=".activity.DesktopActivity"
+            android:label="@string/desktop_title"/>
 
     </application>
 

@@ -10,4 +10,6 @@
     <string name="account_error_value_empty">Empty is not allowed.</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="login_title">Login</string>
+    <string name="desktop_title">Desktop</string>
 </resources>

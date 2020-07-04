@@ -3,26 +3,29 @@ package de.wollis_page.gibsonos.helper;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.provider.Settings.Secure;
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Objects;
 
-import javax.net.ssl.HttpsURLConnection;
+import androidx.annotation.NonNull;
+import de.wollis_page.gibsonos.exception.ResponseException;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 @SuppressWarnings("unused")
-public class DataStore {
+public class DataStore
+{
 	private HashMap<String, String> params = new HashMap<>();
 	
 	private boolean useCache = false;
@@ -35,17 +38,18 @@ public class DataStore {
 	private static final char PARAMETER_EQUALS_CHAR = '=';
 	
 	private int timeout = 20000;
-	
-	private String deviceId;
+
+	private String token;
 	private String url;
 	
 	private String module, task, action;
 	
 	private Context context;
-	
-	
-	public DataStore(Context context, String url) {
-		
+
+	OkHttpClient client = new OkHttpClient();
+
+	public DataStore(Context context, String url, String token)
+	{
 		this.context = context;
 
 		if (!url.endsWith("/")) {
@@ -57,59 +61,59 @@ public class DataStore {
 		}
 
 		this.url = url;
-		deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
-		
-		//HttpParams httpParameters = new BasicHttpParams();
-		//HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);
-		//HttpConnectionParams.setSoTimeout(httpParameters, timeout);
-		
-		//httpClient = new DefaultHttpClient(httpParameters);
-		
-		//params = new ArrayList<NameValuePair>();
-		
-		addParam("device", deviceId);
+		this.token = token;
 	}
 	
-	public void addParamEncoded(String key, String value) {
+	public void addParamEncoded(String key, String value)
+	{
 		value = value.trim();
+
 		try {
 			value = URLEncoder.encode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+
 		params.put(key, value);
 	}
 	
-	public void addParam(String key, String value) {
+	public void addParam(String key, String value)
+	{
 		value = value.trim();
 		params.put(key, value);
 	}
 	
-	public void addParam(String key, Float value) {
+	public void addParam(String key, Float value)
+	{
 		params.put(key, value.toString());
 	}
 	
-	public void addParam(String key, double value) {
+	public void addParam(String key, double value)
+	{
 		params.put(key, Double.valueOf(value).toString());
 	}
 	
-	public void addParam(String key, int value) {
+	public void addParam(String key, int value)
+	{
 		params.put(key, Integer.valueOf(value).toString());
 	}
 	
-	public void addParam(String key, boolean value) {
+	public void addParam(String key, boolean value)
+	{
 		params.put(key, Boolean.valueOf(value).toString());
 	}
 	
-	public void clearParams() {
+	public void clearParams()
+	{
 		params.clear();
 	}
 	
-	public void removeParam(String key) {
+	public void removeParam(String key)
+	{
 		params.remove(key);
 	}
 	
-	public String getData() {
+	public JSONObject getData() throws ResponseException {
 	    if (isOnline()) {
 	        return _execute();
 	    }
@@ -117,92 +121,79 @@ public class DataStore {
 	    return null;
 	}
 	
-	private String _getParams() {
-		StringBuilder result = new StringBuilder();
-		if (params != null) {
-			boolean first = true;
-			for (String key : params.keySet()) {
-				if (!first) {
-					result.append(PARAMETER_DELIMITER);
-	            }
-				
-				try {
-					result.append(key).append(PARAMETER_EQUALS_CHAR).append(URLEncoder.encode(params.get(key), "UTF-8"));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-				first = false;
-			}
+	private @NonNull RequestBody _getParams() {
+
+		if (
+			this.params == null ||
+			this.params.size() == 0
+		) {
+			return RequestBody.create("", MediaType.get("application/json; charset=utf-8"));
 		}
-		
-		return result.toString();
+
+		MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+		for (String key : this.params.keySet()) {
+			builder.addFormDataPart(key, Objects.requireNonNull(this.params.get(key)));
+		}
+
+		return builder.build();
 	}
-	
-	private String _execute() {
-		
-		String requestUrl = getUrl();
-		Log.i(Config.LOG_TAG, requestUrl);
-		
-    	try {
-    		
-    		URL url = new URL(requestUrl);
-    		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    		conn.addRequestProperty("X-Requested-With", "XMLHttpRequest");
-            conn.setReadTimeout(timeout);
-            conn.setConnectTimeout(timeout);
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
 
+	private JSONObject _execute() throws ResponseException {
+		String url = this.getUrl();
+		Log.i(Config.LOG_TAG, url);
 
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(_getParams());
+		Request.Builder requestBuilder = new Request.Builder()
+			.url(getUrl())
+			.header("X-Requested-With", "XMLHttpRequest")
+			.post(this._getParams())
+		;
 
-            writer.flush();
-            writer.close();
-            os.close();
-            int responseCode=conn.getResponseCode();
-            StringBuilder result = new StringBuilder();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line=br.readLine()) != null) {
-                	result.append(line);
-                }
-            }
-            else {
-            	result = new StringBuilder();
-            }
-            
-            Log.i(Config.LOG_TAG, result.toString());
-    		
-    		try {
-				JSONObject jsonObject = new JSONObject(result.toString());
-				if (!jsonObject.getBoolean("success")) {
-					JSONObject data = jsonObject.getJSONObject("data");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+		if (this.token.length() > 0) {
+			Log.i(Config.LOG_TAG, "X-Device-Token: " + this.token);
+			requestBuilder.header("X-Device-Token", this.token);
+		}
+
+		try {
+			Response response = client.newCall(requestBuilder.build()).execute();
+			Log.i(Config.LOG_TAG, "Response code: " + response.code());
+			String body = Objects.requireNonNull(response.body()).string();
+			Log.i(Config.LOG_TAG, "Response body: " + body);
+
+			JSONObject jsonResponse = new JSONObject(body);
+
+			if (
+				(jsonResponse.has("failure") && jsonResponse.getBoolean("failure")) ||
+				(jsonResponse.has("success") && !jsonResponse.getBoolean("success"))
+			) {
+				String message = jsonResponse.has("message")
+					? jsonResponse.getString("message")
+					: "Fehler bei der Abfrage!"
+				;
+
+				throw new ResponseException(message, jsonResponse, response.code());
 			}
-    		return result.toString();
-    		
-        } catch (Exception e) {
-    		e.printStackTrace();
+
+			return jsonResponse;
+		} catch (IOException | JSONException e) {
+			e.printStackTrace();
 		}
     	
     	return null;
 	}
 	
-	private String getUrl() {
+	private String getUrl()
+	{
 		String url = this.url;
+
 		if (module != null) {
 			url += module + SEPERATOR;
 		}
+
 		if (task != null) { 
 			url += task + SEPERATOR;
 		}
+
 		if (action != null) {
 			url += action;
 		}
@@ -210,56 +201,68 @@ public class DataStore {
 		return url;
 	}
 	
-    private boolean isOnline() {
+    private boolean isOnline()
+	{
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
 
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
-	public String getModule() {
+	public String getModule()
+	{
 		return module;
 	}
 
-	public void setModule(String module) {
+	public void setModule(String module)
+	{
 		this.module = module;
 	}
 
-	public String getTask() {
+	public String getTask()
+	{
 		return task;
 	}
 
-	public void setTask(String task) {
+	public void setTask(String task)
+	{
 		this.task = task;
 	}
 
-	public String getAction() {
+	public String getAction()
+	{
 		return action;
 	}
 
-	public void setAction(String action) {
+	public void setAction(String action)
+	{
 		this.action = action;
 	}
 
-	public void setRoute(String module, String task, String action) {
+	public void setRoute(String module, String task, String action)
+	{
 	    setModule(module);
 	    setTask(task);
 	    setAction(action);
     }
 	
-	public void setTimeout(int timeout) {
+	public void setTimeout(int timeout)
+	{
 		this.timeout = timeout;
 	}
 
-	public boolean getCache() {
+	public boolean getCache()
+	{
 		return useCache;
 	}
 
-	public void setCache(boolean useCache) {
+	public void setCache(boolean useCache)
+	{
 		this.useCache = useCache;
 	}
 	
-	public void setCacheTimeToLive(int ttl) {
+	public void setCacheTimeToLive(int ttl)
+	{
 		cacheTTL = ttl;
 	}
 	

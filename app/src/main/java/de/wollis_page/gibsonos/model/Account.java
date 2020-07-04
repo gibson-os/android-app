@@ -5,25 +5,37 @@ import android.os.Parcelable;
 
 import com.orm.SugarRecord;
 
+import java.util.Objects;
 
-public class Account extends SugarRecord implements Parcelable {
+import androidx.annotation.NonNull;
 
+
+public class Account extends SugarRecord implements Parcelable
+{
     public static final String EXTRA_ACCOUNT = "account";
 
     private String alias;
     private String user;
-    private String password;
+    private String token;
     private String url;
 
-    public Account() {
-
+    public Account()
+    {
     }
 
-    public Account(String alias, String user, String password, String url) {
-        setAlias(alias);
+    public Account(@NonNull String user, @NonNull String url, String token)
+    {
         setUser(user);
-        setPassword(password);
+        setToken(url);
+        setToken(token);
+    }
+
+    public Account(@NonNull String user, @NonNull String url, String token, String alias)
+    {
+        setUser(user);
         setUrl(url);
+        setToken(token);
+        setAlias(alias);
     }
 
     private Account(Parcel in) {
@@ -42,23 +54,23 @@ public class Account extends SugarRecord implements Parcelable {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(@NonNull String user) {
         this.user = user;
     }
 
-    public String getPassword() {
-        return password;
+    public String getToken() {
+        return token;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(@NonNull String url) {
         this.url = url;
     }
 
@@ -66,16 +78,16 @@ public class Account extends SugarRecord implements Parcelable {
         dest.writeLong(getId());
         dest.writeString(getAlias());
         dest.writeString(getUser());
-        dest.writeString(getPassword());
+        dest.writeString(getToken());
         dest.writeString(getUrl());
     }
 
     private void readFromParcel(Parcel in) {
         setId(in.readLong());
         setAlias(in.readString());
-        setUser(in.readString());
-        setPassword(in.readString());
-        setUrl(in.readString());
+        setUser(Objects.requireNonNull(in.readString()));
+        setToken(in.readString());
+        setUrl(Objects.requireNonNull(in.readString()));
     }
 
     public static final Parcelable.Creator<Account> CREATOR = new Parcelable.Creator<Account>() {
