@@ -14,8 +14,8 @@ public class DesktopActivity extends AppCompartListActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_desktop);
+        super.onCreate(savedInstanceState);
 
         final DesktopActivity activity = this;
         CompletableFuture.supplyAsync(new Supplier<Object>() {

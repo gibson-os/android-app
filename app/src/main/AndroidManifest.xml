@@ -43,7 +43,7 @@
 
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/login_title"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".activity.MainActivity"
@@ -59,7 +59,7 @@
 
         <activity
             android:name=".activity.DesktopActivity"
-            android:label="@string/desktop_title"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 

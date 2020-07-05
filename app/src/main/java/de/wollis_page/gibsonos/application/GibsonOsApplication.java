@@ -10,8 +10,8 @@ import java.util.List;
 import de.wollis_page.gibsonos.helper.Config;
 import de.wollis_page.gibsonos.process.Process;
 
-public class GibsonOsApplication extends SugarApp {
-
+public class GibsonOsApplication extends SugarApp
+{
     List<Process> processList = new ArrayList<>();
 
     public void addToNavigation(Process process) {

@@ -9,7 +9,6 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
-
 public class Account extends SugarRecord implements Parcelable
 {
     public static final String EXTRA_ACCOUNT = "account";

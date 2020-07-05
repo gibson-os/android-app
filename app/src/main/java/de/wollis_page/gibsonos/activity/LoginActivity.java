@@ -24,8 +24,8 @@ public class LoginActivity extends GibsonOsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        super.onCreate(savedInstanceState);
 
         etAlias = findViewById(R.id.alias);
         etUser = findViewById(R.id.user);
