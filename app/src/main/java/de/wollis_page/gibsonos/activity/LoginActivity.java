@@ -95,6 +95,8 @@ public class LoginActivity extends GibsonOsActivity {
                     account.setUrl(etUrl.getText().toString());
                     account.save();
 
+                    activity.application.addAccount(account);
+
                     //v.setEnabled(true);
                     setResult(RESULT_OK);
                     activity.finish();

@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 
 public class Item
 {
+    @NonNull
     private String module;
+    @NonNull
     private String task;
+    @NonNull
     private String action;
     private String text;
     private String icon;
@@ -33,6 +36,7 @@ public class Item
         //this.params = params;
     }
 
+    @NonNull
     public String getModule() {
         return module;
     }
@@ -41,6 +45,7 @@ public class Item
         this.module = module;
     }
 
+    @NonNull
     public String getTask() {
         return task;
     }
@@ -49,6 +54,7 @@ public class Item
         this.task = task;
     }
 
+    @NonNull
     public String getAction() {
         return action;
     }

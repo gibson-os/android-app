@@ -7,6 +7,8 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,7 +20,6 @@ import de.wollis_page.gibsonos.R;
 import de.wollis_page.gibsonos.activity.DesktopActivity;
 import de.wollis_page.gibsonos.application.GibsonOsApplication;
 import de.wollis_page.gibsonos.model.Account;
-import de.wollis_page.gibsonos.process.Process;
 
 public abstract class GibsonOsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     final public static String ACCOUNT_KEY = "account";
@@ -44,16 +45,18 @@ public abstract class GibsonOsActivity extends AppCompatActivity implements Navi
         Toolbar toolbar = findViewById(R.id.toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
-        if (drawer != null) {
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
-        }
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         this.navigationView = findViewById(R.id.nav_view);
         this.navigationView.setNavigationItemSelectedListener(this);
         this.accountMenu = this.navigationView.getMenu();
-        this.application.addToNavigation(new Process(getTitle().toString(), this.account, this.getClass(), data));
+        this.loadNavigation();
+
+        if (this.account != null) {
+            this.application.addProcess(this);
+        }
     }
 
     @Override
@@ -71,15 +74,22 @@ public abstract class GibsonOsActivity extends AppCompatActivity implements Navi
     }
 
     protected void runActivity(Class<?> activity, Account account) {
-        //this.finish();
-
         Intent intent = new Intent(this, activity);
         intent.putExtra(ACCOUNT_KEY, account);
 
+        this.finish();
         this.startActivity(intent);
     }
 
     public Account getAccount() {
         return account;
+    }
+
+    private void loadNavigation() {
+        final List<Account> accounts = this.application.getAccountModels();
+
+        for (Account account : accounts) {
+            this.accountMenu.add(account.getId().intValue(),Menu.NONE,Menu.NONE, account.getAlias());
+        }
     }
 }

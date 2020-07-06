@@ -8,7 +8,9 @@ import de.wollis_page.gibsonos.dto.desktop.Item;
 
 public class Desktop
 {
+    @NonNull
     private List<Item> desktop;
+    @NonNull
     private List<App> apps;
 
     public Desktop(@NonNull List<Item> desktop, @NonNull List<App> apps) {
@@ -16,6 +18,7 @@ public class Desktop
         this.apps = apps;
     }
 
+    @NonNull
     public List<Item> getDesktop() {
         return desktop;
     }
@@ -24,6 +27,7 @@ public class Desktop
         this.desktop = desktop;
     }
 
+    @NonNull
     public List<App> getApps() {
         return apps;
     }

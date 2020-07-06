@@ -2,7 +2,6 @@ package de.wollis_page.gibsonos.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -22,28 +21,15 @@ public class MainActivity extends AppCompartListActivity
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-        final List<Account> accounts = this.loadList();
-
-        for (Account account : accounts) {
-            this.accountMenu.add(account.getId().intValue(),Menu.NONE,Menu.NONE, account.getAlias());
-        }
+        this.loadList();
 
         FloatingActionButton addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //finish();
                 startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), 100);
             }
         });
-
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                runActivity(DesktopActivity.class, accounts.get(i));
-            }
-        });
-
     }
 
     @Override
@@ -55,16 +41,21 @@ public class MainActivity extends AppCompartListActivity
         }
     }
 
-    private List<Account> loadList() {
-        final List<Account> accounts = Account.listAll(Account.class);
+    private void loadList() {
+        final List<Account> accounts = this.application.getAccountModels();
 
         if (accounts.size() == 0) {
-            this.startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), 100);
+            this.startActivityForResult(new Intent(this.getApplicationContext(), LoginActivity.class), 100);
         }
 
-        AccountAdapter accountAdapter = new AccountAdapter(getApplicationContext(), accounts);
-        setListAdapter(accountAdapter);
+        AccountAdapter accountAdapter = new AccountAdapter(this.getApplicationContext(), accounts);
+        this.setListAdapter(accountAdapter);
 
-        return accounts;
+        this.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                runActivity(DesktopActivity.class, accounts.get(i));
+            }
+        });
     }
 }

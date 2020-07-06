@@ -14,8 +14,10 @@ public class Account extends SugarRecord implements Parcelable
     public static final String EXTRA_ACCOUNT = "account";
 
     private String alias;
+    @NonNull
     private String user;
     private String token;
+    @NonNull
     private String url;
 
     public Account()
@@ -49,6 +51,7 @@ public class Account extends SugarRecord implements Parcelable
         this.alias = alias;
     }
 
+    @NonNull
     public String getUser() {
         return user;
     }
@@ -65,6 +68,7 @@ public class Account extends SugarRecord implements Parcelable
         this.token = token;
     }
 
+    @NonNull
     public String getUrl() {
         return url;
     }
