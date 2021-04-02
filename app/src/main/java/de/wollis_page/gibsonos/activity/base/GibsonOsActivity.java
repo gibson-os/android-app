@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.activity.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import de.wollis_page.gibsonos.R;
 import de.wollis_page.gibsonos.activity.DesktopActivity;
 import de.wollis_page.gibsonos.application.GibsonOsApplication;
+import de.wollis_page.gibsonos.helper.Config;
 import de.wollis_page.gibsonos.model.Account;
 
 public abstract class GibsonOsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,22 +37,23 @@ public abstract class GibsonOsActivity extends AppCompatActivity implements Navi
         this.application = (GibsonOsApplication) getApplication();
 
         Intent intent = getIntent();
-        Bundle data  = intent.getExtras();
         this.account = null;
 
         if (intent.hasExtra(Account.EXTRA_ACCOUNT)) {
             this.account = intent.getParcelableExtra(Account.EXTRA_ACCOUNT);
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        this.navigationView = findViewById(R.id.nav_view);
+        this.navigationView = this.findViewById(R.id.nav_view);
+        Log.d(Config.LOG_TAG, "onCreate: before");
         this.navigationView.setNavigationItemSelectedListener(this);
+        Log.d(Config.LOG_TAG, "onCreate: after");
         this.accountMenu = this.navigationView.getMenu();
         this.loadNavigation();
 
@@ -61,8 +64,8 @@ public abstract class GibsonOsActivity extends AppCompatActivity implements Navi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+        Log.d(Config.LOG_TAG, "onNavigationItemSelected: ");
         this.runActivity(DesktopActivity.class, Account.findById(Account.class, item.getGroupId()));
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 

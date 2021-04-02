@@ -11,16 +11,17 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import de.wollis_page.gibsonos.R;
-import de.wollis_page.gibsonos.activity.base.AppCompartListActivity;
+import de.wollis_page.gibsonos.activity.base.AppCompatListActivity;
 import de.wollis_page.gibsonos.adapter.AccountAdapter;
 import de.wollis_page.gibsonos.model.Account;
 
-public class MainActivity extends AppCompartListActivity
+public class MainActivity extends AppCompatListActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
+        this.navigationView.setNavigationItemSelectedListener(this);
         this.loadList();
 
         FloatingActionButton addButton = findViewById(R.id.addButton);

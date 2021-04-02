@@ -6,12 +6,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import de.wollis_page.gibsonos.R;
-import de.wollis_page.gibsonos.activity.base.AppCompartListActivity;
+import de.wollis_page.gibsonos.activity.base.AppCompatListActivity;
 import de.wollis_page.gibsonos.adapter.DesktopAdapter;
 import de.wollis_page.gibsonos.dto.Desktop;
 import de.wollis_page.gibsonos.task.DesktopTask;
 
-public class DesktopActivity extends AppCompartListActivity
+public class DesktopActivity extends AppCompatListActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
