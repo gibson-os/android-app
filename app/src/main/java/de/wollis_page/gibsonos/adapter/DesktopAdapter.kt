@@ -25,7 +25,7 @@ class DesktopAdapter(context: Context?, desktop: List<Item>) : BaseAdapter() {
         return i.toLong()
     }
 
-    override fun getView(i: Int, convertView: View, viewGroup: ViewGroup): View {
+    override fun getView(i: Int, convertView: View?, viewGroup: ViewGroup): View {
         val view = inflater.inflate(R.layout.desktop_list_item, viewGroup, false)
         (view.findViewById<View>(R.id.text) as TextView).text = desktop[i].text
         return view

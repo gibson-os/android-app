@@ -25,7 +25,7 @@ class AccountAdapter(context: Context?, accounts: List<Account>) : BaseAdapter()
         return accounts[position].id
     }
 
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = inflater.inflate(R.layout.account_list_item, parent, false)
         (view.findViewById<View>(R.id.alias) as TextView).text = accounts[position].alias
         (view.findViewById<View>(R.id.url) as TextView).text = accounts[position].url

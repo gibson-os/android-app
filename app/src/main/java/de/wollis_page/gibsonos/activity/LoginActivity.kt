@@ -17,7 +17,7 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 
 class LoginActivity : GibsonOsActivity() {
-    private var editTexts: MutableList<EditText?>? = null
+    private var editTexts: MutableList<EditText?> = ArrayList()
     private var etAlias: EditText? = null
     private var etUser: EditText? = null
     private var etPassword: EditText? = null
@@ -28,24 +28,24 @@ class LoginActivity : GibsonOsActivity() {
         super.onCreate(savedInstanceState)
         val me = this
 
-        me.etAlias = me.findViewById<EditText>(R.id.alias)
-        me.etUser = me.findViewById<EditText>(R.id.user)
-        me.etPassword = me.findViewById<EditText>(R.id.password)
-        me.etUrl = me.findViewById<EditText>(R.id.url)
+        me.etAlias = me.findViewById(R.id.alias) as EditText
+        me.etUser = me.findViewById(R.id.user) as EditText
+        me.etPassword = me.findViewById(R.id.password) as EditText
+        me.etUrl = me.findViewById(R.id.url) as EditText
 
         me.editTexts = ArrayList()
-        me.editTexts?.add(me.etAlias)
-        me.editTexts?.add(me.etUser)
-        me.editTexts?.add(me.etPassword)
-        me.editTexts?.add(etUrl)
+        me.editTexts.add(me.etAlias)
+        me.editTexts.add(me.etUser)
+        me.editTexts.add(me.etPassword)
+        me.editTexts.add(etUrl)
 
         me.etAlias?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val accounts: List<Account> = SugarRecord.find<Account>(Account::class.java, "alias = ?", s.toString())
+                val accounts: List<Account> = SugarRecord.find(Account::class.java, "alias = ?", s.toString())
 
-                if (accounts.size > 0) {
-                    me.etAlias?.setError(getString(R.string.account_error_alias_exists))
+                if (accounts.isNotEmpty()) {
+                    me.etAlias?.error = getString(R.string.account_error_alias_exists)
                 }
             }
 
@@ -54,33 +54,35 @@ class LoginActivity : GibsonOsActivity() {
 
         val btnLogin = findViewById<Button>(R.id.login)
 
-        btnLogin.setOnClickListener(View.OnClickListener {
+        btnLogin.setOnClickListener OnClickListener@{
             Log.i(Config.LOG_TAG, "Click")
             var hasErrors = false
 
             for (editText in me.editTexts as ArrayList<EditText?>) {
-                if (editText?.text.toString().isEmpty()) {
+                if (editText?.text.isNullOrBlank()) {
                     editText?.error = getString(R.string.account_error_value_empty)
                 }
 
-                if (editText?.error.toString().isNotEmpty()) {
+                if (!editText?.error.isNullOrEmpty()) {
                     hasErrors = true
                 }
             }
 
             if (hasErrors) {
+                Log.i(Config.LOG_TAG, "Login has errors")
+
                 return@OnClickListener
             }
 
-            CompletableFuture.supplyAsync<Any> { //v.setEnabled(false);
+            CompletableFuture.supplyAsync<Any>{
+                //v.setEnabled(false);
                 val account = login(
-                        me,
-                        me.etUrl?.getText().toString(),
-                        me.etUser?.getText().toString(),
-                        me.etPassword?.getText().toString()
+                    me,
+                    me.etUrl?.text.toString(),
+                    me.etUser?.text.toString(),
+                    me.etPassword?.text.toString()
                 )!!
-                account.alias = me.etAlias?.getText().toString()
-                account.url = me.etUrl?.getText().toString()
+                account.alias = me.etAlias?.text.toString()
                 account.save()
                 me.application?.addAccount(account)
 
@@ -88,6 +90,6 @@ class LoginActivity : GibsonOsActivity() {
                 setResult(RESULT_OK)
                 me.finish()
             }
-        })
+        }
     }
 }
