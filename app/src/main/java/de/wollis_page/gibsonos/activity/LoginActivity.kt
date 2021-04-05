@@ -55,7 +55,6 @@ class LoginActivity : GibsonOsActivity() {
         val btnLogin = findViewById<Button>(R.id.login)
 
         btnLogin.setOnClickListener OnClickListener@{
-            Log.i(Config.LOG_TAG, "Click")
             var hasErrors = false
 
             for (editText in me.editTexts as ArrayList<EditText?>) {
@@ -69,12 +68,12 @@ class LoginActivity : GibsonOsActivity() {
             }
 
             if (hasErrors) {
-                Log.i(Config.LOG_TAG, "Login has errors")
+                Log.d(Config.LOG_TAG, "Login has errors")
 
                 return@OnClickListener
             }
 
-            CompletableFuture.supplyAsync<Any>{
+            CompletableFuture.supplyAsync<Any> {
                 //v.setEnabled(false);
                 val account = login(
                     me,

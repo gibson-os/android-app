@@ -40,7 +40,7 @@ class MainActivity : AppCompatListActivity() {
         val accountAdapter = AccountAdapter(this.applicationContext, accounts)
         setListAdapter(accountAdapter)
         this.listView?.onItemClickListener = OnItemClickListener {
-            adapterView, view, i, l -> runActivity(DesktopActivity::class.java, accounts[i])
+            _, _, i, _ -> runActivity(DesktopActivity::class.java, accounts[i])
         }
     }
 }

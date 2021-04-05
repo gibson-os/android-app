@@ -14,18 +14,36 @@ import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.util.*
 
-class DataStore(context: Context, url: String, token: String) {
+class DataStore(private val context: Context, url: String, private val token: String) {
     private val params: HashMap<String, String> = HashMap()
-    private var cacheTTL = (2 * 60 * 1000).toLong()
-    val SEPERATOR = "/"
-    private var timeout = 20000
-    private val token: String
+    private val seperator = "/"
     private val url: String
+    private val client: OkHttpClient = OkHttpClient()
+
+    private var cacheTTL = (2 * 60 * 1000).toLong()
+    private var timeout = 20000
     private var module: String? = null
     private var task: String? = null
     private var action: String? = null
-    private val context: Context
-    var client = OkHttpClient()
+
+    init {
+        Log.d(Config.LOG_TAG, "init")
+        var cleanUrl = url
+        Log.d(Config.LOG_TAG, cleanUrl)
+
+        if (!cleanUrl.endsWith("/")) {
+            cleanUrl += '/'
+        }
+
+        Log.d(Config.LOG_TAG, cleanUrl)
+
+        if (!cleanUrl.startsWith("http://") && !cleanUrl.startsWith("https://")) {
+            cleanUrl = "http://$cleanUrl"
+        }
+
+        Log.d(Config.LOG_TAG, cleanUrl)
+        this.url = cleanUrl
+    }
 
     fun addParamEncoded(key: String, value: String) {
         var cleanValue = value.trim { it <= ' ' }
@@ -92,9 +110,9 @@ class DataStore(context: Context, url: String, token: String) {
         val url = getUrl()
         Log.i(Config.LOG_TAG, url)
         val requestBuilder = Request.Builder()
-                .url(url)
-                .header("X-Requested-With", "XMLHttpRequest")
-                .post(getParams())
+            .url(url)
+            .header("X-Requested-With", "XMLHttpRequest")
+            .post(getParams())
 
         if (this.token.isNotEmpty()) {
             Log.i(Config.LOG_TAG, "X-Device-Token: " + this.token)
@@ -128,11 +146,11 @@ class DataStore(context: Context, url: String, token: String) {
         var url = this.url
 
         if (module != null) {
-            url += module + SEPERATOR
+            url += module + seperator
         }
 
         if (task != null) {
-            url += task + SEPERATOR
+            url += task + seperator
         }
 
         if (action != null) {
@@ -162,21 +180,5 @@ class DataStore(context: Context, url: String, token: String) {
 
     fun setCacheTimeToLive(ttl: Int) {
         this.cacheTTL = ttl.toLong()
-    }
-
-    init {
-        var cleanUrl = url
-        this.context = context
-
-        if (!url.endsWith("/")) {
-            cleanUrl += '/'
-        }
-
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            cleanUrl = "http://$url"
-        }
-
-        this.url = cleanUrl
-        this.token = token
     }
 }
