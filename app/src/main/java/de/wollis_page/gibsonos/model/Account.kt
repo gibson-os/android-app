@@ -2,7 +2,9 @@ package de.wollis_page.gibsonos.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import com.orm.SugarRecord
+import de.wollis_page.gibsonos.helper.Config
 import java.util.*
 
 class Account : SugarRecord, Parcelable {
@@ -14,12 +16,16 @@ class Account : SugarRecord, Parcelable {
     constructor() {}
 
     constructor(user: String, url: String, token: String?) {
+        Log.i(Config.LOG_TAG, "Create Account Model $user@$url with token $token")
+
         this.user = user
-        this.token = url
+        this.url = url
         this.token = token
     }
 
     constructor(user: String, url: String, token: String?, alias: String?) {
+        Log.i(Config.LOG_TAG, "Create Account Model $user@$url with token $token under alias $alias")
+
         this.user = user
         this.url = url
         this.token = token
@@ -39,11 +45,11 @@ class Account : SugarRecord, Parcelable {
     }
 
     private fun readFromParcel(`in`: Parcel) {
-        id = `in`.readLong()
-        alias = `in`.readString()
-        user = `in`.readString().toString()
-        token = `in`.readString()
-        url = `in`.readString().toString()
+        this.id = `in`.readLong()
+        this.alias = `in`.readString()
+        this.user = `in`.readString().toString()
+        this.token = `in`.readString()
+        this.url = `in`.readString().toString()
     }
 
     override fun describeContents(): Int {

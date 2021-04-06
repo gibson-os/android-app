@@ -12,6 +12,9 @@ object DesktopTask {
     @JvmStatic
     fun index(context: Context?, account: Account): Desktop? {
         Log.d(Config.LOG_TAG, "desktop index start")
+        Log.d(Config.LOG_TAG, context.toString())
+        Log.d(Config.LOG_TAG, account.url)
+        Log.d(Config.LOG_TAG, account.token.toString())
         val dataStore = DataStore(context!!, account.url, account.token!!)
         Log.d(Config.LOG_TAG, "desktop index")
         dataStore.setRoute("core", "desktop", "index")
