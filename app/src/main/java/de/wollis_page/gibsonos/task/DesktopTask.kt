@@ -11,17 +11,11 @@ import de.wollis_page.gibsonos.model.Account
 object DesktopTask {
     @JvmStatic
     fun index(context: Context?, account: Account): Desktop? {
-        Log.d(Config.LOG_TAG, "desktop index start")
-        Log.d(Config.LOG_TAG, context.toString())
-        Log.d(Config.LOG_TAG, account.url)
-        Log.d(Config.LOG_TAG, account.token.toString())
         val dataStore = DataStore(context!!, account.url, account.token!!)
-        Log.d(Config.LOG_TAG, "desktop index")
         dataStore.setRoute("core", "desktop", "index")
-        Log.d(Config.LOG_TAG, "desktop index jo")
 
         try {
-            val response = dataStore.data
+            val response = dataStore.getData()
             val moshi = Moshi.Builder().build()
             val jsonAdapter = moshi.adapter(Desktop::class.java)
             return jsonAdapter.fromJson(response?.getJSONObject("data").toString())

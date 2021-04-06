@@ -27,21 +27,16 @@ class DataStore(private val context: Context, url: String, private val token: St
     private var action: String? = null
 
     init {
-        Log.d(Config.LOG_TAG, "init")
         var cleanUrl = url
-        Log.d(Config.LOG_TAG, cleanUrl)
 
         if (!cleanUrl.endsWith("/")) {
             cleanUrl += '/'
         }
 
-        Log.d(Config.LOG_TAG, cleanUrl)
-
         if (!cleanUrl.startsWith("http://") && !cleanUrl.startsWith("https://")) {
             cleanUrl = "http://$cleanUrl"
         }
 
-        Log.d(Config.LOG_TAG, cleanUrl)
         this.url = cleanUrl
     }
 
@@ -85,21 +80,23 @@ class DataStore(private val context: Context, url: String, private val token: St
         this.params.remove(key)
     }
 
-    @get:Throws(ResponseException::class)
-    val data: JSONObject?
-        get() = if (isOnline) {
+    fun getData(): JSONObject? {
+        return if (isOnline()) {
             execute()
-        } else null
+        } else {
+            null
+        }
+    }
 
     private fun getParams(): RequestBody {
         if (this.params.size == 0) {
             return "".toRequestBody("application/json; charset=utf-8".toMediaType())
         }
 
-        val builder: MultipartBody.Builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
 
-        for (key in params.keys) {
-            builder.addFormDataPart(key, params[key].toString())
+        for (key in this.params.keys) {
+            builder.addFormDataPart(key, this.params[key]!!)
         }
 
         return builder.build()
@@ -107,10 +104,10 @@ class DataStore(private val context: Context, url: String, private val token: St
 
     @Throws(ResponseException::class)
     private fun execute(): JSONObject? {
-        val url = getUrl()
-        Log.i(Config.LOG_TAG, url)
+        val requestUrl = getUrl()
+        Log.i(Config.LOG_TAG, requestUrl)
         val requestBuilder = Request.Builder()
-            .url(url)
+            .url(requestUrl)
             .header("X-Requested-With", "XMLHttpRequest")
             .post(getParams())
 
@@ -120,11 +117,10 @@ class DataStore(private val context: Context, url: String, private val token: St
         }
 
         try {
-            val response = client.newCall(requestBuilder.build()).execute()
+            val response = this.client.newCall(requestBuilder.build()).execute()
             Log.i(Config.LOG_TAG, "Response code: " + response.code)
-            val body = Objects.requireNonNull(response.body).toString()
-            Log.i(Config.LOG_TAG, "Response body: $body")
-            val jsonResponse = JSONObject(body)
+            val jsonResponse = JSONObject(response.body!!.string())
+            Log.i(Config.LOG_TAG, "Response body: $jsonResponse")
 
             if (jsonResponse.has("failure") && jsonResponse.getBoolean("failure") ||
                     jsonResponse.has("success") && !jsonResponse.getBoolean("success")) {
@@ -143,30 +139,29 @@ class DataStore(private val context: Context, url: String, private val token: St
     }
 
     private fun getUrl(): String {
-        var url = this.url
+        var buildedUrl = this.url
 
-        if (module != null) {
-            url += module + seperator
+        if (!this.module.isNullOrBlank()) {
+            buildedUrl += this.module + this.seperator
         }
 
-        if (task != null) {
-            url += task + seperator
+        if (!this.task.isNullOrBlank()) {
+            buildedUrl += this.task + this.seperator
         }
 
-        if (action != null) {
-            url += action
+        if (!this.action.isNullOrBlank()) {
+            buildedUrl += this.action
         }
 
-        return url
+        return buildedUrl
     }
 
-    private val isOnline: Boolean
-        get() {
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+    private fun isOnline(): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
 
-            return activeNetworkInfo != null && activeNetworkInfo.isConnected
-        }
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
 
     fun setRoute(module: String?, task: String?, action: String?) {
         this.module = module

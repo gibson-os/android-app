@@ -14,11 +14,9 @@ class DesktopActivity : AppCompatListActivity() {
         setContentView(R.layout.activity_desktop)
         super.onCreate(savedInstanceState)
         val me = this
-        Log.d(Config.LOG_TAG, "Desktop Activity")
+
         CompletableFuture.supplyAsync<Any> {
-            Log.d(Config.LOG_TAG, "Hmm")
             val desktop = index(me, me.account!!)
-            Log.d(Config.LOG_TAG, "Desktop Adapter")
             val desktopAdapter = DesktopAdapter(me.applicationContext, desktop!!.desktop)
             me.setListAdapter(desktopAdapter)
         }
