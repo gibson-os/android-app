@@ -70,8 +70,14 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     private fun loadNavigation() {
         val accounts = application!!.accountModels
+
         for (account in accounts) {
             accountMenu!!.add(account.id.toInt(), Menu.NONE, Menu.NONE, account.alias)
+            var subMenuId = account.id.toInt() * 1000
+
+            for (app in account.apps) {
+                accountMenu!!.addSubMenu(subMenuId++, Menu.NONE, Menu.NONE, app.text)
+            }
         }
     }
 

@@ -2,18 +2,19 @@ package de.wollis_page.gibsonos.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.AdapterView.OnItemClickListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.base.AppCompatListActivity
+import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.adapter.AccountAdapter
 
-class MainActivity : AppCompatListActivity() {
+class MainActivity : ListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
         super.onCreate(savedInstanceState)
+
         navigationView?.setNavigationItemSelectedListener(this)
         loadList()
+
         val addButton = findViewById<FloatingActionButton>(R.id.addButton)
         addButton.setOnClickListener { startActivityForResult(Intent(applicationContext, LoginActivity::class.java), 100) }
     }
@@ -33,14 +34,10 @@ class MainActivity : AppCompatListActivity() {
             return
         }
 
-        if (accounts.size == 0) {
+        if (accounts.isEmpty()) {
             this.startActivityForResult(Intent(this.applicationContext, LoginActivity::class.java), 100)
         }
 
-        val accountAdapter = AccountAdapter(this.applicationContext, accounts)
-        setListAdapter(accountAdapter)
-        this.listView?.onItemClickListener = OnItemClickListener {
-            _, _, i, _ -> runActivity(DesktopActivity::class.java, accounts[i])
-        }
+        this.listView.adapter = AccountAdapter(this.applicationContext, accounts)
     }
 }

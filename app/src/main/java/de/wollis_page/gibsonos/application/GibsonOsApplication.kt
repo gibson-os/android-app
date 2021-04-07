@@ -7,7 +7,7 @@ import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.process.Process
-import java.util.*
+import kotlin.collections.ArrayList
 import de.wollis_page.gibsonos.model.Account as AccountModel
 
 class GibsonOsApplication : SugarApp() {
@@ -52,9 +52,9 @@ class GibsonOsApplication : SugarApp() {
         return null
     }
 
-    val accountModels: List<AccountModel>
+    val accountModels: ArrayList<AccountModel>
         get() {
-            val accounts: MutableList<AccountModel> = ArrayList()
+            val accounts: ArrayList<AccountModel> = ArrayList()
 
             for (accountDto in this.accounts) {
                 accounts.add(accountDto.account)

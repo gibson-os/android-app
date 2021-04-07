@@ -8,3 +8,5 @@
 .externalNativeBuild
 local.properties
 /.idea/modules.xml
+/.idea/caches
+>Pr

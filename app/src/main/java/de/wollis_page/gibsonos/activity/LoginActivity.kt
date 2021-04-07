@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import com.orm.SugarRecord
@@ -12,7 +11,7 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
-import de.wollis_page.gibsonos.task.UserTask.login
+import de.wollis_page.gibsonos.task.UserTask
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
@@ -75,7 +74,7 @@ class LoginActivity : GibsonOsActivity() {
 
             CompletableFuture.supplyAsync<Any> {
                 //v.setEnabled(false);
-                val account = login(
+                val account = UserTask.login(
                     me,
                     me.etUrl?.text.toString(),
                     me.etUser?.text.toString(),

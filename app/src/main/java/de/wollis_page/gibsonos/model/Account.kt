@@ -4,14 +4,16 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
 import com.orm.SugarRecord
+import de.wollis_page.gibsonos.dto.desktop.App
 import de.wollis_page.gibsonos.helper.Config
-import java.util.*
+import kotlin.collections.ArrayList
 
 class Account : SugarRecord, Parcelable {
     var alias: String? = null
     var user: String = ""
     var token: String? = null
     var url: String = ""
+    var apps: MutableList<App> = ArrayList()
 
     constructor() {}
 
@@ -37,11 +39,12 @@ class Account : SugarRecord, Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeLong(id)
-        dest.writeString(alias)
-        dest.writeString(user)
-        dest.writeString(token)
-        dest.writeString(url)
+        dest.writeLong(this.id)
+        dest.writeString(this.alias)
+        dest.writeString(this.user)
+        dest.writeString(this.token)
+        dest.writeString(this.url)
+        dest.writeList(this.apps)
     }
 
     private fun readFromParcel(`in`: Parcel) {
@@ -50,6 +53,7 @@ class Account : SugarRecord, Parcelable {
         this.user = `in`.readString().toString()
         this.token = `in`.readString()
         this.url = `in`.readString().toString()
+        `in`.readList(this.apps, App::class.java.classLoader)
     }
 
     override fun describeContents(): Int {
