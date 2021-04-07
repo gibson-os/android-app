@@ -1,11 +1,14 @@
 package de.wollis_page.gibsonos.dto
 
+import de.wollis_page.gibsonos.dto.desktop.App
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.process.Process
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Account(val account: Account) {
-    private var processes: MutableList<Process>
+    private var processes: MutableList<Process> = ArrayList()
+    var apps: MutableList<App> = ArrayList()
 
     fun getProcesses(): List<Process> {
         return processes
@@ -21,9 +24,5 @@ class Account(val account: Account) {
 
     fun removeProccess(process: Process) {
         processes.remove(process)
-    }
-
-    init {
-        processes = ArrayList()
     }
 }

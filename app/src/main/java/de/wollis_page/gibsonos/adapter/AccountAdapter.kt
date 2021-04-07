@@ -35,7 +35,6 @@ class AccountAdapter(context: Context, private val accounts: ArrayList<Account>)
         }
 
         fun bind(account: Account) {
-            Log.d(Config.LOG_TAG, "Bind account")
             this.account = account
 
             (view.findViewById<View>(R.id.alias) as TextView).text = account.alias

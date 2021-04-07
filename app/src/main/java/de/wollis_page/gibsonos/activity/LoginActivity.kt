@@ -82,7 +82,7 @@ class LoginActivity : GibsonOsActivity() {
                 )!!
                 account.alias = me.etAlias?.text.toString()
                 account.save()
-                me.application?.addAccount(account)
+                me.application.addAccount(account)
 
                 //v.setEnabled(true);
                 setResult(RESULT_OK)

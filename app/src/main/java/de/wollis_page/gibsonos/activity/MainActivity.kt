@@ -6,13 +6,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.adapter.AccountAdapter
+import java.util.concurrent.CompletableFuture
 
 class MainActivity : ListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
         super.onCreate(savedInstanceState)
 
-        navigationView?.setNavigationItemSelectedListener(this)
+//        navigationView?.setNavigationItemSelectedListener(this)
         loadList()
 
         val addButton = findViewById<FloatingActionButton>(R.id.addButton)
@@ -28,11 +29,7 @@ class MainActivity : ListActivity() {
     }
 
     private fun loadList() {
-        val accounts = application?.accountModels
-
-        if (accounts === null) {
-            return
-        }
+        val accounts = this.application.accountModels
 
         if (accounts.isEmpty()) {
             this.startActivityForResult(Intent(this.applicationContext, LoginActivity::class.java), 100)

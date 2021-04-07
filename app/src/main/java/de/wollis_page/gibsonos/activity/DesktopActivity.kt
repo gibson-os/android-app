@@ -12,13 +12,16 @@ class DesktopActivity : ListActivity() {
         setContentView(R.layout.activity_desktop)
         super.onCreate(savedInstanceState)
         val me = this
+        val adapter = DesktopAdapter(me.applicationContext)
+        me.listView.adapter = adapter
 
         CompletableFuture.supplyAsync<Any> {
             val desktop = DesktopTask.index(me, me.account!!)
-            val desktopAdapter = DesktopAdapter(me.applicationContext, desktop!!.desktop)
 
-            me.listView.adapter = desktopAdapter
-            me.account!!.apps = desktop.apps
+            me.application.getAccountById(me.account!!.id)!!.apps = desktop!!.apps
+            adapter.desktop = desktop.desktop
+            adapter.notifyDataSetChanged()
+            me.loadNavigation()
         }
     }
 }

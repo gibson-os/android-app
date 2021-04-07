@@ -21,18 +21,16 @@ import de.wollis_page.gibsonos.model.Account
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     var account: Account? = null
         private set
-    protected var application: GibsonOsApplication? = null
-    protected var navigationView: NavigationView? = null
-    protected var accountMenu: Menu? = null
+    protected lateinit var application: GibsonOsApplication
+    protected lateinit var accountMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        application = getApplication() as GibsonOsApplication
         val intent = intent
-        account = null
+        this.application = getApplication() as GibsonOsApplication
 
         if (intent.hasExtra(Account.EXTRA_ACCOUNT)) {
-            account = intent.getParcelableExtra(Account.EXTRA_ACCOUNT)
+            this.account = intent.getParcelableExtra(Account.EXTRA_ACCOUNT)
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -41,15 +39,10 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
         drawer.addDrawerListener(toggle)
         toggle.syncState()
-        val navigationView = this.findViewById<NavigationView>(R.id.nav_view)
-        Log.d(Config.LOG_TAG, "onCreate: before")
-        navigationView.setNavigationItemSelectedListener(this)
-        Log.d(Config.LOG_TAG, "onCreate: after")
-        accountMenu = navigationView.getMenu()
         loadNavigation()
 
-        if (account != null) {
-            application!!.addProcess(this)
+        if (this.account != null) {
+            this.application.addProcess(this)
         }
     }
 
@@ -68,15 +61,20 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         this.startActivity(intent)
     }
 
-    private fun loadNavigation() {
-        val accounts = application!!.accountModels
+    fun loadNavigation() {
+        val navigationView = this.findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
+        this.accountMenu = navigationView.getMenu()
+        val accounts = this.application.getAccounts()
 
         for (account in accounts) {
-            accountMenu!!.add(account.id.toInt(), Menu.NONE, Menu.NONE, account.alias)
-            var subMenuId = account.id.toInt() * 1000
+            this.accountMenu.add(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
+            var subMenuId = account.account.id.toInt() * 1000
+            Log.d(Config.LOG_TAG, "Add menu")
 
             for (app in account.apps) {
-                accountMenu!!.addSubMenu(subMenuId++, Menu.NONE, Menu.NONE, app.text)
+                Log.d(Config.LOG_TAG, "Add submenu")
+                this.accountMenu.addSubMenu(subMenuId++, Menu.NONE, Menu.NONE, app.text)
             }
         }
     }

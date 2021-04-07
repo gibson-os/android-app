@@ -11,8 +11,9 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.desktop.Item
 import de.wollis_page.gibsonos.helper.Config
 
-class DesktopAdapter(context: Context, private val desktop: MutableList<Item>) : RecyclerView.Adapter<DesktopAdapter.ItemHolder>() {
+class DesktopAdapter(context: Context) : RecyclerView.Adapter<DesktopAdapter.ItemHolder>() {
     private val inflater = LayoutInflater.from(context)
+    var desktop: MutableList<Item> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(this.inflater.inflate(R.layout.desktop_list_item, parent, false))

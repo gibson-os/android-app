@@ -30,15 +30,21 @@ class GibsonOsApplication : SugarApp() {
         return accounts
     }
 
+    fun getAccountById(id: Long): Account? {
+        val me = this
+
+        return me.accounts.find { it.account.id == id }
+    }
+
     fun addProcess(activity: GibsonOsActivity) {
         val account = activity.account
         val accountDto = getAccount(account!!)!!
 
         accountDto.addProccess(Process(
-                activity.title.toString(),
-                account,
-                activity.javaClass,
-                activity.intent.extras!!
+            activity.title.toString(),
+            account,
+            activity.javaClass,
+            activity.intent.extras!!
         ))
     }
 
