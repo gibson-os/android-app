@@ -2,6 +2,8 @@ package de.wollis_page.gibsonos.activity.base
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -22,7 +24,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     var account: Account? = null
         private set
     protected lateinit var application: GibsonOsApplication
-    protected lateinit var accountMenu: Menu
+    private lateinit var navigationView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,9 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+
+        this.navigationView = this.findViewById(R.id.nav_view)
+        this.navigationView.setNavigationItemSelectedListener(this)
         loadNavigation()
 
         if (this.account != null) {
@@ -62,19 +67,19 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     }
 
     fun loadNavigation() {
-        val navigationView = this.findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-        this.accountMenu = navigationView.getMenu()
+        val accountMenu = navigationView.menu
+        Handler(Looper.getMainLooper()).post { accountMenu.clear() }
         val accounts = this.application.getAccounts()
 
         for (account in accounts) {
-            this.accountMenu.add(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
+            accountMenu.add(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
             var subMenuId = account.account.id.toInt() * 1000
             Log.d(Config.LOG_TAG, "Add menu")
+            Log.d(Config.LOG_TAG, account.apps.size.toString())
 
             for (app in account.apps) {
                 Log.d(Config.LOG_TAG, "Add submenu")
-                this.accountMenu.addSubMenu(subMenuId++, Menu.NONE, Menu.NONE, app.text)
+                accountMenu.addSubMenu(subMenuId++, Menu.NONE, Menu.NONE, app.text)
             }
         }
     }

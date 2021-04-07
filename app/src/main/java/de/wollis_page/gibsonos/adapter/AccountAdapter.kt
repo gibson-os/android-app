@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.DesktopActivity
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
-import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 
-class AccountAdapter(context: Context, private val accounts: ArrayList<Account>) : RecyclerView.Adapter<AccountAdapter.AccountHolder>() {
+class AccountAdapter(context: Context) : RecyclerView.Adapter<AccountAdapter.AccountHolder>() {
     private val inflater = LayoutInflater.from(context)
+    var accounts: MutableList<Account> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountHolder {
         return AccountHolder(this.inflater.inflate(R.layout.account_list_item, parent, false))
