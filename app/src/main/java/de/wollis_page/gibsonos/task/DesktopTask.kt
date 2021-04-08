@@ -1,16 +1,17 @@
 package de.wollis_page.gibsonos.task
 
-import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Desktop
 import de.wollis_page.gibsonos.helper.DataStore
 import de.wollis_page.gibsonos.model.Account
 
 object DesktopTask {
-    fun index(context: Context?, account: Account): Desktop? {
+    fun index(context: GibsonOsActivity?, account: Account): Desktop? {
         val dataStore = DataStore(context!!, account.url, account.token!!)
         dataStore.setRoute("core", "desktop", "index")
+        context.showLoading()
 
         try {
             val response = dataStore.getData()
@@ -19,6 +20,8 @@ object DesktopTask {
             return jsonAdapter.fromJson(response?.getJSONObject("data").toString())
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+            context.hideLoading()
         }
 
         return null

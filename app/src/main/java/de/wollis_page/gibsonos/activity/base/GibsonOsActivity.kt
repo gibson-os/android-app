@@ -7,6 +7,9 @@ import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AlphaAnimation
+import android.widget.FrameLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,6 +28,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         private set
     protected lateinit var application: GibsonOsApplication
     private lateinit var navigationView: NavigationView
+    private lateinit var progressBarHolder: FrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         this.navigationView = this.findViewById(R.id.nav_view)
         this.navigationView.setNavigationItemSelectedListener(this)
         loadNavigation()
+
+        this.progressBarHolder = this.findViewById(R.id.progressBarHolder)
 
         if (this.account != null) {
             this.application.addProcess(this)
@@ -67,20 +73,42 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     }
 
     fun loadNavigation() {
-        val accountMenu = navigationView.menu
-        Handler(Looper.getMainLooper()).post { accountMenu.clear() }
-        val accounts = this.application.getAccounts()
+        Handler(Looper.getMainLooper()).post {
+            val accountMenu = navigationView.menu
+            accountMenu.clear()
+            val accounts = this.application.getAccounts()
 
-        for (account in accounts) {
-            accountMenu.add(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
-            var subMenuId = account.account.id.toInt() * 1000
-            Log.d(Config.LOG_TAG, "Add menu")
-            Log.d(Config.LOG_TAG, account.apps.size.toString())
+            for (account in accounts) {
+                accountMenu.add(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
+                var subMenuId = account.account.id.toInt() * 1000
+                Log.d(Config.LOG_TAG, "Add menu")
+                Log.d(Config.LOG_TAG, account.apps.size.toString())
 
-            for (app in account.apps) {
-                Log.d(Config.LOG_TAG, "Add submenu")
-                accountMenu.addSubMenu(subMenuId++, Menu.NONE, Menu.NONE, app.text)
+                for (app in account.apps) {
+                    Log.d(Config.LOG_TAG, "Add submenu")
+                    accountMenu.addSubMenu(app.text)
+                }
             }
+        }
+    }
+
+    fun showLoading() {
+        val inAnimation = AlphaAnimation(0.0f, 1.0f)
+        inAnimation.setDuration(200)
+
+        Handler(Looper.getMainLooper()).post {
+            this.progressBarHolder.animation = inAnimation
+            this.progressBarHolder.visibility = View.VISIBLE
+        }
+    }
+
+    fun hideLoading() {
+        val outAnimation = AlphaAnimation(1.0f, 0.0f)
+        outAnimation.setDuration(200)
+
+        Handler(Looper.getMainLooper()).post {
+            this.progressBarHolder.animation = outAnimation
+            this.progressBarHolder.visibility = View.GONE
         }
     }
 
