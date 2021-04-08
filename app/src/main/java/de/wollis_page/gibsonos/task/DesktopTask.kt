@@ -26,6 +26,7 @@ object DesktopTask {
             val response = dataStore.getData()
             val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
             val jsonAdapter = moshi.adapter(Desktop::class.java)
+
             return jsonAdapter.fromJson(response?.getJSONObject("data").toString())
         } catch (e: Exception) {
             e.printStackTrace()
