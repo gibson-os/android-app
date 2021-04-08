@@ -18,7 +18,7 @@ class DesktopActivity : ListActivity() {
         setContentView(R.layout.activity_desktop)
         super.onCreate(savedInstanceState)
 
-        this.adapter = DesktopAdapter(this.applicationContext)
+        this.adapter = DesktopAdapter(this.applicationContext, this.account!!)
         this.listView.adapter = this.adapter
 
         this.loadDesktop()

@@ -74,18 +74,22 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     fun loadNavigation() {
         Handler(Looper.getMainLooper()).post {
-            val accountMenu = navigationView.menu
-            accountMenu.clear()
-            val accounts = this.application.getAccounts()
+            val menu = navigationView.menu
+            menu.clear()
+            val accounts = this.application.accounts
 
             for (account in accounts) {
-                accountMenu.add(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
-                var subMenuId = account.account.id.toInt() * 1000
-                Log.d(Config.LOG_TAG, "Add menu")
+                if (account.apps.size == 0) {
+                    menu.add(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
+                    continue
+                }
+
+                val accountMenu = menu.addSubMenu(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
+                Log.d(Config.LOG_TAG, "Add submenu " + account.account.alias)
                 Log.d(Config.LOG_TAG, account.apps.size.toString())
 
                 for (app in account.apps) {
-                    Log.d(Config.LOG_TAG, "Add submenu")
+                    Log.d(Config.LOG_TAG, "Add task")
                     accountMenu.addSubMenu(app.text)
                 }
             }

@@ -11,7 +11,7 @@ import kotlin.collections.ArrayList
 import de.wollis_page.gibsonos.model.Account as AccountModel
 
 class GibsonOsApplication : SugarApp() {
-    private val accounts: MutableList<Account> = ArrayList()
+    val accounts: MutableList<Account> = ArrayList()
 
     override fun onCreate() {
         super.onCreate()
@@ -23,17 +23,11 @@ class GibsonOsApplication : SugarApp() {
     }
 
     fun addAccount(account: AccountModel) {
-        accounts.add(Account(account))
-    }
-
-    fun getAccounts(): List<Account> {
-        return accounts
+        this.accounts.add(Account(account))
     }
 
     fun getAccountById(id: Long): Account? {
-        val me = this
-
-        return me.accounts.find { it.account.id == id }
+        return this.accounts.find { it.account.id == id }
     }
 
     fun addProcess(activity: GibsonOsActivity) {
