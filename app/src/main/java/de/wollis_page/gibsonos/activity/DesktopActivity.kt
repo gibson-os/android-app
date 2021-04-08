@@ -24,19 +24,24 @@ class DesktopActivity : ListActivity() {
         this.loadDesktop()
     }
 
-    fun loadDesktop() {
+    private fun loadDesktop() {
         val me = this
+        val account = this.account
 
         CompletableFuture.supplyAsync<Any> {
-            val desktop = DesktopTask.index(me, me.account!!)
+            if (account === null) {
+                return@supplyAsync
+            }
 
-            me.application.getAccountById(me.account!!.id)!!.apps = desktop!!.apps
+            val desktop = DesktopTask.index(me, account)
+
+            me.application.getAccountById(account.id)!!.apps = desktop!!.apps
             me.adapter.desktop = desktop.desktop
             Handler(Looper.getMainLooper()).post { adapter.notifyDataSetChanged() }
             Log.d(Config.LOG_TAG, desktop.apps.size.toString())
             me.loadNavigation()
 
-            null
+            return@supplyAsync
         }.exceptionally({ e -> e.printStackTrace() })
     }
 }

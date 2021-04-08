@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,6 +26,13 @@ import de.wollis_page.gibsonos.model.Account
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     var account: Account? = null
+        get() {
+            if (field == null) {
+                Toast.makeText(this, "Kein Account vorhanden!", Toast.LENGTH_LONG).show()
+            }
+
+            return field
+        }
         private set
     protected lateinit var application: GibsonOsApplication
     private lateinit var navigationView: NavigationView

@@ -8,8 +8,8 @@ import de.wollis_page.gibsonos.helper.DataStore
 import de.wollis_page.gibsonos.model.Account
 
 object DesktopTask {
-    fun index(context: GibsonOsActivity?, account: Account): Desktop? {
-        val dataStore = DataStore(context!!, account.url, account.token!!)
+    fun index(context: GibsonOsActivity, account: Account): Desktop? {
+        val dataStore = DataStore(context, account.url, account.token!!)
         dataStore.setRoute("core", "desktop", "index")
         context.showLoading()
 

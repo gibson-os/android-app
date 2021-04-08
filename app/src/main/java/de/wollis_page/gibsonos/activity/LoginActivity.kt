@@ -87,6 +87,7 @@ class LoginActivity : GibsonOsActivity() {
                 //v.setEnabled(true);
                 setResult(RESULT_OK)
                 me.finish()
+
                 null
             }.exceptionally({ e -> e.printStackTrace() })
         }
