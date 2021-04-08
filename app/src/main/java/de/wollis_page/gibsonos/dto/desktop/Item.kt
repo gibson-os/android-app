@@ -1,7 +1,5 @@
 package de.wollis_page.gibsonos.dto.desktop
 
-import de.wollis_page.gibsonos.dto.Account
-
 class Item(
     var module: String,
     var task: String,
@@ -9,5 +7,6 @@ class Item(
     var text: String,
     var icon: String,
     var thumb: String,
-    var customIcon: Int
+    var customIcon: Int,
+    //var params: LinkedHashMap<String, Any>
 )

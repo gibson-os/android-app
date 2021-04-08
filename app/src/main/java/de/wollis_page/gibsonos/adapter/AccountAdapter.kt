@@ -46,6 +46,7 @@ class AccountAdapter(context: Context) : RecyclerView.Adapter<AccountAdapter.Acc
             val context = this.itemView.context
             val intent = Intent(context, DesktopActivity::class.java)
             intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.account)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
             context.startActivity(intent)
         }

@@ -41,7 +41,7 @@ class DesktopAdapter(context: Context, private val account: Account) : RecyclerV
             this.item = item
 
             (view.findViewById<View>(R.id.text) as TextView).text = item.text
-            (view.findViewById<View>(R.id.module) as TextView).text = item.module
+            (view.findViewById<View>(R.id.module) as TextView).text = item.module + "_" + item.task
         }
 
         override fun onClick(p0: View?) {
@@ -52,6 +52,7 @@ class DesktopAdapter(context: Context, private val account: Account) : RecyclerV
                 val activityClass = Class.forName(packageName)
                 val intent = Intent(context, activityClass::class.java)
                 intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.account)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
                 context.startActivity(intent)
             } catch (e: ClassNotFoundException) {
