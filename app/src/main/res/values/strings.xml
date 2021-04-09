@@ -4,12 +4,20 @@
     <string name="account_alias">Alias</string>
     <string name="account_user">User</string>
     <string name="account_password">Password</string>
-    <string name="account_url">Url</string>
+    <string name="account_url">URL</string>
     <string name="account_save">Save</string>
     <string name="account_error_alias_exists">Aliasname already exists.</string>
     <string name="account_error_value_empty">Empty is not allowed.</string>
+    <string name="account_error_no_model_found">No account model found!</string>
+    <string name="account_error_not_exists">No account exists!</string>
+    <string name="account_error_no_token">Account token doesn\'t exists!</string>
+
+    <string name="login_title">Login</string>
+
+    <string name="desktop_title">Desktop</string>
+    <string name="desktop_error_load">Desktop can\'t be load!</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="login_title">Login</string>
-    <string name="desktop_title">Desktop</string>
+    <string name="not_implemented_yet">Not implemented yet!</string>
 </resources>

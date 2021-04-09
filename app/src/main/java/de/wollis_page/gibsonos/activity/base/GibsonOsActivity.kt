@@ -21,22 +21,29 @@ import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.DesktopActivity
 import de.wollis_page.gibsonos.application.GibsonOsApplication
+import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
+import java.lang.Exception
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    var account: Account? = null
-        get() {
-            if (field == null) {
-                Toast.makeText(this, "Kein Account vorhanden!", Toast.LENGTH_LONG).show()
-            }
-
-            return field
-        }
-        private set
+    private var account: Account? = null
     protected lateinit var application: GibsonOsApplication
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
+
+    @Throws(Exception::class)
+    fun getAccount(): Account {
+        val account = this.account
+
+        if (account == null) {
+            Toast.makeText(this, R.string.account_error_not_exists, Toast.LENGTH_LONG).show()
+
+            throw AccountException("No account set!")
+        }
+
+        return account
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +74,13 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         Log.d(Config.LOG_TAG, "onNavigationItemSelected: ")
-        runActivity(DesktopActivity::class.java, SugarRecord.findById<Account>(Account::class.java, item.groupId))
+        runActivity(DesktopActivity::class.java, SugarRecord.findById(Account::class.java, item.groupId))
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
-    protected fun runActivity(activity: Class<*>?, account: Account? = this.account) {
+    private fun runActivity(activity: Class<*>?, account: Account? = this.account) {
         val intent = Intent(this, activity)
         intent.putExtra(ACCOUNT_KEY, account)
         finish()
@@ -106,7 +113,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     fun showLoading() {
         val inAnimation = AlphaAnimation(0.0f, 1.0f)
-        inAnimation.setDuration(200)
+        inAnimation.duration = 200
 
         Handler(Looper.getMainLooper()).post {
             this.progressBarHolder.animation = inAnimation
@@ -116,7 +123,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     fun hideLoading() {
         val outAnimation = AlphaAnimation(1.0f, 0.0f)
-        outAnimation.setDuration(200)
+        outAnimation.duration = 200
 
         Handler(Looper.getMainLooper()).post {
             this.progressBarHolder.animation = outAnimation

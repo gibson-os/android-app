@@ -8,7 +8,7 @@ import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.adapter.AccountAdapter
 
 class MainActivity : ListActivity() {
-    lateinit var adapter: AccountAdapter
+    private lateinit var adapter: AccountAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)

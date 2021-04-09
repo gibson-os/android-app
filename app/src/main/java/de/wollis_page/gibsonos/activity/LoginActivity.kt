@@ -6,9 +6,11 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
+import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.task.UserTask
@@ -73,23 +75,25 @@ class LoginActivity : GibsonOsActivity() {
             }
 
             CompletableFuture.supplyAsync<Any> {
-                //v.setEnabled(false);
-                val account = UserTask.login(
-                    me,
-                    me.etUrl?.text.toString(),
-                    me.etUser?.text.toString(),
-                    me.etPassword?.text.toString()
-                )!!
-                account.alias = me.etAlias?.text.toString()
-                account.save()
-                me.application.addAccount(account)
+                try {
+                    val account = UserTask.login(
+                            me,
+                            me.etUrl?.text.toString(),
+                            me.etUser?.text.toString(),
+                            me.etPassword?.text.toString()
+                    )
+                    account.alias = me.etAlias?.text.toString()
+                    account.save()
+                    me.application.addAccount(account)
 
-                //v.setEnabled(true);
-                setResult(RESULT_OK)
-                me.finish()
+                    setResult(RESULT_OK)
+                    me.finish()
+                } catch (exception: ResponseException) {
+                    Toast.makeText(me, exception.message, Toast.LENGTH_SHORT).show()
+                }
 
                 null
-            }.exceptionally({ e -> e.printStackTrace() })
+            }.exceptionally { e -> e.printStackTrace() }
         }
     }
 }

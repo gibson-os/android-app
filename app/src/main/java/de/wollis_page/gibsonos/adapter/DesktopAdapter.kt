@@ -55,8 +55,8 @@ class DesktopAdapter(context: Context, private val account: Account) : RecyclerV
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
                 context.startActivity(intent)
-            } catch (e: ClassNotFoundException) {
-                Toast.makeText(context, "Ist leider noch nicht eingebaut!", Toast.LENGTH_LONG).show()
+            } catch (exception: ClassNotFoundException) {
+                Toast.makeText(context, R.string.not_implemented_yet, Toast.LENGTH_LONG).show()
             }
 
         }

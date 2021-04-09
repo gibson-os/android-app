@@ -5,6 +5,7 @@ import com.orm.SugarApp
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Account
+import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.process.Process
 import kotlin.collections.ArrayList
@@ -16,7 +17,7 @@ class GibsonOsApplication : SugarApp() {
     override fun onCreate() {
         super.onCreate()
 
-        for (account in SugarRecord.listAll<AccountModel>(AccountModel::class.java)) {
+        for (account in SugarRecord.listAll(AccountModel::class.java)) {
             Log.d(Config.LOG_TAG, "onCreate: " + account.id)
             addAccount(account)
         }
@@ -31,8 +32,9 @@ class GibsonOsApplication : SugarApp() {
     }
 
     fun addProcess(activity: GibsonOsActivity) {
-        val account = activity.account
-        val accountDto = getAccount(account!!)!!
+        val account = activity.getAccount()
+        val accountDto = this.getAccount(account)
+            ?: throw AccountException("Account " + account.id + " not found in store!")
 
         accountDto.addProccess(Process(
             activity.title.toString(),

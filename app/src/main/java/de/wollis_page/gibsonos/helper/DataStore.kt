@@ -3,6 +3,8 @@ package de.wollis_page.gibsonos.helper
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
+import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.ResponseException
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -14,7 +16,7 @@ import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.util.*
 
-class DataStore(private val context: Context, url: String, private val token: String) {
+class DataStore(private val context: GibsonOsActivity, url: String, private val token: String) {
     private val params: HashMap<String, String> = HashMap()
     private val seperator = "/"
     private val url: String
@@ -45,8 +47,8 @@ class DataStore(private val context: Context, url: String, private val token: St
 
         try {
             cleanValue = URLEncoder.encode(value, "UTF-8")
-        } catch (e: UnsupportedEncodingException) {
-            e.printStackTrace()
+        } catch (exception: UnsupportedEncodingException) {
+            exception.printStackTrace()
         }
 
         this.params[key] = cleanValue
@@ -80,12 +82,12 @@ class DataStore(private val context: Context, url: String, private val token: St
         this.params.remove(key)
     }
 
-    fun getData(): JSONObject? {
-        return if (isOnline()) {
-            execute()
-        } else {
-            null
-        }
+    fun getData(): JSONObject {
+//        return if (isOnline()) {
+            return execute()
+//        } else {
+//            null
+//        }
     }
 
     private fun getParams(): RequestBody {
@@ -103,7 +105,7 @@ class DataStore(private val context: Context, url: String, private val token: St
     }
 
     @Throws(ResponseException::class)
-    private fun execute(): JSONObject? {
+    private fun execute(): JSONObject {
         val requestUrl = getUrl()
         Log.i(Config.LOG_TAG, requestUrl)
         val requestBuilder = Request.Builder()
@@ -116,26 +118,37 @@ class DataStore(private val context: Context, url: String, private val token: St
             requestBuilder.header("X-Device-Token", this.token)
         }
 
+        val response = this.client.newCall(requestBuilder.build()).execute()
+        val body = response.body ?: throw ResponseException("Body is empty!", "", response.code)
+
         try {
-            val response = this.client.newCall(requestBuilder.build()).execute()
             Log.i(Config.LOG_TAG, "Response code: " + response.code)
-            val jsonResponse = JSONObject(response.body!!.string())
+            val jsonResponse = JSONObject(body.string())
             Log.i(Config.LOG_TAG, "Response body: $jsonResponse")
 
-            if (jsonResponse.has("failure") && jsonResponse.getBoolean("failure") ||
-                    jsonResponse.has("success") && !jsonResponse.getBoolean("success")) {
-                val message = if (jsonResponse.has("message")) jsonResponse.getString("message") else "Fehler bei der Abfrage!"
-                throw ResponseException(message, jsonResponse, response.code)
+            if (
+                (jsonResponse.has("failure") && jsonResponse.getBoolean("failure")) ||
+                (!jsonResponse.has("success") || !jsonResponse.getBoolean("success"))
+            ) {
+                val message = if (jsonResponse.has("data")) {
+                    val data = jsonResponse.getJSONObject("data")
+
+                    when {
+                        data.has("message") -> data.getString("message")
+                        data.has("msg") -> data.getString("msg")
+                        else -> "Response error!"
+                    }
+                } else "Response error!"
+
+                throw ResponseException(message, jsonResponse.toString(2), response.code)
             }
 
             return jsonResponse
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+        } catch (exception: JSONException) {
+            exception.printStackTrace()
 
-        return null
+            throw ResponseException("JSON can't be parsed. Maybe wrong URL?", body.string(), response.code)
+        }
     }
 
     private fun getUrl(): String {
