@@ -1,17 +1,12 @@
 package de.wollis_page.gibsonos.activity
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.adapter.DesktopAdapter
-import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.task.DesktopTask
-import java.util.concurrent.CompletableFuture
 
 class DesktopActivity : ListActivity() {
     private lateinit var adapter: DesktopAdapter
@@ -26,43 +21,12 @@ class DesktopActivity : ListActivity() {
         this.loadDesktop()
     }
 
-    private fun loadDesktop() {
-        val me = this
-        val account = this.getAccount()
+    private fun loadDesktop() = this.load {
+        val desktop = DesktopTask.index(this, it.account)
 
-        CompletableFuture.supplyAsync<Any> {
-            val accountModel = me.application.getAccountById(account.id)
-
-            if (accountModel === null) {
-                me.runOnUiThread {
-                    Toast.makeText(me, R.string.account_error_no_model_found, Toast.LENGTH_LONG).show()
-                    me.finish()
-                }
-
-                return@supplyAsync
-            }
-
-            try {
-                val desktop = DesktopTask.index(me, account)
-
-                accountModel.apps = desktop.apps
-                me.adapter.desktop = desktop.desktop
-                Handler(Looper.getMainLooper()).post { adapter.notifyDataSetChanged() }
-                Log.d(Config.LOG_TAG, desktop.apps.size.toString())
-                me.loadNavigation()
-            } catch (exception: MessageException) {
-                me.runOnUiThread {
-                    var message = exception.message
-                    val messageRessource = exception.messageRessource
-
-                    if (messageRessource != null) {
-                        message = getString(messageRessource)
-                    }
-
-                    Toast.makeText(me, message, Toast.LENGTH_LONG).show()
-                    me.finish()
-                }
-            }
-        }.exceptionally { e -> e.printStackTrace() }
+        it.apps = desktop.apps
+        this.adapter.desktop = desktop.desktop
+        Log.d(Config.LOG_TAG, desktop.apps.size.toString())
+        this.loadNavigation()
     }
 }

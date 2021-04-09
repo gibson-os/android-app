@@ -7,6 +7,6 @@ class Item(
     var text: String,
     var icon: String,
     var thumb: String,
-    var customIcon: Int,
+    var customIcon: Long,
     //var params: LinkedHashMap<String, Any>
 )
