@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,9 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.dto.desktop.Item
+import de.wollis_page.gibsonos.helper.Config
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DesktopAdapter(context: Context, private val account: Account) : RecyclerView.Adapter<DesktopAdapter.ItemHolder>() {
     private val inflater = LayoutInflater.from(context)
@@ -46,11 +50,15 @@ class DesktopAdapter(context: Context, private val account: Account) : RecyclerV
 
         override fun onClick(p0: View?) {
             val context = this.itemView.context
-            val packageName = "de.wollis_page.gibsonos.moduel" + this.item.module + ".activity." + this.item.task + "Activity"
+            val packageName =
+                "de.wollis_page.gibsonos.module." +
+                this.item.module + ".activity." +
+                this.item.task.capitalize(Locale.ROOT) + "Activity"
 
             try {
+                Log.i(Config.LOG_TAG, "Look for package: $packageName")
                 val activityClass = Class.forName(packageName)
-                val intent = Intent(context, activityClass::class.java)
+                val intent = Intent(context, activityClass)
                 intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.account)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 

@@ -9,7 +9,6 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.adapter.DesktopAdapter
 import de.wollis_page.gibsonos.exception.MessageException
-import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.task.DesktopTask
 import java.util.concurrent.CompletableFuture
@@ -64,8 +63,6 @@ class DesktopActivity : ListActivity() {
                     me.finish()
                 }
             }
-
-            return@supplyAsync
         }.exceptionally { e -> e.printStackTrace() }
     }
 }
