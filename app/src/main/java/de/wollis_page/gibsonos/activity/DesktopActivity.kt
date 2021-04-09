@@ -52,7 +52,14 @@ class DesktopActivity : ListActivity() {
                 me.loadNavigation()
             } catch (exception: TaskException) {
                 me.runOnUiThread {
-                    Toast.makeText(me, exception.message, Toast.LENGTH_LONG).show()
+                    var message = exception.message
+                    val messageRessource = exception.messageRessource
+
+                    if (messageRessource != null) {
+                        message = getString(messageRessource)
+                    }
+
+                    Toast.makeText(me, message, Toast.LENGTH_LONG).show()
                     me.finish()
                 }
             }

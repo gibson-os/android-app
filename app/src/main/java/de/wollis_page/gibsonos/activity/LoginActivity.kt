@@ -11,6 +11,7 @@ import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.ResponseException
+import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.task.UserTask
@@ -88,11 +89,18 @@ class LoginActivity : GibsonOsActivity() {
 
                     setResult(RESULT_OK)
                     me.finish()
-                } catch (exception: ResponseException) {
-                    Toast.makeText(me, exception.message, Toast.LENGTH_SHORT).show()
-                }
+                } catch (exception: TaskException) {
+                    me.runOnUiThread {
+                        var message = exception.message
+                        val messageRessource = exception.messageRessource
 
-                null
+                        if (messageRessource != null) {
+                            message = getString(messageRessource)
+                        }
+
+                        Toast.makeText(me, message, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }.exceptionally { e -> e.printStackTrace() }
         }
     }

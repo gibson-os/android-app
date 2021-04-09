@@ -6,6 +6,7 @@ import android.util.Log
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.ResponseException
+import de.wollis_page.gibsonos.exception.TaskException
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -16,10 +17,11 @@ import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.util.*
 
-class DataStore(private val context: GibsonOsActivity, url: String, private val token: String) {
+class DataStore(private val context: GibsonOsActivity, url: String, token: String?) {
     private val params: HashMap<String, String> = HashMap()
     private val seperator = "/"
     private val url: String
+    private val token: String
     private val client: OkHttpClient = OkHttpClient()
 
     private var cacheTTL = (2 * 60 * 1000).toLong()
@@ -29,6 +31,12 @@ class DataStore(private val context: GibsonOsActivity, url: String, private val 
     private var action: String? = null
 
     init {
+        if (token == null) {
+            throw TaskException("Account token doesn't exists!", R.string.account_error_no_token)
+        }
+
+        this.token = token
+
         var cleanUrl = url
 
         if (!cleanUrl.endsWith("/")) {
@@ -118,36 +126,45 @@ class DataStore(private val context: GibsonOsActivity, url: String, private val 
             requestBuilder.header("X-Device-Token", this.token)
         }
 
-        val response = this.client.newCall(requestBuilder.build()).execute()
-        val body = response.body ?: throw ResponseException("Body is empty!", "", response.code)
-
         try {
-            Log.i(Config.LOG_TAG, "Response code: " + response.code)
-            val jsonResponse = JSONObject(body.string())
-            Log.i(Config.LOG_TAG, "Response body: $jsonResponse")
+            val response = this.client.newCall(requestBuilder.build()).execute()
+            val body = response.body ?: throw ResponseException("Body is empty!", "", response.code)
 
-            if (
-                (jsonResponse.has("failure") && jsonResponse.getBoolean("failure")) ||
-                (!jsonResponse.has("success") || !jsonResponse.getBoolean("success"))
-            ) {
-                val message = if (jsonResponse.has("data")) {
-                    val data = jsonResponse.getJSONObject("data")
+            try {
+                Log.i(Config.LOG_TAG, "Response code: " + response.code)
+                val jsonResponse = JSONObject(body.string())
+                Log.i(Config.LOG_TAG, "Response body: $jsonResponse")
 
-                    when {
-                        data.has("message") -> data.getString("message")
-                        data.has("msg") -> data.getString("msg")
-                        else -> "Response error!"
-                    }
-                } else "Response error!"
+                if (
+                    (jsonResponse.has("failure") && jsonResponse.getBoolean("failure")) ||
+                    (!jsonResponse.has("success") || !jsonResponse.getBoolean("success"))
+                ) {
+                    val message = if (jsonResponse.has("data")) {
+                        val data = jsonResponse.getJSONObject("data")
 
-                throw ResponseException(message, jsonResponse.toString(2), response.code)
+                        when {
+                            data.has("message") -> data.getString("message")
+                            data.has("msg") -> data.getString("msg")
+                            else -> "Response error!"
+                        }
+                    } else "Response error!"
+
+                    throw ResponseException(message, jsonResponse.toString(2), response.code)
+                }
+
+                return jsonResponse
+            } catch (exception: JSONException) {
+                throw ResponseException(
+                    "JSON can't be parsed. Maybe wrong URL?",
+                    body.string(),
+                    response.code,
+                    R.string.response_error_json
+                )
             }
-
-            return jsonResponse
-        } catch (exception: JSONException) {
-            exception.printStackTrace()
-
-            throw ResponseException("JSON can't be parsed. Maybe wrong URL?", body.string(), response.code)
+        } catch (exception: ResponseException) {
+            throw exception
+        } catch (exception: Exception) {
+            throw ResponseException(exception.message ?: "Request has errors!", "", 0)
         }
     }
 

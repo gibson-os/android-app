@@ -20,4 +20,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="not_implemented_yet">Not implemented yet!</string>
+
+    <string name="response_error_json">JSON can\'t be parsed. Maybe wrong URL?</string>
 </resources>
