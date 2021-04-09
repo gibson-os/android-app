@@ -78,10 +78,10 @@ class LoginActivity : GibsonOsActivity() {
             CompletableFuture.supplyAsync<Any> {
                 try {
                     val account = UserTask.login(
-                            me,
-                            me.etUrl?.text.toString(),
-                            me.etUser?.text.toString(),
-                            me.etPassword?.text.toString()
+                        me,
+                        me.etUrl?.text.toString(),
+                        me.etUser?.text.toString(),
+                        me.etPassword?.text.toString()
                     )
                     account.alias = me.etAlias?.text.toString()
                     account.save()

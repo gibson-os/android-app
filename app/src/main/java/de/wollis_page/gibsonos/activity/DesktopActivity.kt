@@ -8,6 +8,7 @@ import android.widget.Toast
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.adapter.DesktopAdapter
+import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.task.DesktopTask
@@ -50,7 +51,7 @@ class DesktopActivity : ListActivity() {
                 Handler(Looper.getMainLooper()).post { adapter.notifyDataSetChanged() }
                 Log.d(Config.LOG_TAG, desktop.apps.size.toString())
                 me.loadNavigation()
-            } catch (exception: TaskException) {
+            } catch (exception: MessageException) {
                 me.runOnUiThread {
                     var message = exception.message
                     val messageRessource = exception.messageRessource

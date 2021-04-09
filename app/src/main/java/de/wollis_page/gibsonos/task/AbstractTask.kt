@@ -1,6 +1,5 @@
 package de.wollis_page.gibsonos.task
 
-import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
@@ -22,6 +21,7 @@ abstract class AbstractTask {
         return dataStore
     }
 
+    @Throws(TaskException::class)
     protected fun run(context: GibsonOsActivity, dataStore: DataStore): JSONObject {
         context.showLoading()
 

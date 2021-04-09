@@ -90,6 +90,7 @@ class DataStore(private val context: GibsonOsActivity, url: String, token: Strin
         this.params.remove(key)
     }
 
+    @Throws(ResponseException::class)
     fun getData(): JSONObject {
 //        return if (isOnline()) {
             return execute()
