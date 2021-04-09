@@ -10,8 +10,7 @@ import android.widget.Toast
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
-import de.wollis_page.gibsonos.exception.ResponseException
-import de.wollis_page.gibsonos.exception.TaskException
+import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.task.UserTask
@@ -89,7 +88,7 @@ class LoginActivity : GibsonOsActivity() {
 
                     setResult(RESULT_OK)
                     me.finish()
-                } catch (exception: TaskException) {
+                } catch (exception: MessageException) {
                     me.runOnUiThread {
                         var message = exception.message
                         val messageRessource = exception.messageRessource
