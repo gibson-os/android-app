@@ -2,19 +2,42 @@ package de.wollis_page.gibsonos.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
-import de.wollis_page.gibsonos.adapter.AccountAdapter
+import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.model.Account
 
 class MainActivity : ListActivity() {
-    private lateinit var adapter: AccountAdapter
+    override fun onCLick(item: ListInterface) {
+        if (item !is Account) {
+            return
+        }
+
+        val intent = Intent(this, DesktopActivity::class.java)
+        intent.putExtra(ACCOUNT_KEY, item)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        this.startActivity(intent)
+    }
+
+    override fun bind(item: ListInterface, view: View) {
+        if (item !is Account) {
+            return
+        }
+
+        (view.findViewById<View>(R.id.alias) as TextView).text = item.alias
+        (view.findViewById<View>(R.id.url) as TextView).text = item.url
+        (view.findViewById<View>(R.id.user) as TextView).text = item.user
+    }
+
+    override fun getListRessource() = R.layout.account_list_item
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
         super.onCreate(savedInstanceState)
-        this.adapter = AccountAdapter(this.applicationContext)
-        this.listView.adapter = this.adapter
 
         loadList()
 
@@ -37,7 +60,7 @@ class MainActivity : ListActivity() {
             this.startActivityForResult(Intent(this.applicationContext, LoginActivity::class.java), 100)
         }
 
-        this.adapter.accounts = accounts
+        this.adapter.items = accounts.toMutableList()
         this.adapter.notifyDataSetChanged()
     }
 }

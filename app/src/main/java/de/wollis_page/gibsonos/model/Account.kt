@@ -4,11 +4,12 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
 import com.orm.SugarRecord
+import de.wollis_page.gibsonos.dto.ListInterface
 import de.wollis_page.gibsonos.dto.desktop.App
 import de.wollis_page.gibsonos.helper.Config
 import kotlin.collections.ArrayList
 
-class Account : SugarRecord, Parcelable {
+class Account : SugarRecord, Parcelable, ListInterface {
     var alias: String? = null
     var user: String = ""
     var token: String? = null

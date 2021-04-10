@@ -1,5 +1,7 @@
 package de.wollis_page.gibsonos.dto.desktop
 
+import de.wollis_page.gibsonos.dto.ListInterface
+
 class Item(
     var module: String,
     var task: String,
@@ -9,4 +11,4 @@ class Item(
     var thumb: String,
     var customIcon: Long,
     //var params: LinkedHashMap<String, Any>
-)
+): ListInterface
