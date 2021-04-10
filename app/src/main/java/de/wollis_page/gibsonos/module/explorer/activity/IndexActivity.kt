@@ -1,12 +1,14 @@
 package de.wollis_page.gibsonos.module.explorer.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.explorer.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 
@@ -17,7 +19,7 @@ class IndexActivity: ListActivity() {
         }
 
         if (item.type == "dir") {
-            this.loadList(item.name)
+            this.loadList(item.path + "/" + item.name)
 
             return
         }
@@ -44,6 +46,7 @@ class IndexActivity: ListActivity() {
     }
 
     private fun loadList(directory: String = "") = this.load {
+        Log.i(Config.LOG_TAG, "Read dir $directory")
         val dir = DirTask.read(this, it.account, directory)
 
         this.adapter.items = dir.data.toMutableList()
