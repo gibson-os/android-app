@@ -33,7 +33,7 @@ class IndexActivity: ListActivity() {
             return
         }
 
-        (view.findViewById<View>(R.id.icon) as TextView).text = getString(R.string.fa_folder)
+        //(view.findViewById<View>(R.id.icon) as TextView).text = getString(R.string.fa_folder)
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
         (view.findViewById<View>(R.id.size) as TextView).text = item.size.toHumanReadableByte()
     }
