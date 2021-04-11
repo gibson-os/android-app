@@ -11,5 +11,10 @@ class Item(
     val files: Long?,
     val dirDirs: Long?,
     val dirFiles: Long?,
-    val icon: String?
+    val icon: String?,
+    val category: Int?,
+    val metaInfos: Map<String, Any>?,
+    val html5VideoStatus: String?,
+    val html5VideoToken: String?,
+    val thumbAvailable: Boolean = false
 ): ListInterface

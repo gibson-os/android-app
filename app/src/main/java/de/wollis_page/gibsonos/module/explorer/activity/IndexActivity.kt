@@ -36,6 +36,14 @@ class IndexActivity: ListActivity() {
 
         if (item.type != "dir") {
             (view.findViewById<View>(R.id.icon) as ImageView).setImageResource(R.drawable.ic_file)
+        } else {
+            (view.findViewById<View>(R.id.icon) as ImageView).setImageResource(R.drawable.ic_folder)
+        }
+
+        if (item.html5VideoToken != null) {
+            (view.findViewById<View>(R.id.html5) as ImageView).visibility = View.VISIBLE
+        } else {
+            (view.findViewById<View>(R.id.html5) as ImageView).visibility = View.INVISIBLE
         }
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
