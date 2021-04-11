@@ -9,6 +9,7 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.dto.ListInterface
 import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.explorer.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 
@@ -33,7 +34,7 @@ class IndexActivity: ListActivity() {
         }
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
-        (view.findViewById<View>(R.id.path) as TextView).text = item.path
+        (view.findViewById<View>(R.id.size) as TextView).text = item.size.toHumanReadableByte()
     }
 
     override fun getListRessource() = R.layout.explorer_index_list_item
@@ -42,7 +43,7 @@ class IndexActivity: ListActivity() {
         setContentView(R.layout.explorer_index_activity)
         super.onCreate(savedInstanceState)
 
-        this.loadList()
+        this.loadList((this.getItem().params?.get("dir") ?: "").toString())
     }
 
     private fun loadList(directory: String = "") = this.load {

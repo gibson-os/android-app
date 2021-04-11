@@ -21,13 +21,16 @@ import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.DesktopActivity
 import de.wollis_page.gibsonos.application.GibsonOsApplication
+import de.wollis_page.gibsonos.dto.desktop.Item
 import de.wollis_page.gibsonos.exception.AccountException
+import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import java.lang.Exception
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var account: Account? = null
+    private var item: Item? = null
     protected lateinit var application: GibsonOsApplication
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
@@ -45,13 +48,29 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         return account
     }
 
+    fun getItem(): Item {
+        val item = this.item
+
+        if (item == null) {
+            Toast.makeText(this, R.string.no_item_set, Toast.LENGTH_LONG).show()
+
+            throw ActivityException("No Item set!")
+        }
+
+        return item
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val intent = intent
         this.application = getApplication() as GibsonOsApplication
 
-        if (intent.hasExtra(Account.EXTRA_ACCOUNT)) {
-            this.account = intent.getParcelableExtra(Account.EXTRA_ACCOUNT)
+        if (intent.hasExtra(ACCOUNT_KEY)) {
+            this.account = intent.getParcelableExtra(ACCOUNT_KEY)
+        }
+
+        if (intent.hasExtra(ITEM_KEY)) {
+            this.item = intent.getParcelableExtra(ITEM_KEY)
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -133,5 +152,6 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     companion object {
         const val ACCOUNT_KEY = "account"
+        const val ITEM_KEY = "item"
     }
 }

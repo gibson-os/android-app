@@ -24,7 +24,7 @@
         android:layout_marginBottom="16dp" >
 
         <TextView
-            android:id="@+id/path"
+            android:id="@+id/size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"

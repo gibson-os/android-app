@@ -30,6 +30,7 @@ class DesktopActivity : ListActivity() {
             val activityClass = Class.forName(packageName)
             val intent = Intent(this, activityClass)
             intent.putExtra(ACCOUNT_KEY, this.getAccount())
+            intent.putExtra(ITEM_KEY, item)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
             this.startActivity(intent)
@@ -61,7 +62,6 @@ class DesktopActivity : ListActivity() {
 
         it.apps = desktop.apps
         this.adapter.items = desktop.desktop.toMutableList()
-        Log.d(Config.LOG_TAG, desktop.apps.size.toString())
         this.loadNavigation()
     }
 }

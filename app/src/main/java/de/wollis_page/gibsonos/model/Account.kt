@@ -5,11 +5,9 @@ import android.os.Parcelable
 import android.util.Log
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.dto.ListInterface
-import de.wollis_page.gibsonos.dto.desktop.App
 import de.wollis_page.gibsonos.helper.Config
-import kotlin.collections.ArrayList
 
-class Account : SugarRecord, Parcelable, ListInterface {
+class Account: SugarRecord, Parcelable, ListInterface {
     var alias: String? = null
     var user: String = ""
     var token: String? = null
@@ -25,17 +23,12 @@ class Account : SugarRecord, Parcelable, ListInterface {
         this.token = token
     }
 
-    constructor(user: String, url: String, token: String?, alias: String?) {
-        Log.i(Config.LOG_TAG, "Create Account Model $user@$url with token $token under alias $alias")
-
-        this.user = user
-        this.url = url
-        this.token = token
-        this.alias = alias
-    }
-
-    private constructor(`in`: Parcel) {
-        readFromParcel(`in`)
+    private constructor(parcel: Parcel) {
+        this.id = parcel.readLong()
+        this.alias = parcel.readString()
+        this.user = parcel.readString().toString()
+        this.token = parcel.readString()
+        this.url = parcel.readString().toString()
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -46,28 +39,17 @@ class Account : SugarRecord, Parcelable, ListInterface {
         dest.writeString(this.url)
     }
 
-    private fun readFromParcel(`in`: Parcel) {
-        this.id = `in`.readLong()
-        this.alias = `in`.readString()
-        this.user = `in`.readString().toString()
-        this.token = `in`.readString()
-        this.url = `in`.readString().toString()
-    }
-
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object {
-        const val EXTRA_ACCOUNT = "account"
-        @JvmField val CREATOR: Parcelable.Creator<Account> = object : Parcelable.Creator<Account> {
-            override fun createFromParcel(`in`: Parcel): Account {
-                return Account(`in`)
-            }
+    companion object CREATOR : Parcelable.Creator<Account> {
+        override fun createFromParcel(parcel: Parcel): Account {
+            return Account(parcel)
+        }
 
-            override fun newArray(size: Int): Array<Account?> {
-                return arrayOfNulls(size)
-            }
+        override fun newArray(size: Int): Array<Account?> {
+            return arrayOfNulls(size)
         }
     }
 }
