@@ -3,6 +3,7 @@ package de.wollis_page.gibsonos.module.explorer.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import de.wollis_page.gibsonos.R
@@ -33,7 +34,10 @@ class IndexActivity: ListActivity() {
             return
         }
 
-        //(view.findViewById<View>(R.id.icon) as TextView).text = getString(R.string.fa_folder)
+        if (item.type != "dir") {
+            (view.findViewById<View>(R.id.icon) as ImageView).setImageResource(R.drawable.ic_file)
+        }
+
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
         (view.findViewById<View>(R.id.size) as TextView).text = item.size.toHumanReadableByte()
     }
