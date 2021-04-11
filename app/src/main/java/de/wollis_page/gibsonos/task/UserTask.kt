@@ -9,7 +9,7 @@ import de.wollis_page.gibsonos.model.Account
 object UserTask: AbstractTask() {
     @Throws(TaskException::class)
     fun login(context: GibsonOsActivity, url: String, username: String, password: String): Account {
-        val dataStore = DataStore(context, url, "")
+        val dataStore = DataStore(url, "")
         dataStore.setRoute("core", "user", "appLogin")
         dataStore.addParam("username", username)
         dataStore.addParam("password", password)

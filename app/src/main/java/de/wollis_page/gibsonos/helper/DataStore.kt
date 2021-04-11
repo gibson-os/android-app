@@ -1,10 +1,7 @@
 package de.wollis_page.gibsonos.helper
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.util.Log
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import okhttp3.*
@@ -12,12 +9,11 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.IOException
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.util.*
 
-class DataStore(private val context: GibsonOsActivity, url: String, token: String?) {
+class DataStore(url: String, token: String?) {
     private val params: HashMap<String, String> = HashMap()
     private val seperator = "/"
     private val url: String
@@ -90,15 +86,6 @@ class DataStore(private val context: GibsonOsActivity, url: String, token: Strin
         this.params.remove(key)
     }
 
-    @Throws(ResponseException::class)
-    fun getData(): JSONObject {
-//        return if (isOnline()) {
-            return execute()
-//        } else {
-//            null
-//        }
-    }
-
     private fun getParams(): RequestBody {
         if (this.params.size == 0) {
             return "".toRequestBody("application/json; charset=utf-8".toMediaType())
@@ -114,7 +101,7 @@ class DataStore(private val context: GibsonOsActivity, url: String, token: Strin
     }
 
     @Throws(ResponseException::class)
-    private fun execute(): JSONObject {
+    fun execute(): JSONObject {
         val requestUrl = getUrl()
         Log.i(Config.LOG_TAG, requestUrl)
         val requestBuilder = Request.Builder()
@@ -185,13 +172,6 @@ class DataStore(private val context: GibsonOsActivity, url: String, token: Strin
         }
 
         return buildedUrl
-    }
-
-    private fun isOnline(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
-
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
     fun setRoute(module: String?, task: String?, action: String?) {

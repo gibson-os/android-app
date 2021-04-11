@@ -4,8 +4,8 @@ import de.wollis_page.gibsonos.dto.ListInterface
 
 class Item(
     val name: String,
-    val path: String?, // @todo path sollte nicht optional sein
     val size: Long,
+    val path: String?,
     val type: String,
     val dirs: Long?,
     val files: Long?,

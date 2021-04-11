@@ -9,13 +9,12 @@ import org.json.JSONObject
 
 abstract class AbstractTask {
     protected fun getDataStore(
-        context: GibsonOsActivity,
         account: Account,
         module: String,
         task: String,
         action: String
     ): DataStore {
-        val dataStore = DataStore(context, account.url, account.token)
+        val dataStore = DataStore(account.url, account.token)
         dataStore.setRoute(module, task, action)
 
         return dataStore
@@ -26,7 +25,7 @@ abstract class AbstractTask {
         context.showLoading()
 
         try {
-            return dataStore.getData()
+            return dataStore.execute()
         } catch (exception: ResponseException) {
             exception.printStackTrace()
 

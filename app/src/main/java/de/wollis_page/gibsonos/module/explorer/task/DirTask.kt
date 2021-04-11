@@ -12,7 +12,7 @@ import de.wollis_page.gibsonos.task.AbstractTask
 object DirTask: AbstractTask() {
     @Throws(TaskException::class)
     fun read(context: GibsonOsActivity, account: Account, directory: String): Dir {
-        val dataStore = getDataStore(context, account, "explorer", "dir", "read")
+        val dataStore = getDataStore(account, "explorer", "dir", "read")
         dataStore.addParam("dir", directory)
         val response = run(context, dataStore)
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
