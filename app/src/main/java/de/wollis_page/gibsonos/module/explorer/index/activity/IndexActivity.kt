@@ -29,6 +29,7 @@ class IndexActivity: ListActivity() {
         val dir = DirTask.read(this, it.account, directory)
 
         this.history.add(directory)
+        this.setTitle(directory)
         this.adapter.items = dir.data.toMutableList()
     }
 

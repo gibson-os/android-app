@@ -28,6 +28,7 @@ class LoginActivity : GibsonOsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.setTitle(R.string.login_title)
         val me = this
 
         me.etAlias = me.findViewById(R.id.alias) as EditText

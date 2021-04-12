@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -161,6 +162,18 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             this.progressBarHolder.animation = outAnimation
             this.progressBarHolder.visibility = View.GONE
         }
+    }
+
+    override fun setTitle(titleId: Int) {
+        this.findViewById<TextView>(android.R.id.title).text = this.getString(titleId)
+        super.setTitle(titleId)
+    }
+
+    fun setTitle(title: String) {
+        Handler(Looper.getMainLooper()).post {
+            this.findViewById<TextView>(android.R.id.title).text = title
+        }
+        super.setTitle(title)
     }
 
     companion object {

@@ -14,15 +14,15 @@
 
     <string name="login_title">Login</string>
 
-    <string name="desktop_title">Desktop</string>
-    <string name="desktop_error_load">Desktop can\'t be load!</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="not_implemented_yet">Not implemented yet!</string>
     <string name="no_item_set">No item set!</string>
 
     <string name="response_error_json">JSON can\'t be parsed. Maybe wrong URL?</string>
+
+    <string name="core_desktop_title">Desktop</string>
+    <string name="core_desktop_error_load">Desktop can\'t be load!</string>
 
     <string name="explorer_dir_error_response">Dir not in response!</string>
     <string name="explorer_icon_description">Icon</string>
