@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.activity.base
+package de.wollis_page.gibsonos.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,9 +21,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.DesktopActivity
+import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.application.GibsonOsApplication
-import de.wollis_page.gibsonos.dto.desktop.Item
+import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.helper.Config
@@ -106,7 +106,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         Log.d(Config.LOG_TAG, "onNavigationItemSelected: ")
-        runActivity(DesktopActivity::class.java, SugarRecord.findById(Account::class.java, item.groupId))
+        runActivity(IndexActivity::class.java, SugarRecord.findById(Account::class.java, item.groupId))
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
         return true

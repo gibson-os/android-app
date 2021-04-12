@@ -1,7 +1,7 @@
 package de.wollis_page.gibsonos.task
 
 import android.os.Build
-import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.DataStore
 import de.wollis_page.gibsonos.model.Account

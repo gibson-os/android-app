@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.dto.desktop
+package de.wollis_page.gibsonos.module.core.desktop.dto
 
 import android.os.Parcel
 import android.os.Parcelable

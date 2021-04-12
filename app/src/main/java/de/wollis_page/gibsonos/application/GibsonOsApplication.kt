@@ -3,7 +3,7 @@ package de.wollis_page.gibsonos.application
 import android.util.Log
 import com.orm.SugarApp
 import com.orm.SugarRecord
-import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.helper.Config

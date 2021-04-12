@@ -42,7 +42,7 @@
             android:value="2.1" />
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".module.core.user.activity.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
@@ -58,11 +58,11 @@
         </activity>
 
         <activity
-            android:name=".activity.DesktopActivity"
+            android:name=".module.core.desktop.activity.IndexActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".module.explorer.activity.IndexActivity"
+            android:name="de.wollis_page.gibsonos.module.explorer.index.activity.IndexActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>

@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.module.explorer.activity
+package de.wollis_page.gibsonos.module.explorer.index.activity
 
 import android.os.Bundle
 import android.util.Log
@@ -7,11 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.base.ListActivity
+import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
-import de.wollis_page.gibsonos.module.explorer.dto.Item
+import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 
 class IndexActivity: ListActivity() {

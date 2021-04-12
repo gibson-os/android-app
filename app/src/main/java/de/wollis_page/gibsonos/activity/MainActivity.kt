@@ -7,9 +7,10 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.base.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.model.Account
+import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
+import de.wollis_page.gibsonos.module.core.user.activity.LoginActivity
 
 class MainActivity : ListActivity() {
     override fun getListRessource() = R.layout.account_list_item
@@ -58,7 +59,7 @@ class MainActivity : ListActivity() {
             return
         }
 
-        val intent = Intent(this, DesktopActivity::class.java)
+        val intent = Intent(this, IndexActivity::class.java)
         intent.putExtra(ACCOUNT_KEY, item)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 

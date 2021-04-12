@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.activity
+package de.wollis_page.gibsonos.module.core.user.activity
 
 import android.os.Bundle
 import android.text.Editable
@@ -9,7 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account

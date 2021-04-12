@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import de.wollis_page.gibsonos.activity.base.ListActivity
+import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
 class BaseAdapter(private val context: ListActivity) : RecyclerView.Adapter<BaseAdapter.ItemHolder>() {
@@ -25,8 +25,8 @@ class BaseAdapter(private val context: ListActivity) : RecyclerView.Adapter<Base
     override fun getItemCount() = this.items.size
 
     class ItemHolder(
-        private var context: ListActivity,
-        private var view: View
+            private var context: ListActivity,
+            private var view: View
     ) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var item: ListItemInterface
 

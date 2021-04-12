@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.activity
+package de.wollis_page.gibsonos.module.core.desktop.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,14 +7,13 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.base.ListActivity
+import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
-import de.wollis_page.gibsonos.dto.desktop.Item
+import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.task.DesktopTask
-import java.util.*
 
-class DesktopActivity : ListActivity() {
+class IndexActivity : ListActivity() {
     override fun getListRessource() = R.layout.desktop_list_item
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +37,7 @@ class DesktopActivity : ListActivity() {
 
         val packageName =
             "de.wollis_page.gibsonos.module." +
-            item.module + ".activity." +
-            item.task.capitalize(Locale.ROOT) + "Activity"
+            item.module + "." + item.task + ".activity.IndexActivity"
 
         try {
             Log.i(Config.LOG_TAG, "Look for package: $packageName")

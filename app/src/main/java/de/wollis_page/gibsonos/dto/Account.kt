@@ -1,9 +1,8 @@
 package de.wollis_page.gibsonos.dto
 
-import de.wollis_page.gibsonos.dto.desktop.App
+import de.wollis_page.gibsonos.module.core.desktop.dto.App
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.process.Process
-import java.util.*
 import kotlin.collections.ArrayList
 
 class Account(val account: Account) {

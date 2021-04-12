@@ -1,6 +1,6 @@
 package de.wollis_page.gibsonos.task
 
-import de.wollis_page.gibsonos.activity.base.GibsonOsActivity
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.DataStore

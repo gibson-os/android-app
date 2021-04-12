@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.module.explorer.dto
+package de.wollis_page.gibsonos.module.explorer.index.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
