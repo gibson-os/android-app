@@ -3,9 +3,7 @@ package de.wollis_page.gibsonos.activity.base
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.Adapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,9 +24,11 @@ abstract class ListActivity : GibsonOsActivity() {
 
     abstract fun getListRessource(): Int
 
+    override fun getContentView() = R.layout.base_list
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
-        this.listView = findViewById(android.R.id.list)
+        this.listView = findViewById(R.id.list)
         this.listView.layoutManager = LinearLayoutManager(this)
 
         this.adapter = BaseAdapter(this)

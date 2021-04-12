@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -26,14 +28,16 @@ import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
-import java.lang.Exception
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var account: Account? = null
     private var item: Item? = null
     protected lateinit var application: GibsonOsApplication
+    protected lateinit var contentContainer: ConstraintLayout
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
+
+    abstract protected fun getContentView(): Int
 
     @Throws(Exception::class)
     fun getAccount(): Account {
@@ -61,9 +65,18 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        this.setContentView(R.layout.base_layout)
         super.onCreate(savedInstanceState)
         val intent = intent
         this.application = getApplication() as GibsonOsApplication
+
+        this.contentContainer = this.findViewById(R.id.content) as ConstraintLayout
+        val inflater = LayoutInflater.from(this)
+        this.contentContainer.addView(inflater.inflate(
+            this.getContentView(),
+            this.findViewById(android.R.id.content),
+            false
+        ))
 
         if (intent.hasExtra(ACCOUNT_KEY)) {
             this.account = intent.getParcelableExtra(ACCOUNT_KEY)
@@ -73,8 +86,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             this.item = intent.getParcelableExtra(ITEM_KEY)
         }
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
+        val drawer = this.findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
 
         drawer.addDrawerListener(toggle)

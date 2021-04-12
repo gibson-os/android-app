@@ -15,6 +15,22 @@ import de.wollis_page.gibsonos.task.DesktopTask
 import java.util.*
 
 class DesktopActivity : ListActivity() {
+    override fun getListRessource() = R.layout.desktop_list_item
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        this.loadDesktop()
+    }
+
+    private fun loadDesktop() = this.load {
+        val desktop = DesktopTask.index(this, it.account)
+
+        it.apps = desktop.apps
+        this.adapter.items = desktop.desktop.toMutableList()
+        this.loadNavigation()
+    }
+
     override fun onCLick(item: ListInterface) {
         if (item !is Item) {
             return
@@ -46,22 +62,5 @@ class DesktopActivity : ListActivity() {
 
         (view.findViewById<View>(R.id.text) as TextView).text = item.text
         (view.findViewById<View>(R.id.module) as TextView).text = item.module + "_" + item.task
-    }
-
-    override fun getListRessource() = R.layout.desktop_list_item
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_desktop)
-        super.onCreate(savedInstanceState)
-
-        this.loadDesktop()
-    }
-
-    private fun loadDesktop() = this.load {
-        val desktop = DesktopTask.index(this, it.account)
-
-        it.apps = desktop.apps
-        this.adapter.items = desktop.desktop.toMutableList()
-        this.loadNavigation()
     }
 }

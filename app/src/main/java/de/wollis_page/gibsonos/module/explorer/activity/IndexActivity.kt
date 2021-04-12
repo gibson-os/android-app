@@ -15,6 +15,21 @@ import de.wollis_page.gibsonos.module.explorer.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 
 class IndexActivity: ListActivity() {
+    override fun getListRessource() = R.layout.explorer_index_list_item
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        this.loadList((this.getItem().params?.get("dir") ?: "").toString())
+    }
+
+    private fun loadList(directory: String = "") = this.load {
+        Log.i(Config.LOG_TAG, "Read dir $directory")
+        val dir = DirTask.read(this, it.account, directory)
+
+        this.adapter.items = dir.data.toMutableList()
+    }
+
     override fun onCLick(item: ListInterface) {
         if (item !is Item) {
             return
@@ -48,21 +63,5 @@ class IndexActivity: ListActivity() {
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
         (view.findViewById<View>(R.id.size) as TextView).text = item.size.toHumanReadableByte()
-    }
-
-    override fun getListRessource() = R.layout.explorer_index_list_item
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.explorer_index_activity)
-        super.onCreate(savedInstanceState)
-
-        this.loadList((this.getItem().params?.get("dir") ?: "").toString())
-    }
-
-    private fun loadList(directory: String = "") = this.load {
-        Log.i(Config.LOG_TAG, "Read dir $directory")
-        val dir = DirTask.read(this, it.account, directory)
-
-        this.adapter.items = dir.data.toMutableList()
     }
 }
