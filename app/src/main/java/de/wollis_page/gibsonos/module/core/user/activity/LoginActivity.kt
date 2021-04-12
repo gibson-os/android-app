@@ -24,7 +24,7 @@ class LoginActivity : GibsonOsActivity() {
     private var etPassword: EditText? = null
     private var etUrl: EditText? = null
 
-    override fun getContentView() = R.layout.activity_login
+    override fun getContentView() = R.layout.core_user_login_activity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

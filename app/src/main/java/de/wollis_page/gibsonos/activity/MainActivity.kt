@@ -13,7 +13,7 @@ import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.module.core.user.activity.LoginActivity
 
 class MainActivity : ListActivity() {
-    override fun getListRessource() = R.layout.account_list_item
+    override fun getListRessource() = R.layout.base_account_list_item
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
