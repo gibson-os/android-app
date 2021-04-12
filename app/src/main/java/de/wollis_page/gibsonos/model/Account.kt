@@ -4,10 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
 import com.orm.SugarRecord
-import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.Config
 
-class Account: SugarRecord, Parcelable, ListInterface {
+class Account: SugarRecord, Parcelable, ListItemInterface {
     var alias: String? = null
     var user: String = ""
     var token: String? = null

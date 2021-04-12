@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
-import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.model.Account
 
 class MainActivity : ListActivity() {
@@ -53,7 +53,7 @@ class MainActivity : ListActivity() {
         this.adapter.notifyDataSetChanged()
     }
 
-    override fun onCLick(item: ListInterface) {
+    override fun onCLick(item: ListItemInterface) {
         if (item !is Account) {
             return
         }
@@ -65,7 +65,7 @@ class MainActivity : ListActivity() {
         this.startActivity(intent)
     }
 
-    override fun bind(item: ListInterface, view: View) {
+    override fun bind(item: ListItemInterface, view: View) {
         if (item !is Account) {
             return
         }

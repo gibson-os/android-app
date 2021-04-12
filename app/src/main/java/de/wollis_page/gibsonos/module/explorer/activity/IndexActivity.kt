@@ -8,7 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
-import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.explorer.dto.Item
@@ -30,7 +30,7 @@ class IndexActivity: ListActivity() {
         this.adapter.items = dir.data.toMutableList()
     }
 
-    override fun onCLick(item: ListInterface) {
+    override fun onCLick(item: ListItemInterface) {
         if (item !is Item) {
             return
         }
@@ -44,7 +44,7 @@ class IndexActivity: ListActivity() {
         Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG).show()
     }
 
-    override fun bind(item: ListInterface, view: View) {
+    override fun bind(item: ListItemInterface, view: View) {
         if (item !is Item) {
             return
         }

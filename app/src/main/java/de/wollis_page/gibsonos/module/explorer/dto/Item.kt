@@ -1,6 +1,6 @@
 package de.wollis_page.gibsonos.module.explorer.dto
 
-import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.dto.ListItemInterface
 
 class Item(
     val name: String,
@@ -17,4 +17,4 @@ class Item(
     val html5VideoStatus: String?,
     val html5VideoToken: String?,
     val thumbAvailable: Boolean = false
-): ListInterface
+): ListItemInterface

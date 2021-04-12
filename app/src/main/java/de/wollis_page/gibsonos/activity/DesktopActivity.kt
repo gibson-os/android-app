@@ -8,7 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.base.ListActivity
-import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.dto.desktop.Item
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.task.DesktopTask
@@ -31,7 +31,7 @@ class DesktopActivity : ListActivity() {
         this.loadNavigation()
     }
 
-    override fun onCLick(item: ListInterface) {
+    override fun onCLick(item: ListItemInterface) {
         if (item !is Item) {
             return
         }
@@ -55,7 +55,7 @@ class DesktopActivity : ListActivity() {
         }
     }
 
-    override fun bind(item: ListInterface, view: View) {
+    override fun bind(item: ListItemInterface, view: View) {
         if (item !is Item) {
             return
         }

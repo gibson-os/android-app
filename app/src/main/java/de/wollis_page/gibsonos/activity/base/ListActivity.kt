@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.adapter.BaseAdapter
 import de.wollis_page.gibsonos.dto.Account
-import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.MessageException
 import java.util.concurrent.CompletableFuture
 
@@ -18,23 +18,21 @@ abstract class ListActivity : GibsonOsActivity() {
     protected lateinit var listView: RecyclerView
     protected lateinit var adapter: BaseAdapter
 
-    abstract fun onCLick(item: ListInterface)
+    abstract fun onCLick(item: ListItemInterface)
 
-    abstract fun bind(item: ListInterface, view: View)
+    abstract fun bind(item: ListItemInterface, view: View)
 
     abstract fun getListRessource(): Int
 
     override fun getContentView() = R.layout.base_list
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_main)
-        this.listView = findViewById(R.id.list)
+        super.onCreate(savedInstanceState)
+        this.listView = this.findViewById(R.id.list)
         this.listView.layoutManager = LinearLayoutManager(this)
 
         this.adapter = BaseAdapter(this)
         this.listView.adapter = this.adapter
-
-        super.onCreate(savedInstanceState)
     }
 
     protected fun load(run: (account: Account) -> Unit) {

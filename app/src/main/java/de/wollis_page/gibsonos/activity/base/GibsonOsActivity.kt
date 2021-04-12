@@ -33,7 +33,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     private var account: Account? = null
     private var item: Item? = null
     protected lateinit var application: GibsonOsApplication
-    protected lateinit var contentContainer: ConstraintLayout
+    lateinit var contentContainer: ConstraintLayout
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
 

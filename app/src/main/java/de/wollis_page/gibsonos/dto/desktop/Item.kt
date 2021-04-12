@@ -3,7 +3,7 @@ package de.wollis_page.gibsonos.dto.desktop
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.ArrayMap
-import de.wollis_page.gibsonos.dto.ListInterface
+import de.wollis_page.gibsonos.dto.ListItemInterface
 
 class Item(
     var module: String,
@@ -14,7 +14,7 @@ class Item(
     var thumb: String,
     var customIcon: Long,
     var params: Map<String, Any>?
-): ListInterface, Parcelable {
+): ListItemInterface, Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString().toString(),
         parcel.readString().toString(),
