@@ -16,6 +16,7 @@ import de.wollis_page.gibsonos.module.explorer.task.DirTask
 
 class IndexActivity: ListActivity() {
     override fun getListRessource() = R.layout.explorer_index_list_item
+    private val history: MutableList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,7 @@ class IndexActivity: ListActivity() {
         Log.i(Config.LOG_TAG, "Read dir $directory")
         val dir = DirTask.read(this, it.account, directory)
 
+        this.history.add(directory)
         this.adapter.items = dir.data.toMutableList()
     }
 
@@ -42,6 +44,18 @@ class IndexActivity: ListActivity() {
         }
 
         Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onBackPressed() {
+        this.history.removeLast();
+
+        if (this.history.isEmpty()) {
+            super.onBackPressed()
+            return
+        }
+
+        this.loadList(this.history.last())
+        this.history.removeLast();
     }
 
     override fun bind(item: ListItemInterface, view: View) {
