@@ -28,7 +28,6 @@ abstract class ListActivity : GibsonOsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.listView = this.findViewById(R.id.list)
-        this.listView.layoutManager = LinearLayoutManager(this)
 
         val llm = LinearLayoutManager(this)
         llm.orientation = LinearLayoutManager.VERTICAL
