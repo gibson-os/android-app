@@ -3,6 +3,7 @@ package de.wollis_page.gibsonos.activity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.wollis_page.gibsonos.R
@@ -28,6 +29,12 @@ abstract class ListActivity : GibsonOsActivity() {
         super.onCreate(savedInstanceState)
         this.listView = this.findViewById(R.id.list)
         this.listView.layoutManager = LinearLayoutManager(this)
+
+        val llm = LinearLayoutManager(this)
+        llm.orientation = LinearLayoutManager.VERTICAL
+        this.listView.layoutManager = llm
+        val dividerItemDecoration = DividerItemDecoration(this, llm.orientation)
+        this.listView.addItemDecoration(dividerItemDecoration)
 
         this.listAdapter = BaseListAdapter(this)
         this.listView.adapter = this.listAdapter
