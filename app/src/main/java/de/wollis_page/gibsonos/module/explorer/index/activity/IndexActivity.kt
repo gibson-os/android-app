@@ -11,12 +11,13 @@ import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
+import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 
 class IndexActivity: ListActivity() {
     override fun getListRessource() = R.layout.explorer_index_list_item
-    private val history: MutableList<String> = ArrayList()
+    private lateinit var loadedDir: Dir
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +27,10 @@ class IndexActivity: ListActivity() {
 
     private fun loadList(directory: String = "") = this.load {
         Log.i(Config.LOG_TAG, "Read dir $directory")
-        val dir = DirTask.read(this, it.account, directory)
+        this.loadedDir = DirTask.read(this, it.account, directory)
 
-        this.history.add(directory)
-        this.setTitle(directory)
-        this.adapter.items = dir.data.toMutableList()
+        this.setTitle(this.loadedDir.dir)
+        this.adapter.items = this.loadedDir.data.toMutableList()
     }
 
     override fun onCLick(item: ListItemInterface) {
@@ -48,15 +48,24 @@ class IndexActivity: ListActivity() {
     }
 
     override fun onBackPressed() {
-        this.history.removeLast();
+        Log.i(Config.LOG_TAG, "Loaded dir " + this.loadedDir.dir)
+        val dirs = this.loadedDir.dir.split("/").toMutableList()
 
-        if (this.history.isEmpty()) {
+        if (dirs.last().isEmpty()) {
+            dirs.removeLast();
+        }
+
+        dirs.removeLast();
+
+        val newDir = dirs.joinToString("/") + "/"
+        Log.i(Config.LOG_TAG, "New dir $newDir")
+
+        if (newDir.length < this.loadedDir.homePath.length || newDir == this.loadedDir.dir) {
             super.onBackPressed()
             return
         }
 
-        this.loadList(this.history.last())
-        this.history.removeLast();
+        this.loadList(newDir)
     }
 
     override fun bind(item: ListItemInterface, view: View) {

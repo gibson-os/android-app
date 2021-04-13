@@ -2,8 +2,6 @@ package de.wollis_page.gibsonos.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -121,7 +119,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     }
 
     fun loadNavigation() {
-        Handler(Looper.getMainLooper()).post {
+        this.runOnUiThread {
             val menu = navigationView.menu
             menu.clear()
             val accounts = this.application.accounts
@@ -148,7 +146,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         val inAnimation = AlphaAnimation(0.0f, 1.0f)
         inAnimation.duration = 200
 
-        Handler(Looper.getMainLooper()).post {
+        this.runOnUiThread {
             this.progressBarHolder.animation = inAnimation
             this.progressBarHolder.visibility = View.VISIBLE
         }
@@ -158,22 +156,24 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         val outAnimation = AlphaAnimation(1.0f, 0.0f)
         outAnimation.duration = 200
 
-        Handler(Looper.getMainLooper()).post {
+        this.runOnUiThread {
             this.progressBarHolder.animation = outAnimation
             this.progressBarHolder.visibility = View.GONE
         }
     }
 
     override fun setTitle(titleId: Int) {
-        this.findViewById<TextView>(android.R.id.title).text = this.getString(titleId)
-        super.setTitle(titleId)
+        this.runOnUiThread {
+            this.findViewById<TextView>(android.R.id.title).text = this.getString(titleId)
+            super.setTitle(titleId)
+        }
     }
 
     fun setTitle(title: String) {
-        Handler(Looper.getMainLooper()).post {
+        this.runOnUiThread {
             this.findViewById<TextView>(android.R.id.title).text = title
+            super.setTitle(title)
         }
-        super.setTitle(title)
     }
 
     companion object {

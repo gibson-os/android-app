@@ -1,14 +1,11 @@
 package de.wollis_page.gibsonos.activity
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.adapter.BaseAdapter
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -54,7 +51,7 @@ abstract class ListActivity : GibsonOsActivity() {
 
             try {
                 run(account)
-                Handler(Looper.getMainLooper()).post { me.listView.adapter?.notifyDataSetChanged() }
+                this.runOnUiThread { me.listView.adapter?.notifyDataSetChanged() }
             } catch (exception: MessageException) {
                 me.runOnUiThread {
                     var message = exception.message
