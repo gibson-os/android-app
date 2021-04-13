@@ -2,7 +2,7 @@ package de.wollis_page.gibsonos.module.explorer.index.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
-class Item(
+data class Item(
     val name: String,
     val size: Long,
     val path: String?,

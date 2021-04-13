@@ -50,8 +50,8 @@ class MainActivity : ListActivity() {
             this.startActivityForResult(Intent(this.applicationContext, LoginActivity::class.java), 100)
         }
 
-        this.adapter.items = accounts.toMutableList()
-        this.adapter.notifyDataSetChanged()
+        this.listAdapter.items = accounts.toMutableList()
+        this.listAdapter.notifyDataSetChanged()
     }
 
     override fun onCLick(item: ListItemInterface) {

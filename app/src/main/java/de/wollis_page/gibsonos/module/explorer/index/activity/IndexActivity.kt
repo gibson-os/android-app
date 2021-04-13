@@ -1,6 +1,9 @@
 package de.wollis_page.gibsonos.module.explorer.index.activity
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.ArrayMap
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -9,20 +12,31 @@ import android.widget.Toast
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
+import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
+import de.wollis_page.gibsonos.module.explorer.task.FileTask
+import java.lang.Exception
+import java.util.concurrent.CompletableFuture
 
 class IndexActivity: ListActivity() {
     override fun getListRessource() = R.layout.explorer_index_list_item
     private lateinit var loadedDir: Dir
+    private val images = ArrayMap<String, ArrayMap<String, Bitmap>>()
+    private val imageQueue = ArrayMap<ImageView, Item>()
+    private var imagesLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         this.loadList((this.getItem().params?.get("dir") ?: "").toString())
+
+        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
+            Toast.makeText(this, "Click!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadList(directory: String = "") = this.load {
@@ -30,7 +44,7 @@ class IndexActivity: ListActivity() {
         this.loadedDir = DirTask.read(this, it.account, directory)
 
         this.setTitle(this.loadedDir.dir)
-        this.adapter.items = this.loadedDir.data.toMutableList()
+        this.listAdapter.items = this.loadedDir.data.toMutableList()
     }
 
     override fun onCLick(item: ListItemInterface) {
@@ -52,10 +66,10 @@ class IndexActivity: ListActivity() {
         val dirs = this.loadedDir.dir.split("/").toMutableList()
 
         if (dirs.last().isEmpty()) {
-            dirs.removeLast();
+            dirs.removeLast()
         }
 
-        dirs.removeLast();
+        dirs.removeLast()
 
         val newDir = dirs.joinToString("/") + "/"
         Log.i(Config.LOG_TAG, "New dir $newDir")
@@ -73,10 +87,28 @@ class IndexActivity: ListActivity() {
             return
         }
 
-        if (item.type != "dir") {
-            (view.findViewById<View>(R.id.icon) as ImageView).setImageResource(R.drawable.ic_file)
+        val imageView = view.findViewById<View>(R.id.icon) as ImageView
+
+        if (item.type == "dir") {
+            imageView.setImageResource(R.drawable.ic_folder)
         } else {
-            (view.findViewById<View>(R.id.icon) as ImageView).setImageResource(R.drawable.ic_folder)
+            imageView.setImageResource(R.drawable.ic_file)
+
+            if (item.thumbAvailable) {
+                var imagePath = this.images[this.loadedDir.dir]
+
+                if (imagePath == null) {
+                    imagePath = ArrayMap()
+                    this.images[this.loadedDir.dir] = imagePath
+                }
+
+                if (imagePath[item.name] == null) {
+                    this.imageQueue[imageView] = item
+                    this.loadImages()
+                } else {
+                    imageView.setImageBitmap(imagePath[item.name])
+                }
+            }
         }
 
         if (item.html5VideoToken != null) {
@@ -87,5 +119,43 @@ class IndexActivity: ListActivity() {
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
         (view.findViewById<View>(R.id.size) as TextView).text = item.size.toHumanReadableByte()
+    }
+
+    private fun loadImages() {
+        if (this.imagesLoading) {
+            return
+        }
+
+        this.imagesLoading = true
+
+        CompletableFuture.supplyAsync<Any> {
+            while (this.imageQueue.size != 0) {
+                val imageView = this.imageQueue.keyAt(0)
+                val item = this.imageQueue[imageView] ?: continue
+                this.imageQueue.remove(imageView)
+
+                var imagePath = this.images[this.loadedDir.dir]
+
+                if (imagePath == null) {
+                    imagePath = ArrayMap()
+                    this.images[this.loadedDir.dir] = imagePath
+                }
+
+                try {
+                    if (imagePath[item.name] == null) {
+                        imagePath[item.name] = FileTask.image(
+                            this.getAccount(),
+                            this.loadedDir.dir,
+                            item.name,
+                            imageView.width
+                        )
+                    }
+
+                    this.runOnUiThread { imageView.setImageBitmap(imagePath[item.name]) }
+                } catch (exception: ResponseException) {}
+            }
+
+            this.imagesLoading = false
+        }.exceptionally { e -> e.printStackTrace() }
     }
 }

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
-class BaseAdapter(private val context: ListActivity) : RecyclerView.Adapter<BaseAdapter.ItemHolder>() {
+class BaseListAdapter(private val context: ListActivity) : RecyclerView.Adapter<BaseListAdapter.ItemHolder>() {
     private val inflater = LayoutInflater.from(context)
     var items: MutableList<ListItemInterface> = ArrayList()
 

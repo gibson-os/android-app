@@ -25,7 +25,7 @@ abstract class AbstractTask {
         context.showLoading()
 
         try {
-            return dataStore.execute()
+            return dataStore.loadJson()
         } catch (exception: ResponseException) {
             exception.printStackTrace()
 

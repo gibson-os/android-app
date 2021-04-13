@@ -1,5 +1,7 @@
 package de.wollis_page.gibsonos.helper
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.exception.ResponseException
@@ -101,25 +103,12 @@ class DataStore(url: String, token: String?) {
     }
 
     @Throws(ResponseException::class)
-    fun execute(): JSONObject {
-        val requestUrl = getUrl()
-        Log.i(Config.LOG_TAG, requestUrl)
-        val requestBuilder = Request.Builder()
-            .url(requestUrl)
-            .header("X-Requested-With", "XMLHttpRequest")
-            .post(getParams())
-
-        if (this.token.isNotEmpty()) {
-            Log.i(Config.LOG_TAG, "X-Device-Token: " + this.token)
-            requestBuilder.header("X-Device-Token", this.token)
-        }
-
+    fun loadJson(): JSONObject {
         try {
-            val response = this.client.newCall(requestBuilder.build()).execute()
-            val body = response.body ?: throw ResponseException("Body is empty!", "", response.code)
+            val response = this.execute()
+            val body = this.getBody(response)
 
             try {
-                Log.i(Config.LOG_TAG, "Response code: " + response.code)
                 val jsonResponse = JSONObject(body.string())
                 Log.i(Config.LOG_TAG, "Response body: $jsonResponse")
 
@@ -154,6 +143,44 @@ class DataStore(url: String, token: String?) {
         } catch (exception: Exception) {
             throw ResponseException(exception.message ?: "Request has errors!", "", 0)
         }
+    }
+
+    fun loadBitmap(): Bitmap {
+        try {
+            return BitmapFactory.decodeStream(this.getBody(this.execute()).byteStream())
+        } catch (exception: ResponseException) {
+            throw exception
+        } catch (exception: Exception) {
+            throw ResponseException(exception.message ?: "Request has errors!", "", 0)
+        }
+    }
+
+    private fun execute(): Response {
+        val requestUrl = getUrl()
+        Log.i(Config.LOG_TAG, requestUrl)
+        val requestBuilder = Request.Builder()
+            .url(requestUrl)
+            .header("X-Requested-With", "XMLHttpRequest")
+            .post(getParams())
+
+        if (this.token.isNotEmpty()) {
+            Log.i(Config.LOG_TAG, "X-Device-Token: " + this.token)
+            requestBuilder.header("X-Device-Token", this.token)
+        }
+
+        val response = this.client.newCall(requestBuilder.build()).execute()
+
+        Log.i(Config.LOG_TAG, "Response code: " + response.code)
+
+        if (!response.isSuccessful) {
+            throw ResponseException("Request error!", "", response.code)
+        }
+
+        return response
+    }
+
+    private fun getBody(response: Response): ResponseBody {
+        return response.body ?: throw ResponseException("Body is empty!", "", response.code)
     }
 
     private fun getUrl(): String {

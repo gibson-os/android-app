@@ -5,7 +5,7 @@ import android.os.Parcelable
 import android.util.ArrayMap
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
-class Item(
+data class Item(
     var module: String,
     var task: String,
     var action: String,
