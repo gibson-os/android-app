@@ -66,7 +66,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     override fun onCreate(savedInstanceState: Bundle?) {
         this.setContentView(R.layout.base_layout)
         super.onCreate(savedInstanceState)
-        val intent = intent
+        val intent = this.intent
         this.application = getApplication() as GibsonOsApplication
 
         this.contentContainer = this.findViewById(R.id.content) as ConstraintLayout

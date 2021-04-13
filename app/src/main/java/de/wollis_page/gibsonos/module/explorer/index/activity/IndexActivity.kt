@@ -1,7 +1,6 @@
 package de.wollis_page.gibsonos.module.explorer.index.activity
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.ArrayMap
 import android.util.Log
@@ -19,7 +18,6 @@ import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
-import java.lang.Exception
 import java.util.concurrent.CompletableFuture
 
 class IndexActivity: ListActivity() {
@@ -29,10 +27,19 @@ class IndexActivity: ListActivity() {
     private val imageQueue = ArrayMap<ImageView, Item>()
     private var imagesLoading = false
 
+    companion object {
+        const val DIRECTORY_KEY = "directory"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var directory: String? = null
 
-        this.loadList((this.getItem().params?.get("dir") ?: "").toString())
+        if (this.intent.hasExtra(DIRECTORY_KEY)) {
+            directory = this.intent.getStringExtra(DIRECTORY_KEY)
+        }
+
+        this.loadList(directory ?: (this.getItem().params?.get("dir") ?: "").toString())
 
         this.findViewById<TextView>(android.R.id.title).setOnClickListener {
             Toast.makeText(this, "Click!", Toast.LENGTH_SHORT).show()
@@ -42,6 +49,7 @@ class IndexActivity: ListActivity() {
     private fun loadList(directory: String = "") = this.load {
         Log.i(Config.LOG_TAG, "Read dir $directory")
         this.loadedDir = DirTask.read(this, it.account, directory)
+        this.intent.putExtra(DIRECTORY_KEY, this.loadedDir.dir)
 
         this.setTitle(this.loadedDir.dir)
         this.listAdapter.items = this.loadedDir.data.toMutableList()
