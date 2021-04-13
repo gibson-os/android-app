@@ -29,6 +29,7 @@ class IndexActivity: ListActivity() {
 
     companion object {
         const val DIRECTORY_KEY = "directory"
+        const val IMAGE_WIDTH_KEY = "image_width"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,12 +136,22 @@ class IndexActivity: ListActivity() {
         }
 
         this.imagesLoading = true
+        var imageWidth: Int? = null
+
+        if (this.intent.hasExtra(IMAGE_WIDTH_KEY)) {
+            imageWidth = this.intent.getIntExtra(IMAGE_WIDTH_KEY, 0)
+        }
 
         CompletableFuture.supplyAsync<Any> {
             while (this.imageQueue.size != 0) {
                 val imageView = this.imageQueue.keyAt(0)
                 val item = this.imageQueue[imageView] ?: continue
                 this.imageQueue.remove(imageView)
+
+                if (imageWidth == null) {
+                    imageWidth = imageView.width
+                    this.intent.putExtra(IMAGE_WIDTH_KEY, imageWidth)
+                }
 
                 var imagePath = this.images[this.loadedDir.dir]
 
@@ -155,7 +166,7 @@ class IndexActivity: ListActivity() {
                             this.getAccount(),
                             this.loadedDir.dir,
                             item.name,
-                            imageView.width
+                            imageWidth
                         )
                     }
 
