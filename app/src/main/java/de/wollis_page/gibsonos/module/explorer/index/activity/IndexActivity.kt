@@ -98,6 +98,7 @@ class IndexActivity: ListActivity() {
 
         if (newDir.length < this.loadedDir.homePath.length || newDir == this.loadedDir.dir) {
             super.onBackPressed()
+
             return
         }
 
