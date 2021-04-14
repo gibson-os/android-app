@@ -38,6 +38,7 @@ class IndexActivity: ListActivity() {
         super.onCreate(savedInstanceState)
 
         this.findViewById<TextView>(android.R.id.title).setOnClickListener {
+            DirTask.dirList(this, this.loadedDir.dir)
             Toast.makeText(this, "Click!", Toast.LENGTH_SHORT).show()
         }
 
@@ -60,7 +61,7 @@ class IndexActivity: ListActivity() {
 
     private fun loadList(directory: String = "") = this.load {
         Log.i(Config.LOG_TAG, "Read dir $directory")
-        this.loadedDir = DirTask.read(this, it.account, directory)
+        this.loadedDir = DirTask.read(this, directory)
         this.setDir()
     }
 

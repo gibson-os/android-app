@@ -25,5 +25,6 @@
     <string name="core_desktop_error_load">Desktop can\'t be load!</string>
 
     <string name="explorer_dir_error_response">Dir not in response!</string>
+    <string name="explorer_dir_list_error_response">Dir list not in response!</string>
     <string name="explorer_icon_description">Icon</string>
 </resources>

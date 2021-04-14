@@ -13,7 +13,7 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
-import de.wollis_page.gibsonos.task.UserTask
+import de.wollis_page.gibsonos.module.core.task.UserTask
 import java.util.*
 import java.util.concurrent.CompletableFuture
 

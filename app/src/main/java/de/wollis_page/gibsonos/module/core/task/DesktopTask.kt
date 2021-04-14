@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.task
+package de.wollis_page.gibsonos.module.core.task
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -6,12 +6,12 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.module.core.desktop.dto.Desktop
 import de.wollis_page.gibsonos.exception.TaskException
-import de.wollis_page.gibsonos.model.Account
+import de.wollis_page.gibsonos.task.AbstractTask
 
 object DesktopTask: AbstractTask() {
     @Throws(TaskException::class)
-    fun index(context: GibsonOsActivity, account: Account): Desktop {
-        val response = run(context, getDataStore(account, "core", "desktop", "index"))
+    fun index(context: GibsonOsActivity): Desktop {
+        val response = run(context, getDataStore(context.getAccount(), "core", "desktop", "index"))
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val jsonAdapter = moshi.adapter(Desktop::class.java)
 

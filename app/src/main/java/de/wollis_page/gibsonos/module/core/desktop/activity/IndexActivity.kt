@@ -11,7 +11,7 @@ import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 import de.wollis_page.gibsonos.helper.Config
-import de.wollis_page.gibsonos.task.DesktopTask
+import de.wollis_page.gibsonos.module.core.task.DesktopTask
 
 class IndexActivity : ListActivity() {
     override fun getListRessource() = R.layout.desktop_list_item
@@ -23,7 +23,7 @@ class IndexActivity : ListActivity() {
     }
 
     private fun loadDesktop() = this.load {
-        val desktop = DesktopTask.index(this, it.account)
+        val desktop = DesktopTask.index(this)
 
         it.apps = desktop.apps
         this.listAdapter.items = desktop.desktop.toMutableList()
