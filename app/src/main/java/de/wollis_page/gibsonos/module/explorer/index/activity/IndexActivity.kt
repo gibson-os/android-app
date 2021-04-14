@@ -23,35 +23,48 @@ import java.util.concurrent.CompletableFuture
 class IndexActivity: ListActivity() {
     override fun getListRessource() = R.layout.explorer_index_list_item
     private lateinit var loadedDir: Dir
-    private val images = ArrayMap<String, ArrayMap<String, Bitmap>>()
+    private var images = HashMap<String, ArrayMap<String, Bitmap>>()
     private val imageQueue = ArrayMap<ImageView, Item>()
     private var imagesLoading = false
+    private var imageWidth: Int? = null
 
     companion object {
         const val DIRECTORY_KEY = "directory"
         const val IMAGE_WIDTH_KEY = "image_width"
+        const val IMAGES_KEY = "images"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var directory: String? = null
-
-        if (this.intent.hasExtra(DIRECTORY_KEY)) {
-            directory = this.intent.getStringExtra(DIRECTORY_KEY)
-        }
-
-        this.loadList(directory ?: (this.getItem().params?.get("dir") ?: "").toString())
 
         this.findViewById<TextView>(android.R.id.title).setOnClickListener {
             Toast.makeText(this, "Click!", Toast.LENGTH_SHORT).show()
+        }
+
+        if (savedInstanceState == null) {
+            this.loadList((this.getItem().params?.get("dir") ?: "").toString())
+
+            return
+        }
+
+        this.loadedDir = savedInstanceState.getParcelable(DIRECTORY_KEY)!!
+        this.setDir()
+
+        this.images = savedInstanceState.getSerializable(IMAGES_KEY) as HashMap<String, ArrayMap<String, Bitmap>>
+        this.imageWidth = savedInstanceState.getInt(IMAGE_WIDTH_KEY)
+
+        if (this.imageWidth == 0) {
+            this.imageWidth = null
         }
     }
 
     private fun loadList(directory: String = "") = this.load {
         Log.i(Config.LOG_TAG, "Read dir $directory")
         this.loadedDir = DirTask.read(this, it.account, directory)
-        this.intent.putExtra(DIRECTORY_KEY, this.loadedDir.dir)
+        this.setDir()
+    }
 
+    private fun setDir() {
         this.setTitle(this.loadedDir.dir)
         this.listAdapter.items = this.loadedDir.data.toMutableList()
     }
@@ -136,11 +149,6 @@ class IndexActivity: ListActivity() {
         }
 
         this.imagesLoading = true
-        var imageWidth: Int? = null
-
-        if (this.intent.hasExtra(IMAGE_WIDTH_KEY)) {
-            imageWidth = this.intent.getIntExtra(IMAGE_WIDTH_KEY, 0)
-        }
 
         CompletableFuture.supplyAsync<Any> {
             while (this.imageQueue.size != 0) {
@@ -148,9 +156,8 @@ class IndexActivity: ListActivity() {
                 val item = this.imageQueue[imageView] ?: continue
                 this.imageQueue.remove(imageView)
 
-                if (imageWidth == null) {
-                    imageWidth = imageView.width
-                    this.intent.putExtra(IMAGE_WIDTH_KEY, imageWidth)
+                if (this.imageWidth == null) {
+                    this.imageWidth = imageView.width
                 }
 
                 var imagePath = this.images[this.loadedDir.dir]
@@ -166,7 +173,7 @@ class IndexActivity: ListActivity() {
                             this.getAccount(),
                             this.loadedDir.dir,
                             item.name,
-                            imageWidth
+                            this.imageWidth
                         )
                     }
 
@@ -176,5 +183,13 @@ class IndexActivity: ListActivity() {
 
             this.imagesLoading = false
         }.exceptionally { e -> e.printStackTrace() }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(IMAGE_WIDTH_KEY, this.imageWidth ?: 0)
+        outState.putParcelable(DIRECTORY_KEY, this.loadedDir)
+        outState.putSerializable(IMAGES_KEY, this.images)
     }
 }
