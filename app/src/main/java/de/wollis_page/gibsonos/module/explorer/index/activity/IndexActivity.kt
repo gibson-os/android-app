@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.module.explorer.index.activity
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.ArrayMap
@@ -39,7 +40,13 @@ class IndexActivity: ListActivity() {
 
         this.findViewById<TextView>(android.R.id.title).setOnClickListener {
             this.runTask {
-                DirTask.dirList(this, this.loadedDir.dir)
+                val dirList = DirTask.dirList(this, this.loadedDir.dir)
+
+                this.runOnUiThread {
+                    val alertDialog = AlertDialog.Builder(this)
+                        .setTitle("Test")
+                    alertDialog.create().show()
+                }
             }
         }
 
