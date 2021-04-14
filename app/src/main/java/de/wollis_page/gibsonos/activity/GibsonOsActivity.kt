@@ -25,8 +25,10 @@ import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.ActivityException
+import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
+import java.util.concurrent.CompletableFuture
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var account: Account? = null
@@ -174,6 +176,26 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             this.findViewById<TextView>(android.R.id.title).text = title
             super.setTitle(title)
         }
+    }
+
+    protected fun runTask(run: () -> Unit) {
+        CompletableFuture.supplyAsync<Any> {
+            try {
+                run()
+            } catch (exception: MessageException) {
+                this.runOnUiThread {
+                    var message = exception.message
+                    val messageRessource = exception.messageRessource
+
+                    if (messageRessource != null) {
+                        message = getString(messageRessource)
+                    }
+
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                    this.finish()
+                }
+            }
+        }.exceptionally { e -> e.printStackTrace() }
     }
 
     companion object {

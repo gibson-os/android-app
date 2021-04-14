@@ -42,7 +42,7 @@ abstract class ListActivity : GibsonOsActivity() {
     protected fun load(run: (account: Account) -> Unit) {
         val accountModel = this.getAccount()
 
-        CompletableFuture.supplyAsync<Any> {
+        this.runTask {
             val account = this.application.getAccountById(accountModel.id)
 
             if (account === null) {
@@ -51,7 +51,7 @@ abstract class ListActivity : GibsonOsActivity() {
                     this.finish()
                 }
 
-                return@supplyAsync
+                return@runTask
             }
 
             try {
@@ -70,6 +70,6 @@ abstract class ListActivity : GibsonOsActivity() {
                     this.finish()
                 }
             }
-        }.exceptionally { e -> e.printStackTrace() }
+        }
     }
 }

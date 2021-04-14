@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import okhttp3.*
@@ -105,40 +106,8 @@ class DataStore(url: String, token: String?) {
     @Throws(ResponseException::class)
     fun loadJson(): JSONObject {
         try {
-            val response = this.execute()
-            val body = this.getBody(response)
-
-            try {
-                val jsonResponse = JSONObject(body.string())
-                Log.i(Config.LOG_TAG, "Response body: $jsonResponse")
-
-                if (
-                    (jsonResponse.has("failure") && jsonResponse.getBoolean("failure")) ||
-                    (!jsonResponse.has("success") || !jsonResponse.getBoolean("success"))
-                ) {
-                    val message = if (jsonResponse.has("data")) {
-                        val data = jsonResponse.getJSONObject("data")
-
-                        when {
-                            data.has("message") -> data.getString("message")
-                            data.has("msg") -> data.getString("msg")
-                            else -> "Response error!"
-                        }
-                    } else "Response error!"
-
-                    throw ResponseException(message, jsonResponse.toString(2), response.code)
-                }
-
-                return jsonResponse
-            } catch (exception: JSONException) {
-                throw ResponseException(
-                    "JSON can't be parsed. Maybe wrong URL?",
-                    body.string(),
-                    response.code,
-                    R.string.response_error_json
-                )
-            }
-        } catch (exception: ResponseException) {
+            return this.checkError(this.execute())
+        } catch (exception: MessageException) {
             throw exception
         } catch (exception: Exception) {
             throw ResponseException(exception.message ?: "Request has errors!", "", 0)
@@ -173,6 +142,7 @@ class DataStore(url: String, token: String?) {
         Log.i(Config.LOG_TAG, "Response code: " + response.code)
 
         if (!response.isSuccessful) {
+            this.checkError(response)
             throw ResponseException("Request error!", "", response.code)
         }
 
@@ -199,6 +169,30 @@ class DataStore(url: String, token: String?) {
         }
 
         return buildedUrl
+    }
+
+    private fun checkError(response: Response): JSONObject {
+        val jsonResponse = JSONObject(this.getBody(response).string())
+        Log.i(Config.LOG_TAG, "Response body: $jsonResponse")
+
+        if (
+            (jsonResponse.has("failure") && jsonResponse.getBoolean("failure")) ||
+            (!jsonResponse.has("success") || !jsonResponse.getBoolean("success"))
+        ) {
+            val message = if (jsonResponse.has("data")) {
+                val data = jsonResponse.getJSONObject("data")
+
+                when {
+                    data.has("message") -> data.getString("message")
+                    data.has("msg") -> data.getString("msg")
+                    else -> "Response error!"
+                }
+            } else "Response error!"
+
+            throw ResponseException(message, jsonResponse.toString(2), response.code)
+        }
+
+        return jsonResponse
     }
 
     fun setRoute(module: String?, task: String?, action: String?) {

@@ -38,8 +38,10 @@ class IndexActivity: ListActivity() {
         super.onCreate(savedInstanceState)
 
         this.findViewById<TextView>(android.R.id.title).setOnClickListener {
-            DirTask.dirList(this, this.loadedDir.dir)
-            Toast.makeText(this, "Click!", Toast.LENGTH_SHORT).show()
+            this.runTask {
+                DirTask.dirList(this, this.loadedDir.dir)
+                Toast.makeText(this, "Click!", Toast.LENGTH_SHORT).show()
+            }
         }
 
         if (savedInstanceState == null) {
@@ -152,7 +154,7 @@ class IndexActivity: ListActivity() {
 
         this.imagesLoading = true
 
-        CompletableFuture.supplyAsync<Any> {
+        this.runTask {
             while (this.imageQueue.size != 0) {
                 val imageView = this.imageQueue.keyAt(0)
                 val item = this.imageQueue[imageView] ?: continue
@@ -184,7 +186,7 @@ class IndexActivity: ListActivity() {
             }
 
             this.imagesLoading = false
-        }.exceptionally { e -> e.printStackTrace() }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

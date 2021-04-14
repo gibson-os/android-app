@@ -76,33 +76,20 @@ class LoginActivity : GibsonOsActivity() {
                 return@OnClickListener
             }
 
-            CompletableFuture.supplyAsync<Any> {
-                try {
-                    val account = UserTask.login(
-                        me,
-                        me.etUrl?.text.toString(),
-                        me.etUser?.text.toString(),
-                        me.etPassword?.text.toString()
-                    )
-                    account.alias = me.etAlias?.text.toString()
-                    account.save()
-                    me.application.addAccount(account)
+            this.runTask {
+                val account = UserTask.login(
+                    me,
+                    me.etUrl?.text.toString(),
+                    me.etUser?.text.toString(),
+                    me.etPassword?.text.toString()
+                )
+                account.alias = me.etAlias?.text.toString()
+                account.save()
+                me.application.addAccount(account)
 
-                    setResult(RESULT_OK)
-                    me.finish()
-                } catch (exception: MessageException) {
-                    me.runOnUiThread {
-                        var message = exception.message
-                        val messageRessource = exception.messageRessource
-
-                        if (messageRessource != null) {
-                            message = getString(messageRessource)
-                        }
-
-                        Toast.makeText(me, message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }.exceptionally { e -> e.printStackTrace() }
+                setResult(RESULT_OK)
+                me.finish()
+            }
         }
     }
 }
