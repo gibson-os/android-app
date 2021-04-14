@@ -40,7 +40,6 @@ class IndexActivity: ListActivity() {
         this.findViewById<TextView>(android.R.id.title).setOnClickListener {
             this.runTask {
                 DirTask.dirList(this, this.loadedDir.dir)
-                Toast.makeText(this, "Click!", Toast.LENGTH_SHORT).show()
             }
         }
 

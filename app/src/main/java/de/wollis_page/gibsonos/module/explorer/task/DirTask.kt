@@ -30,7 +30,7 @@ object DirTask: AbstractTask() {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val jsonAdapter = moshi.adapter(DirList::class.java)
 
-        return jsonAdapter.fromJson(response.toString()) ?:
+        return jsonAdapter.fromJson(response.getJSONArray("data").get(0).toString()) ?:
             throw TaskException("Dir list not in response!", R.string.explorer_dir_list_error_response)
     }
 }
