@@ -1,6 +1,7 @@
 package de.wollis_page.gibsonos.module.explorer.index.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
+import java.io.Serializable
 
 data class Item(
     val name: String,
@@ -17,4 +18,4 @@ data class Item(
     val html5VideoStatus: Html5Status?,
     val html5VideoToken: String?,
     val thumbAvailable: Boolean = false
-): ListItemInterface
+): ListItemInterface, Serializable
