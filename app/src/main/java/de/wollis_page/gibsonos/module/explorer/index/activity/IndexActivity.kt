@@ -1,7 +1,9 @@
 package de.wollis_page.gibsonos.module.explorer.index.activity
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.util.ArrayMap
 import android.util.Log
@@ -16,10 +18,10 @@ import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
+import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
-import java.util.concurrent.CompletableFuture
 
 class IndexActivity: ListActivity() {
     override fun getListRessource() = R.layout.explorer_index_list_item
@@ -89,7 +91,20 @@ class IndexActivity: ListActivity() {
             return
         }
 
-        Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG).show()
+        val options = ArrayList<String>()
+
+        if (item.html5VideoStatus == Html5Status.GENERATED) {
+            options.add("An Chromecast senden")
+        } else if (item.html5VideoStatus == null) {
+            options.add("Für HTML5 generieren")
+        }
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle(item.name)
+            .setItems(options.toArray(arrayOfNulls<String>(0))) { dialog, which ->
+                Toast.makeText(this, which, Toast.LENGTH_SHORT).show()
+            }
+        alertDialog.create().show()
     }
 
     override fun onBackPressed() {
@@ -143,10 +158,26 @@ class IndexActivity: ListActivity() {
             }
         }
 
-        if (item.html5VideoToken != null) {
-            (view.findViewById<View>(R.id.html5) as ImageView).visibility = View.VISIBLE
+        val html5VideoStatus = item.html5VideoStatus
+        val html5ImageView = view.findViewById<View>(R.id.html5) as ImageView
+
+        if (html5VideoStatus != null) {
+            html5ImageView.visibility = View.VISIBLE
+
+            when (html5VideoStatus) {
+                Html5Status.WAIT -> {
+                    html5ImageView.setColorFilter(Color.argb(255, 218, 218, 218))
+                }
+                Html5Status.ERROR -> {
+                    html5ImageView.setColorFilter(Color.argb(255, 255, 0, 0))
+                }
+                Html5Status.GENERATE -> {
+                    html5ImageView.setColorFilter(Color.argb(255, 0, 0, 255))
+                }
+                else -> {}
+            }
         } else {
-            (view.findViewById<View>(R.id.html5) as ImageView).visibility = View.INVISIBLE
+            html5ImageView.visibility = View.INVISIBLE
         }
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
@@ -180,10 +211,10 @@ class IndexActivity: ListActivity() {
                 try {
                     if (imagePath[item.name] == null) {
                         imagePath[item.name] = FileTask.image(
-                            this.getAccount(),
-                            this.loadedDir.dir,
-                            item.name,
-                            this.imageWidth
+                                this.getAccount(),
+                                this.loadedDir.dir,
+                                item.name,
+                                this.imageWidth
                         )
                     }
 

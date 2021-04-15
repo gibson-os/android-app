@@ -14,7 +14,7 @@ data class Item(
     val icon: String?,
     val category: Int?,
     val metaInfos: Map<String, Any>?,
-    val html5VideoStatus: String?,
+    val html5VideoStatus: Html5Status?,
     val html5VideoToken: String?,
     val thumbAvailable: Boolean = false
 ): ListItemInterface
