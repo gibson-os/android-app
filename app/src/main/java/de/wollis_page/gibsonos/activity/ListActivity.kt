@@ -10,11 +10,9 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.dto.ListItemInterface
-import de.wollis_page.gibsonos.exception.MessageException
-import java.util.concurrent.CompletableFuture
 
 abstract class ListActivity : GibsonOsActivity() {
-    protected lateinit var listView: RecyclerView
+    private lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
 
     abstract fun onClick(item: ListItemInterface)

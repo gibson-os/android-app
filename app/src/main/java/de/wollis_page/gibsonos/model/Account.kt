@@ -13,7 +13,7 @@ class Account: SugarRecord, Parcelable, ListItemInterface {
     var token: String? = null
     var url: String = ""
 
-    constructor() {}
+    constructor()
 
     constructor(user: String, url: String, token: String?) {
         Log.i(Config.LOG_TAG, "Create Account Model $user@$url with token $token")

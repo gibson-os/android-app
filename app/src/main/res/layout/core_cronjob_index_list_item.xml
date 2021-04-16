@@ -11,16 +11,17 @@
     tools:ignore="UseCompoundDrawables">
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/command"
         android:textSize="@dimen/headline_font_size"
         android:textStyle="bold"
+        android:ellipsize="start"
+        android:singleLine="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/lastRun"
         android:textSize="@dimen/headline_font_size"
-        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

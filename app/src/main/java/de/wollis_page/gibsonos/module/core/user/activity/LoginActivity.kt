@@ -6,16 +6,13 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
-import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.task.UserTask
 import java.util.*
-import java.util.concurrent.CompletableFuture
 
 class LoginActivity : GibsonOsActivity() {
     private var editTexts: MutableList<EditText?> = ArrayList()

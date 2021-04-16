@@ -26,10 +26,10 @@
                 android:textSize="@dimen/headline_font_size"
                 android:gravity="center_vertical"
                 android:ellipsize="start"
+                android:singleLine="true"
                 android:layout_marginEnd="@dimen/outter_spacing"
                 android:textStyle="bold"
-                android:text="@string/app_name"
-                android:singleLine="true" />
+                android:text="@string/app_name" />
 
         </LinearLayout>
 

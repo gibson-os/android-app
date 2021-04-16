@@ -1,7 +1,6 @@
 package de.wollis_page.gibsonos.activity
 
 import android.content.Intent
-import android.hardware.camera2.CaptureFailure
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,14 +20,14 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.application.GibsonOsApplication
-import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
+import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
+import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 import java.util.concurrent.CompletableFuture
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -39,7 +38,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
 
-    abstract protected fun getContentView(): Int
+    protected abstract fun getContentView(): Int
 
     @Throws(Exception::class)
     fun getAccount(): Account {

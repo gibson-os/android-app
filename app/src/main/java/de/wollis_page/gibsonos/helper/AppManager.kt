@@ -3,7 +3,6 @@ package de.wollis_page.gibsonos.helper
 import android.util.Log
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
-import de.wollis_page.gibsonos.exception.AppException
 
 object AppManager {
     fun getActivityClass(module: String, task: String): Class<*> {

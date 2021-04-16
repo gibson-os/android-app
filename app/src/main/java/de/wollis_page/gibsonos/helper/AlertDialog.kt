@@ -9,7 +9,7 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 
-class AlertDialog(val context: GibsonOsActivity, val title: String, val items: ArrayList<DialogItem>) {
+class AlertDialog(val context: GibsonOsActivity, private val title: String, val items: ArrayList<DialogItem>) {
     var layout: Int = R.layout.base_alert_dialog_item
 //    this.items.toArray(arrayOfNulls<String>(0)
     fun show(): AlertDialog? {

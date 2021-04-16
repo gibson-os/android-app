@@ -10,7 +10,6 @@ import de.wollis_page.gibsonos.exception.TaskException
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder

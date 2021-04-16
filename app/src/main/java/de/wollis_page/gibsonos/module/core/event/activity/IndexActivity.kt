@@ -1,6 +1,5 @@
 package de.wollis_page.gibsonos.module.core.event.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -10,7 +9,6 @@ import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.AlertDialog
-import de.wollis_page.gibsonos.helper.AppManager
 import de.wollis_page.gibsonos.module.core.event.dto.Event
 import de.wollis_page.gibsonos.module.core.task.EventTask
 
@@ -23,9 +21,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     }
 
     private fun loadEvents() = this.load {
-        val events = EventTask.index(this)
-
-        this.listAdapter.items = events.toMutableList()
+        this.listAdapter.items = EventTask.index(this).toMutableList()
     }
 
     override fun onClick(item: ListItemInterface) {

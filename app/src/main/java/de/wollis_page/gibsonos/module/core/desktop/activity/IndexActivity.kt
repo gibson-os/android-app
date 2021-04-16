@@ -30,7 +30,7 @@ class IndexActivity : ListActivity() {
             false
         ))
 
-        val cronjobsSetting = DialogItem(this.getString(R.string.core_desktop_cronjobs))
+        val cronjobsSetting = DialogItem(this.getString(R.string.core_cronjob_title))
         cronjobsSetting.icon = AppManager.getAppIcon("core", "cronjob")
         cronjobsSetting.onClick = {
             this.runTask({
@@ -43,14 +43,13 @@ class IndexActivity : ListActivity() {
             })
         }
 
-        val eventsSetting = DialogItem(this.getString(R.string.core_desktop_events))
+        val eventsSetting = DialogItem(this.getString(R.string.core_event_title))
         eventsSetting.icon = AppManager.getAppIcon("core", "event")
         eventsSetting.onClick = {
             this.runTask({
                 val activityClass = AppManager.getActivityClass("core", "event")
                 val intent = Intent(this, activityClass)
                 intent.putExtra(ACCOUNT_KEY, this.getAccount())
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
                 this.startActivity(intent)
             })
