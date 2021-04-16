@@ -1,6 +1,7 @@
 package de.wollis_page.gibsonos.activity
 
 import android.content.Intent
+import android.hardware.camera2.CaptureFailure
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -178,7 +179,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         }
     }
 
-    protected fun runTask(run: () -> Unit) {
+    protected fun runTask(run: () -> Unit, runFailure: ((exception: Throwable) -> Unit)? = null) {
         CompletableFuture.supplyAsync<Any> {
             try {
                 run()
@@ -192,7 +193,10 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                     }
 
                     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-                    this.finish()
+
+                    if (runFailure != null) {
+                        runFailure(exception)
+                    }
                 }
             }
         }.exceptionally { e -> e.printStackTrace() }

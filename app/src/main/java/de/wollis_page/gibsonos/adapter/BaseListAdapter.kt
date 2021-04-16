@@ -40,7 +40,7 @@ class BaseListAdapter(private val context: ListActivity) : RecyclerView.Adapter<
         }
 
         override fun onClick(p0: View?) {
-            this.context.onCLick(this.item)
+            this.context.onClick(this.item)
         }
     }
 }

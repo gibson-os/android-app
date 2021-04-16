@@ -76,7 +76,7 @@ class LoginActivity : GibsonOsActivity() {
                 return@OnClickListener
             }
 
-            this.runTask {
+            this.runTask({
                 val account = UserTask.login(
                     me,
                     me.etUrl?.text.toString(),
@@ -89,7 +89,7 @@ class LoginActivity : GibsonOsActivity() {
 
                 setResult(RESULT_OK)
                 me.finish()
-            }
+            })
         }
     }
 }

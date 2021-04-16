@@ -17,7 +17,7 @@ abstract class ListActivity : GibsonOsActivity() {
     protected lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
 
-    abstract fun onCLick(item: ListItemInterface)
+    abstract fun onClick(item: ListItemInterface)
 
     abstract fun bind(item: ListItemInterface, view: View)
 
@@ -42,7 +42,7 @@ abstract class ListActivity : GibsonOsActivity() {
     protected fun load(run: (account: Account) -> Unit) {
         val accountModel = this.getAccount()
 
-        this.runTask {
+        this.runTask({
             val account = this.application.getAccountById(accountModel.id)
 
             if (account === null) {
@@ -54,22 +54,10 @@ abstract class ListActivity : GibsonOsActivity() {
                 return@runTask
             }
 
-            try {
-                run(account)
-                this.runOnUiThread { this.listView.adapter?.notifyDataSetChanged() }
-            } catch (exception: MessageException) {
-                this.runOnUiThread {
-                    var message = exception.message
-                    val messageRessource = exception.messageRessource
-
-                    if (messageRessource != null) {
-                        message = getString(messageRessource)
-                    }
-
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-                    this.finish()
-                }
-            }
-        }
+            run(account)
+            this.runOnUiThread { this.listView.adapter?.notifyDataSetChanged() }
+        }, {
+            this.finish()
+        })
     }
 }

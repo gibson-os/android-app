@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -22,7 +23,7 @@ import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
 
-class IndexActivity: ListActivity() {
+class IndexActivity: ListActivity(), AppActivityInterface {
     override fun getListRessource() = R.layout.explorer_index_list_item
     private lateinit var loadedDir: Dir
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
@@ -79,7 +80,7 @@ class IndexActivity: ListActivity() {
         this.listAdapter.items = this.loadedDir.data.toMutableList()
     }
 
-    override fun onCLick(item: ListItemInterface) {
+    override fun onClick(item: ListItemInterface) {
         if (item !is Item) {
             return
         }
@@ -188,7 +189,7 @@ class IndexActivity: ListActivity() {
 
         this.imagesLoading = true
 
-        this.runTask {
+        this.runTask({
             while (this.imageQueue.size != 0) {
                 val imageView = this.imageQueue.keyAt(0)
                 val item = this.imageQueue[imageView] ?: continue
@@ -208,10 +209,10 @@ class IndexActivity: ListActivity() {
                 try {
                     if (imagePath[item.name] == null) {
                         imagePath[item.name] = FileTask.image(
-                                this.getAccount(),
-                                this.loadedDir.dir,
-                                item.name,
-                                this.imageWidth
+                            this.getAccount(),
+                            this.loadedDir.dir,
+                            item.name,
+                            this.imageWidth
                         )
                     }
 
@@ -220,7 +221,7 @@ class IndexActivity: ListActivity() {
             }
 
             this.imagesLoading = false
-        }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -229,5 +230,9 @@ class IndexActivity: ListActivity() {
         outState.putInt(IMAGE_WIDTH_KEY, this.imageWidth ?: 0)
         outState.putParcelable(DIRECTORY_KEY, this.loadedDir)
         outState.putSerializable(IMAGES_KEY, this.images)
+    }
+
+    override fun getAppIcon(): Int {
+        return R.drawable.ic_folder
     }
 }

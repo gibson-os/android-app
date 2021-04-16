@@ -54,7 +54,7 @@ class MainActivity : ListActivity() {
         this.listAdapter.notifyDataSetChanged()
     }
 
-    override fun onCLick(item: ListItemInterface) {
+    override fun onClick(item: ListItemInterface) {
         if (item !is Account) {
             return
         }
