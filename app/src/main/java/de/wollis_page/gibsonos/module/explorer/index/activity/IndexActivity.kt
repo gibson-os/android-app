@@ -1,7 +1,5 @@
 package de.wollis_page.gibsonos.module.explorer.index.activity
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -10,11 +8,12 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
+import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.ResponseException
+import de.wollis_page.gibsonos.helper.AlertDialog
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
@@ -40,17 +39,17 @@ class IndexActivity: ListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
-            this.runTask {
-                val dirList = DirTask.dirList(this, this.loadedDir.dir)
-
-                this.runOnUiThread {
-                    val alertDialog = AlertDialog.Builder(this)
-                        .setTitle("Test")
-                    alertDialog.create().show()
-                }
-            }
-        }
+//        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
+//            this.runTask {
+//                val dirList = DirTask.dirList(this, this.loadedDir.dir)
+//
+//                this.runOnUiThread {
+//                    val alertDialog = AlertDialog.Builder(this)
+//                        .setTitle("Test")
+//                    alertDialog.create().show()
+//                }
+//            }
+//        }
 
         if (savedInstanceState == null) {
             this.loadList((this.getItem().params?.get("dir") ?: "").toString())
@@ -91,20 +90,18 @@ class IndexActivity: ListActivity() {
             return
         }
 
-        val options = ArrayList<String>()
+        val options = ArrayList<DialogItem>()
+        var html5Item = DialogItem("Für HTML5 konvertieren")
+        html5Item.icon = R.drawable.ic_html5
 
         if (item.html5VideoStatus == Html5Status.GENERATED) {
-            options.add("An Chromecast senden")
-        } else if (item.html5VideoStatus == null) {
-            options.add("Für HTML5 generieren")
+            html5Item = DialogItem("An Chromecast senden")
+            html5Item.icon = R.drawable.ic_chromecast
         }
 
-        val alertDialog = AlertDialog.Builder(this)
-            .setTitle(item.name)
-            .setItems(options.toArray(arrayOfNulls<String>(0))) { dialog, which ->
-                Toast.makeText(this, which, Toast.LENGTH_SHORT).show()
-            }
-        alertDialog.create().show()
+        options.add(html5Item)
+
+        AlertDialog(this, item.name, options).show()
     }
 
     override fun onBackPressed() {
@@ -134,7 +131,7 @@ class IndexActivity: ListActivity() {
             return
         }
 
-        val imageView = view.findViewById<View>(R.id.icon) as ImageView
+        val imageView = view.findViewById<ImageView>(R.id.icon)
 
         if (item.type == "dir") {
             imageView.setImageResource(R.drawable.ic_folder)
