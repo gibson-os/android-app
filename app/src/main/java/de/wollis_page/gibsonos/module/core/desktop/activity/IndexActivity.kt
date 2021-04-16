@@ -31,10 +31,10 @@ class IndexActivity : ListActivity() {
         ))
 
         val cronjobsSetting = DialogItem(this.getString(R.string.core_desktop_cronjobs))
-        cronjobsSetting.icon = R.drawable.ic_calendar_alt
+        cronjobsSetting.icon = AppManager.getAppIcon("core", "cronjob")
 
         val eventsSetting = DialogItem(this.getString(R.string.core_desktop_events))
-        eventsSetting.icon = R.drawable.ic_stream
+        eventsSetting.icon = AppManager.getAppIcon("core", "event")
 
         val cogButton = this.findViewById<FloatingActionButton>(R.id.cogButton)
         cogButton.setOnClickListener {

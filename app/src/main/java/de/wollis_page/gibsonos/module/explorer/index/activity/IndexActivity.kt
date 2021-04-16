@@ -232,7 +232,5 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         outState.putSerializable(IMAGES_KEY, this.images)
     }
 
-    override fun getAppIcon(): Int {
-        return R.drawable.ic_folder
-    }
+    override fun getAppIcon() = R.drawable.ic_folder
 }
