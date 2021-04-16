@@ -9,4 +9,7 @@
 local.properties
 /.idea/modules.xml
 /.idea/caches
->Pr
+/local.properties
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.cxx
