@@ -20,7 +20,7 @@ class MainActivity : ListActivity() {
 
         val inflater = LayoutInflater.from(this)
         this.contentContainer.addView(inflater.inflate(
-            R.layout.base_add_button,
+            R.layout.base_button_add,
             this.findViewById(android.R.id.content),
             false
         ))
