@@ -18,6 +18,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        this.setTitle(R.string.core_event_title)
         this.loadEvents()
     }
 
@@ -36,15 +37,12 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         startEvent.icon = R.drawable.ic_play
         startEvent.onClick = {
             this.runTask({
+                EventTask.run(this, item.id)
             })
         }
 
         val deleteEvent = DialogItem(this.getString(R.string.core_event_remove))
         deleteEvent.icon = R.drawable.ic_minus
-        deleteEvent.onClick = {
-            this.runTask({
-            })
-        }
 
         AlertDialog(
             this,
@@ -59,7 +57,10 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         }
 
         view.findViewById<TextView>(R.id.name).text = item.name
-        view.findViewById<TextView>(R.id.lastRun).text = this.getString(R.string.core_event_last_run, item.lastRun)
+        view.findViewById<TextView>(R.id.lastRun).text = this.getString(
+            R.string.core_event_last_run,
+            item.lastRun ?: this.getString(R.string.core_event_last_run_none)
+        )
     }
 
     override fun getListRessource() = R.layout.core_event_index_list_item

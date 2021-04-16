@@ -10,7 +10,7 @@ import de.wollis_page.gibsonos.task.AbstractTask
 
 object DesktopTask: AbstractTask() {
     fun index(context: GibsonOsActivity): Desktop {
-        val response = run(context, getDataStore(context.getAccount(), "core", "desktop", "index"))
+        val response = this.run(context, this.getDataStore(context.getAccount(), "core", "desktop", "index"))
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val jsonAdapter = moshi.adapter(Desktop::class.java)
 
