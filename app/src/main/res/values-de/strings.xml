@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Gibson OS</string>
+    <string name="account_title">Account hinzufügen</string>
+    <string name="account_alias">Alias</string>
+    <string name="account_user">Benutzername</string>
+    <string name="account_password">Passwort</string>
+    <string name="account_url">URL</string>
+    <string name="account_save">SPeichern</string>
+    <string name="account_error_alias_exists">Alias existiert schon.</string>
+    <string name="account_error_value_empty">Darf nicht leer sein.</string>
+    <string name="account_error_no_model_found">Kein Account Model gefunden!</string>
+    <string name="account_error_not_exists">Account existiert nicht!</string>
+    <string name="account_error_no_token">Account Token existiert nicht!</string>
+
+    <string name="login_title">Login</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="not_implemented_yet">Noch nicht eingebaut!</string>
+    <string name="no_item_set">Kein Item ausgewählt!</string>
+
+    <string name="response_error_json">JSON kann nicht verarbeitet werden. Vielleicht die falsche URL?</string>
+
+    <string name="core_desktop_title">Desktop</string>
+    <string name="core_desktop_error_load">Desktop kann nicht geladen werden!</string>
+    <string name="core_desktop_settings">Einstellungen</string>
+    <string name="core_desktop_cronjobs">Cronjobs</string>
+    <string name="core_desktop_events">Events</string>
+
+    <string name="core_cronjob_last_run">Letzter Lauf: %s</string>
+
+    <string name="core_event_title">Events</string>
+    <string name="core_event_last_run">Letzter Lauf: %s</string>
+    <string name="core_event_last_run_none">Keiner</string>
+    <string name="core_event_execute">Ausführen</string>
+    <string name="core_event_remove">Entfernen</string>
+
+    <string name="explorer_dir_error_response">Ordern nicht empfangen!</string>
+    <string name="explorer_dir_list_error_response">Ordnerliste nicht empfangen!</string>
+    <string name="explorer_icon_description">Icon</string>
+</resources>
