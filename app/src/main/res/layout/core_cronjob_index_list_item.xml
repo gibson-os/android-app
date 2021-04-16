@@ -15,12 +15,11 @@
         android:textSize="@dimen/headline_font_size"
         android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/text_spacing"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/lastRun"
-        android:textSize="@dimen/subline_font_size"
+        android:textSize="@dimen/headline_font_size"
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

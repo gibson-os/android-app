@@ -32,9 +32,29 @@ class IndexActivity : ListActivity() {
 
         val cronjobsSetting = DialogItem(this.getString(R.string.core_desktop_cronjobs))
         cronjobsSetting.icon = AppManager.getAppIcon("core", "cronjob")
+        cronjobsSetting.onClick = {
+            this.runTask({
+                val activityClass = AppManager.getActivityClass("core", "cronjob")
+                val intent = Intent(this, activityClass)
+                intent.putExtra(ACCOUNT_KEY, this.getAccount())
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                this.startActivity(intent)
+            })
+        }
 
         val eventsSetting = DialogItem(this.getString(R.string.core_desktop_events))
         eventsSetting.icon = AppManager.getAppIcon("core", "event")
+        eventsSetting.onClick = {
+            this.runTask({
+                val activityClass = AppManager.getActivityClass("core", "event")
+                val intent = Intent(this, activityClass)
+                intent.putExtra(ACCOUNT_KEY, this.getAccount())
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                this.startActivity(intent)
+            })
+        }
 
         val cogButton = this.findViewById<FloatingActionButton>(R.id.cogButton)
         cogButton.setOnClickListener {

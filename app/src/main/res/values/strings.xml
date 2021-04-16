@@ -27,6 +27,13 @@
     <string name="core_desktop_cronjobs">Cronjobs</string>
     <string name="core_desktop_events">Events</string>
 
+    <string name="core_cronjob_last_run">Last run: %s</string>
+
+    <string name="core_event_title">Events</string>
+    <string name="core_event_last_run">Last run: %s</string>
+    <string name="core_event_execute">Execute</string>
+    <string name="core_event_remove">Remove</string>
+
     <string name="explorer_dir_error_response">Dir not in response!</string>
     <string name="explorer_dir_list_error_response">Dir list not in response!</string>
     <string name="explorer_icon_description">Icon</string>

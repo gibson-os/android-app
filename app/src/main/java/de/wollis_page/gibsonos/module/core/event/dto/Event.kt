@@ -4,5 +4,6 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 
 data class Event(
     val id: Int,
-    val name: String
+    val name: String,
+    val lastRun: String?
 ): ListItemInterface

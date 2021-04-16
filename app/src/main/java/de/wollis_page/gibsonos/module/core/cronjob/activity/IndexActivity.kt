@@ -15,9 +15,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         TODO("Not yet implemented")
     }
 
-    override fun getListRessource(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getListRessource() = R.layout.core_cronjob_index_list_item
 
     override fun getAppIcon() = R.drawable.ic_calendar_alt
 }
