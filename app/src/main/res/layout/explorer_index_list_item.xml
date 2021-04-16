@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/outter_spacing"
-        android:layout_marginLeft="@dimen/outter_spacing"
-        android:layout_marginRight="@dimen/outter_spacing"
+        android:layout_marginStart="@dimen/inner_spacing"
+        android:layout_marginEnd="@dimen/outter_spacing"
         android:layout_marginBottom="@dimen/outter_spacing">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="@dimen/normal_icon_size"
+            android:layout_width="@dimen/thumb_width"
             android:layout_height="@dimen/normal_icon_size"
             android:contentDescription="@string/explorer_icon_description"
             app:srcCompat="@drawable/ic_folder" />
@@ -25,7 +25,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/outter_spacing" >
+            android:layout_marginStart="@dimen/inner_spacing" >
 
             <TextView
                 android:id="@+id/name"
