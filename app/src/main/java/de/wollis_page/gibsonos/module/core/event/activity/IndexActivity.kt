@@ -42,7 +42,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
         AlertDialog(
             this,
-            this.getString(R.string.core_event_title),
+            item.name,
             arrayListOf(startEvent, deleteEvent)
         ).show()
     }
