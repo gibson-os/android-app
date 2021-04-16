@@ -9,15 +9,15 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginTop="@dimen/outter_spacing"
+        android:layout_marginLeft="@dimen/outter_spacing"
+        android:layout_marginRight="@dimen/outter_spacing"
+        android:layout_marginBottom="@dimen/inner_spacing">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/normal_icon_size"
+            android:layout_height="@dimen/normal_icon_size"
             android:contentDescription="@string/explorer_icon_description"
             app:srcCompat="@drawable/ic_folder" />
 
@@ -25,14 +25,14 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp" >
+            android:layout_marginStart="@dimen/outter_spacing" >
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="2dp"
-                android:textSize="18sp"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/headline_font_size"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -45,12 +45,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="9"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/subline_font_size" />
 
                 <ImageView
                     android:id="@+id/html5"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/badge_icon_size"
+                    android:layout_height="@dimen/badge_icon_size"
                     android:layout_weight="1"
                     android:contentDescription="@string/explorer_icon_description"
                     android:scaleType="fitEnd"
@@ -65,6 +65,6 @@
 
     <ProgressBar
         android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="3dp" />
 
 </LinearLayout>
