@@ -27,6 +27,7 @@
             android:layout_height="match_parent"
             android:textSize="@dimen/subline_font_size"
             android:textStyle="bold"
+            android:gravity="center_vertical"
             android:layout_marginStart="@dimen/inner_spacing" />
 
     </LinearLayout>
