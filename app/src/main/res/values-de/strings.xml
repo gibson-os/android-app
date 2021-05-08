@@ -25,6 +25,7 @@
     <string name="core_desktop_error_load">Desktop kann nicht geladen werden!</string>
     <string name="core_desktop_settings">Einstellungen</string>
 
+    <string name="core_cronjob_title">Cronjobs</string>
     <string name="core_cronjob_last_run">Letzter Lauf: %s</string>
     <string name="core_cronjob_last_run_none">Nie</string>
 
@@ -37,5 +38,5 @@
     <string name="explorer_dir_error_response">Ordern nicht empfangen!</string>
     <string name="explorer_dir_list_error_response">Ordnerliste nicht empfangen!</string>
     <string name="explorer_icon_description">Icon</string>
-    <string name="core_cronjob_title">Cronjobs</string>
+    <string name="explorer_html5_error_convert_status">Konvertierungsstatus nicht empfangen!</string>
 </resources>

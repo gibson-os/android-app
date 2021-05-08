@@ -64,7 +64,10 @@
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/position"
         android:layout_width="match_parent"
-        android:layout_height="3dp" />
+        android:layout_height="3dp"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressBackgroundTint="#80FFFFFF" />
 
 </LinearLayout>

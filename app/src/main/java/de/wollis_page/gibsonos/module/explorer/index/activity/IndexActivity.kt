@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.module.explorer.index.activity
 
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.ArrayMap
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
@@ -22,6 +24,7 @@ import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
+import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 
 class IndexActivity: ListActivity(), AppActivityInterface {
     override fun getListRessource() = R.layout.explorer_index_list_item
@@ -158,28 +161,50 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
         val html5VideoStatus = item.html5VideoStatus
         val html5ImageView = view.findViewById<View>(R.id.html5) as ImageView
+        var color = Color.rgb(233, 98, 40)
+        val progressBar = view.findViewById(R.id.position) as ProgressBar
+        progressBar.max = 1
+        progressBar.progress = 0
+        progressBar.visibility = View.INVISIBLE
 
         if (html5VideoStatus != null) {
             html5ImageView.visibility = View.VISIBLE
 
             when (html5VideoStatus) {
                 Html5Status.WAIT -> {
-                    html5ImageView.setColorFilter(Color.argb(255, 218, 218, 218))
+                    color = Color.rgb(218, 218, 218)
                 }
                 Html5Status.ERROR -> {
-                    html5ImageView.setColorFilter(Color.argb(255, 255, 0, 0))
+                    color = Color.rgb(255, 0, 0)
                 }
                 Html5Status.GENERATE -> {
-                    html5ImageView.setColorFilter(Color.argb(255, 0, 0, 255))
+                    color = Color.rgb(0, 0, 255)
+                    val convertStatus = Html5Task.convertStatus(this, item.html5VideoToken ?: "")
+                    progressBar.max = convertStatus.frames
+                    progressBar.progress = convertStatus.frame
                 }
                 else -> {}
             }
+
+            html5ImageView.setColorFilter(color)
         } else {
             html5ImageView.visibility = View.INVISIBLE
         }
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
         (view.findViewById<View>(R.id.size) as TextView).text = item.size.toHumanReadableByte()
+
+        progressBar.progressTintList = ColorStateList.valueOf(color)
+
+        if (
+            item.metaInfos !== null &&
+            item.position !== null &&
+            item.metaInfos.containsKey("duration")
+        ) {
+            progressBar.max = item.metaInfos.get("duration").toString().toFloat().toInt()
+            progressBar.progress = item.position
+            progressBar.visibility = View.VISIBLE
+        }
     }
 
     private fun loadImages() {

@@ -17,5 +17,6 @@ data class Item(
     val metaInfos: Map<String, Any>?,
     val html5VideoStatus: Html5Status?,
     val html5VideoToken: String?,
-    val thumbAvailable: Boolean = false
+    val thumbAvailable: Boolean = false,
+    val position: Int? = null
 ): ListItemInterface, Serializable
