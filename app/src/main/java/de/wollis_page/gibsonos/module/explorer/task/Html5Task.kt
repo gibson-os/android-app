@@ -16,7 +16,7 @@ object Html5Task: AbstractTask() {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val jsonAdapter = moshi.adapter(ConvertStatus::class.java)
 
-        return jsonAdapter.fromJson(response.toString()) ?:
+        return jsonAdapter.fromJson(response.getJSONObject("data").toString()) ?:
             throw TaskException("Convert status not in response!", R.string.explorer_html5_error_convert_status)
     }
 }

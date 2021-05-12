@@ -14,6 +14,6 @@ object UserTask: AbstractTask() {
         dataStore.addParam("password", password)
         dataStore.addParam("model", Build.MODEL)
 
-        return Account(username, url, run(context, dataStore).getJSONObject("data").getString("token"))
+        return Account(username, url, this.run(context, dataStore).getJSONObject("data").getString("token"))
     }
 }

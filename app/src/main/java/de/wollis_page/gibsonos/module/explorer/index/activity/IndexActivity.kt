@@ -166,6 +166,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         progressBar.max = 1
         progressBar.progress = 0
         progressBar.visibility = View.INVISIBLE
+        html5ImageView.visibility = View.INVISIBLE
 
         if (html5VideoStatus != null) {
             html5ImageView.visibility = View.VISIBLE
@@ -179,16 +180,24 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 }
                 Html5Status.GENERATE -> {
                     color = Color.rgb(0, 0, 255)
-                    val convertStatus = Html5Task.convertStatus(this, item.html5VideoToken ?: "")
-                    progressBar.max = convertStatus.frames
-                    progressBar.progress = convertStatus.frame
+
+                    this.runTask({
+                        val convertStatus = Html5Task.convertStatus(
+                            this,
+                            item.html5VideoToken ?: ""
+                        )
+
+                        this.runOnUiThread {
+                            progressBar.max = convertStatus.frames
+                            progressBar.progress = convertStatus.frame
+                            progressBar.visibility = View.VISIBLE
+                        }
+                    })
                 }
                 else -> {}
             }
 
             html5ImageView.setColorFilter(color)
-        } else {
-            html5ImageView.visibility = View.INVISIBLE
         }
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name

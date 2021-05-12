@@ -96,6 +96,7 @@ class DataStore(url: String, token: String?) {
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
 
         for (key in this.params.keys) {
+            Log.d(Config.LOG_TAG, "Add param '" + key + "' with value '" + this.params[key].toString() + "'")
             builder.addFormDataPart(key, this.params[key]!!)
         }
 
@@ -109,6 +110,8 @@ class DataStore(url: String, token: String?) {
         } catch (exception: MessageException) {
             throw exception
         } catch (exception: Exception) {
+            exception.printStackTrace()
+
             throw ResponseException(exception.message ?: "Request has errors!", "", 0)
         }
     }
@@ -124,12 +127,12 @@ class DataStore(url: String, token: String?) {
     }
 
     private fun execute(): Response {
-        val requestUrl = getUrl()
+        val requestUrl = this.getUrl()
         Log.i(Config.LOG_TAG, requestUrl)
         val requestBuilder = Request.Builder()
             .url(requestUrl)
             .header("X-Requested-With", "XMLHttpRequest")
-            .post(getParams())
+            .post(this.getParams())
 
         if (this.token.isNotEmpty()) {
             Log.i(Config.LOG_TAG, "X-Device-Token: " + this.token)
@@ -137,7 +140,6 @@ class DataStore(url: String, token: String?) {
         }
 
         val response = this.client.newCall(requestBuilder.build()).execute()
-
         Log.i(Config.LOG_TAG, "Response code: " + response.code)
 
         if (!response.isSuccessful) {
