@@ -49,6 +49,8 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
         super.onCreate(savedInstanceState)
 
+        this.addSearch()
+
 //        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
 //            this.runTask {
 //                val dirList = DirTask.dirList(this, this.loadedDir.dir)
@@ -190,7 +192,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     color = Color.rgb(0, 0, 255)
 
                     this.runTask({
-                        while (html5VideoStatus == Html5Status.GENERATE) {
+//                        while (html5VideoStatus == Html5Status.GENERATE) {
                             val convertStatus = Html5Task.convertStatus(
                                 this,
                                 item.html5VideoToken ?: ""
@@ -202,8 +204,8 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                                 progressBar.visibility = View.VISIBLE
                             }
 
-                            Thread.sleep(1000)
-                        }
+//                            Thread.sleep(1000)
+//                        }
                     })
                 }
                 else -> {}
