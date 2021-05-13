@@ -21,8 +21,10 @@ abstract class AbstractTask {
     }
 
     @Throws(TaskException::class)
-    protected fun run(context: GibsonOsActivity, dataStore: DataStore): JSONObject {
-        context.showLoading()
+    protected fun run(context: GibsonOsActivity, dataStore: DataStore, showLoading: Boolean = true): JSONObject {
+        if (showLoading) {
+            context.showLoading()
+        }
 
         try {
             return dataStore.loadJson()
@@ -35,7 +37,9 @@ abstract class AbstractTask {
 
             throw TaskException(exception.message ?: "Task exception")
         } finally {
-            context.hideLoading()
+            if (showLoading) {
+                context.hideLoading()
+            }
         }
     }
 }

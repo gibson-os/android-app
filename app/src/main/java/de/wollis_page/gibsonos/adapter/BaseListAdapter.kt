@@ -25,8 +25,8 @@ class BaseListAdapter(private val context: ListActivity) : RecyclerView.Adapter<
     override fun getItemCount() = this.items.size
 
     class ItemHolder(
-            private var context: ListActivity,
-            private var view: View
+        private var context: ListActivity,
+        private var view: View
     ) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var item: ListItemInterface
 

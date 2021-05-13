@@ -63,11 +63,9 @@ class IndexActivity : ListActivity() {
                 arrayListOf(cronjobsSetting, eventsSetting)
             ).show()
         }
-
-        this.loadDesktop()
     }
 
-    private fun loadDesktop() = this.load {
+    override fun loadList() = this.load {
         val desktop = DesktopTask.index(this)
 
         it.apps = desktop.apps

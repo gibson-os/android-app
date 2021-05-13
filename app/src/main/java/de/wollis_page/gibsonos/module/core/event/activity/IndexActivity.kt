@@ -17,10 +17,9 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         super.onCreate(savedInstanceState)
 
         this.setTitle(R.string.core_event_title)
-        this.loadEvents()
     }
 
-    private fun loadEvents() = this.load {
+    override fun loadList() = this.load {
         this.listAdapter.items = EventTask.index(this).toMutableList()
     }
 

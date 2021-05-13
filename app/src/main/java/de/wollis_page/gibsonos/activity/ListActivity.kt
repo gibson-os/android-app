@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
@@ -21,6 +22,8 @@ abstract class ListActivity : GibsonOsActivity() {
 
     abstract fun getListRessource(): Int
 
+    protected abstract fun loadList()
+
     override fun getContentView() = R.layout.base_list
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +38,14 @@ abstract class ListActivity : GibsonOsActivity() {
 
         this.listAdapter = BaseListAdapter(this)
         this.listView.adapter = this.listAdapter
+
+        this.loadList()
+
+        val swipeContainer = this.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
+        swipeContainer.setOnRefreshListener {
+            this.loadList()
+            swipeContainer.isRefreshing = false
+        }
     }
 
     protected fun load(run: (account: Account) -> Unit) {

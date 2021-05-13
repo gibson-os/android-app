@@ -29,6 +29,7 @@ import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 class IndexActivity: ListActivity(), AppActivityInterface {
     override fun getListRessource() = R.layout.explorer_index_list_item
     private lateinit var loadedDir: Dir
+    private var loadDir: String? = null
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
     private val imageQueue = ArrayMap<ImageView, Item>()
     private var imagesLoading = false
@@ -41,6 +42,11 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            this.loadedDir = savedInstanceState.getParcelable(DIRECTORY_KEY)!!
+            this.loadDir = loadedDir.dir
+        }
+
         super.onCreate(savedInstanceState)
 
 //        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
@@ -61,9 +67,6 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             return
         }
 
-        this.loadedDir = savedInstanceState.getParcelable(DIRECTORY_KEY)!!
-        this.setDir()
-
         this.images = savedInstanceState.getSerializable(IMAGES_KEY) as HashMap<String, ArrayMap<String, Bitmap>>
         this.imageWidth = savedInstanceState.getInt(IMAGE_WIDTH_KEY)
 
@@ -72,15 +75,20 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         }
     }
 
-    private fun loadList(directory: String = "") = this.load {
-        Log.i(Config.LOG_TAG, "Read dir $directory")
-        this.loadedDir = DirTask.read(this, directory)
-        this.setDir()
+    override fun loadList() {
+        if (this.loadDir == null) {
+            this.loadDir = (this.getItem().params?.get("dir") ?: "").toString()
+        }
+
+        this.loadList(this.loadDir)
     }
 
-    private fun setDir() {
-        this.setTitle(this.loadedDir.dir)
+    private fun loadList(directory: String? = "") = this.load {
+        Log.i(Config.LOG_TAG, "Read dir $directory")
+        this.loadedDir = DirTask.read(this, directory ?: "")
+        this.loadDir = loadedDir.dir
         this.listAdapter.items = this.loadedDir.data.toMutableList()
+        this.setTitle(this.loadDir.toString())
     }
 
     override fun onClick(item: ListItemInterface) {
@@ -182,15 +190,19 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     color = Color.rgb(0, 0, 255)
 
                     this.runTask({
-                        val convertStatus = Html5Task.convertStatus(
-                            this,
-                            item.html5VideoToken ?: ""
-                        )
+                        while (html5VideoStatus == Html5Status.GENERATE) {
+                            val convertStatus = Html5Task.convertStatus(
+                                this,
+                                item.html5VideoToken ?: ""
+                            )
 
-                        this.runOnUiThread {
-                            progressBar.max = convertStatus.frames
-                            progressBar.progress = convertStatus.frame
-                            progressBar.visibility = View.VISIBLE
+                            this.runOnUiThread {
+                                progressBar.max = convertStatus.frames
+                                progressBar.progress = convertStatus.frame
+                                progressBar.visibility = View.VISIBLE
+                            }
+
+                            Thread.sleep(1000)
                         }
                     })
                 }
@@ -210,7 +222,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             item.position !== null &&
             item.metaInfos.containsKey("duration")
         ) {
-            progressBar.max = item.metaInfos.get("duration").toString().toFloat().toInt()
+            progressBar.max = item.metaInfos["duration"].toString().toFloat().toInt()
             progressBar.progress = item.position
             progressBar.visibility = View.VISIBLE
         }

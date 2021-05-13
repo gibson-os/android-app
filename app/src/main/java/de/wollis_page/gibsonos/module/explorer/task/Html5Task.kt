@@ -12,7 +12,7 @@ object Html5Task: AbstractTask() {
     fun convertStatus(context: GibsonOsActivity, token: String): ConvertStatus {
         val dataStore = this.getDataStore(context.getAccount(), "explorer", "html5", "convertStatus")
         dataStore.addParam("token", token)
-        val response = this.run(context, dataStore)
+        val response = this.run(context, dataStore, false)
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val jsonAdapter = moshi.adapter(ConvertStatus::class.java)
 

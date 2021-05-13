@@ -43,7 +43,7 @@ class MainActivity : ListActivity() {
         }
     }
 
-    private fun loadList() {
+    override fun loadList() {
         val accounts = this.application.accountModels
 
         if (accounts.isEmpty()) {
