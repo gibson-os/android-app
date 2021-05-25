@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.mediarouter.app.MediaRouteChooserDialog
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.ListActivity
@@ -111,6 +112,9 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         if (item.html5VideoStatus == Html5Status.GENERATED) {
             html5Item = DialogItem("An Chromecast senden")
             html5Item.icon = R.drawable.ic_chromecast
+            html5Item.onClick = {
+                MediaRouteChooserDialog(this).show();
+            }
         }
 
         options.add(html5Item)
