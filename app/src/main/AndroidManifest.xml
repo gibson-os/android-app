@@ -51,7 +51,8 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -75,6 +76,14 @@
 
         <activity
             android:name="de.wollis_page.gibsonos.module.core.cronjob.activity.IndexActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="de.wollis_page.gibsonos.module.hc.index.activity.IndexActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="de.wollis_page.gibsonos.module.hc.index.activity.ModuleActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>

@@ -13,7 +13,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
-import java.util.*
 
 class DataStore(url: String, token: String?) {
     private val params: HashMap<String, String> = HashMap()
@@ -74,6 +73,10 @@ class DataStore(url: String, token: String?) {
 
     fun addParam(key: String, value: Int) {
         this.params[key] = Integer.valueOf(value).toString()
+    }
+
+    fun addParam(key: String, value: Long) {
+        this.params[key] = value.toString()
     }
 
     fun addParam(key: String, value: Boolean) {

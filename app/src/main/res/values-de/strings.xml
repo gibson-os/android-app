@@ -39,4 +39,6 @@
     <string name="explorer_dir_list_error_response">Ordnerliste nicht empfangen!</string>
     <string name="explorer_icon_description">Icon</string>
     <string name="explorer_html5_error_convert_status">Konvertierungsstatus nicht empfangen!</string>
+
+    <string name="hc_title">Homecontrol</string>
 </resources>

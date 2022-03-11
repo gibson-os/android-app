@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_stream.xml" value="0.168" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/desktop_list_item.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/explorer_index_list_item.xml" value="0.10106382978723404" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_index.xml" value="0.20697463768115942" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_index_list_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_log_list_item.xml" value="0.16032608695652173" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_master_list_item.xml" value="0.1" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_list_item.xml" value="0.16032608695652173" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />

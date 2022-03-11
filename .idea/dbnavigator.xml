@@ -58,12 +58,15 @@
     <last-used-operator value="EQUAL" />
     <filters />
   </component>
+  <component name="DBNavigator.Project.ParserDiagnosticsManager">
+    <diagnostics-history />
+  </component>
   <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
     <recently-used-interfaces />
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="eeea5fc5-0316-4911-af7b-ea5c7270710b" active="true">
+      <connection id="eeea5fc5-0316-4911-af7b-ea5c7270710b" active="true" signed="true">
         <database>
           <name value="GibsonOS" />
           <description value="" />
@@ -79,7 +82,7 @@
           <database value="database" />
           <files>
             <file path="sqlite.db" schema="main" />
-            <file path="C:\Users\Meins\Documents\AndroidStudio\DeviceExplorer\Nexus_5X_API_27 [emulator-5554]\data\data\de.wollis_page.gibsonos\databases\gibsonos.db" schema="" />
+            <file path="C:\Users\Meins\Documents\AndroidStudio\DeviceExplorer\Nexus_5X_API_27 [emulator-5554]\data\data\de.wollis_page.gibsonos\databases\gibsonos.db" schema="gibsonos" />
           </files>
           <type value="NONE" />
           <user value="" />
