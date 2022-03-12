@@ -41,4 +41,7 @@
     <string name="explorer_html5_error_convert_status">Convert status not in response!</string>
 
     <string name="hc_title">Homecontrol</string>
+
+    <string name="hc_module_io_input">Input</string>
+    <string name="hc_module_io_output">Output</string>
 </resources>

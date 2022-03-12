@@ -86,6 +86,10 @@
             android:name="de.wollis_page.gibsonos.module.hc.index.activity.ModuleActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.hc.module.io.activity.IndexActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

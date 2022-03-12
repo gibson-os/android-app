@@ -41,4 +41,7 @@
     <string name="explorer_html5_error_convert_status">Konvertierungsstatus nicht empfangen!</string>
 
     <string name="hc_title">Homecontrol</string>
+
+    <string name="hc_module_io_input">Eingang</string>
+    <string name="hc_module_io_output">Ausgang</string>
 </resources>
