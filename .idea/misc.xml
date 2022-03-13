@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_app_bar.xml" value="0.1621376811594203" />
+        <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_layout.xml" value="0.1621376811594203" />
+        <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_list.xml" value="0.1621376811594203" />
+        <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_tab.xml" value="0.23958333333333334" />
         <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/hc_module_io_list_item.xml" value="0.13768115942028986" />
         <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/hc_module_list_item.xml" value="0.13768115942028986" />
       </map>
