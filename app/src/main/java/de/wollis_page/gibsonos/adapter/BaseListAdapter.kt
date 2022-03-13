@@ -1,14 +1,16 @@
 package de.wollis_page.gibsonos.adapter
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
+import de.wollis_page.gibsonos.helper.ListInterface
 
-class BaseListAdapter(private val context: ListActivity) : RecyclerView.Adapter<BaseListAdapter.ItemHolder>() {
-    private val inflater = LayoutInflater.from(context)
+class BaseListAdapter(private val context: ListInterface) : RecyclerView.Adapter<BaseListAdapter.ItemHolder>() {
+    private val inflater = LayoutInflater.from(context.getGibsonOsActivity())
     var items: MutableList<ListItemInterface> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -25,7 +27,7 @@ class BaseListAdapter(private val context: ListActivity) : RecyclerView.Adapter<
     override fun getItemCount() = this.items.size
 
     class ItemHolder(
-        private var context: ListActivity,
+        private var context: ListInterface,
         private var view: View
     ) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var item: ListItemInterface

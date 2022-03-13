@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.activity
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,20 +16,15 @@ import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.helper.ListInterface
 
-abstract class ListActivity : GibsonOsActivity() {
+abstract class ListActivity : GibsonOsActivity(), ListInterface {
     private lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
 
-    abstract fun onClick(item: ListItemInterface)
-
-    abstract fun bind(item: ListItemInterface, view: View)
-
-    abstract fun getListRessource(): Int
-
-    protected abstract fun loadList()
-
-    override fun getContentView() = R.layout.base_list
+    override fun getGibsonOsActivity(): Activity {
+        return this;
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

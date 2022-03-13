@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,23 +16,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
-import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.helper.ListInterface
 
-abstract class ListFragment : Fragment() {
+abstract class ListFragment : Fragment(), ListInterface {
     private lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
     protected lateinit var arguments: Map<String, *>
 
-    abstract fun onClick(item: ListItemInterface)
-
-    abstract fun bind(item: ListItemInterface, view: View)
-
-    abstract fun getListRessource(): Int
-
-    protected abstract fun loadList()
-
-    protected fun getContentView() = R.layout.base_list
+    override fun getGibsonOsActivity(): Activity {
+        return this.requireActivity()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,12 +38,13 @@ abstract class ListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         this.arguments = requireArguments().getParcelable("arguments")!!
 
-        this.listView = this.findViewById(R.id.list)
+        val activity = this.getGibsonOsActivity()
+        this.listView = activity.findViewById(R.id.list)
 
-        val llm = LinearLayoutManager(this)
+        val llm = LinearLayoutManager(activity)
         llm.orientation = LinearLayoutManager.VERTICAL
         this.listView.layoutManager = llm
-        val dividerItemDecoration = DividerItemDecoration(this, llm.orientation)
+        val dividerItemDecoration = DividerItemDecoration(activity, llm.orientation)
         this.listView.addItemDecoration(dividerItemDecoration)
 
         this.listAdapter = BaseListAdapter(this)
@@ -56,7 +52,7 @@ abstract class ListFragment : Fragment() {
 
         this.loadList()
 
-        val swipeContainer = this.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
+        val swipeContainer = activity.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
         swipeContainer.setOnRefreshListener {
             this.loadList()
             swipeContainer.isRefreshing = false
@@ -64,13 +60,14 @@ abstract class ListFragment : Fragment() {
     }
 
     protected fun load(run: (account: Account) -> Unit) {
-        val accountModel = this.getAccount()
+        val activity = this.getGibsonOsActivity()
+        val accountModel = activity.getAccount()
 
         this.runTask({
-            val account = this.application.getAccountById(accountModel.id)
+            val account = activity.application.getAccountById(accountModel.id)
 
             if (account === null) {
-                this.runOnUiThread {
+                activity.runOnUiThread {
                     Toast.makeText(this, R.string.account_error_no_model_found, Toast.LENGTH_LONG).show()
                     this.finish()
                 }
@@ -79,9 +76,9 @@ abstract class ListFragment : Fragment() {
             }
 
             run(account)
-            this.runOnUiThread { this.listView.adapter?.notifyDataSetChanged() }
+            activity.runOnUiThread { this.listView.adapter?.notifyDataSetChanged() }
         }, {
-            this.finish()
+            activity.finish()
         })
     }
 
