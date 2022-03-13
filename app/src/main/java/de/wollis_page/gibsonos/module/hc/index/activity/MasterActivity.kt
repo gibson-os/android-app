@@ -3,20 +3,16 @@ package de.wollis_page.gibsonos.module.hc.index.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
-import de.wollis_page.gibsonos.activity.ListActivity
+import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
-import de.wollis_page.gibsonos.helper.AppManager
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.hc.index.dto.Master
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
-import de.wollis_page.gibsonos.module.hc.task.ModuleTask
 
-class MasterActivity : ListActivity(), AppActivityInterface {
+class MasterActivity : TabActivity(), AppActivityInterface {
     private lateinit var master: Master
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,21 +41,6 @@ class MasterActivity : ListActivity(), AppActivityInterface {
                 throw AppException("Not implemented yet!", R.string.not_implemented_yet)
             }
         })
-    }
-
-    override fun bind(item: ListItemInterface, view: View) {
-        if (item !is Module) {
-            return
-        }
-
-        view.findViewById<TextView>(R.id.name).text = item.name
-        view.findViewById<TextView>(R.id.address).text = item.address.toString()
-        view.findViewById<TextView>(R.id.type).text = item.type
-        view.findViewById<TextView>(R.id.modified).text = item.modified
-    }
-
-    override fun loadList() = this.load {
-        this.listAdapter.items = ModuleTask.index(this, this.master.id).toMutableList()
     }
 
     override fun getListRessource() = R.layout.hc_module_list_item

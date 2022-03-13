@@ -12,11 +12,10 @@
         android:background="?attr/colorPrimary"
         app:tabMode="fixed" />
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@android:color/white" />
+        android:layout_weight="1" />
 
 </LinearLayout>
