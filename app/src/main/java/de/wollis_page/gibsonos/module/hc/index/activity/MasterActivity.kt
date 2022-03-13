@@ -16,7 +16,7 @@ import de.wollis_page.gibsonos.module.hc.index.dto.Master
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.task.ModuleTask
 
-class ModuleActivity : ListActivity(), AppActivityInterface {
+class MasterActivity : ListActivity(), AppActivityInterface {
     private lateinit var master: Master
 
     override fun onCreate(savedInstanceState: Bundle?) {

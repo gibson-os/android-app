@@ -83,7 +83,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name="de.wollis_page.gibsonos.module.hc.index.activity.ModuleActivity"
+            android:name="de.wollis_page.gibsonos.module.hc.index.activity.MasterActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity

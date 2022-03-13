@@ -26,7 +26,7 @@ class IndexActivity : ListActivity(), AppActivityInterface {
 
         this.runTask({
             try {
-                val intent = Intent(this, ModuleActivity::class.java)
+                val intent = Intent(this, MasterActivity::class.java)
                 intent.putExtra(ACCOUNT_KEY, this.getAccount())
                 intent.putExtra("master", item)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
