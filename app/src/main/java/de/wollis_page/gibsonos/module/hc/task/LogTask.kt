@@ -10,11 +10,15 @@ import de.wollis_page.gibsonos.task.AbstractTask
 
 object LogTask: AbstractTask() {
     @Throws(TaskException::class)
-    fun index(context: GibsonOsActivity, masterId: Long? = null): MutableList<Log> {
+    fun index(context: GibsonOsActivity, masterId: Long? = null, moduleId: Long? = null): MutableList<Log> {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "index", "log")
 
         if (masterId != null) {
             dataStore.addParam("masterId", masterId)
+        }
+
+        if (moduleId != null) {
+            dataStore.addParam("moduleId", moduleId)
         }
 
         val response = this.run(context, dataStore)
