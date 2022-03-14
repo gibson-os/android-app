@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.module.hc.index.fragment
 
+import android.text.Html
 import android.view.View
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
@@ -27,7 +28,7 @@ class LogFragment: ListFragment() {
             text = item.data
         }
 
-        view.findViewById<TextView>(R.id.text).text = text
+        view.findViewById<TextView>(R.id.text).text = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
         view.findViewById<TextView>(R.id.added).text = item.added
         view.findViewById<TextView>(R.id.master).text = item.masterName
         view.findViewById<TextView>(R.id.module).text = item.moduleName.toString()
