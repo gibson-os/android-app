@@ -6,6 +6,7 @@ import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.Tab
 import de.wollis_page.gibsonos.module.hc.index.dto.Master
+import de.wollis_page.gibsonos.module.hc.index.fragment.LogFragment
 import de.wollis_page.gibsonos.module.hc.index.fragment.ModuleFragment
 
 class MasterActivity : TabActivity(), AppActivityInterface {
@@ -14,7 +15,8 @@ class MasterActivity : TabActivity(), AppActivityInterface {
     override fun getTabs(): Array<Tab> {
         val arguments = hashMapOf("masterId" to this.master.id)
         return arrayOf(
-            Tab("Module", ModuleFragment::class, arguments)
+            Tab("Module", ModuleFragment::class, arguments),
+            Tab("Log", LogFragment::class, arguments),
         )
     }
 
