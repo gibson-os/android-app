@@ -1,7 +1,6 @@
 package de.wollis_page.gibsonos.module.hc.index.fragment
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
@@ -9,22 +8,21 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.helper.Config
-import de.wollis_page.gibsonos.module.hc.index.dto.Module
-import de.wollis_page.gibsonos.module.hc.task.ModuleTask
+import de.wollis_page.gibsonos.module.hc.index.activity.MasterActivity
+import de.wollis_page.gibsonos.module.hc.index.dto.Master
+import de.wollis_page.gibsonos.module.hc.task.MasterTask
 
-class ModuleFragment: ListFragment() {
+class MasterFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) {
-        if (item !is Module) {
+        if (item !is Master) {
             return
         }
 
         this.runTask({
             try {
-                val activityClass = this.getModuleActivityClass(item.helper)
-                val intent = Intent(this.requireActivity(), activityClass)
+                val intent = Intent(this.requireActivity(), MasterActivity::class.java)
                 intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.getAccount())
-                intent.putExtra("module", item)
+                intent.putExtra("master", item)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
                 this.startActivity(intent)
@@ -34,28 +32,19 @@ class ModuleFragment: ListFragment() {
         })
     }
 
-    override fun getListRessource() = R.layout.hc_module_list_item
-
     override fun bind(item: ListItemInterface, view: View) {
-        if (item !is Module) {
+        if (item !is Master) {
             return
         }
 
         view.findViewById<TextView>(R.id.name).text = item.name
-        view.findViewById<TextView>(R.id.address).text = item.address.toString()
-        view.findViewById<TextView>(R.id.type).text = item.type
+        view.findViewById<TextView>(R.id.address).text = item.address
         view.findViewById<TextView>(R.id.modified).text = item.modified
     }
 
     override fun loadList() = this.load {
-        val masterId = this.fragmentsArguments["masterId"] as Long
-        this.listAdapter.items = ModuleTask.index(this.getGibsonOsActivity(), masterId).toMutableList()
+        this.listAdapter.items = MasterTask.index(this.getGibsonOsActivity()).toMutableList()
     }
 
-    private fun getModuleActivityClass(helper: String): Class<*> {
-        val packageName = "de.wollis_page.gibsonos.module.hc.module.$helper.activity.IndexActivity"
-        Log.i(Config.LOG_TAG, "Look for package: $packageName")
-
-        return Class.forName(packageName)
-    }
+    override fun getListRessource() = R.layout.hc_master_list_item
 }

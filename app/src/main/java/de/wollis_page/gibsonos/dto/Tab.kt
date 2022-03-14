@@ -6,5 +6,5 @@ import kotlin.reflect.KClass
 data class Tab(
     val title: String,
     val className: KClass<*>,
-    val arguments: Map<String, *> = emptyMap<String, Any>()
+    val arguments: HashMap<String, *> = hashMapOf<String, Any>()
 ): Serializable

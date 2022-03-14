@@ -18,7 +18,7 @@ class BaseTabAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activit
         val tab = this.tabs.get(position)
         val fragment = tab.className.createInstance() as Fragment
         fragment.arguments = Bundle().apply {
-            putSerializable("tab", tab)
+            putSerializable("arguments", tab.arguments)
         }
 
         return fragment

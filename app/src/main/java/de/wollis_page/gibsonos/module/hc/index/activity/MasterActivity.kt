@@ -12,7 +12,7 @@ class MasterActivity : TabActivity(), AppActivityInterface {
     private lateinit var master: Master
 
     override fun getTabs(): Array<Tab> {
-        val arguments = mapOf("master" to this.master)
+        val arguments = hashMapOf("masterId" to this.master.id)
         return arrayOf(
             Tab("Module", ModuleFragment::class, arguments)
         )

@@ -14,14 +14,13 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
-import de.wollis_page.gibsonos.dto.Tab
 import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.helper.ListInterface
 
 abstract class ListFragment : Fragment(), ListInterface {
     private lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
-    protected lateinit var tab: Tab
+    protected lateinit var fragmentsArguments: HashMap<String, *>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,8 +54,8 @@ abstract class ListFragment : Fragment(), ListInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.takeIf { it.containsKey("tab") }?.apply {
-            tab = getSerializable("tab") as Tab
+        arguments?.takeIf { it.containsKey("arguments") }?.apply {
+            fragmentsArguments = getSerializable("arguments") as HashMap<String, *>
         }
     }
 
@@ -92,7 +91,7 @@ abstract class ListFragment : Fragment(), ListInterface {
     }
 
     protected fun getGibsonOsActivity(): GibsonOsActivity {
-        val activity = this.requireActivity();
+        val activity = this.requireActivity()
 
         if (activity !is GibsonOsActivity) {
             throw ActivityException("Activity is no instance of GibsonOsActivity!")
