@@ -5,18 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.ListInterface
 
-class BaseListAdapter(private val context: ListInterface) : RecyclerView.Adapter<BaseListAdapter.ItemHolder>() {
-    private val inflater = LayoutInflater.from(context.getGibsonOsActivity())
+class BaseListAdapter(private val context: Activity, private val list: ListInterface) : RecyclerView.Adapter<BaseListAdapter.ItemHolder>() {
+    private val inflater = LayoutInflater.from(context)
     var items: MutableList<ListItemInterface> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
-            this.context,
-            this.inflater.inflate(this.context.getListRessource(), parent, false)
+            this.list,
+            this.inflater.inflate(this.list.getListRessource(), parent, false)
         )
     }
 

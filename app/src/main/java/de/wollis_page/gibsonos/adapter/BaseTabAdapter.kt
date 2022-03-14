@@ -4,25 +4,27 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import de.wollis_page.gibsonos.dto.Tab
+import kotlin.reflect.full.createInstance
 
 class BaseTabAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
-    var fragments: MutableList<String> = ArrayList()
+    private var tabs: MutableList<Tab> = ArrayList()
 
     override fun getItemCount(): Int {
-        return this.fragments.count()
+        return this.tabs.count()
     }
 
     override fun createFragment(position: Int): Fragment {
-        val fragment = Class.forName(fragments.get(position)) as Fragment
+        val tab = this.tabs.get(position)
+        val fragment = tab.className.createInstance() as Fragment
         fragment.arguments = Bundle().apply {
-            // Our object is just an integer :-P
-//            putInt(ARG_OBJECT, position + 1)
+            putSerializable("tab", tab)
         }
 
         return fragment
     }
 
-    fun addTab(fragementClassName: String) {
-        this.fragments.add(fragementClassName)
+    fun addTab(tab: Tab) {
+        this.tabs.add(tab)
     }
 }

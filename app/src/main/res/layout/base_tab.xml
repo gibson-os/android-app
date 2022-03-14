@@ -6,14 +6,13 @@
     android:orientation="vertical">
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
         app:tabMode="fixed" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/content"
+        android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

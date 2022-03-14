@@ -1,10 +1,8 @@
 package de.wollis_page.gibsonos.activity
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,17 +12,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
-import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.ListInterface
 
 abstract class ListActivity : GibsonOsActivity(), ListInterface {
     private lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
-
-    override fun getGibsonOsActivity(): Activity {
-        return this;
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +29,7 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
         val dividerItemDecoration = DividerItemDecoration(this, llm.orientation)
         this.listView.addItemDecoration(dividerItemDecoration)
 
-        this.listAdapter = BaseListAdapter(this)
+        this.listAdapter = BaseListAdapter(this, this)
         this.listView.adapter = this.listAdapter
 
         this.loadList()

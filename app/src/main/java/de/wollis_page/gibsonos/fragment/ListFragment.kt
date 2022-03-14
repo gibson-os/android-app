@@ -1,8 +1,6 @@
 package de.wollis_page.gibsonos.fragment
 
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,34 +10,27 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
-import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.dto.Tab
+import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.helper.ListInterface
 
 abstract class ListFragment : Fragment(), ListInterface {
     private lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
-    protected lateinit var arguments: Map<String, *>
-
-    override fun getGibsonOsActivity(): Activity {
-        return this.requireActivity()
-    }
+    protected lateinit var tab: Tab
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(this.getContentView(), container, false)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        this.arguments = requireArguments().getParcelable("arguments")!!
-
-        val activity = this.getGibsonOsActivity()
-        this.listView = activity.findViewById(R.id.list)
+    ): View {
+        val view = inflater.inflate(this.getContentView(), container, false)
+        val activity = this.requireActivity()
+        this.listView = view.findViewById(R.id.list)
 
         val llm = LinearLayoutManager(activity)
         llm.orientation = LinearLayoutManager.VERTICAL
@@ -47,15 +38,25 @@ abstract class ListFragment : Fragment(), ListInterface {
         val dividerItemDecoration = DividerItemDecoration(activity, llm.orientation)
         this.listView.addItemDecoration(dividerItemDecoration)
 
-        this.listAdapter = BaseListAdapter(this)
+        this.listAdapter = BaseListAdapter(this.requireActivity(), this)
         this.listView.adapter = this.listAdapter
 
         this.loadList()
 
-        val swipeContainer = activity.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
+        val swipeContainer = view.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
         swipeContainer.setOnRefreshListener {
             this.loadList()
             swipeContainer.isRefreshing = false
+        }
+
+        return view
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.takeIf { it.containsKey("tab") }?.apply {
+            tab = getSerializable("tab") as Tab
         }
     }
 
@@ -63,13 +64,13 @@ abstract class ListFragment : Fragment(), ListInterface {
         val activity = this.getGibsonOsActivity()
         val accountModel = activity.getAccount()
 
-        this.runTask({
+        activity.runTask({
             val account = activity.application.getAccountById(accountModel.id)
 
             if (account === null) {
                 activity.runOnUiThread {
-                    Toast.makeText(this, R.string.account_error_no_model_found, Toast.LENGTH_LONG).show()
-                    this.finish()
+                    Toast.makeText(activity, R.string.account_error_no_model_found, Toast.LENGTH_LONG).show()
+                    activity.finish()
                 }
 
                 return@runTask
@@ -82,16 +83,21 @@ abstract class ListFragment : Fragment(), ListInterface {
         })
     }
 
-    protected fun addSearch() {
-        val inflater = LayoutInflater.from(this)
-        this.contentContainer.addView(inflater.inflate(
-            R.layout.base_button_search,
-            this.findViewById(android.R.id.content),
-            false
-        ))
-        val searchButton = findViewById<FloatingActionButton>(R.id.searchButton)
-        searchButton.setOnClickListener {
-            Log.d(Config.LOG_TAG, "Click")
+    fun runTask(run: () -> Unit, runFailure: ((exception: Throwable) -> Unit)? = null) {
+        this.getGibsonOsActivity().runTask(run, runFailure)
+    }
+
+    fun getAccount(): de.wollis_page.gibsonos.model.Account {
+        return this.getGibsonOsActivity().getAccount()
+    }
+
+    protected fun getGibsonOsActivity(): GibsonOsActivity {
+        val activity = this.requireActivity();
+
+        if (activity !is GibsonOsActivity) {
+            throw ActivityException("Activity is no instance of GibsonOsActivity!")
         }
+
+        return activity
     }
 }

@@ -33,7 +33,7 @@ import java.util.concurrent.CompletableFuture
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var account: Account? = null
     private var item: Item? = null
-    protected lateinit var application: GibsonOsApplication
+    lateinit var application: GibsonOsApplication
     lateinit var contentContainer: ConstraintLayout
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
@@ -178,7 +178,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         }
     }
 
-    protected fun runTask(run: () -> Unit, runFailure: ((exception: Throwable) -> Unit)? = null) {
+    fun runTask(run: () -> Unit, runFailure: ((exception: Throwable) -> Unit)? = null) {
         CompletableFuture.supplyAsync<Any> {
             try {
                 run()
