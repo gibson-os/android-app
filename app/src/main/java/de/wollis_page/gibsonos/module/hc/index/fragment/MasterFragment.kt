@@ -42,8 +42,8 @@ class MasterFragment: ListFragment() {
         view.findViewById<TextView>(R.id.modified).text = item.modified
     }
 
-    override fun loadList() = this.load {
-        this.listAdapter.items = MasterTask.index(this.getGibsonOsActivity()).toMutableList()
+    override fun loadList(start: Long, limit: Long) = this.load {
+        this.listAdapter.setListResponse(MasterTask.index(this.getGibsonOsActivity(), start, limit))
     }
 
     override fun getListRessource() = R.layout.hc_master_list_item

@@ -4,14 +4,16 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.module.hc.index.dto.Log
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object LogTask: AbstractTask() {
     @Throws(TaskException::class)
-    fun index(context: GibsonOsActivity, masterId: Long? = null, moduleId: Long? = null): MutableList<Log> {
+    fun index(context: GibsonOsActivity, start: Long, limit: Long, masterId: Long? = null, moduleId: Long? = null): ListResponse<Log> {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "index", "log")
+        dataStore.setPage(start, limit)
 
         if (masterId != null) {
             dataStore.addParam("masterId", masterId)
@@ -21,12 +23,6 @@ object LogTask: AbstractTask() {
             dataStore.addParam("moduleId", moduleId)
         }
 
-        val response = this.run(context, dataStore)
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        val listType = Types.newParameterizedType(MutableList::class.java, Log::class.java)
-        val jsonAdapter = moshi.adapter<MutableList<Log>>(listType)
-
-        return jsonAdapter.fromJson(response.getJSONArray("data").toString()) ?:
-            throw TaskException("Logs not in response!")
+        return this.loadListResponse(this.run(context, dataStore))
     }
 }

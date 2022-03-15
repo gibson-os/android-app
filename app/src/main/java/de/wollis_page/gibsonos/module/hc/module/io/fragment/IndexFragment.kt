@@ -27,7 +27,7 @@ class IndexFragment: ListFragment() {
             this.getString(if (item.direction == 0) R.string.hc_module_io_input else R.string.hc_module_io_output)
     }
 
-    override fun loadList() = this.load {
+    override fun loadList(start: Long, limit: Long) = this.load {
         val moduleId = this.fragmentsArguments["moduleId"] as Long
         this.listAdapter.items = IoTask.ports(this.getGibsonOsActivity(), moduleId).toMutableList()
     }

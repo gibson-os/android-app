@@ -26,7 +26,7 @@ class KeyFragment: ListFragment() {
 
     override fun getListRessource(): Int = R.layout.hc_module_ir_key_list_item
 
-    override fun loadList() = this.load {
+    override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.items = IrTask.keys(this.getGibsonOsActivity()).toMutableList()
     }
 }

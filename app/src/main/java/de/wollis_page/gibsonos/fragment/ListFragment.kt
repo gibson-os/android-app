@@ -21,6 +21,7 @@ abstract class ListFragment : Fragment(), ListInterface {
     private lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
     protected lateinit var fragmentsArguments: HashMap<String, *>
+    private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +48,18 @@ abstract class ListFragment : Fragment(), ListInterface {
             this.loadList()
             swipeContainer.isRefreshing = false
         }
+
+        this.scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val totalItemCount = recyclerView.layoutManager?.itemCount
+
+                if (totalItemCount == llm.findLastVisibleItemPosition() + 1) {
+                    //listView.removeOnScrollListener(scrollListener)
+                }
+            }
+        }
+        this.listView.addOnScrollListener(this.scrollListener)
 
         return view
     }

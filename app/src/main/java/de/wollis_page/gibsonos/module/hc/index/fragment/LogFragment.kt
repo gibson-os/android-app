@@ -39,9 +39,15 @@ class LogFragment: ListFragment() {
 
     override fun getListRessource(): Int = R.layout.hc_log_list_item
 
-    override fun loadList() = this.load {
+    override fun loadList(start: Long, limit: Long) = this.load {
         val masterId = this.fragmentsArguments["masterId"] as Long?
         val moduleId = this.fragmentsArguments["moduleId"] as Long?
-        this.listAdapter.items = LogTask.index(this.getGibsonOsActivity(), masterId, moduleId).toMutableList()
+        this.listAdapter.setListResponse(LogTask.index(
+            this.getGibsonOsActivity(),
+            start,
+            limit,
+            masterId,
+            moduleId
+        ))
     }
 }

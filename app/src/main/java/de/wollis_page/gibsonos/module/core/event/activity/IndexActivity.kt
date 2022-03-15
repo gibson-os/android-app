@@ -19,8 +19,8 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         this.setTitle(R.string.core_event_title)
     }
 
-    override fun loadList() = this.load {
-        this.listAdapter.items = EventTask.index(this).toMutableList()
+    override fun loadList(start: Long, limit: Long) = this.load {
+        this.listAdapter.setListResponse(EventTask.index(this, start, limit))
     }
 
     override fun onClick(item: ListItemInterface) {

@@ -91,6 +91,11 @@ class DataStore(url: String, token: String?) {
         this.params.remove(key)
     }
 
+    fun setPage(start: Long, limit: Long) {
+        this.addParam("start", start)
+        this.addParam("limit", limit)
+    }
+
     private fun getParams(): RequestBody {
         if (this.params.size == 0) {
             return "".toRequestBody("application/json; charset=utf-8".toMediaType())

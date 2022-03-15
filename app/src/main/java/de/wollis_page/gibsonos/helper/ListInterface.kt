@@ -11,7 +11,7 @@ interface ListInterface {
 
     fun getListRessource(): Int
 
-    fun loadList()
+    fun loadList(start: Long = 0, limit: Long = 100)
 
     fun getContentView() = R.layout.base_list
 }

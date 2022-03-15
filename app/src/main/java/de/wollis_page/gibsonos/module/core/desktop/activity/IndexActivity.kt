@@ -65,7 +65,7 @@ class IndexActivity : ListActivity() {
         }
     }
 
-    override fun loadList() = this.load {
+    override fun loadList(start: Long, limit: Long) = this.load {
         val desktop = DesktopTask.index(this)
 
         it.apps = desktop.apps

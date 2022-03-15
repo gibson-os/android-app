@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import de.wollis_page.gibsonos.dto.ListItemInterface
+import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.helper.ListInterface
 
 class BaseListAdapter(private val context: Activity, private val list: ListInterface) : RecyclerView.Adapter<BaseListAdapter.ItemHolder>() {
     private val inflater = LayoutInflater.from(context)
     var items: MutableList<ListItemInterface> = ArrayList()
+    var total: Long = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
@@ -24,6 +26,11 @@ class BaseListAdapter(private val context: Activity, private val list: ListInter
     }
 
     override fun getItemCount() = this.items.size
+
+    fun setListResponse(listResponse: ListResponse<*>) {
+        this.items = listResponse.data.toMutableList() as MutableList<ListItemInterface>
+        this.total = listResponse.total
+    }
 
     class ItemHolder(
         private var context: ListInterface,

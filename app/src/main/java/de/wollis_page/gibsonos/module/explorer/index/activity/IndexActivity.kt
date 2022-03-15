@@ -78,7 +78,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         }
     }
 
-    override fun loadList() {
+    override fun loadList(start: Long, limit: Long) {
         if (this.loadDir == null) {
             this.loadDir = (this.getItem().params?.get("dir") ?: "").toString()
         }

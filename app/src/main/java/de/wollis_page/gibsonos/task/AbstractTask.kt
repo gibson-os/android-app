@@ -1,6 +1,10 @@
 package de.wollis_page.gibsonos.task
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.DataStore
@@ -41,5 +45,17 @@ abstract class AbstractTask {
                 context.hideLoading()
             }
         }
+    }
+
+    protected inline fun <reified E> loadListResponse(response: JSONObject): ListResponse<E> {
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val listType = Types.newParameterizedType(MutableList::class.java, E::class.java)
+        val jsonAdapter = moshi.adapter<MutableList<E>>(listType)
+
+        return ListResponse(
+            jsonAdapter.fromJson(response.getJSONArray("data").toString())
+                ?: throw TaskException("Data not in response!"),
+            if (response.has("total")) response.getLong("total") else 0
+        )
     }
 }

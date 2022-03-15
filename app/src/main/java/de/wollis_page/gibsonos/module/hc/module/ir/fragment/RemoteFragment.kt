@@ -23,7 +23,7 @@ class RemoteFragment: ListFragment() {
 
     override fun getListRessource(): Int = R.layout.hc_module_ir_remote_list_item
 
-    override fun loadList() = this.load {
+    override fun loadList(start: Long, limit: Long) = this.load {
         val moduleId = this.fragmentsArguments["moduleId"] as Long
         this.listAdapter.items = IrTask.remotes(this.getGibsonOsActivity(), moduleId).toMutableList()
     }

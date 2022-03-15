@@ -47,7 +47,7 @@ class ModuleFragment: ListFragment() {
         view.findViewById<TextView>(R.id.modified).text = item.modified
     }
 
-    override fun loadList() = this.load {
+    override fun loadList(start: Long, limit: Long) = this.load {
         val masterId = this.fragmentsArguments["masterId"] as Long
         this.listAdapter.items = ModuleTask.index(this.getGibsonOsActivity(), masterId).toMutableList()
     }
