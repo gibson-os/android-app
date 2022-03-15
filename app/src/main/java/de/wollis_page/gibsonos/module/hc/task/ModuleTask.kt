@@ -11,8 +11,7 @@ object ModuleTask: AbstractTask() {
     fun index(context: GibsonOsActivity, masterId: Long, start: Long, limit: Long): ListResponse<Module> {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "slave", "index")
         dataStore.addParam("masterId", masterId)
-        dataStore.setPage(start, limit)
 
-        return this.loadListResponse(this.run(context, dataStore))
+        return this.loadList(context, dataStore, start, limit)
     }
 }

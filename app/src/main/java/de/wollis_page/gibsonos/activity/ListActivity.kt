@@ -18,6 +18,7 @@ import de.wollis_page.gibsonos.helper.ListInterface
 abstract class ListActivity : GibsonOsActivity(), ListInterface {
     private lateinit var listView: RecyclerView
     protected lateinit var listAdapter: BaseListAdapter
+    private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,21 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
             this.loadList()
             swipeContainer.isRefreshing = false
         }
+
+        this.scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
+
+                if (
+                    totalItemCount == llm.findLastVisibleItemPosition() + 1 &&
+                    totalItemCount < listAdapter.total
+                ) {
+                    loadList(totalItemCount.toLong())
+                }
+            }
+        }
+        this.listView.addOnScrollListener(this.scrollListener)
     }
 
     protected fun load(run: (account: Account) -> Unit) {

@@ -10,7 +10,6 @@ object LogTask: AbstractTask() {
     @Throws(TaskException::class)
     fun index(context: GibsonOsActivity, start: Long, limit: Long, masterId: Long? = null, moduleId: Long? = null): ListResponse<Log> {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "index", "log")
-        dataStore.setPage(start, limit)
 
         if (masterId != null) {
             dataStore.addParam("masterId", masterId)
@@ -20,6 +19,6 @@ object LogTask: AbstractTask() {
             dataStore.addParam("moduleId", moduleId)
         }
 
-        return this.loadListResponse(this.run(context, dataStore))
+        return this.loadList(context, dataStore, start, limit)
     }
 }

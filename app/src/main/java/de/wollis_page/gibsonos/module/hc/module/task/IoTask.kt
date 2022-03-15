@@ -11,9 +11,8 @@ object IoTask: AbstractTask() {
     fun ports(context: GibsonOsActivity, moduleId: Long, start: Long, limit: Long): ListResponse<Port> {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "io", "ports")
         dataStore.addParam("moduleId", moduleId)
-        dataStore.setPage(start, limit)
 
-        return this.loadListResponse(this.run(context, dataStore))
+        return this.loadList(context, dataStore, start, limit)
     }
 
     @Throws(TaskException::class)

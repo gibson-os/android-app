@@ -12,16 +12,14 @@ object IrTask: AbstractTask() {
     fun remotes(context: GibsonOsActivity, moduleId: Long, start: Long, limit: Long): ListResponse<Remote> {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "remotes")
         dataStore.addParam("moduleId", moduleId)
-        dataStore.setPage(start, limit)
 
-        return this.loadListResponse(this.run(context, dataStore))
+        return this.loadList(context, dataStore, start, limit)
     }
 
     @Throws(TaskException::class)
     fun keys(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Key> {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "keys")
-        dataStore.setPage(start, limit)
 
-        return this.loadListResponse(this.run(context, dataStore))
+        return this.loadList(context, dataStore, start, limit)
     }
 }

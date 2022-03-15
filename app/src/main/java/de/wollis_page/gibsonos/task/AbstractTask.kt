@@ -47,7 +47,14 @@ abstract class AbstractTask {
         }
     }
 
-    protected inline fun <reified E> loadListResponse(response: JSONObject): ListResponse<E> {
+    protected inline fun <reified E> loadList(
+        context: GibsonOsActivity,
+        dataStore: DataStore,
+        start: Long = 0,
+        limit: Long = 1,
+    ): ListResponse<E> {
+        dataStore.setPage(start, limit)
+        val response = this.run(context, dataStore)
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val listType = Types.newParameterizedType(MutableList::class.java, E::class.java)
         val jsonAdapter = moshi.adapter<MutableList<E>>(listType)
@@ -55,7 +62,9 @@ abstract class AbstractTask {
         return ListResponse(
             jsonAdapter.fromJson(response.getJSONArray("data").toString())
                 ?: throw TaskException("Data not in response!"),
-            if (response.has("total")) response.getLong("total") else 0
+            if (response.has("total")) response.getLong("total") else 0,
+            start,
+            limit
         )
     }
 }

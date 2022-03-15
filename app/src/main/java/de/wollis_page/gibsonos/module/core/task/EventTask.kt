@@ -8,9 +8,8 @@ import de.wollis_page.gibsonos.task.AbstractTask
 object EventTask: AbstractTask() {
     fun index(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Event> {
         val dataStore = this.getDataStore(context.getAccount(), "core", "event", "index")
-        dataStore.setPage(start, limit)
 
-        return this.loadListResponse(this.run(context, dataStore))
+        return this.loadList(context, dataStore, start, limit)
     }
     
     fun run(context: GibsonOsActivity, eventId: Int) {

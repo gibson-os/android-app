@@ -28,8 +28,15 @@ class BaseListAdapter(private val context: Activity, private val list: ListInter
     override fun getItemCount() = this.items.size
 
     fun setListResponse(listResponse: ListResponse<*>) {
-        this.items = listResponse.data.toMutableList() as MutableList<ListItemInterface>
         this.total = listResponse.total
+
+        if (listResponse.start > 0) {
+            this.items.addAll(listResponse.data.toMutableList() as MutableList<ListItemInterface>)
+
+            return
+        }
+
+        this.items = listResponse.data.toMutableList() as MutableList<ListItemInterface>
     }
 
     class ItemHolder(

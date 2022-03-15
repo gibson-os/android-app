@@ -52,10 +52,13 @@ abstract class ListFragment : Fragment(), ListInterface {
         this.scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                val totalItemCount = recyclerView.layoutManager?.itemCount
+                val totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
 
-                if (totalItemCount == llm.findLastVisibleItemPosition() + 1) {
-                    //listView.removeOnScrollListener(scrollListener)
+                if (
+                    totalItemCount == llm.findLastVisibleItemPosition() + 1 &&
+                    totalItemCount < listAdapter.total
+                ) {
+                    loadList(totalItemCount.toLong())
                 }
             }
         }
