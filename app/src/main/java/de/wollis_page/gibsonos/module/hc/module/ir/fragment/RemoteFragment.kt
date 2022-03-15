@@ -1,16 +1,29 @@
 package de.wollis_page.gibsonos.module.hc.module.ir.fragment
 
+import android.content.Intent
 import android.view.View
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
+import de.wollis_page.gibsonos.module.hc.module.ir.activity.RemoteActivity
 import de.wollis_page.gibsonos.module.hc.module.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.module.task.IrTask
 
 class RemoteFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) {
-        TODO("Not yet implemented")
+        if (item !is Remote) {
+            return
+        }
+
+        this.runTask({
+            val intent = Intent(this.requireActivity(), RemoteActivity::class.java)
+            intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.getAccount())
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            this.startActivity(intent)
+        })
     }
 
     override fun bind(item: ListItemInterface, view: View) {
