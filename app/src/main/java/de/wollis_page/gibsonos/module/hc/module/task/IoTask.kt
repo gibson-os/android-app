@@ -1,25 +1,19 @@
 package de.wollis_page.gibsonos.module.hc.module.task
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.module.hc.module.io.dto.Port
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object IoTask: AbstractTask() {
     @Throws(TaskException::class)
-    fun ports(context: GibsonOsActivity, moduleId: Long): MutableList<Port> {
+    fun ports(context: GibsonOsActivity, moduleId: Long, start: Long, limit: Long): ListResponse<Port> {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "io", "ports")
         dataStore.addParam("moduleId", moduleId)
-        val response = this.run(context, dataStore)
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        val listType = Types.newParameterizedType(MutableList::class.java, Port::class.java)
-        val jsonAdapter = moshi.adapter<MutableList<Port>>(listType)
+        dataStore.setPage(start, limit)
 
-        return jsonAdapter.fromJson(response.getJSONArray("data").toString()) ?:
-            throw TaskException("Modules not in response!")
+        return this.loadListResponse(this.run(context, dataStore))
     }
 
     @Throws(TaskException::class)

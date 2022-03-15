@@ -49,7 +49,12 @@ class ModuleFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         val masterId = this.fragmentsArguments["masterId"] as Long
-        this.listAdapter.items = ModuleTask.index(this.getGibsonOsActivity(), masterId).toMutableList()
+        this.listAdapter.setListResponse(ModuleTask.index(
+            this.getGibsonOsActivity(),
+            masterId,
+            start,
+            limit
+        ))
     }
 
     private fun getModuleActivityClass(helper: String): Class<*> {
