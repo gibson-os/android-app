@@ -22,4 +22,21 @@ object IrTask: AbstractTask() {
 
         return this.loadList(context, dataStore, start, limit)
     }
+
+    @Throws(TaskException::class)
+    fun send(
+        context: GibsonOsActivity,
+        moduleId: Long,
+        protocol: Int,
+        address: Int,
+        command: Int
+    ) {
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "send")
+        dataStore.addParam("moduleId", moduleId)
+        dataStore.addParam("protocol", protocol)
+        dataStore.addParam("address", address)
+        dataStore.addParam("command", command)
+
+        this.run(context, dataStore)
+    }
 }

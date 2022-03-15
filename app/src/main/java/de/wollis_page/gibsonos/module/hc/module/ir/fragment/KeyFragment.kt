@@ -9,8 +9,17 @@ import de.wollis_page.gibsonos.module.hc.module.ir.dto.Key
 import de.wollis_page.gibsonos.module.hc.module.task.IrTask
 
 class KeyFragment: ListFragment() {
-    override fun onClick(item: ListItemInterface) {
-        TODO("Not yet implemented")
+    override fun onClick(item: ListItemInterface) = this.load {
+        if (item is Key) {
+            val moduleId = this.fragmentsArguments["moduleId"] as Long
+            IrTask.send(
+                this.getGibsonOsActivity(),
+                moduleId,
+                item.protocol,
+                item.address,
+                item.command
+            )
+        }
     }
 
     override fun bind(item: ListItemInterface, view: View) {
