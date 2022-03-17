@@ -15,8 +15,8 @@ class MasterActivity : TabActivity(), AppActivityInterface {
     override fun getTabs(): Array<Tab> {
         val arguments = hashMapOf("masterId" to this.master.id)
         return arrayOf(
-            Tab("Module", ModuleFragment::class, arguments),
-            Tab("Log", LogFragment::class, arguments),
+            Tab(R.string.hc_module_tab, ModuleFragment::class, arguments),
+            Tab(R.string.hc_log_tab, LogFragment::class, arguments),
         )
     }
 

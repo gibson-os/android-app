@@ -10,8 +10,8 @@ import de.wollis_page.gibsonos.module.hc.index.fragment.MasterFragment
 
 class IndexActivity : TabActivity(), AppActivityInterface {
     override fun getTabs(): Array<Tab> = arrayOf(
-        Tab("Master", MasterFragment::class),
-        Tab("Log", LogFragment::class),
+        Tab(R.string.hc_master_tab, MasterFragment::class),
+        Tab(R.string.hc_log_tab, LogFragment::class),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

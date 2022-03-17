@@ -42,6 +42,14 @@
 
     <string name="hc_title">Homecontrol</string>
 
+    <string name="hc_master_tab">Master</string>
+    <string name="hc_module_tab">Module</string>
+    <string name="hc_log_tab">Log</string>
+
+    <string name="hc_module_io_tab">IO</string>
     <string name="hc_module_io_input">Input</string>
     <string name="hc_module_io_output">Output</string>
+
+    <string name="hc_module_ir_remote_tab">Remotes</string>
+    <string name="hc_module_ir_key_tab">Keys</string>
 </resources>

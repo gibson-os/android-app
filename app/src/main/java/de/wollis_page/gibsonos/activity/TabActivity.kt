@@ -32,7 +32,7 @@ abstract class TabActivity : GibsonOsActivity() {
 
         val tabLayout = findViewById<View>(R.id.tabLayout) as TabLayout
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = this.getTabs().get(position).title
+            tab.text = getString(this.getTabs().get(position).title)
         }.attach()
     }
 }

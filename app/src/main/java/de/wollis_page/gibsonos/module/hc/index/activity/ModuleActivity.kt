@@ -15,7 +15,7 @@ abstract class ModuleActivity : TabActivity(), AppActivityInterface {
         val arguments = hashMapOf("moduleId" to this.module.id)
 
         return arrayOf(
-            Tab("Log", LogFragment::class, arguments),
+            Tab(R.string.hc_log_tab, LogFragment::class, arguments),
         )
     }
 
