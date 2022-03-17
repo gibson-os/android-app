@@ -8,9 +8,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.module.hc.module.ir.dto.Remote
+import de.wollis_page.gibsonos.module.hc.module.task.IrTask
 
 
 class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
+    private lateinit var remote: Remote
+
     override fun getAppIcon(): Int = R.drawable.ic_cog
 
     override fun getContentView(): Int = R.layout.hc_module_ir_remote_view
@@ -19,10 +23,18 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
         super.onCreate(savedInstanceState)
 
         val layout = findViewById<View>(R.id.remote) as ConstraintLayout
-        val button = Button(this)
-        button.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        button.text = "Button"
 
-        layout.addView(button)
+        this.runTask({
+            this.remote = IrTask.remote(this, this.intent.getLongExtra("remoteId", 0))
+
+            this.remote.keys.forEach {
+                val button = Button(this)
+                button.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                button.text = it.name
+
+                this.runOnUiThread { layout.addView(button) }
+            }
+        })
+
     }
 }

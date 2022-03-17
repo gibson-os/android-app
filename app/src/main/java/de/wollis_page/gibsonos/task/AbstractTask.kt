@@ -47,11 +47,25 @@ abstract class AbstractTask {
         }
     }
 
+    protected inline fun <reified E> load(
+        context: GibsonOsActivity,
+        dataStore: DataStore,
+        messageRessource: Int? = null
+    ): E {
+        val response = this.run(context, dataStore)
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val jsonAdapter = moshi.adapter(E::class.java)
+
+        return jsonAdapter.fromJson(response.getJSONObject("data").toString()) ?:
+            throw TaskException("Object not in response!", messageRessource)
+    }
+
     protected inline fun <reified E> loadList(
         context: GibsonOsActivity,
         dataStore: DataStore,
         start: Long = 0,
         limit: Long = 1,
+        messageRessource: Int? = null
     ): ListResponse<E> {
         dataStore.setPage(start, limit)
         val response = this.run(context, dataStore)
@@ -61,7 +75,7 @@ abstract class AbstractTask {
 
         return ListResponse(
             jsonAdapter.fromJson(response.getJSONArray("data").toString())
-                ?: throw TaskException("Data not in response!"),
+                ?: throw TaskException("Data not in response!", messageRessource),
             if (response.has("total")) response.getLong("total") else 0,
             start,
             limit

@@ -20,6 +20,7 @@ class RemoteFragment: ListFragment() {
         this.runTask({
             val intent = Intent(this.requireActivity(), RemoteActivity::class.java)
             intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.getAccount())
+            intent.putExtra("remoteId", item.id)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
             this.startActivity(intent)
