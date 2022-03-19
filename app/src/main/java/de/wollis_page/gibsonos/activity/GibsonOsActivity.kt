@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -102,6 +103,15 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
         if (this.account != null) {
             this.application.addProcess(this)
+        }
+
+        val setting = this.findViewById<ImageView>(R.id.setting)
+        setting.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            finish()
+            this.startActivity(intent)
+            val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+            drawer.closeDrawer(GravityCompat.START)
         }
     }
 

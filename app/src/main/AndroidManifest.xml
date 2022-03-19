@@ -63,6 +63,10 @@
         </activity>
 
         <activity
+            android:name=".activity.SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
             android:name=".module.core.desktop.activity.IndexActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 

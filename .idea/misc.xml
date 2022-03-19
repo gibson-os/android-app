@@ -4,14 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_cog.xml" value="0.189" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/base_alert_dialog_item.xml" value="0.10106382978723404" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/base_button_cog.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/base_layout.xml" value="0.10740740740740741" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/base_navigation_header.xml" value="0.19791666666666666" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/desktop_list_item.xml" value="0.10106382978723404" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_log_list_item.xml" value="0.1" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_io_list_item.xml" value="0.16032608695652173" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_ir_key_list_item.xml" value="0.16032608695652173" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_ir_remote_list_item.xml" value="0.16032608695652173" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_ir_remote_view.xml" value="0.16032608695652173" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_list_item.xml" value="0.1" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/setting.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_app_bar.xml" value="0.1621376811594203" />
         <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_layout.xml" value="0.1621376811594203" />
         <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_list.xml" value="0.1621376811594203" />
