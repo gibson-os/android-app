@@ -57,10 +57,7 @@ object IrTask: AbstractTask() {
     ) {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "sendRemoteKey")
         dataStore.addParam("moduleId", moduleId)
-
-        if (eventId != null) {
-            dataStore.addParam("eventId", eventId)
-        }
+        dataStore.addParam("eventId", eventId ?: 0)
 
         val keySubIds = mutableListOf<Long>()
 
