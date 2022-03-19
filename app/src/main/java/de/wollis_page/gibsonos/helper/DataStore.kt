@@ -83,6 +83,10 @@ class DataStore(url: String, token: String?) {
         this.params[key] = java.lang.Boolean.valueOf(value).toString()
     }
 
+    fun addParam(key: String, value: MutableList<*>) {
+        this.params[key] = value.toString()
+    }
+
     fun clearParams() {
         this.params.clear()
     }

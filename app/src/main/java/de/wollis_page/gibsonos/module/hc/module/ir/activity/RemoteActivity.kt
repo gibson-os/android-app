@@ -1,10 +1,10 @@
 package de.wollis_page.gibsonos.module.hc.module.ir.activity
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
-import android.view.ViewGroup.LayoutParams
 import android.widget.Button
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.RelativeLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
@@ -14,6 +14,7 @@ import de.wollis_page.gibsonos.module.hc.module.task.IrTask
 
 class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
     private lateinit var remote: Remote
+    private var moduleId: Long = 0
 
     override fun getAppIcon(): Int = R.drawable.ic_cog
 
@@ -21,18 +22,34 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val layout = findViewById<View>(R.id.remote) as ConstraintLayout
+        this.moduleId = this.intent.getLongExtra("moduleId", 0)
+        val layout = findViewById<View>(R.id.remote) as RelativeLayout
 
         this.runTask({
             this.remote = IrTask.remote(this, this.intent.getLongExtra("remoteId", 0))
+            val displayMetrics = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val displayWidth = displayMetrics.widthPixels
+            val unitWidth = displayWidth / remote.width
 
             this.remote.keys.forEach {
+//                val shape = GradientDrawable()
+//                shape.cornerRadius = 8F
                 val button = Button(this)
-                button.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                button.setPadding(0, 0, 0, 0)
+//                button.background = shape
                 button.text = it.name
+                val key = it
+                button.setOnClickListener {
+                    this.runTask({
+                        IrTask.sendRemoteKey(this, this.moduleId, key.eventId, key.keys)
+                    })
+                }
+                val params = RelativeLayout.LayoutParams(it.width * unitWidth, it.height * unitWidth)
+                params.leftMargin = it.left * unitWidth
+                params.topMargin = it.top * unitWidth
 
-                this.runOnUiThread { layout.addView(button) }
+                this.runOnUiThread { layout.addView(button, params) }
             }
         })
 

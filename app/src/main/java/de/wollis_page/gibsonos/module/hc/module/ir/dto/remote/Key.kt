@@ -16,6 +16,6 @@ data class Key(
     val borderRadiusTopRight: Int,
     val borderRadiusBottomLeft: Int,
     val borderRadiusBottomRight: Int,
-    val eventId: Int?,
+    val eventId: Long?,
     val keys: MutableList<Key>,
 )

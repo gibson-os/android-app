@@ -47,4 +47,29 @@ object IrTask: AbstractTask() {
 
         this.run(context, dataStore)
     }
+
+    @Throws(TaskException::class)
+    fun sendRemoteKey(
+        context: GibsonOsActivity,
+        moduleId: Long,
+        eventId: Long?,
+        keys: MutableList<Key>
+    ) {
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "sendRemoteKey")
+        dataStore.addParam("moduleId", moduleId)
+
+        if (eventId != null) {
+            dataStore.addParam("eventId", eventId)
+        }
+
+        val keySubIds = mutableListOf<Long>()
+
+        keys.forEach {
+            keySubIds.add(it.id)
+        }
+
+        dataStore.addParam("keys", keySubIds)
+
+        this.run(context, dataStore)
+    }
 }
