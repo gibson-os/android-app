@@ -13,8 +13,9 @@ class SettingActivity: GibsonOsActivity() {
 
         val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
         val darkMode = this.findViewById<SwitchMaterial>(R.id.darkMode)
+        darkMode.isChecked = uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES
         darkMode.setOnCheckedChangeListener { compoundButton, checked ->
-            uiModeManager.nightMode = if (checked) UiModeManager.MODE_NIGHT_YES else UiModeManager.MODE_NIGHT_NO
+            this.application.setDarkMode(checked)
         }
     }
 }

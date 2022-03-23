@@ -12,7 +12,6 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.task.UserTask
-import java.util.*
 
 class LoginActivity : GibsonOsActivity() {
     private var editTexts: MutableList<EditText?> = ArrayList()
