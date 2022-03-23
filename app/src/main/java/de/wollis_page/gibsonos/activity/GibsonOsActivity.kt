@@ -125,6 +125,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     private fun runActivity(activity: Class<*>?, account: Account? = this.account) {
         val intent = Intent(this, activity)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
         intent.putExtra(ACCOUNT_KEY, account)
         finish()
         this.startActivity(intent)

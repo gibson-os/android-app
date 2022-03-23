@@ -69,12 +69,17 @@ class GibsonOsApplication : SugarApp() {
         val accountDto = this.getAccount(account)
             ?: throw AccountException("Account " + account.id + " not found in store!")
 
-        accountDto.addProccess(Process(
-            activity.title.toString(),
-            account,
-            activity.javaClass,
-            activity.intent.extras!!
-        ))
+        accountDto.addProccess(Process(account, activity))
+    }
+
+    fun getAccountByToken(token: String): Account? {
+        for (accountDto in accounts) {
+            if (accountDto.account.token == token) {
+                return accountDto
+            }
+        }
+
+        return null
     }
 
     private fun getAccount(account: AccountModel): Account? {

@@ -22,7 +22,7 @@ class RemoteFragment: ListFragment() {
             intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.getAccount())
             intent.putExtra("moduleId", this.fragmentsArguments["moduleId"] as Long)
             intent.putExtra("remoteId", item.id)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
 
             this.startActivity(intent)
         })

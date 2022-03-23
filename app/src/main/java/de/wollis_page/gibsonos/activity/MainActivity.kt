@@ -61,7 +61,7 @@ class MainActivity : ListActivity() {
 
         val intent = Intent(this, IndexActivity::class.java)
         intent.putExtra(ACCOUNT_KEY, item)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
 
         this.startActivity(intent)
     }

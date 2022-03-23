@@ -23,7 +23,7 @@ class MasterFragment: ListFragment() {
                 val intent = Intent(this.requireActivity(), MasterActivity::class.java)
                 intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.getAccount())
                 intent.putExtra("master", item)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
 
                 this.startActivity(intent)
             } catch (exception: ClassNotFoundException) {

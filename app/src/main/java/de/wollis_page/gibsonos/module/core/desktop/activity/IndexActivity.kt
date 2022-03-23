@@ -37,7 +37,7 @@ class IndexActivity : ListActivity() {
                 val activityClass = AppManager.getActivityClass("core", "cronjob")
                 val intent = Intent(this, activityClass)
                 intent.putExtra(ACCOUNT_KEY, this.getAccount())
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
 
                 this.startActivity(intent)
             })
@@ -50,6 +50,7 @@ class IndexActivity : ListActivity() {
                 val activityClass = AppManager.getActivityClass("core", "event")
                 val intent = Intent(this, activityClass)
                 intent.putExtra(ACCOUNT_KEY, this.getAccount())
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
 
                 this.startActivity(intent)
             })
@@ -84,7 +85,7 @@ class IndexActivity : ListActivity() {
                 val intent = Intent(this, activityClass)
                 intent.putExtra(ACCOUNT_KEY, this.getAccount())
                 intent.putExtra(ITEM_KEY, item)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
 
                 this.startActivity(intent)
             } catch (exception: ClassNotFoundException) {
