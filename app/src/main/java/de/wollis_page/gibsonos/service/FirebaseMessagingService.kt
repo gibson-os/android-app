@@ -35,7 +35,7 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
         var activity: GibsonOsActivity? = null
         val application = this.application as GibsonOsApplication
         val account = remoteMessage.data["token"]?.let { application.getAccountByToken(it) }
-        val activityName = "class de.wollis_page.gibsonos.module." +
+        val activityName = "de.wollis_page.gibsonos.module." +
                 remoteMessage.data["module"] + "." +
                 remoteMessage.data["task"] + ".activity." +
                 (remoteMessage.data["action"].toString().replaceFirstChar { it.uppercase() }) + "Activity"
@@ -44,30 +44,35 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
 
         account?.getProcesses()?.forEach {
             Log.d(Config.LOG_TAG, it.activity::class.java.toString())
-            if (it.activity::class.java.toString() == activityName) {
+            if (it.activity::class.java.toString() == "class $activityName") {
                 Log.d(Config.LOG_TAG, "--- " + it.activity::class.java.toString())
                 activity = it.activity
             }
         }
 
         if (remoteMessage.notification != null) {
+            var intent = Intent(this, Class.forName(activityName))
+            intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, account!!.account)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
+
+            if (activity != null) {
+                intent = activity!!.intent
+            }
+
             val notificationBuilder = NotificationCompat.Builder(this, "test")
                 .setSmallIcon(R.drawable.ic_anchor)
                 .setContentTitle(remoteMessage.notification!!.title)
                 .setContentText(remoteMessage.notification!!.body)
-                .setAutoCancel(true)
-//                .setSound(defaultSoundUri)
-
-            if (activity != null) {
-                notificationBuilder.setContentIntent(
+                .setContentIntent(
                     PendingIntent.getActivity(
                         this,
-                        1,
-                        Intent(this, activity!!::class.java),
+                        0,
+                        intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
-            }
+                .setAutoCancel(true)
+//                .setSound(defaultSoundUri)
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
