@@ -22,6 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
+import de.wollis_page.gibsonos.dto.Update
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.exception.MessageException
@@ -29,6 +30,7 @@ import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.module.core.desktop.dto.Item
+import de.wollis_page.gibsonos.module.core.task.DeviceTask
 import java.util.concurrent.CompletableFuture
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +40,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     lateinit var contentContainer: ConstraintLayout
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
+    protected var update: Update? = null
 
     protected abstract fun getContentView(): Int
 
@@ -107,11 +110,9 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
         val setting = this.findViewById<ImageView>(R.id.setting)
         setting.setOnClickListener {
-            val intent = Intent(this, SettingActivity::class.java)
             finish()
-            this.startActivity(intent)
-            val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-            drawer.closeDrawer(GravityCompat.START)
+            this.startActivity(Intent(this, SettingActivity::class.java))
+            findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
         }
     }
 
@@ -210,6 +211,28 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                 }
             }
         }.exceptionally { e -> e.printStackTrace() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val update = this.update
+
+        if (update != null) {
+            this.runTask({
+                DeviceTask.addPush(this, update)
+            })
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val update = this.update
+
+        if (update != null) {
+            this.runTask({
+                DeviceTask.removePush(this, update)
+            })
+        }
     }
 
     companion object {

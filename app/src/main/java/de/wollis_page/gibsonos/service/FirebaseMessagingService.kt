@@ -40,12 +40,9 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
                 remoteMessage.data["task"] + ".activity." +
                 (remoteMessage.data["action"].toString().replaceFirstChar { it.uppercase() }) + "Activity"
 
-        Log.d(Config.LOG_TAG, activityName)
-
         account?.getProcesses()?.forEach {
             Log.d(Config.LOG_TAG, it.activity::class.java.toString())
             if (it.activity::class.java.toString() == "class $activityName") {
-                Log.d(Config.LOG_TAG, "--- " + it.activity::class.java.toString())
                 activity = it.activity
             }
         }

@@ -87,6 +87,10 @@ class DataStore(url: String, token: String?) {
         this.params[key] = value.toString()
     }
 
+    fun addParam(key: String, value: MutableMap<*, *>) {
+        this.params[key] = value.toString()
+    }
+
     fun clearParams() {
         this.params.clear()
     }
