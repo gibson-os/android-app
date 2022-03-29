@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,22 +13,27 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
-import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.helper.ListInterface
 
-abstract class ListFragment : Fragment(), ListInterface {
-    private lateinit var listView: RecyclerView
-    protected lateinit var listAdapter: BaseListAdapter
-    protected lateinit var fragmentsArguments: HashMap<String, *>
+abstract class ListFragment : GibsonOsFragment(), ListInterface {
+    override lateinit var listView: RecyclerView
+    override lateinit var listAdapter: BaseListAdapter
+    override lateinit var activity: GibsonOsActivity
     private lateinit var scrollListener: RecyclerView.OnScrollListener
+
+    override fun updateData(data: String) {
+        val update = this.activity.update ?: return
+
+        this.updateList(data, update.dtoClass.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        this.activity = this.requireActivity() as GibsonOsActivity
         val view = inflater.inflate(this.getContentView(), container, false)
-        val activity = this.requireActivity()
         this.listView = view.findViewById(R.id.list)
 
         val llm = LinearLayoutManager(activity)
@@ -38,7 +42,7 @@ abstract class ListFragment : Fragment(), ListInterface {
         val dividerItemDecoration = DividerItemDecoration(activity, llm.orientation)
         this.listView.addItemDecoration(dividerItemDecoration)
 
-        this.listAdapter = BaseListAdapter(this.requireActivity(), this)
+        this.listAdapter = BaseListAdapter(this.activity, this)
         this.listView.adapter = this.listAdapter
 
         this.loadList()
@@ -76,16 +80,15 @@ abstract class ListFragment : Fragment(), ListInterface {
     }
 
     protected fun load(run: (account: Account) -> Unit) {
-        val activity = this.getGibsonOsActivity()
-        val accountModel = activity.getAccount()
+        val accountModel = this.activity.getAccount()
 
-        activity.runTask({
-            val account = activity.application.getAccountById(accountModel.id)
+        this.activity.runTask({
+            val account = this.activity.application.getAccountById(accountModel.id)
 
             if (account === null) {
-                activity.runOnUiThread {
+                this.activity.runOnUiThread {
                     Toast.makeText(activity, R.string.account_error_no_model_found, Toast.LENGTH_LONG).show()
-                    activity.finish()
+                    this.activity.finish()
                 }
 
                 return@runTask
@@ -99,20 +102,10 @@ abstract class ListFragment : Fragment(), ListInterface {
     }
 
     fun runTask(run: () -> Unit, runFailure: ((exception: Throwable) -> Unit)? = null) {
-        this.getGibsonOsActivity().runTask(run, runFailure)
+        this.activity.runTask(run, runFailure)
     }
 
     fun getAccount(): de.wollis_page.gibsonos.model.Account {
-        return this.getGibsonOsActivity().getAccount()
-    }
-
-    protected fun getGibsonOsActivity(): GibsonOsActivity {
-        val activity = this.requireActivity()
-
-        if (activity !is GibsonOsActivity) {
-            throw ActivityException("Activity is no instance of GibsonOsActivity!")
-        }
-
-        return activity
+        return this.activity.getAccount()
     }
 }

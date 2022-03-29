@@ -1,6 +1,6 @@
-package de.wollis_page.gibsonos.module.hc.module.ir.dto.remote
+package de.wollis_page.gibsonos.module.hc.ir.dto.remote
 
-import de.wollis_page.gibsonos.module.hc.module.ir.dto.Key
+import de.wollis_page.gibsonos.module.hc.ir.dto.Key
 
 data class Key(
     val name: String,

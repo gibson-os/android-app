@@ -1,3 +1,5 @@
 package de.wollis_page.gibsonos.dto
 
-interface ListItemInterface
+interface ListItemInterface {
+    fun getId(): Any
+}

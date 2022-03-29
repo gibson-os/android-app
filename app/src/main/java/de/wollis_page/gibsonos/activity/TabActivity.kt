@@ -11,7 +11,7 @@ import de.wollis_page.gibsonos.dto.Tab
 
 
 abstract class TabActivity : GibsonOsActivity() {
-    protected lateinit var adapter: BaseTabAdapter
+    private lateinit var adapter: BaseTabAdapter
 
     abstract fun getTabs(): Array<Tab>
 
@@ -34,5 +34,11 @@ abstract class TabActivity : GibsonOsActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = getString(this.getTabs().get(position).title)
         }.attach()
+    }
+
+    override fun updateData(data: String) {
+        this.adapter.fragments.forEach {
+            it.updateData(data)
+        }
     }
 }

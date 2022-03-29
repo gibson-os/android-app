@@ -19,4 +19,8 @@ data class Item(
     val html5VideoToken: String?,
     val thumbAvailable: Boolean = false,
     val position: Int? = null
-): ListItemInterface, Serializable
+): ListItemInterface, Serializable {
+    override fun getId(): String {
+        return this.path.toString() + this.name
+    }
+}

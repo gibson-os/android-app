@@ -1,10 +1,8 @@
-package de.wollis_page.gibsonos.module.hc.module.io.dto
+package de.wollis_page.gibsonos.module.hc.io.dto
 
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.ArrayMap
 import de.wollis_page.gibsonos.dto.ListItemInterface
-import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 
 data class Port(
     var number: Int,
@@ -50,5 +48,9 @@ data class Port(
         override fun newArray(size: Int): Array<Port?> {
             return arrayOfNulls(size)
         }
+    }
+
+    override fun getId(): Int {
+        return this.number
     }
 }

@@ -16,8 +16,9 @@ import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.ListInterface
 
 abstract class ListActivity : GibsonOsActivity(), ListInterface {
-    private lateinit var listView: RecyclerView
-    protected lateinit var listAdapter: BaseListAdapter
+    override lateinit var listView: RecyclerView
+    override lateinit var listAdapter: BaseListAdapter
+    override var activity: GibsonOsActivity = this
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +56,12 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
             }
         }
         this.listView.addOnScrollListener(this.scrollListener)
+    }
+
+    override fun updateData(data: String) {
+        val update = this.update ?: return
+
+        this.updateList(data, update.dtoClass.java)
     }
 
     protected fun load(run: (account: Account) -> Unit) {

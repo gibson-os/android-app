@@ -50,7 +50,7 @@ class ModuleFragment: ListFragment() {
     override fun loadList(start: Long, limit: Long) = this.load {
         val masterId = this.fragmentsArguments["masterId"] as Long
         this.listAdapter.setListResponse(ModuleTask.index(
-            this.getGibsonOsActivity(),
+            this.activity,
             masterId,
             start,
             limit
@@ -58,7 +58,7 @@ class ModuleFragment: ListFragment() {
     }
 
     private fun getModuleActivityClass(helper: String): Class<*> {
-        val packageName = "de.wollis_page.gibsonos.module.hc.module.$helper.activity.IndexActivity"
+        val packageName = "de.wollis_page.gibsonos.module.hc.$helper.activity.IndexActivity"
         Log.i(Config.LOG_TAG, "Look for package: $packageName")
 
         return Class.forName(packageName)

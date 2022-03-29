@@ -1,10 +1,10 @@
-package de.wollis_page.gibsonos.module.hc.module.ir.activity
+package de.wollis_page.gibsonos.module.hc.ir.activity
 
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.Tab
 import de.wollis_page.gibsonos.module.hc.index.activity.ModuleActivity
-import de.wollis_page.gibsonos.module.hc.module.ir.fragment.KeyFragment
-import de.wollis_page.gibsonos.module.hc.module.ir.fragment.RemoteFragment
+import de.wollis_page.gibsonos.module.hc.ir.fragment.KeyFragment
+import de.wollis_page.gibsonos.module.hc.ir.fragment.RemoteFragment
 
 class IndexActivity : ModuleActivity() {
     override fun getTabs(): Array<Tab> {

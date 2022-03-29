@@ -1,9 +1,9 @@
-package de.wollis_page.gibsonos.module.hc.module.task
+package de.wollis_page.gibsonos.module.hc.task
 
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.exception.TaskException
-import de.wollis_page.gibsonos.module.hc.module.io.dto.Port
+import de.wollis_page.gibsonos.module.hc.io.dto.Port
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object IoTask: AbstractTask() {

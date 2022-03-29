@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.module.hc.module.ir.activity
+package de.wollis_page.gibsonos.module.hc.ir.activity
 
 import android.graphics.Color
 import android.graphics.Paint
@@ -12,8 +12,8 @@ import android.widget.RelativeLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
-import de.wollis_page.gibsonos.module.hc.module.ir.dto.Remote
-import de.wollis_page.gibsonos.module.hc.module.task.IrTask
+import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
+import de.wollis_page.gibsonos.module.hc.task.IrTask
 
 
 class RemoteActivity: GibsonOsActivity(), AppActivityInterface {

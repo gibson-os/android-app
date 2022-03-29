@@ -1,18 +1,18 @@
-package de.wollis_page.gibsonos.module.hc.module.io.fragment
+package de.wollis_page.gibsonos.module.hc.io.fragment
 
 import android.view.View
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.hc.module.io.dto.Port
-import de.wollis_page.gibsonos.module.hc.module.task.IoTask
+import de.wollis_page.gibsonos.module.hc.io.dto.Port
+import de.wollis_page.gibsonos.module.hc.task.IoTask
 
 class IndexFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) = this.load {
         if (item is Port && item.direction == 1) {
             val moduleId = this.fragmentsArguments["moduleId"] as Long
-            IoTask.toggle(this.getGibsonOsActivity(), moduleId, item.number)
+            IoTask.toggle(this.activity, moduleId, item.number)
         }
     }
 
@@ -29,7 +29,7 @@ class IndexFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         val moduleId = this.fragmentsArguments["moduleId"] as Long
-        this.listAdapter.setListResponse(IoTask.ports(this.getGibsonOsActivity(), moduleId, start, limit))
+        this.listAdapter.setListResponse(IoTask.ports(this.activity, moduleId, start, limit))
     }
 
     override fun getListRessource() = R.layout.hc_module_io_list_item

@@ -93,15 +93,15 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name="de.wollis_page.gibsonos.module.hc.module.io.activity.IndexActivity"
+            android:name="de.wollis_page.gibsonos.module.hc.io.activity.IndexActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name="de.wollis_page.gibsonos.module.hc.module.ir.activity.IndexActivity"
+            android:name="de.wollis_page.gibsonos.module.hc.ir.activity.IndexActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name="de.wollis_page.gibsonos.module.hc.module.ir.activity.RemoteActivity"
+            android:name="de.wollis_page.gibsonos.module.hc.ir.activity.RemoteActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <service

@@ -40,9 +40,12 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     lateinit var contentContainer: ConstraintLayout
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
-    protected var update: Update? = null
+    var update: Update? = null
 
     protected abstract fun getContentView(): Int
+
+    open fun updateData(data: String) {
+    }
 
     @Throws(Exception::class)
     fun getAccount(): Account {

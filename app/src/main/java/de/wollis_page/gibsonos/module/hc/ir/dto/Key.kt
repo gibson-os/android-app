@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.module.hc.module.ir.dto
+package de.wollis_page.gibsonos.module.hc.ir.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
@@ -9,4 +9,8 @@ data class Key(
     var command: Int,
     var protocolName: String?,
     var name: String?,
-): ListItemInterface
+): ListItemInterface {
+    override fun getId(): Any {
+        return this.id
+    }
+}

@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.module.hc.module.ir.fragment
+package de.wollis_page.gibsonos.module.hc.ir.fragment
 
 import android.content.Intent
 import android.view.View
@@ -7,9 +7,9 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.hc.module.ir.activity.RemoteActivity
-import de.wollis_page.gibsonos.module.hc.module.ir.dto.Remote
-import de.wollis_page.gibsonos.module.hc.module.task.IrTask
+import de.wollis_page.gibsonos.module.hc.ir.activity.RemoteActivity
+import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
+import de.wollis_page.gibsonos.module.hc.task.IrTask
 
 class RemoteFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) {
@@ -40,8 +40,9 @@ class RemoteFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         val moduleId = this.fragmentsArguments["moduleId"] as Long
-        this.listAdapter.setListResponse(IrTask.remotes(
-            this.getGibsonOsActivity(),
+        this.listAdapter.setListResponse(
+            IrTask.remotes(
+            this.activity,
             moduleId,
             start,
             limit

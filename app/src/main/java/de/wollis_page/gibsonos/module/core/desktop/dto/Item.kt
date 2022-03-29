@@ -59,4 +59,8 @@ data class Item(
             return arrayOfNulls(size)
         }
     }
+
+    override fun getId(): String {
+        return this.module + '_' + this.task + '_' + this.action + '_' + this.params.toString()
+    }
 }

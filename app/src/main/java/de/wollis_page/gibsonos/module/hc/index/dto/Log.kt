@@ -16,4 +16,8 @@ data class Log(
     var slaveAddress: Int?,
     var text: String?,
     var rendered: String?
-) : ListItemInterface
+) : ListItemInterface {
+    override fun getId(): Long {
+        return this.id
+    }
+}

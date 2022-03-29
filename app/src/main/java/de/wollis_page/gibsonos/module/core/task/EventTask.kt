@@ -12,7 +12,7 @@ object EventTask: AbstractTask() {
         return this.loadList(context, dataStore, start, limit)
     }
     
-    fun run(context: GibsonOsActivity, eventId: Int) {
+    fun run(context: GibsonOsActivity, eventId: Long) {
         val dataStore = this.getDataStore(context.getAccount(), "core", "event", "run")
         dataStore.addParam("eventId", eventId)
         this.run(context, dataStore)

@@ -1,7 +1,7 @@
-package de.wollis_page.gibsonos.module.hc.module.ir.dto
+package de.wollis_page.gibsonos.module.hc.ir.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
-import de.wollis_page.gibsonos.module.hc.module.ir.dto.remote.Key
+import de.wollis_page.gibsonos.module.hc.ir.dto.remote.Key
 
 data class Remote(
     val id: Long,
@@ -10,4 +10,8 @@ data class Remote(
     val height: Int,
     val background: String?,
     val keys: MutableList<Key>
-): ListItemInterface
+): ListItemInterface {
+    override fun getId(): Any {
+        return this.id
+    }
+}

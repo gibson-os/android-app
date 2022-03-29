@@ -1,19 +1,19 @@
-package de.wollis_page.gibsonos.module.hc.module.ir.fragment
+package de.wollis_page.gibsonos.module.hc.ir.fragment
 
 import android.view.View
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.hc.module.ir.dto.Key
-import de.wollis_page.gibsonos.module.hc.module.task.IrTask
+import de.wollis_page.gibsonos.module.hc.ir.dto.Key
+import de.wollis_page.gibsonos.module.hc.task.IrTask
 
 class KeyFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) = this.load {
         if (item is Key) {
             val moduleId = this.fragmentsArguments["moduleId"] as Long
             IrTask.send(
-                this.getGibsonOsActivity(),
+                this.activity,
                 moduleId,
                 item.protocol,
                 item.address,
@@ -36,6 +36,6 @@ class KeyFragment: ListFragment() {
     override fun getListRessource(): Int = R.layout.hc_module_ir_key_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(IrTask.keys(this.getGibsonOsActivity(), start, limit))
+        this.listAdapter.setListResponse(IrTask.keys(this.activity, start, limit))
     }
 }

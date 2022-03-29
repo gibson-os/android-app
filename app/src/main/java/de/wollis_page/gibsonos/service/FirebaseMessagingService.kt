@@ -47,6 +47,11 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             }
         }
 
+        if (remoteMessage.data["payload"]?.length ?: 0 > 0) {
+            // Wenn activity nicht existiert und typ update ist = update abmelden
+            activity?.updateData(remoteMessage.data["payload"].toString())
+        }
+
         if (remoteMessage.notification != null) {
             var intent = Intent(this, Class.forName(activityName))
             intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, account!!.account)

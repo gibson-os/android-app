@@ -43,7 +43,7 @@ class LogFragment: ListFragment() {
         val masterId = this.fragmentsArguments["masterId"] as Long?
         val moduleId = this.fragmentsArguments["moduleId"] as Long?
         this.listAdapter.setListResponse(LogTask.index(
-            this.getGibsonOsActivity(),
+            this.activity,
             start,
             limit,
             masterId,

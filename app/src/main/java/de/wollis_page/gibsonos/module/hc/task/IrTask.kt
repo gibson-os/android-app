@@ -1,10 +1,10 @@
-package de.wollis_page.gibsonos.module.hc.module.task
+package de.wollis_page.gibsonos.module.hc.task
 
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.exception.TaskException
-import de.wollis_page.gibsonos.module.hc.module.ir.dto.Key
-import de.wollis_page.gibsonos.module.hc.module.ir.dto.Remote
+import de.wollis_page.gibsonos.module.hc.ir.dto.Key
+import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object IrTask: AbstractTask() {

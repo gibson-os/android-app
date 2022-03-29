@@ -44,4 +44,8 @@ data class Module(
             return arrayOfNulls(size)
         }
     }
+
+    override fun getId(): Long {
+        return this.id
+    }
 }

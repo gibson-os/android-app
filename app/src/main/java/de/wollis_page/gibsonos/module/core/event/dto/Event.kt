@@ -3,7 +3,11 @@ package de.wollis_page.gibsonos.module.core.event.dto
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
 data class Event(
-    val id: Int,
+    val id: Long,
     val name: String,
     val lastRun: String?
-): ListItemInterface
+): ListItemInterface {
+    override fun getId(): Long {
+        return this.id
+    }
+}
