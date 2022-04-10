@@ -96,8 +96,6 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
 
             run(account)
             activity.runOnUiThread { this.listView.adapter?.notifyDataSetChanged() }
-        }, {
-            activity.finish()
         })
     }
 

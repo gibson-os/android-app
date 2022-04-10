@@ -81,8 +81,6 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
 
             run(account)
             this.runOnUiThread { this.listView.adapter?.notifyDataSetChanged() }
-        }, {
-            this.finish()
         })
     }
 
