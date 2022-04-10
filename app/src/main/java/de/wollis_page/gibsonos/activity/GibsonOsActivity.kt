@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.activity
 
+import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -180,16 +181,20 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     }
 
     override fun setTitle(titleId: Int) {
-        this.runOnUiThread {
-            this.findViewById<TextView>(android.R.id.title).text = this.getString(titleId)
-            super.setTitle(titleId)
-        }
+        this.setTitle(this.getString(titleId))
     }
 
     fun setTitle(title: String) {
         this.runOnUiThread {
-            this.findViewById<TextView>(android.R.id.title).text = title
-            super.setTitle(title)
+            var newTitle = this.getAccount().alias
+
+            if (title.isNotEmpty()) {
+                newTitle += " - $title"
+            }
+
+            this.findViewById<TextView>(android.R.id.title).text = newTitle
+            super.setTitle(newTitle)
+            this.setTaskDescription(ActivityManager.TaskDescription(newTitle))
         }
     }
 
