@@ -22,7 +22,7 @@ class IndexActivity : ListActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setTitle("")
+        this.setTitle()
 
         val inflater = LayoutInflater.from(this)
         this.contentContainer.addView(inflater.inflate(

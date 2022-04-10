@@ -184,15 +184,15 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         this.setTitle(this.getString(titleId))
     }
 
-    fun setTitle(title: String) {
+    fun setTitle(title: String? = null) {
         this.runOnUiThread {
             var newTitle = this.getAccount().alias
 
-            if (title.isNotEmpty()) {
+            if (title?.isNotEmpty() == true) {
                 newTitle += " - $title"
             }
 
-            this.findViewById<TextView>(android.R.id.title).text = newTitle
+            this.findViewById<TextView>(android.R.id.title).text = title ?: newTitle
             super.setTitle(newTitle)
             this.setTaskDescription(ActivityManager.TaskDescription(newTitle))
         }
