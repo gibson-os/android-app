@@ -20,5 +20,5 @@ class IndexActivity : TabActivity(), AppActivityInterface {
         this.setTitle(R.string.hc_title)
     }
 
-    override fun getAppIcon() = R.drawable.ic_stream
+    override fun getAppIcon() = R.drawable.ic_house_laptop_solid
 }
