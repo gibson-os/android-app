@@ -9,6 +9,8 @@ import de.wollis_page.gibsonos.module.hc.io.dto.Port
 import de.wollis_page.gibsonos.module.hc.io.fragment.IndexFragment
 
 class IndexActivity : ModuleActivity() {
+    override fun getAppIcon(): Int = R.drawable.ic_switch
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.update = Update(

@@ -26,6 +26,4 @@ abstract class ModuleActivity : TabActivity(), AppActivityInterface {
 
         this.setTitle(this.module.name)
     }
-
-    override fun getAppIcon() = R.drawable.ic_stream
 }

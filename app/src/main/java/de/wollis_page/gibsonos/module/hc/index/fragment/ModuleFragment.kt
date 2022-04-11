@@ -3,8 +3,10 @@ package de.wollis_page.gibsonos.module.hc.index.fragment
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
@@ -41,6 +43,19 @@ class ModuleFragment: ListFragment() {
             return
         }
 
+        var imageRessource = R.drawable.ic_android
+
+        try {
+            val moduleActivity = this.getModuleActivityClass(item.helper).newInstance()
+
+            if (moduleActivity is AppActivityInterface) {
+                imageRessource = moduleActivity.getAppIcon()
+            }
+        } catch (exception: ClassNotFoundException) {
+            Log.i(Config.LOG_TAG, "Class for hc module " + item.name + "doesnt exists")
+        }
+
+        view.findViewById<ImageView>(R.id.icon).setImageResource(imageRessource)
         view.findViewById<TextView>(R.id.name).text = item.name
         view.findViewById<TextView>(R.id.address).text = item.address.toString()
         view.findViewById<TextView>(R.id.type).text = item.type

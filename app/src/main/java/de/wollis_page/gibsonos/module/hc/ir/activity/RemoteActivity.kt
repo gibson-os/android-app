@@ -20,7 +20,7 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
     private lateinit var remote: Remote
     private var moduleId: Long = 0
 
-    override fun getAppIcon(): Int = R.drawable.ic_cog
+    override fun getAppIcon(): Int = R.drawable.ic_remote_control
 
     override fun getContentView(): Int = R.layout.hc_module_ir_remote_view
 
