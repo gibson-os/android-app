@@ -32,7 +32,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     private lateinit var loadedDir: Dir
     private var loadDir: String? = null
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
-    private val imageQueue = ArrayMap<ImageView, Item>()
+    private var imageQueue = ArrayMap<ImageView, Item>()
     private var imagesLoading = false
     private var imageWidth: Int? = null
 
@@ -113,7 +113,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             html5Item = DialogItem("An Chromecast senden")
             html5Item.icon = R.drawable.ic_chromecast
             html5Item.onClick = {
-                MediaRouteChooserDialog(this).show();
+                MediaRouteChooserDialog(this).show()
             }
         }
 
@@ -124,6 +124,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
     override fun onBackPressed() {
         Log.i(Config.LOG_TAG, "Loaded dir " + this.loadedDir.dir)
+        this.imageQueue = ArrayMap<ImageView, Item>()
         val dirs = this.loadedDir.dir.split("/").toMutableList()
 
         if (dirs.last().isEmpty()) {
