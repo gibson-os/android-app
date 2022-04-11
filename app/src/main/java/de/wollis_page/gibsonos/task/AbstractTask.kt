@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.task
 
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -53,11 +54,16 @@ abstract class AbstractTask {
         messageRessource: Int? = null
     ): E {
         val response = this.run(context, dataStore)
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        val jsonAdapter = moshi.adapter(E::class.java)
 
-        return jsonAdapter.fromJson(response.getJSONObject("data").toString()) ?:
+        return this.getJsonAdapter<E>().fromJson(response.getJSONObject("data").toString()) ?:
             throw TaskException("Object not in response!", messageRessource)
+    }
+
+    protected inline fun <reified E> getJsonAdapter(): JsonAdapter<E>
+    {
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
+        return moshi.adapter(E::class.java)
     }
 
     protected inline fun <reified E> loadList(

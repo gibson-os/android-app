@@ -13,7 +13,11 @@ object DirTask: AbstractTask() {
         val dataStore = this.getDataStore(context.getAccount(), "explorer", "dir", "read")
         dataStore.addParam("dir", directory)
 
-        return this.load(context, dataStore, R.string.explorer_dir_error_response)
+        val response = this.run(context, dataStore)
+        val jsonAdapter = this.getJsonAdapter<Dir>()
+
+        return jsonAdapter.fromJson(response.toString()) ?:
+            throw TaskException("Dir not in response!", R.string.explorer_dir_error_response)
     }
 
     @Throws(TaskException::class)
