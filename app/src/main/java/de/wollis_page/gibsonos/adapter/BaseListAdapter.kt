@@ -42,11 +42,12 @@ class BaseListAdapter(private val context: Activity, private val list: ListInter
     class ItemHolder(
         private var context: ListInterface,
         private var view: View
-    ) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    ) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
         private lateinit var item: ListItemInterface
 
         init {
             view.setOnClickListener(this)
+            view.setOnLongClickListener(this)
         }
 
         fun bind(item: ListItemInterface) {
@@ -56,6 +57,10 @@ class BaseListAdapter(private val context: Activity, private val list: ListInter
 
         override fun onClick(p0: View?) {
             this.context.onClick(this.item)
+        }
+
+        override fun onLongClick(p0: View?): Boolean {
+            return this.context.onLongClick(this.item)
         }
     }
 }

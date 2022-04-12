@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -14,6 +15,7 @@ import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.ListInterface
+import de.wollis_page.gibsonos.helper.ListItemTouchHelper
 
 abstract class ListActivity : GibsonOsActivity(), ListInterface {
     override lateinit var listView: RecyclerView
@@ -24,6 +26,7 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.listView = this.findViewById(R.id.list)
+        ItemTouchHelper(ListItemTouchHelper(this)).attachToRecyclerView(this.listView)
 
         val llm = LinearLayoutManager(this)
         llm.orientation = LinearLayoutManager.VERTICAL

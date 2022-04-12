@@ -27,6 +27,13 @@ interface ListInterface {
 
     fun getContentView() = R.layout.base_list
 
+    fun onLongClick(item: ListItemInterface): Boolean {
+        return false
+    }
+
+    fun onSwiped(item: ListItemInterface, direction: Int) {
+    }
+
     fun updateList(data: String, dtoClass: Class<*>) {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val listType = Types.newParameterizedType(MutableList::class.java, dtoClass)
