@@ -51,7 +51,7 @@ class MainActivity : ListActivity() {
         }
 
         this.listAdapter.items = accounts.toMutableList()
-        this.listAdapter.notifyDataSetChanged()
+        this.listAdapter.notifyItemRangeChanged(0, accounts.size)
     }
 
     override fun onClick(item: ListItemInterface) {
@@ -74,5 +74,13 @@ class MainActivity : ListActivity() {
         (view.findViewById<View>(R.id.alias) as TextView).text = item.alias
         (view.findViewById<View>(R.id.url) as TextView).text = item.url
         (view.findViewById<View>(R.id.user) as TextView).text = item.user
+    }
+
+    override fun onSwiped(item: ListItemInterface, direction: Int) {
+        if (item !is Account) {
+            return
+        }
+
+        this.application.removeAccount(item)
     }
 }

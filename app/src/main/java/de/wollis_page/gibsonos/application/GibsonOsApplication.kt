@@ -48,9 +48,8 @@ class GibsonOsApplication : SugarApp() {
     }
 
     fun removeAccount(account: AccountModel) {
+        this.accounts.remove(this.getAccountById(account.id))
         SugarRecord.delete(account)
-//        this.accounts.find {  }
-        this.accounts.remove(Account(account))
     }
 
     fun getAccountById(id: Long): Account? {

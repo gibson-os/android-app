@@ -14,8 +14,9 @@ class ListItemTouchHelper(private val context: ListActivity): ItemTouchHelper.Si
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        this.context.onSwiped(this.context.listAdapter.items.get(viewHolder.absoluteAdapterPosition), direction)
-//        this.context.listAdapter.notifyItemRemoved(viewHolder.absoluteAdapterPosition)
-        this.context.listAdapter.notifyDataSetChanged()
+        val index = viewHolder.absoluteAdapterPosition
+        this.context.onSwiped(this.context.listAdapter.items.get(index), direction)
+        this.context.listAdapter.items.removeAt(index)
+        this.context.listAdapter.notifyItemRemoved(index)
     }
 }
