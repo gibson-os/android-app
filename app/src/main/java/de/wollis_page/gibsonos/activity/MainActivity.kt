@@ -76,11 +76,13 @@ class MainActivity : ListActivity() {
         (view.findViewById<View>(R.id.user) as TextView).text = item.user
     }
 
-    override fun onSwiped(item: ListItemInterface, direction: Int) {
+    override fun deleteItem(item: ListItemInterface): Boolean {
         if (item !is Account) {
-            return
+            return false
         }
 
         this.application.removeAccount(item)
+
+        return true
     }
 }

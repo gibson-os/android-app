@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
@@ -24,7 +25,7 @@ class LoginActivity : GibsonOsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setTitle(R.string.login_title)
+        this.findViewById<TextView>(android.R.id.title).text = this.getString(R.string.login_title)
         val me = this
 
         me.etAlias = me.findViewById(R.id.alias) as EditText

@@ -31,7 +31,8 @@ interface ListInterface {
         return false
     }
 
-    fun onSwiped(item: ListItemInterface, direction: Int) {
+    fun deleteItem(item: ListItemInterface): Boolean {
+        return false
     }
 
     fun updateList(data: String, dtoClass: Class<*>) {
