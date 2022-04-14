@@ -12,7 +12,7 @@ import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
-import de.wollis_page.gibsonos.helper.AlertDialog
+import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.helper.AppManager
 import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 import de.wollis_page.gibsonos.module.core.task.DesktopTask
@@ -59,7 +59,7 @@ class IndexActivity : ListActivity() {
 
         val cogButton = this.findViewById<FloatingActionButton>(R.id.cogButton)
         cogButton.setOnClickListener {
-            AlertDialog(
+            AlertListDialog(
                 this,
                 this.getString(R.string.core_desktop_settings),
                 arrayListOf(cronjobsSetting, eventsSetting)

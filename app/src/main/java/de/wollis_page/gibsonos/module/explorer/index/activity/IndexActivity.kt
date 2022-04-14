@@ -17,7 +17,7 @@ import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.ResponseException
-import de.wollis_page.gibsonos.helper.AlertDialog
+import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
@@ -119,7 +119,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
         options.add(html5Item)
 
-        AlertDialog(this, item.name, options).show()
+        AlertListDialog(this, item.name, options).show()
     }
 
     override fun onBackPressed() {
