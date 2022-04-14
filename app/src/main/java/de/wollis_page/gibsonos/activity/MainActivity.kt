@@ -13,6 +13,13 @@ import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.module.core.user.activity.LoginActivity
 
 class MainActivity : ListActivity() {
+    override fun getDeleteTitle() = this.getString(R.string.account_delete_title)
+
+    override fun getDeleteMessage(item: ListItemInterface) = this.getString(
+        R.string.account_delete_message,
+        if (item is Account) item.alias else ""
+    )
+
     override fun getListRessource() = R.layout.base_account_list_item
 
     override fun onCreate(savedInstanceState: Bundle?) {

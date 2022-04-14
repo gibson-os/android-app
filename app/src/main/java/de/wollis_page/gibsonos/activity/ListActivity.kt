@@ -26,7 +26,10 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.listView = this.findViewById(R.id.list)
-        ItemTouchHelper(ListItemTouchHelper(this)).attachToRecyclerView(this.listView)
+
+        if (this.getDeleteTitle() != null) {
+            ItemTouchHelper(ListItemTouchHelper(this)).attachToRecyclerView(this.listView)
+        }
 
         val llm = LinearLayoutManager(this)
         llm.orientation = LinearLayoutManager.VERTICAL

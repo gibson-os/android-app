@@ -35,6 +35,14 @@ interface ListInterface {
         return false
     }
 
+    fun getDeleteTitle(): String? {
+        return null
+    }
+
+    fun getDeleteMessage(item: ListItemInterface): String? {
+        return null
+    }
+
     fun updateList(data: String, dtoClass: Class<*>) {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val listType = Types.newParameterizedType(MutableList::class.java, dtoClass)

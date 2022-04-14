@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Gibson OS</string>
     <string name="use_dark_mode">Use dark mode</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+
     <string name="account_title">Add account</string>
     <string name="account_alias">Alias</string>
     <string name="account_user">User</string>
@@ -12,6 +16,8 @@
     <string name="account_error_no_model_found">No account model found!</string>
     <string name="account_error_not_exists">No account exists!</string>
     <string name="account_error_no_token">Account token doesn\'t exists!</string>
+    <string name="account_delete_title">Delete account</string>
+    <string name="account_delete_message">Delete account "%s"?</string>
 
     <string name="login_title">Login</string>
 
