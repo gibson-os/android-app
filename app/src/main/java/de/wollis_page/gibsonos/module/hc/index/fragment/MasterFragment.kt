@@ -1,14 +1,12 @@
 package de.wollis_page.gibsonos.module.hc.index.fragment
 
-import android.content.Intent
+import android.os.Parcelable
 import android.view.View
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.hc.index.activity.MasterActivity
 import de.wollis_page.gibsonos.module.hc.index.dto.Master
 import de.wollis_page.gibsonos.module.hc.task.MasterTask
 
@@ -20,12 +18,13 @@ class MasterFragment: ListFragment() {
 
         this.runTask({
             try {
-                val intent = Intent(this.requireActivity(), MasterActivity::class.java)
-                intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.getAccount())
-                intent.putExtra("master", item)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-
-                this.startActivity(intent)
+                this.activity.startActivity(
+                    "hc",
+                    "index",
+                    "master",
+                    item.id,
+                    mapOf<String, Parcelable>("master" to item)
+                )
             } catch (exception: ClassNotFoundException) {
                 throw AppException("Not implemented yet!", R.string.not_implemented_yet)
             }

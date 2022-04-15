@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.module.core.desktop.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -67,6 +68,10 @@ class IndexActivity : ListActivity() {
         }
     }
 
+    override fun getId(): Any {
+        return 0
+    }
+
     override fun loadList(start: Long, limit: Long) = this.load {
         val desktop = DesktopTask.index(this)
 
@@ -82,13 +87,13 @@ class IndexActivity : ListActivity() {
 
         this.runTask({
             try {
-                val activityClass = AppManager.getActivityClass(item.module, item.task)
-                val intent = Intent(this, activityClass)
-                intent.putExtra(ACCOUNT_KEY, this.getAccount())
-                intent.putExtra(ITEM_KEY, item)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-
-                this.startActivity(intent)
+                this.startActivity(
+                    item.module,
+                    item.task,
+                    "index",
+                    item.getId(),
+                    mapOf<String, Parcelable>(ITEM_KEY to item)
+                )
             } catch (exception: ClassNotFoundException) {
                 throw AppException("Not implemented yet!", R.string.not_implemented_yet)
             }

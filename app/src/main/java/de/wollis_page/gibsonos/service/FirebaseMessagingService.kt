@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -32,35 +31,36 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(Config.LOG_TAG, "Firebase message received!")
-        var activity: GibsonOsActivity? = null
         val application = this.application as GibsonOsApplication
         val account = remoteMessage.data["token"]?.let { application.getAccountByToken(it) }
-        val activityName = "de.wollis_page.gibsonos.module." +
-                remoteMessage.data["module"] + "." +
-                remoteMessage.data["task"] + ".activity." +
-                (remoteMessage.data["action"].toString().replaceFirstChar { it.uppercase() }) + "Activity"
+        var activity: GibsonOsActivity? = null
 
-        account?.getProcesses()?.forEach {
-            Log.d(Config.LOG_TAG, it.activity::class.java.toString())
-            if (it.activity::class.java.toString() == "class $activityName") {
-                activity = it.activity
-            }
+        if (account == null) {
+            return
         }
+
+        activity = application.getActivity(
+            account,
+            remoteMessage.data["module"].toString(),
+            remoteMessage.data["task"].toString(),
+            remoteMessage.data["action"].toString(),
+            remoteMessage.data["id"] ?: 0,
+        )
 
         if (remoteMessage.data["payload"]?.length ?: 0 > 0) {
             // Wenn activity nicht existiert und typ update ist = update abmelden
             activity?.updateData(remoteMessage.data["payload"].toString())
         }
 
+        val intent = application.getActivityIntent(
+            account.account,
+            remoteMessage.data["module"].toString(),
+            remoteMessage.data["task"].toString(),
+            remoteMessage.data["action"].toString(),
+            remoteMessage.data["id"] ?: 0,
+        )
+
         if (remoteMessage.notification != null) {
-            var intent = Intent(this, Class.forName(activityName))
-            intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, account!!.account)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-
-            if (activity != null) {
-                intent = activity!!.intent
-            }
-
             val notificationBuilder = NotificationCompat.Builder(this, "test")
                 .setSmallIcon(R.drawable.ic_anchor)
                 .setContentTitle(remoteMessage.notification!!.title)

@@ -1,8 +1,10 @@
 package de.wollis_page.gibsonos.activity
 
 import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -44,6 +46,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     var update: Update? = null
 
     protected abstract fun getContentView(): Int
+
+    abstract fun getId(): Any
 
     open fun updateData(data: String) {
     }
@@ -196,6 +200,36 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             super.setTitle(newTitle)
             this.setTaskDescription(ActivityManager.TaskDescription(newTitle))
         }
+    }
+
+    fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Parcelable>) {
+        val account = this.application.getAccountById(this.getAccount().id)
+            ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
+
+        val activity = this.application.getActivity(
+            account,
+            module,
+            task,
+            action,
+            id
+        )
+
+        if (activity == null) {
+            val intent = Intent(this, Class.forName(this.application.getActivityName(module, task, action)))
+            intent.putExtra(ACCOUNT_KEY, account.account)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+
+            extras.forEach {
+                intent.putExtra(it.key, it.value)
+            }
+
+            this.startActivity(intent)
+
+            return
+        }
+
+        val activityManager = activity.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        activityManager.moveTaskToFront(activity.taskId, 0)
     }
 
     fun runTask(run: () -> Unit, runFailure: ((exception: Throwable) -> Unit)? = null) {

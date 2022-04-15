@@ -42,6 +42,10 @@ class MainActivity : ListActivity() {
         loadList()
     }
 
+    override fun getId(): Any {
+        return 0
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

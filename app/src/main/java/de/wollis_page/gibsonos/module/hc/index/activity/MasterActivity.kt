@@ -28,5 +28,9 @@ class MasterActivity : TabActivity(), AppActivityInterface {
         this.setTitle(this.master.name)
     }
 
+    override fun getId(): Any {
+        return this.master.getId()
+    }
+
     override fun getAppIcon() = R.drawable.ic_stream
 }

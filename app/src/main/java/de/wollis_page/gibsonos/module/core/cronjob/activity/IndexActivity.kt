@@ -17,6 +17,10 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         this.setTitle(R.string.core_cronjob_title)
     }
 
+    override fun getId(): Any {
+        return 0
+    }
+
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(CronjobTask.index(this, start, limit))
     }

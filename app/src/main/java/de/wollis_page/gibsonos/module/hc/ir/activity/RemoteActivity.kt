@@ -23,6 +23,10 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
 
     override fun getContentView(): Int = R.layout.hc_module_ir_remote_view
 
+    override fun getId(): Any {
+        return this.remote.getId()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.moduleId = this.intent.getLongExtra("moduleId", 0)

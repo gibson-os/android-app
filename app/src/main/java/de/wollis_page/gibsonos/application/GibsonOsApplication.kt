@@ -1,6 +1,7 @@
 package de.wollis_page.gibsonos.application
 
 import android.app.UiModeManager
+import android.content.Intent
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.gms.tasks.OnCompleteListener
@@ -85,6 +86,54 @@ class GibsonOsApplication : SugarApp() {
         }
 
         return null
+    }
+
+    fun getActivity(
+        account: Account,
+        module: String,
+        task: String,
+        action: String,
+        id: Any
+    ): GibsonOsActivity? {
+        val activityName = this.getActivityName(module, task, action)
+
+        // @todo verfeiern. Z.B. bei Ordner muss der richtige geöffnet sein.
+        val process = account.getProcesses().find {
+            it.activity::class.java.toString() == "class $activityName" && it.activity.getId() == id
+        }
+
+        return process?.activity
+    }
+
+    fun getActivityIntent(
+        accountModel: AccountModel,
+        module: String,
+        task: String,
+        action: String,
+        id: Any
+    ): Intent {
+        val account = this.getAccountById(accountModel.id)
+            ?: throw AccountException("Account " + accountModel.id + " not found in store!")
+
+        val activity = this.getActivity(account, module, task, action, id)
+
+        if (activity == null) {
+            val intent = Intent(this, Class.forName(this.getActivityName(module, task, action)))
+            intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, account.account)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+
+            return intent
+        }
+
+        return activity.intent
+    }
+
+    fun getActivityName(module: String, task: String, action: String): String
+    {
+        return "de.wollis_page.gibsonos.module." +
+            module + "." +
+            task + ".activity." +
+            (action.replaceFirstChar { it.uppercase() }) + "Activity"
     }
 
     private fun getAccount(account: AccountModel): Account? {

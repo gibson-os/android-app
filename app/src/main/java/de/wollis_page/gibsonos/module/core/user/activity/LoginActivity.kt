@@ -89,4 +89,8 @@ class LoginActivity : GibsonOsActivity() {
             })
         }
     }
+
+    override fun getId(): Any {
+        return 0
+    }
 }

@@ -26,4 +26,8 @@ abstract class ModuleActivity : TabActivity(), AppActivityInterface {
 
         this.setTitle(this.module.name)
     }
+
+    override fun getId(): Any {
+        return this.module.id
+    }
 }

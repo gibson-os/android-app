@@ -308,4 +308,8 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     }
 
     override fun getAppIcon() = R.drawable.ic_folder
+
+    override fun getId(): Any {
+        return this.loadDir.toString()
+    }
 }

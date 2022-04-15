@@ -18,4 +18,8 @@ class SettingActivity: GibsonOsActivity() {
             this.application.setDarkMode(checked)
         }
     }
+
+    override fun getId(): Any {
+        return 0
+    }
 }
