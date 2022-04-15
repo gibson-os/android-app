@@ -1,6 +1,5 @@
 package de.wollis_page.gibsonos.module.hc.ir.activity
 
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
@@ -34,13 +33,13 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             val displayWidth = displayMetrics.widthPixels
-            val unitWidth = displayWidth / remote.width
+            val unitWidth = displayWidth / (remote.width + 1)
 
             this.remote.keys.forEach {
                 val shape = ShapeDrawable()
                 shape.shape = RectShape()
                 shape.setPadding(0, 0, 0,0)
-                shape.paint.color = Color.BLACK
+                shape.paint.color = R.color.colorAsset
                 shape.paint.strokeWidth = 1f
                 shape.paint.style = Paint.Style.STROKE
                 val button = Button(this)
