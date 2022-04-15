@@ -17,7 +17,7 @@ class MainActivity : ListActivity() {
 
     override fun getDeleteMessage(item: ListItemInterface) = this.getString(
         R.string.account_delete_message,
-        if (item is Account) item.alias else ""
+        if (item is Account) item.alias?.trim() else ""
     )
 
     override fun getListRessource() = R.layout.base_account_list_item

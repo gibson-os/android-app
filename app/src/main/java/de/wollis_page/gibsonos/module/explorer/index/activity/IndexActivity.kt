@@ -11,6 +11,10 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.mediarouter.app.MediaRouteChooserDialog
+import androidx.mediarouter.media.MediaControlIntent
+import androidx.mediarouter.media.MediaRouteSelector
+import com.google.android.gms.cast.CastMediaControlIntent
+import com.google.android.gms.cast.framework.CastContext
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.ListActivity
@@ -18,6 +22,7 @@ import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.helper.AlertListDialog
+import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
@@ -30,6 +35,8 @@ import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 class IndexActivity: ListActivity(), AppActivityInterface {
     override fun getListRessource() = R.layout.explorer_index_list_item
     private lateinit var loadedDir: Dir
+    private lateinit var castContext: CastContext
+    private lateinit var mediaRouteChooserDialog: MediaRouteChooserDialog
     private var loadDir: String? = null
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
     private var imageQueue = ArrayMap<ImageView, Item>()
@@ -43,6 +50,19 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        this.castContext = CastContext.getSharedInstance(this)
+
+        this.castContext.sessionManager.addSessionManagerListener(Chromecast())
+//        this.castContext.sessionManager.currentCastSession?.sendMessage(
+//            "urn:x-cast:net.itronom.gibson",
+//        )
+        val mediaRouteSelector = MediaRouteSelector.Builder()
+            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+            .addControlCategory(CastMediaControlIntent.categoryForCast(Config.CHROMECAST_RECEIVER_APPLICATION_ID))
+            .build()
+        this.mediaRouteChooserDialog = MediaRouteChooserDialog(this)
+        this.mediaRouteChooserDialog.routeSelector = mediaRouteSelector
+
         if (savedInstanceState != null) {
             this.loadedDir = savedInstanceState.getParcelable(DIRECTORY_KEY)!!
             this.loadDir = loadedDir.dir
@@ -113,7 +133,9 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             html5Item = DialogItem("An Chromecast senden")
             html5Item.icon = R.drawable.ic_chromecast
             html5Item.onClick = {
-                MediaRouteChooserDialog(this).show()
+                Log.d(Config.LOG_TAG, this.castContext.sessionManager.currentCastSession.toString())
+                Log.d(Config.LOG_TAG, this.castContext.sessionManager.currentSession.toString())
+                this.mediaRouteChooserDialog.show()
             }
         }
 

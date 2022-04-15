@@ -17,7 +17,7 @@
     <string name="account_error_not_exists">No account exists!</string>
     <string name="account_error_no_token">Account token doesn\'t exists!</string>
     <string name="account_delete_title">Delete account</string>
-    <string name="account_delete_message">Delete account "%s"?</string>
+    <string name="account_delete_message">Delete account %s?</string>
 
     <string name="login_title">Login</string>
 
