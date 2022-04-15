@@ -39,7 +39,7 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
                 val shape = ShapeDrawable()
                 shape.shape = RectShape()
                 shape.setPadding(0, 0, 0,0)
-                shape.paint.color = R.color.colorAsset
+                shape.paint.color = this.resources.getColor(R.color.colorAsset, this.theme)
                 shape.paint.strokeWidth = 1f
                 shape.paint.style = Paint.Style.STROKE
                 val button = Button(this)
