@@ -1,6 +1,5 @@
 package de.wollis_page.gibsonos.module.core.desktop.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -36,12 +35,13 @@ class IndexActivity : ListActivity() {
         cronjobsSetting.icon = AppManager.getAppIcon("core", "cronjob")
         cronjobsSetting.onClick = {
             this.runTask({
-                val activityClass = AppManager.getActivityClass("core", "cronjob")
-                val intent = Intent(this, activityClass)
-                intent.putExtra(ACCOUNT_KEY, this.getAccount())
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-
-                this.startActivity(intent)
+                this.startActivity(
+                    "core",
+                    "cronjob",
+                    "index",
+                    0,
+                    emptyMap()
+                )
             })
         }
 
@@ -49,12 +49,13 @@ class IndexActivity : ListActivity() {
         eventsSetting.icon = AppManager.getAppIcon("core", "event")
         eventsSetting.onClick = {
             this.runTask({
-                val activityClass = AppManager.getActivityClass("core", "event")
-                val intent = Intent(this, activityClass)
-                intent.putExtra(ACCOUNT_KEY, this.getAccount())
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-
-                this.startActivity(intent)
+                this.startActivity(
+                    "core",
+                    "event",
+                    "index",
+                    0,
+                    emptyMap()
+                )
             })
         }
 

@@ -34,6 +34,7 @@ import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.module.core.desktop.dto.Item
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
+import java.io.Serializable
 import java.util.concurrent.CompletableFuture
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -202,7 +203,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         }
     }
 
-    fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Parcelable>) {
+    fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Any>) {
         val account = this.application.getAccountById(this.getAccount().id)
             ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
 
@@ -220,7 +221,17 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 
             extras.forEach {
-                intent.putExtra(it.key, it.value)
+                when (val value = it.value) {
+                    is Parcelable -> intent.putExtra(it.key, value)
+                    is Serializable -> intent.putExtra(it.key, value)
+                    is String -> intent.putExtra(it.key, value)
+                    is Int -> intent.putExtra(it.key, value)
+                    is Long -> intent.putExtra(it.key, value)
+                    is Float -> intent.putExtra(it.key, value)
+                    is Double -> intent.putExtra(it.key, value)
+                    is Boolean -> intent.putExtra(it.key, value)
+                    else -> throw ActivityException(it.key + " cant put as extra. Type not allowed")
+                }
             }
 
             this.startActivity(intent)
@@ -275,6 +286,16 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                 DeviceTask.removePush(this, update)
             })
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(Config.LOG_TAG, "Destroy activity")
+        val account = this.application.getAccountById(this.getAccount().id) ?: return
+        val process = account.getProcesses().find {
+            it.activity == this
+        } ?: return
+        account.removeProccess(process)
     }
 
     companion object {

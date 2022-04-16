@@ -11,29 +11,31 @@ import android.widget.RelativeLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.task.IrTask
 
 
 class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
     private lateinit var remote: Remote
-    private var moduleId: Long = 0
+    private lateinit var module: Module
 
     override fun getAppIcon(): Int = R.drawable.ic_remote_control
 
     override fun getContentView(): Int = R.layout.hc_module_ir_remote_view
 
     override fun getId(): Any {
-        return this.remote.getId()
+        return this.module.id.toString() + '_' + this.remote.getId().toString()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.moduleId = this.intent.getLongExtra("moduleId", 0)
+        this.module = this.intent.getParcelableExtra("module")!!
         val layout = findViewById<View>(R.id.remote) as RelativeLayout
 
         this.runTask({
             this.remote = IrTask.remote(this, this.intent.getLongExtra("remoteId", 0))
+            this.setTitle(this.module.name + ": " + this.remote.name)
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             val displayWidth = displayMetrics.widthPixels
@@ -54,7 +56,7 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
                 val key = it
                 button.setOnClickListener {
                     this.runTask({
-                        IrTask.sendRemoteKey(this, this.moduleId, key.eventId, key.keys)
+                        IrTask.sendRemoteKey(this, this.module.id, key.eventId, key.keys)
                     })
                 }
                 val params = RelativeLayout.LayoutParams(it.width * unitWidth, it.height * unitWidth)

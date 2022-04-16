@@ -1,13 +1,11 @@
 package de.wollis_page.gibsonos.module.hc.ir.fragment
 
-import android.content.Intent
 import android.view.View
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.hc.ir.activity.RemoteActivity
+import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.task.IrTask
 
@@ -17,14 +15,19 @@ class RemoteFragment: ListFragment() {
             return
         }
 
-        this.runTask({
-            val intent = Intent(this.requireActivity(), RemoteActivity::class.java)
-            intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.getAccount())
-            intent.putExtra("moduleId", this.fragmentsArguments["moduleId"] as Long)
-            intent.putExtra("remoteId", item.id)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
+        val module = this.fragmentsArguments["module"] as Module
 
-            this.startActivity(intent)
+        this.runTask({
+            this.activity.startActivity(
+                "hc",
+                "ir",
+                "remote",
+                module.id.toString() + '_' + item.id.toString(),
+                mapOf(
+                    "module" to module,
+                    "remoteId" to item.id,
+                )
+            )
         })
     }
 
@@ -39,11 +42,11 @@ class RemoteFragment: ListFragment() {
     override fun getListRessource(): Int = R.layout.hc_module_ir_remote_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        val moduleId = this.fragmentsArguments["moduleId"] as Long
+        val module = this.fragmentsArguments["module"] as Module
         this.listAdapter.setListResponse(
             IrTask.remotes(
             this.activity,
-            moduleId,
+            module.id,
             start,
             limit
         ))

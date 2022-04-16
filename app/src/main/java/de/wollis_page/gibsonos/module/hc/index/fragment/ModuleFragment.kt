@@ -1,13 +1,12 @@
 package de.wollis_page.gibsonos.module.hc.index.fragment
 
-import android.content.Intent
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
@@ -23,13 +22,13 @@ class ModuleFragment: ListFragment() {
 
         this.runTask({
             try {
-                val activityClass = this.getModuleActivityClass(item.helper)
-                val intent = Intent(this.requireActivity(), activityClass)
-                intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, this.getAccount())
-                intent.putExtra("module", item)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-
-                this.startActivity(intent)
+                this.activity.startActivity(
+                    "hc",
+                    item.helper,
+                    "index",
+                    item.id,
+                    mapOf<String, Parcelable>("module" to item)
+                )
             } catch (exception: ClassNotFoundException) {
                 throw AppException("Not implemented yet!", R.string.not_implemented_yet)
             }

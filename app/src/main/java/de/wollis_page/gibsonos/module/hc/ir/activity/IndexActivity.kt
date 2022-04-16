@@ -10,7 +10,7 @@ class IndexActivity : ModuleActivity() {
     override fun getAppIcon(): Int = R.drawable.ic_remote_control
 
     override fun getTabs(): Array<Tab> {
-        val arguments = hashMapOf("moduleId" to this.module.id)
+        val arguments = hashMapOf("module" to this.module)
 
         return arrayOf(
             Tab(R.string.hc_module_ir_remote_tab, RemoteFragment::class, arguments),

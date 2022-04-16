@@ -5,16 +5,17 @@ import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
+import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Key
 import de.wollis_page.gibsonos.module.hc.task.IrTask
 
 class KeyFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) = this.load {
         if (item is Key) {
-            val moduleId = this.fragmentsArguments["moduleId"] as Long
+            val module = this.fragmentsArguments["module"] as Module
             IrTask.send(
                 this.activity,
-                moduleId,
+                module.id,
                 item.protocol,
                 item.address,
                 item.command
