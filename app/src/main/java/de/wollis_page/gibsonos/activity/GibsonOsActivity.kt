@@ -32,14 +32,14 @@ import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
-import de.wollis_page.gibsonos.module.core.desktop.dto.Item
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
 import java.io.Serializable
 import java.util.concurrent.CompletableFuture
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var account: Account? = null
-    private var item: Item? = null
+    private var shortcut: Shortcut? = null
     lateinit var application: GibsonOsApplication
     lateinit var contentContainer: ConstraintLayout
     private lateinit var navigationView: NavigationView
@@ -66,16 +66,16 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         return account
     }
 
-    fun getItem(): Item {
-        val item = this.item
+    fun getShortcut(): Shortcut {
+        val shortcut = this.shortcut
 
-        if (item == null) {
-            Toast.makeText(this, R.string.no_item_set, Toast.LENGTH_LONG).show()
+        if (shortcut == null) {
+            Toast.makeText(this, R.string.no_shortcut_set, Toast.LENGTH_LONG).show()
 
             throw ActivityException("No Item set!")
         }
 
-        return item
+        return shortcut
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,8 +96,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             this.account = intent.getParcelableExtra(ACCOUNT_KEY)
         }
 
-        if (intent.hasExtra(ITEM_KEY)) {
-            this.item = intent.getParcelableExtra(ITEM_KEY)
+        if (intent.hasExtra(SHORTCUT_KEY)) {
+            this.shortcut = intent.getParcelableExtra(SHORTCUT_KEY)
         }
 
         val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
@@ -300,6 +300,6 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     companion object {
         const val ACCOUNT_KEY = "account"
-        const val ITEM_KEY = "item"
+        const val SHORTCUT_KEY = "shortcut"
     }
 }

@@ -1,7 +1,6 @@
 package de.wollis_page.gibsonos.module.core.desktop.activity
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -14,7 +13,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.helper.AppManager
-import de.wollis_page.gibsonos.module.core.desktop.dto.Item
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DesktopTask
 
 class IndexActivity : ListActivity() {
@@ -82,7 +81,7 @@ class IndexActivity : ListActivity() {
     }
 
     override fun onClick(item: ListItemInterface) {
-        if (item !is Item) {
+        if (item !is Shortcut) {
             return
         }
 
@@ -93,7 +92,7 @@ class IndexActivity : ListActivity() {
                     item.task,
                     "index",
                     item.getId(),
-                    mapOf<String, Parcelable>(ITEM_KEY to item)
+                    mapOf(SHORTCUT_KEY to item)
                 )
             } catch (exception: ClassNotFoundException) {
                 throw AppException("Not implemented yet!", R.string.not_implemented_yet)
@@ -102,7 +101,7 @@ class IndexActivity : ListActivity() {
     }
 
     override fun bind(item: ListItemInterface, view: View) {
-        if (item !is Item) {
+        if (item !is Shortcut) {
             return
         }
 

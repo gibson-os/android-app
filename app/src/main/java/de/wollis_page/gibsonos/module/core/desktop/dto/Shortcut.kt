@@ -5,7 +5,7 @@ import android.os.Parcelable
 import android.util.ArrayMap
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
-data class Item(
+data class Shortcut(
     var module: String,
     var task: String,
     var action: String,
@@ -50,12 +50,12 @@ data class Item(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Item> {
-        override fun createFromParcel(parcel: Parcel): Item {
-            return Item(parcel)
+    companion object CREATOR : Parcelable.Creator<Shortcut> {
+        override fun createFromParcel(parcel: Parcel): Shortcut {
+            return Shortcut(parcel)
         }
 
-        override fun newArray(size: Int): Array<Item?> {
+        override fun newArray(size: Int): Array<Shortcut?> {
             return arrayOfNulls(size)
         }
     }

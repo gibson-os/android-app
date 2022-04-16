@@ -24,7 +24,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="not_implemented_yet">Noch nicht eingebaut!</string>
-    <string name="no_item_set">Kein Item ausgewählt!</string>
+    <string name="no_shortcut_set">Kein Shortcut ausgewählt!</string>
 
     <string name="response_error_json">JSON kann nicht verarbeitet werden. Vielleicht die falsche URL?</string>
 
