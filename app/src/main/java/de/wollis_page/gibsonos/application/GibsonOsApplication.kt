@@ -12,6 +12,7 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.process.Process
 import de.wollis_page.gibsonos.model.Account as AccountModel
 
@@ -97,9 +98,22 @@ class GibsonOsApplication : SugarApp() {
     ): GibsonOsActivity? {
         val activityName = this.getActivityName(module, task, action)
 
-        // @todo verfeiern. Z.B. bei Ordner muss der richtige geöffnet sein.
         val process = account.getProcesses().find {
             it.activity::class.java.toString() == "class $activityName" && it.activity.getId() == id
+        }
+
+        return process?.activity
+    }
+
+    fun getActivity(
+        account: Account,
+        shortcut: Shortcut
+    ): GibsonOsActivity? {
+        val activityName = this.getActivityName(shortcut.module, shortcut.task, shortcut.action)
+
+        val process = account.getProcesses().find {
+            it.activity::class.java.toString() == "class $activityName" &&
+            it.activity.isActivityforShotcut(shortcut)
         }
 
         return process?.activity

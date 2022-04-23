@@ -75,34 +75,42 @@
 
         <activity
             android:name="de.wollis_page.gibsonos.module.explorer.index.activity.IndexActivity"
+            android:icon="@drawable/ic_folder"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.core.event.activity.IndexActivity"
+            android:icon="@drawable/ic_stream"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.core.cronjob.activity.IndexActivity"
+            android:icon="@drawable/ic_calendar_alt"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.hc.index.activity.IndexActivity"
+            android:icon="@drawable/ic_house_laptop_solid"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.hc.index.activity.MasterActivity"
+            android:icon="@drawable/ic_house_laptop_solid"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.hc.io.activity.IndexActivity"
+            android:icon="@drawable/ic_switch"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.hc.ir.activity.IndexActivity"
+            android:icon="@drawable/ic_remote_control"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.hc.ir.activity.RemoteActivity"
+            android:icon="@drawable/ic_remote_control"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <service

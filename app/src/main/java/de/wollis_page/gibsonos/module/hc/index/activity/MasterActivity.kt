@@ -5,6 +5,7 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.Tab
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.dto.Master
 import de.wollis_page.gibsonos.module.hc.index.fragment.LogFragment
 import de.wollis_page.gibsonos.module.hc.index.fragment.ModuleFragment
@@ -32,5 +33,9 @@ class MasterActivity : TabActivity(), AppActivityInterface {
         return this.master.getId()
     }
 
-    override fun getAppIcon() = R.drawable.ic_stream
+    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
+        return shortcut.params?.get("id") == this.master.getId()
+    }
+
+    override fun getAppIcon() = R.drawable.ic_house_laptop_solid
 }

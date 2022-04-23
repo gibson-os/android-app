@@ -11,6 +11,7 @@ import android.widget.RelativeLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.task.IrTask
@@ -26,6 +27,11 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
 
     override fun getId(): Any {
         return this.module.id.toString() + '_' + this.remote.getId().toString()
+    }
+
+    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
+        return shortcut.params?.get("id") == this.remote.getId() &&
+            shortcut.params?.get("moduleId") == this.module.getId()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

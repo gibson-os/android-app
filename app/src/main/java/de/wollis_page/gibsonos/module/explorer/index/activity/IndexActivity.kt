@@ -25,6 +25,7 @@ import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
@@ -311,5 +312,9 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
     override fun getId(): Any {
         return this.loadDir.toString()
+    }
+
+    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
+        return shortcut.params?.get("dir") == this.loadDir.toString()
     }
 }

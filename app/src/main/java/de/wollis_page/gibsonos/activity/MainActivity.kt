@@ -10,6 +10,7 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.user.activity.LoginActivity
 
 class MainActivity : ListActivity() {
@@ -44,6 +45,10 @@ class MainActivity : ListActivity() {
 
     override fun getId(): Any {
         return 0
+    }
+
+    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
+        return false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

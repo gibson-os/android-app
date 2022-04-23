@@ -50,6 +50,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     abstract fun getId(): Any
 
+    abstract fun isActivityforShotcut(shortcut: Shortcut): Boolean
+
     open fun updateData(data: String) {
     }
 
@@ -203,17 +205,47 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         }
     }
 
+    fun startActivity(shortcut: Shortcut, extras: Map<String, Any>) {
+        val account = this.application.getAccountById(this.getAccount().id)
+            ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
+
+        this.startActivity(
+            this.application.getActivity(account, shortcut),
+            shortcut.module,
+            shortcut.task,
+            shortcut.action,
+            extras
+        )
+    }
+
     fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Any>) {
         val account = this.application.getAccountById(this.getAccount().id)
             ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
 
-        val activity = this.application.getActivity(
-            account,
+        this.startActivity(
+            this.application.getActivity(
+                account,
+                module,
+                task,
+                action,
+                id
+            ),
             module,
             task,
             action,
-            id
+            extras
         )
+    }
+
+    private fun startActivity(
+        activity: GibsonOsActivity?,
+        module: String,
+        task: String,
+        action: String,
+        extras: Map<String, Any>
+    ) {
+        val account = this.application.getAccountById(this.getAccount().id)
+            ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
 
         if (activity == null) {
             val intent = Intent(this, Class.forName(this.application.getActivityName(module, task, action)))

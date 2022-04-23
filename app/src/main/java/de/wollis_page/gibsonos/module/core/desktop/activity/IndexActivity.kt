@@ -72,6 +72,10 @@ class IndexActivity : ListActivity() {
         return 0
     }
 
+    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
+        return false
+    }
+
     override fun loadList(start: Long, limit: Long) = this.load {
         val desktop = DesktopTask.index(this)
 
@@ -87,13 +91,7 @@ class IndexActivity : ListActivity() {
 
         this.runTask({
             try {
-                this.startActivity(
-                    item.module,
-                    item.task,
-                    "index",
-                    item.getId(),
-                    mapOf(SHORTCUT_KEY to item)
-                )
+                this.startActivity(item, mapOf(SHORTCUT_KEY to item))
             } catch (exception: ClassNotFoundException) {
                 throw AppException("Not implemented yet!", R.string.not_implemented_yet)
             }
