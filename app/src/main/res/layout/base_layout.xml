@@ -22,8 +22,6 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <include layout="@layout/base_navigation" />
-
     <FrameLayout
         android:id="@+id/progressBarHolder"
         android:animateLayoutChanges="true"
@@ -41,5 +39,7 @@
             android:layout_gravity="center" />
 
     </FrameLayout>
+
+    <include layout="@layout/base_navigation" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

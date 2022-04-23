@@ -22,7 +22,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.orm.SugarRecord
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.dto.Update
@@ -31,7 +30,6 @@ import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
-import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
 import java.io.Serializable
@@ -128,8 +126,26 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        Log.d(Config.LOG_TAG, "onNavigationItemSelected: ")
-        runActivity(IndexActivity::class.java, SugarRecord.findById(Account::class.java, item.groupId))
+        Log.d(Config.LOG_TAG, "onNavigationItemSelected: " + item.itemId)
+
+        val account = this.application.accounts[item.groupId]
+        val accountsCount = this.application.accounts.size
+
+        when {
+            item.itemId > accountsCount + account.apps.size -> {
+                val activity = account.getProcesses()[item.itemId - accountsCount - account.apps.size].activity
+                val activityManager = activity.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+                activityManager.moveTaskToFront(activity.taskId, 0)
+            }
+            item.itemId > accountsCount -> {
+                val app = account.apps[item.itemId - accountsCount]
+                this.startActivity(app.module, app.task, app.action, 0, emptyMap(), account)
+            }
+            else -> {
+                this.startActivity("core", "desktop", "index", 0, emptyMap(), account)
+            }
+        }
+
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
         return true
@@ -148,20 +164,31 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             val menu = navigationView.menu
             menu.clear()
             val accounts = this.application.accounts
+            val accountsCount = accounts.size
 
-            for (account in accounts) {
+            for ((accountId, account) in accounts.withIndex()) {
                 if (account.apps.size == 0) {
-                    menu.add(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
+                    menu.add(accountId, accountId, Menu.NONE, account.account.alias)
                     continue
                 }
 
-                val accountMenu = menu.addSubMenu(account.account.id.toInt(), Menu.NONE, Menu.NONE, account.account.alias)
+                val accountMenu = menu.addSubMenu(accountId, accountId, Menu.NONE, account.account.alias)
                 Log.d(Config.LOG_TAG, "Add submenu " + account.account.alias)
                 Log.d(Config.LOG_TAG, account.apps.size.toString())
+                val appsCount = account.apps.size
 
-                for (app in account.apps) {
+                for ((appId, app) in account.apps.withIndex()) {
                     Log.d(Config.LOG_TAG, "Add task")
-                    accountMenu.addSubMenu(app.text)
+                    accountMenu.add(accountId, accountsCount + appId, Menu.NONE, app.text)
+
+                    for ((processId, process) in account.getProcesses().withIndex()) {
+                        val activityName = this.application.getActivityName(app.module, app.task, app.action)
+
+                        if (process.activity::class.java.toString() == "class $activityName") {
+                            Log.d(Config.LOG_TAG, "Add process")
+                            accountMenu.add(accountId, accountsCount + appsCount + processId, Menu.NONE, process.activity.title)
+                        }
+                    }
                 }
             }
         }
@@ -200,8 +227,9 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             }
 
             this.findViewById<TextView>(android.R.id.title).text = title ?: newTitle
-            super.setTitle(newTitle)
+            super.setTitle(title ?: newTitle)
             this.setTaskDescription(ActivityManager.TaskDescription(newTitle))
+            this.loadNavigation()
         }
     }
 
@@ -219,9 +247,18 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     }
 
     fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Any>) {
-        val account = this.application.getAccountById(this.getAccount().id)
-            ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
+        this.startActivity(
+            module,
+            task,
+            action,
+            id,
+            extras,
+            this.application.getAccountById(this.getAccount().id)
+                ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
+        )
+    }
 
+    fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Any>, account: de.wollis_page.gibsonos.dto.Account) {
         this.startActivity(
             this.application.getActivity(
                 account,
@@ -307,6 +344,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                 DeviceTask.addPush(this, update)
             })
         }
+
+        this.loadNavigation()
     }
 
     override fun onPause() {
