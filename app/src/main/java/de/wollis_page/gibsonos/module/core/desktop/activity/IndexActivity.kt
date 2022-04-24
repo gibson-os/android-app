@@ -69,7 +69,7 @@ class IndexActivity : ListActivity() {
     }
 
     override fun getId(): Any {
-        return 0
+        return this.getAccount().id
     }
 
     override fun isActivityforShotcut(shortcut: Shortcut): Boolean {

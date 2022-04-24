@@ -19,6 +19,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -28,12 +29,14 @@ import de.wollis_page.gibsonos.dto.Update
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.exception.MessageException
+import de.wollis_page.gibsonos.helper.AppManager
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
 import java.io.Serializable
 import java.util.concurrent.CompletableFuture
+import de.wollis_page.gibsonos.dto.Account as AccountDto
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var account: Account? = null
@@ -107,15 +110,15 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
+        if (this.account != null) {
+            this.application.addProcess(this)
+        }
+
         this.navigationView = this.findViewById(R.id.nav_view)
         this.navigationView.setNavigationItemSelectedListener(this)
         loadNavigation()
 
         this.progressBarHolder = this.findViewById(R.id.progressBarHolder)
-
-        if (this.account != null) {
-            this.application.addProcess(this)
-        }
 
         val setting = this.findViewById<ImageView>(R.id.setting)
         setting.setOnClickListener {
@@ -142,7 +145,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                 this.startActivity(app.module, app.task, app.action, 0, emptyMap(), account)
             }
             else -> {
-                this.startActivity("core", "desktop", "index", 0, emptyMap(), account)
+                this.startActivity("core", "desktop", "index", account.account.id, emptyMap(), account)
             }
         }
 
@@ -179,14 +182,25 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
                 for ((appId, app) in account.apps.withIndex()) {
                     Log.d(Config.LOG_TAG, "Add task")
-                    accountMenu.add(accountId, accountsCount + appId, Menu.NONE, app.text)
+                    val appItem = accountMenu.add(accountId, accountsCount + appId, Menu.NONE, app.text)
+                    appItem.icon = ResourcesCompat.getDrawable(
+                        this.resources,
+                        AppManager.getAppIcon(app.module, app.task),
+                        this.theme
+                    )
 
                     for ((processId, process) in account.getProcesses().withIndex()) {
                         val activityName = this.application.getActivityName(app.module, app.task, app.action)
+                        val activity = process.activity
 
-                        if (process.activity::class.java.toString() == "class $activityName") {
+                        if (activity::class.java.toString() == "class $activityName") {
                             Log.d(Config.LOG_TAG, "Add process")
-                            accountMenu.add(accountId, accountsCount + appsCount + processId, Menu.NONE, process.activity.title)
+                            val proccessItem = accountMenu.add(accountId, accountsCount + appsCount + processId, Menu.NONE, activity.title)
+                            proccessItem.icon = ResourcesCompat.getDrawable(
+                                this.resources,
+                                if (activity is AppActivityInterface) activity.getAppIcon() else R.drawable.ic_android,
+                                this.theme
+                            )
                         }
                     }
                 }
@@ -242,7 +256,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             shortcut.module,
             shortcut.task,
             shortcut.action,
-            extras
+            extras,
+            account
         )
     }
 
@@ -258,7 +273,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         )
     }
 
-    fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Any>, account: de.wollis_page.gibsonos.dto.Account) {
+    fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Any>, account: AccountDto) {
         this.startActivity(
             this.application.getActivity(
                 account,
@@ -270,7 +285,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             module,
             task,
             action,
-            extras
+            extras,
+            account
         )
     }
 
@@ -279,11 +295,9 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         module: String,
         task: String,
         action: String,
-        extras: Map<String, Any>
+        extras: Map<String, Any>,
+        account: AccountDto
     ) {
-        val account = this.application.getAccountById(this.getAccount().id)
-            ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
-
         if (activity == null) {
             val intent = Intent(this, Class.forName(this.application.getActivityName(module, task, action)))
             intent.putExtra(ACCOUNT_KEY, account.account)
