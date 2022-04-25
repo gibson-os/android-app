@@ -10,7 +10,7 @@ import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.index.fragment.LogFragment
 
 abstract class ModuleActivity : TabActivity(), AppActivityInterface {
-    protected lateinit var module: Module
+    lateinit var module: Module
 
     override fun getTabs(): Array<Tab> {
         val arguments = hashMapOf("moduleId" to this.module.id)

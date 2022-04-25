@@ -16,7 +16,6 @@ import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.task.IrTask
 
-
 class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
     private lateinit var remote: Remote
     private lateinit var module: Module

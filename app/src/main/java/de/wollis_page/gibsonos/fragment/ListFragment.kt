@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.helper.ListInterface
@@ -18,7 +17,6 @@ import de.wollis_page.gibsonos.helper.ListInterface
 abstract class ListFragment : GibsonOsFragment(), ListInterface {
     override lateinit var listView: RecyclerView
     override lateinit var listAdapter: BaseListAdapter
-    override lateinit var activity: GibsonOsActivity
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     override fun updateData(data: String) {
@@ -32,7 +30,6 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        this.activity = this.requireActivity() as GibsonOsActivity
         val view = inflater.inflate(this.getContentView(), container, false)
         this.listView = view.findViewById(R.id.list)
 

@@ -113,6 +113,11 @@
             android:icon="@drawable/ic_remote_control"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.hc.neopixel.activity.IndexActivity"
+            android:icon="@drawable/ic_led"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">

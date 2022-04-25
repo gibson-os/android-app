@@ -128,6 +128,9 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         val accountId = item.groupId shr 2
         val account = this.application.accounts[accountId]
 
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawer.closeDrawer(GravityCompat.START)
+
         try {
             when (item.groupId and 3) {
                 this.navigationAccountGroupBit -> {
@@ -157,8 +160,6 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG).show()
         }
 
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
         return true
     }
 

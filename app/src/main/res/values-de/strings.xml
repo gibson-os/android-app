@@ -59,4 +59,7 @@
 
     <string name="hc_module_ir_remote_tab">Fernbedienungen</string>
     <string name="hc_module_ir_key_tab">Tasten</string>
+
+    <string name="hc_module_neopixel_pixel_tab">Pixel</string>
+    <string name="hc_module_neopixel_animation_tab">Animationen</string>
 </resources>

@@ -7,6 +7,9 @@
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_folder.xml" value="0.2145" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_homecontrol.xml" value="0.2145" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_house_laptop_solid.xml" value="0.2145" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_laptop_house.xml" value="0.2145" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_led.xml" value="0.2145" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_minus.xml" value="0.2145" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_plus.xml" value="0.215" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_remote_control.xml" value="0.215" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/drawable/ic_switch.xml" value="0.215" />
@@ -24,6 +27,7 @@
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_ir_remote_list_item.xml" value="0.16032608695652173" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_ir_remote_view.xml" value="0.16032608695652173" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_list_item.xml" value="0.1" />
+        <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/hc_module_neopixel_pixel_view.xml" value="0.20697463768115942" />
         <entry key="..\:/Users/Meins/Documents/Projekte/GibsonOSApp/app/src/main/res/layout/setting.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_app_bar.xml" value="0.1621376811594203" />
         <entry key="..\:/Users/ich/Documents/Projekte/gibsonOsApp/app/src/main/res/layout/base_layout.xml" value="0.1621376811594203" />
