@@ -86,7 +86,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 //        }
 
         if (savedInstanceState == null) {
-            this.loadList((this.getShortcut().params?.get("dir") ?: "").toString())
+            this.loadList((this.getShortcut()?.params?.get("dir") ?: "").toString())
 
             return
         }
@@ -101,7 +101,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
     override fun loadList(start: Long, limit: Long) {
         if (this.loadDir == null) {
-            this.loadDir = (this.getShortcut().params?.get("dir") ?: "").toString()
+            this.loadDir = (this.getShortcut()?.params?.get("dir") ?: "").toString()
         }
 
         this.loadList(this.loadDir)

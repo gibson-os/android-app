@@ -46,6 +46,9 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
     var update: Update? = null
+    private val navigationAccountGroupBit = 0
+    private val navigationAppGroupBit = 1
+    private val navigationProcessGroupBit = 2
 
     protected abstract fun getContentView(): Int
 
@@ -69,16 +72,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         return account
     }
 
-    fun getShortcut(): Shortcut {
-        val shortcut = this.shortcut
-
-        if (shortcut == null) {
-            Toast.makeText(this, R.string.no_shortcut_set, Toast.LENGTH_LONG).show()
-
-            throw ActivityException("No Item set!")
-        }
-
-        return shortcut
+    fun getShortcut(): Shortcut? {
+        return this.shortcut
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,7 +111,6 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
         this.navigationView = this.findViewById(R.id.nav_view)
         this.navigationView.setNavigationItemSelectedListener(this)
-        loadNavigation()
 
         this.progressBarHolder = this.findViewById(R.id.progressBarHolder)
 
@@ -131,22 +125,36 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         Log.d(Config.LOG_TAG, "onNavigationItemSelected: " + item.itemId)
 
-        val account = this.application.accounts[item.groupId]
-        val accountsCount = this.application.accounts.size
+        val accountId = item.groupId shr 2
+        val account = this.application.accounts[accountId]
 
-        when {
-            item.itemId > accountsCount + account.apps.size -> {
-                val activity = account.getProcesses()[item.itemId - accountsCount - account.apps.size].activity
-                val activityManager = activity.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-                activityManager.moveTaskToFront(activity.taskId, 0)
+        try {
+            when (item.groupId and 3) {
+                this.navigationAccountGroupBit -> {
+                    Log.d(Config.LOG_TAG, "Navigation account")
+                    this.startActivity(
+                        "core",
+                        "desktop",
+                        "index",
+                        account.account.id,
+                        emptyMap(),
+                        account
+                    )
+                }
+                this.navigationAppGroupBit -> {
+                    Log.d(Config.LOG_TAG, "Navigation app")
+                    val app = account.apps[item.itemId]
+                    this.startActivity(app.module, app.task, app.action, 0, emptyMap(), account)
+                }
+                this.navigationProcessGroupBit -> {
+                    Log.d(Config.LOG_TAG, "Navigation proccess")
+                    val activity = account.getProcesses()[item.itemId].activity
+                    val activityManager = activity.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+                    activityManager.moveTaskToFront(activity.taskId, 0)
+                }
             }
-            item.itemId > accountsCount -> {
-                val app = account.apps[item.itemId - accountsCount]
-                this.startActivity(app.module, app.task, app.action, 0, emptyMap(), account)
-            }
-            else -> {
-                this.startActivity("core", "desktop", "index", account.account.id, emptyMap(), account)
-            }
+        } catch (exception: ClassNotFoundException) {
+            Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG).show()
         }
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -167,22 +175,24 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             val menu = navigationView.menu
             menu.clear()
             val accounts = this.application.accounts
-            val accountsCount = accounts.size
 
             for ((accountId, account) in accounts.withIndex()) {
+                val accountGroupId = accountId shl 2
+                val appGroupId = accountGroupId or this.navigationAppGroupBit
+                val processGroupId = accountGroupId or this.navigationProcessGroupBit
+
                 if (account.apps.size == 0) {
-                    menu.add(accountId, accountId, Menu.NONE, account.account.alias)
+                    menu.add(accountGroupId, accountId, Menu.NONE, account.account.alias)
                     continue
                 }
 
-                val accountMenu = menu.addSubMenu(accountId, accountId, Menu.NONE, account.account.alias)
+                val accountMenu = menu.addSubMenu(accountGroupId, accountId, Menu.NONE, account.account.alias)
                 Log.d(Config.LOG_TAG, "Add submenu " + account.account.alias)
                 Log.d(Config.LOG_TAG, account.apps.size.toString())
-                val appsCount = account.apps.size
 
                 for ((appId, app) in account.apps.withIndex()) {
                     Log.d(Config.LOG_TAG, "Add task")
-                    val appItem = accountMenu.add(accountId, accountsCount + appId, Menu.NONE, app.text)
+                    val appItem = accountMenu.add(appGroupId, appId, Menu.NONE, app.text)
                     appItem.icon = ResourcesCompat.getDrawable(
                         this.resources,
                         AppManager.getAppIcon(app.module, app.task),
@@ -195,7 +205,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
                         if (activity::class.java.toString() == "class $activityName") {
                             Log.d(Config.LOG_TAG, "Add process")
-                            val proccessItem = accountMenu.add(accountId, accountsCount + appsCount + processId, Menu.NONE, activity.title)
+                            val proccessItem = accountMenu.add(processGroupId, processId, Menu.NONE, activity.title)
                             proccessItem.icon = ResourcesCompat.getDrawable(
                                 this.resources,
                                 if (activity is AppActivityInterface) activity.getAppIcon() else R.drawable.ic_android,
