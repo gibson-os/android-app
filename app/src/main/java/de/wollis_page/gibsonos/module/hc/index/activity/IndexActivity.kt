@@ -26,7 +26,7 @@ class IndexActivity : TabActivity(), AppActivityInterface {
     }
 
     override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return false
+        return true
     }
 
     override fun getAppIcon() = R.drawable.ic_house_laptop_solid
