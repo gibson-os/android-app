@@ -1,6 +1,7 @@
 package de.wollis_page.gibsonos.module.hc.neopixel.dto
 
 data class Pixel(
+    val id: Long,
     val number: Int,
     val left: Int,
     val top: Int,

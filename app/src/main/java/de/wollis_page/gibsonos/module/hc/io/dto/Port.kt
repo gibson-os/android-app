@@ -5,6 +5,7 @@ import android.os.Parcelable
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
 data class Port(
+    var id: Long,
     var number: Int,
     var name: String,
     var value: Boolean,
@@ -15,6 +16,7 @@ data class Port(
     var valueNames: Array<String>
 ) : ListItemInterface, Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readLong(),
         parcel.readInt(),
         parcel.readString().toString(),
         parcel.readInt() > 0,
@@ -26,6 +28,7 @@ data class Port(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
         parcel.writeInt(number)
         parcel.writeString(name)
         parcel.writeInt(if (value) 1 else 0)
@@ -50,7 +53,7 @@ data class Port(
         }
     }
 
-    override fun getId(): Int {
-        return this.number
+    override fun getId(): Long {
+        return this.id
     }
 }

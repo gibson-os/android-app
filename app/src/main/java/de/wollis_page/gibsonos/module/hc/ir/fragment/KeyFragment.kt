@@ -16,9 +16,7 @@ class KeyFragment: ListFragment() {
             IrTask.send(
                 this.activity,
                 module.id,
-                item.protocol,
-                item.address,
-                item.command
+                item.id
             )
         }
     }

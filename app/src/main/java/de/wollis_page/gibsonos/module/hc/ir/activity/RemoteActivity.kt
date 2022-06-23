@@ -46,7 +46,7 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
             val displayWidth = displayMetrics.widthPixels
             val unitWidth = displayWidth / (remote.width + 1)
 
-            this.remote.keys.forEach {
+            this.remote.buttons.forEach {
                 val shape = ShapeDrawable()
                 shape.shape = RectShape()
                 shape.setPadding(0, 0, 0,0)
@@ -61,7 +61,7 @@ class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
                 val key = it
                 button.setOnClickListener {
                     this.runTask({
-                        IrTask.sendRemoteKey(this, this.module.id, key.eventId, key.keys)
+                        IrTask.sendButton(this, this.module.id, key.id)
                     })
                 }
                 val params = RelativeLayout.LayoutParams(it.width * unitWidth, it.height * unitWidth)

@@ -9,7 +9,7 @@ import de.wollis_page.gibsonos.task.AbstractTask
 object ModuleTask: AbstractTask() {
     @Throws(TaskException::class)
     fun index(context: GibsonOsActivity, masterId: Long, start: Long, limit: Long): ListResponse<Module> {
-        val dataStore = this.getDataStore(context.getAccount(), "hc", "slave", "index")
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "module", "index")
         dataStore.addParam("masterId", masterId)
 
         return this.loadList(context, dataStore, start, limit)

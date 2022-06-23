@@ -16,10 +16,10 @@ object IoTask: AbstractTask() {
     }
 
     @Throws(TaskException::class)
-    fun toggle(context: GibsonOsActivity, moduleId: Long, number: Int) {
+    fun toggle(context: GibsonOsActivity, moduleId: Long, id: Long) {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "io", "toggle")
         dataStore.addParam("moduleId", moduleId)
-        dataStore.addParam("number", number)
+        dataStore.addParam("id", id)
         this.run(context, dataStore)
     }
 }

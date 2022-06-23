@@ -17,9 +17,9 @@ object IrTask: AbstractTask() {
     }
 
     @Throws(TaskException::class)
-    fun remote(context: GibsonOsActivity, remoteId: Long): Remote {
+    fun remote(context: GibsonOsActivity, id: Long): Remote {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "remote")
-        dataStore.addParam("remoteId", remoteId)
+        dataStore.addParam("id", id)
 
         return this.load(context, dataStore)
     }
@@ -35,37 +35,24 @@ object IrTask: AbstractTask() {
     fun send(
         context: GibsonOsActivity,
         moduleId: Long,
-        protocol: Int,
-        address: Int,
-        command: Int
+        id: Long
     ) {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "send")
         dataStore.addParam("moduleId", moduleId)
-        dataStore.addParam("protocol", protocol)
-        dataStore.addParam("address", address)
-        dataStore.addParam("command", command)
+        dataStore.addParam("id", id)
 
         this.run(context, dataStore)
     }
 
     @Throws(TaskException::class)
-    fun sendRemoteKey(
+    fun sendButton(
         context: GibsonOsActivity,
         moduleId: Long,
-        eventId: Long?,
-        keys: MutableList<Key>
+        id: Long
     ) {
-        val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "sendRemoteKey")
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "sendButton")
         dataStore.addParam("moduleId", moduleId)
-        dataStore.addParam("eventId", eventId ?: 0)
-
-        val keySubIds = mutableListOf<Long>()
-
-        keys.forEach {
-            keySubIds.add(it.id)
-        }
-
-        dataStore.addParam("keys", keySubIds)
+        dataStore.addParam("id", id)
 
         this.run(context, dataStore)
     }
