@@ -52,6 +52,7 @@ class MainActivity : ListActivity() {
         return false
     }
 
+    @SuppressWarnings("deprecation")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
