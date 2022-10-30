@@ -1,6 +1,7 @@
 package de.wollis_page.gibsonos.module.hc.index.activity
 
 import android.os.Bundle
+import android.util.Log
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.TabActivity
@@ -26,6 +27,7 @@ class MasterActivity : TabActivity(), AppActivityInterface {
 
         super.onCreate(savedInstanceState)
 
+        Log.d(de.wollis_page.gibsonos.helper.Config.LOG_TAG, this.master.name)
         this.setTitle(this.master.name)
     }
 

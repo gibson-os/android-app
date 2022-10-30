@@ -79,7 +79,7 @@ class MainActivity : ListActivity() {
 
         val intent = Intent(this, IndexActivity::class.java)
         intent.putExtra(ACCOUNT_KEY, item)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 
         this.startActivity(
             "core",

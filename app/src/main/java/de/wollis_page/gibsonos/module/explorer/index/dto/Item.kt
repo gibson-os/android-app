@@ -20,7 +20,5 @@ data class Item(
     val thumbAvailable: Boolean = false,
     val position: Int? = null
 ): ListItemInterface, Serializable {
-    override fun getId(): String {
-        return this.path.toString() + this.name
-    }
+    override fun getId(): String = this.path.toString() + this.name
 }

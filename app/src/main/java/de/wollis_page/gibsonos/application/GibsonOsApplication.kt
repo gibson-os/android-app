@@ -134,7 +134,7 @@ class GibsonOsApplication : SugarApp() {
         if (activity == null) {
             val intent = Intent(this, Class.forName(this.getActivityName(module, task, action)))
             intent.putExtra(GibsonOsActivity.ACCOUNT_KEY, account.account)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 
             return intent
         }

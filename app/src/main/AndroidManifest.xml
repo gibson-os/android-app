@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="de.wollis_page.gibsonos">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -77,6 +76,12 @@
             android:name="de.wollis_page.gibsonos.module.explorer.index.activity.IndexActivity"
             android:icon="@drawable/ic_folder"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="de.wollis_page.gibsonos.module.explorer.html5.activity.PlayerActivity"
+            android:icon="@drawable/ic_play"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.FullScreen"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.core.event.activity.IndexActivity"

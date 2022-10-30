@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.ArrayMap
 import android.util.Log
 import android.view.View
@@ -29,6 +30,7 @@ import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
+import de.wollis_page.gibsonos.module.explorer.index.dto.Media
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
@@ -138,6 +140,21 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 Log.d(Config.LOG_TAG, this.castContext.sessionManager.currentSession.toString())
                 this.mediaRouteChooserDialog.show()
             }
+
+            val playItem = DialogItem("Widergeben")
+            playItem.icon = R.drawable.ic_play
+            playItem.onClick = {
+                this.runTask({
+                    this.startActivity(
+                        "explorer",
+                        "html5",
+                        "player",
+                        item.html5VideoToken.toString(),
+                        mapOf<String, Parcelable>("media" to Media(item.name, item.html5VideoToken, item.position))
+                    )
+                })
+            }
+            options.add(playItem)
         }
 
         options.add(html5Item)
@@ -180,21 +197,21 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         } else {
             imageView.setImageResource(R.drawable.ic_file)
 
-            if (item.thumbAvailable) {
-                var imagePath = this.images[this.loadedDir.dir]
-
-                if (imagePath == null) {
-                    imagePath = ArrayMap()
-                    this.images[this.loadedDir.dir] = imagePath
-                }
-
-                if (imagePath[item.name] == null) {
-                    this.imageQueue[imageView] = item
-                    this.loadImages()
-                } else {
-                    imageView.setImageBitmap(imagePath[item.name])
-                }
-            }
+//            if (item.thumbAvailable) {
+//                var imagePath = this.images[this.loadedDir.dir]
+//
+//                if (imagePath == null) {
+//                    imagePath = ArrayMap()
+//                    this.images[this.loadedDir.dir] = imagePath
+//                }
+//
+//                if (imagePath[item.name] == null) {
+//                    this.imageQueue[imageView] = item
+//                    this.loadImages()
+//                } else {
+//                    imageView.setImageBitmap(imagePath[item.name])
+//                }
+//            }
         }
 
         val html5VideoStatus = item.html5VideoStatus
@@ -293,7 +310,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     }
 
                     this.runOnUiThread { imageView.setImageBitmap(imagePath[item.name]) }
-                } catch (exception: ResponseException) {}
+                } catch (_: ResponseException) {}
             }
 
             this.imagesLoading = false
@@ -310,11 +327,8 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
     override fun getAppIcon() = R.drawable.ic_folder
 
-    override fun getId(): Any {
-        return this.loadDir.toString()
-    }
+    override fun getId(): Any = this.loadDir.toString()
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return shortcut.params?.get("dir") == this.loadDir.toString()
-    }
+    override fun isActivityforShotcut(shortcut: Shortcut): Boolean =
+        shortcut.params?.get("dir") == this.loadDir.toString()
 }

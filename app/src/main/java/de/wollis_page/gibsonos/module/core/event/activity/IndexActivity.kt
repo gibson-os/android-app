@@ -20,13 +20,9 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         this.setTitle(R.string.core_event_title)
     }
 
-    override fun getId(): Any {
-        return 0
-    }
+    override fun getId(): Any = 0
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return false
-    }
+    override fun isActivityforShotcut(shortcut: Shortcut): Boolean = false
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(EventTask.index(this, start, limit))

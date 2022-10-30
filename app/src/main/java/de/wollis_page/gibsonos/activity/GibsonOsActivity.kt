@@ -165,7 +165,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     private fun runActivity(activity: Class<*>?, account: Account? = this.account) {
         val intent = Intent(this, activity)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
         intent.putExtra(ACCOUNT_KEY, account)
         finish()
         this.startActivity(intent)
@@ -312,7 +312,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         if (activity == null) {
             val intent = Intent(this, Class.forName(this.application.getActivityName(module, task, action)))
             intent.putExtra(ACCOUNT_KEY, account.account)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 
             extras.forEach {
                 when (val value = it.value) {
