@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.MediaController
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import de.wollis_page.gibsonos.R
@@ -31,12 +32,38 @@ class PlayerActivity: AppCompatActivity() {
 
         cleanUrl += "explorer/html5/video/token/" + this.media.token
 
-        Log.d(Config.LOG_TAG, "Before player")
-        val videoPlayer = findViewById<View>(R.id.video) as VideoView
-        Log.d(Config.LOG_TAG, "Before set uri")
-        videoPlayer.setVideoURI(Uri.parse(cleanUrl))
-        Log.d(Config.LOG_TAG, "Before start")
-        videoPlayer.start()
-        Log.d(Config.LOG_TAG, "Player Finish")
+        val videoView = findViewById<View>(R.id.video) as VideoView
+        val mediaController = MediaController(this)
+        mediaController.setAnchorView(videoView)
+        videoView.setMediaController(mediaController)
+        videoView.setVideoURI(Uri.parse(cleanUrl))
+        videoView.start()
+        //this.savePosition(videoPlayer, media.position ?: 0)
+
+        videoView.setOnClickListener {
+            if (videoView.isPlaying) {
+                videoView.pause()
+
+                return@setOnClickListener
+            }
+
+            videoView.start()
+        }
+
+        videoView.setOnCompletionListener {
+            this.finish()
+        }
+    }
+
+    private fun savePosition(videoView: VideoView, lastPosition: Int) {
+        var newPosition = lastPosition
+
+        if (videoView.currentPosition > lastPosition) {
+            Log.d(Config.LOG_TAG, "save position: " + videoView.currentPosition.toString())
+            newPosition = videoView.currentPosition
+        }
+
+        Thread.sleep(1000)
+        savePosition(videoView, newPosition)
     }
 }
