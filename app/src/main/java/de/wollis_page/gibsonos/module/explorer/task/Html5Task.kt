@@ -21,4 +21,20 @@ object Html5Task: AbstractTask() {
 //        dataStore.addParam("userIds", context.getAccount().user)
         this.run(context, dataStore)
     }
+
+    fun convert(
+        context: GibsonOsActivity,
+        dir: String,
+        files: MutableList<String>,
+        audioStream: String? = null,
+        subtitleStream: String? = null
+    ) {
+        val dataStore = this.getDataStore(context.getAccount(), "explorer", "html5", "convert")
+        dataStore.addParam("dir", dir)
+        dataStore.addParam("files", files)
+        audioStream?.let { dataStore.addParam("audioStream", it) }
+        subtitleStream?.let { dataStore.addParam("subtitleStream", it) }
+
+        this.run(context, dataStore)
+    }
 }

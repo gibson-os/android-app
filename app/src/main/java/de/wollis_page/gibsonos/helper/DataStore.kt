@@ -10,6 +10,7 @@ import de.wollis_page.gibsonos.exception.TaskException
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
@@ -84,11 +85,11 @@ class DataStore(url: String, token: String?) {
     }
 
     fun addParam(key: String, value: MutableList<*>) {
-        this.params[key] = value.toString()
+        this.params[key] = JSONArray(value).toString()
     }
 
     fun addParam(key: String, value: MutableMap<*, *>) {
-        this.params[key] = value.toString()
+        this.params[key] = JSONObject(value).toString()
     }
 
     fun clearParams() {

@@ -31,6 +31,7 @@ import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.index.dto.Media
+import de.wollis_page.gibsonos.module.explorer.service.Html5Service
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
@@ -131,6 +132,9 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         val options = ArrayList<DialogItem>()
         var html5Item = DialogItem("Für HTML5 konvertieren")
         html5Item.icon = R.drawable.ic_html5
+        html5Item.onClick = {
+            Html5Service().convert(this, this.loadedDir.dir, item)
+        }
 
         if (item.html5VideoStatus == Html5Status.GENERATED) {
             html5Item = DialogItem("An Chromecast senden")
@@ -267,9 +271,9 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         if (
             item.metaInfos !== null &&
             item.position !== null &&
-            item.metaInfos.containsKey("duration")
+            item.metaInfos!!.containsKey("duration")
         ) {
-            progressBar.max = item.metaInfos["duration"].toString().toFloat().toInt()
+            progressBar.max = item.metaInfos!!["duration"].toString().toFloat().toInt()
             progressBar.progress = item.position
             progressBar.visibility = View.VISIBLE
         }

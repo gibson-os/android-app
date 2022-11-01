@@ -14,7 +14,7 @@ data class Item(
     val dirFiles: Long?,
     val icon: String?,
     val category: Int?,
-    val metaInfos: Map<String, Any>?,
+    var metaInfos: Map<String, Any>?,
     val html5VideoStatus: Html5Status?,
     val html5VideoToken: String?,
     val thumbAvailable: Boolean = false,
