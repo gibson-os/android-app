@@ -265,10 +265,10 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 actualHtml5VideoStatus == Html5Status.GENERATE ||
                 actualHtml5VideoStatus == Html5Status.WAIT
             ) {
-                var color = Color.rgb(0, 0, 255)
+                var color = getColor(R.color.colorProgressGenerate) //Color.rgb(0, 0, 255)
 
                 if (actualHtml5VideoStatus == Html5Status.WAIT) {
-                    color = Color.rgb(218, 218, 218)
+                    color = getColor(R.color.colorProgressWait) //Color.rgb(218, 218, 218)
                 }
 
                 html5ImageView.setColorFilter(color)
@@ -305,10 +305,10 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 Thread.sleep(1000)
             }
 
-            var color = Color.rgb(233, 98, 40)
+            var color = getColor(R.color.colorProgressDone) //Color.rgb(233, 98, 40)
 
             if (actualHtml5VideoStatus == Html5Status.ERROR) {
-                color = Color.rgb(255, 0, 0)
+                color = getColor(R.color.colorProgressError) //Color.rgb(255, 0, 0)
             }
 
             html5ImageView.setColorFilter(color)

@@ -2,6 +2,10 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#E7AD1B</color>
     <color name="colorAsset">#000000</color>
+    <color name="colorProgressWait">#DADADA</color>
+    <color name="colorProgressGenerate">#0000FF</color>
+    <color name="colorProgressDone">#E96228</color>
+    <color name="colorProgressError">#FF0000</color>
 </resources>
