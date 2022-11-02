@@ -274,29 +274,32 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 html5ImageView.setColorFilter(color)
                 progressBar.progressTintList = ColorStateList.valueOf(color)
 
-                val convertStatus = Html5Task.convertStatus(
-                    this,
-                    item.html5VideoToken ?: "",
-                )
+                try {
+                    val convertStatus = Html5Task.convertStatus(
+                        this,
+                        item.html5VideoToken ?: "",
+                    )
 
-                actualHtml5VideoStatus = convertStatus.status
+                    actualHtml5VideoStatus = convertStatus.status
 
-                if (actualHtml5VideoStatus != Html5Status.GENERATE) {
-                    item.html5VideoStatus = actualHtml5VideoStatus
+                    if (actualHtml5VideoStatus != Html5Status.GENERATE) {
+                        item.html5VideoStatus = actualHtml5VideoStatus
 
-                    if (actualHtml5VideoStatus == Html5Status.WAIT) {
-                        Thread.sleep(3000)
+                        if (actualHtml5VideoStatus == Html5Status.WAIT) {
+                            Thread.sleep(3000)
 
-                        continue
+                            continue
+                        }
+
+                        break
                     }
 
-                    break
-                }
-
-                this.runOnUiThread {
-                    progressBar.max = convertStatus.frames
-                    progressBar.progress = convertStatus.frame!!
-                    progressBar.visibility = View.VISIBLE
+                    this.runOnUiThread {
+                        progressBar.max = convertStatus.frames
+                        progressBar.progress = convertStatus.frame!!
+                        progressBar.visibility = View.VISIBLE
+                    }
+                } catch (_: ResponseException) {
                 }
 
                 Thread.sleep(1000)
