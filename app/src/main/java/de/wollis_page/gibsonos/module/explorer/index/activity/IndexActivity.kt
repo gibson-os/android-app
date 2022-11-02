@@ -136,6 +136,10 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             Html5Service().convert(this, this.loadedDir.dir, item) {
                 item.html5VideoToken = it[this.loadedDir.dir + "/" + item.name]
                 item.html5VideoStatus = Html5Status.WAIT
+
+                this.runOnUiThread {
+                    this.listAdapter.notifyItemChanged(this.listAdapter.items.indexOf(item))
+                }
             }
         }
 
@@ -254,16 +258,16 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         progressBar: ProgressBar,
         html5ImageView: ImageView
     ) {
-        var html5VideoStatus1 = html5VideoStatus
+        var actualHtml5VideoStatus = html5VideoStatus
 
         this.runTask({
             while (
-                html5VideoStatus1 == Html5Status.GENERATE ||
-                html5VideoStatus1 == Html5Status.WAIT
+                actualHtml5VideoStatus == Html5Status.GENERATE ||
+                actualHtml5VideoStatus == Html5Status.WAIT
             ) {
                 var color = Color.rgb(0, 0, 255)
 
-                if (html5VideoStatus1 == Html5Status.WAIT) {
+                if (actualHtml5VideoStatus == Html5Status.WAIT) {
                     color = Color.rgb(218, 218, 218)
                 }
 
@@ -275,10 +279,16 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     item.html5VideoToken ?: "",
                 )
 
-                html5VideoStatus1 = convertStatus.status
+                actualHtml5VideoStatus = convertStatus.status
 
-                if (html5VideoStatus1 != Html5Status.GENERATE) {
-                    item.html5VideoStatus = html5VideoStatus1
+                if (actualHtml5VideoStatus != Html5Status.GENERATE) {
+                    item.html5VideoStatus = actualHtml5VideoStatus
+
+                    if (actualHtml5VideoStatus == Html5Status.WAIT) {
+                        Thread.sleep(3000)
+
+                        continue
+                    }
 
                     break
                 }
@@ -294,7 +304,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
             var color = Color.rgb(233, 98, 40)
 
-            if (html5VideoStatus1 == Html5Status.ERROR) {
+            if (actualHtml5VideoStatus == Html5Status.ERROR) {
                 color = Color.rgb(255, 0, 0)
             }
 
