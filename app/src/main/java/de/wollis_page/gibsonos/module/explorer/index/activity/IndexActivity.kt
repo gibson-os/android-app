@@ -133,7 +133,10 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         var html5Item = DialogItem("Für HTML5 konvertieren")
         html5Item.icon = R.drawable.ic_html5
         html5Item.onClick = {
-            Html5Service().convert(this, this.loadedDir.dir, item)
+            Html5Service().convert(this, this.loadedDir.dir, item) {
+                item.html5VideoToken = it[this.loadedDir.dir + "/" + item.name]
+                item.html5VideoStatus = Html5Status.WAIT
+            }
         }
 
         if (item.html5VideoStatus == Html5Status.GENERATED) {
@@ -220,7 +223,6 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
         val html5VideoStatus = item.html5VideoStatus
         val html5ImageView = view.findViewById<View>(R.id.html5) as ImageView
-        var color = Color.rgb(233, 98, 40)
         val progressBar = view.findViewById(R.id.position) as ProgressBar
         progressBar.max = 1
         progressBar.progress = 0
@@ -229,44 +231,11 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
         if (html5VideoStatus != null) {
             html5ImageView.visibility = View.VISIBLE
-
-            when (html5VideoStatus) {
-                Html5Status.WAIT -> {
-                    color = Color.rgb(218, 218, 218)
-                }
-                Html5Status.ERROR -> {
-                    color = Color.rgb(255, 0, 0)
-                }
-                Html5Status.GENERATE -> {
-                    color = Color.rgb(0, 0, 255)
-
-                    this.runTask({
-//                        while (html5VideoStatus == Html5Status.GENERATE) {
-                            val convertStatus = Html5Task.convertStatus(
-                                this,
-                                item.html5VideoToken ?: ""
-                            )
-
-                            this.runOnUiThread {
-                                progressBar.max = convertStatus.frames
-                                progressBar.progress = convertStatus.frame
-                                progressBar.visibility = View.VISIBLE
-                            }
-
-//                            Thread.sleep(1000)
-//                        }
-                    })
-                }
-                else -> {}
-            }
-
-            html5ImageView.setColorFilter(color)
+            this.getConvertStatus(html5VideoStatus, item, progressBar, html5ImageView)
         }
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
         (view.findViewById<View>(R.id.size) as TextView).text = item.size.toHumanReadableByte()
-
-        progressBar.progressTintList = ColorStateList.valueOf(color)
 
         if (
             item.metaInfos !== null &&
@@ -274,9 +243,66 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             item.metaInfos!!.containsKey("duration")
         ) {
             progressBar.max = item.metaInfos!!["duration"].toString().toFloat().toInt()
-            progressBar.progress = item.position
+            progressBar.progress = item.position!!
             progressBar.visibility = View.VISIBLE
         }
+    }
+
+    private fun getConvertStatus(
+        html5VideoStatus: Html5Status?,
+        item: Item,
+        progressBar: ProgressBar,
+        html5ImageView: ImageView
+    ) {
+        var html5VideoStatus1 = html5VideoStatus
+
+        this.runTask({
+            while (
+                html5VideoStatus1 == Html5Status.GENERATE ||
+                html5VideoStatus1 == Html5Status.WAIT
+            ) {
+                var color = Color.rgb(0, 0, 255)
+
+                if (html5VideoStatus1 == Html5Status.WAIT) {
+                    color = Color.rgb(218, 218, 218)
+                }
+
+                html5ImageView.setColorFilter(color)
+                progressBar.progressTintList = ColorStateList.valueOf(color)
+
+                val convertStatus = Html5Task.convertStatus(
+                    this,
+                    item.html5VideoToken ?: "",
+                )
+
+                html5VideoStatus1 = convertStatus.status
+
+                if (html5VideoStatus1 != Html5Status.GENERATE) {
+                    item.html5VideoStatus = html5VideoStatus1
+
+                    break
+                }
+
+                this.runOnUiThread {
+                    progressBar.max = convertStatus.frames
+                    progressBar.progress = convertStatus.frame!!
+                    progressBar.visibility = View.VISIBLE
+                }
+
+                Thread.sleep(1000)
+            }
+
+            var color = Color.rgb(233, 98, 40)
+
+            if (html5VideoStatus1 == Html5Status.ERROR) {
+                color = Color.rgb(255, 0, 0)
+            }
+
+            html5ImageView.setColorFilter(color)
+            progressBar.visibility = View.INVISIBLE
+            progressBar.progressTintList = ColorStateList.valueOf(color)
+            // @todo das was da unten gemacht wird. Preüfen wie weit geschaut muss ausgelagert und hier auch aufgerufen werden
+        })
     }
 
     private fun loadImages() {

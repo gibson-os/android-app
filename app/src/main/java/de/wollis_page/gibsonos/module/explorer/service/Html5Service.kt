@@ -9,19 +9,28 @@ import de.wollis_page.gibsonos.module.explorer.task.FileTask
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 
 class Html5Service {
-    fun convert(context: GibsonOsActivity, dir: String, item: Item) {
+    fun convert(
+        context: GibsonOsActivity,
+        dir: String,
+        item: Item,
+        callback: (tokens: MutableMap<String, String>) -> Unit
+    ) {
         context.runTask({
             if (item.metaInfos === null) {
                 item.metaInfos = FileTask.metaInfos(context, dir + "/" + item.name)
             }
 
             context.runOnUiThread {
-                this.showConvertDialog(context, dir, item)
+                this.showConvertDialog(context, dir, item, callback)
             }
         })
     }
 
-    private fun showConvertDialog(context: GibsonOsActivity, dir: String, item: Item) {
+    private fun showConvertDialog(
+        context: GibsonOsActivity,
+        dir: String, item: Item,
+        callback: (tokens: MutableMap<String, String>) -> Unit
+    ) {
         var selectedLanguage: String? = null
 
         val languages = ArrayList<DialogItem>()
@@ -35,12 +44,12 @@ class Html5Service {
 
         if (audioStreams.size == 1 && subtitleStreams.isEmpty()) {
             context.runTask({
-                Html5Task.convert(
+                callback(Html5Task.convert(
                     context,
                     dir,
                     files,
                     audioStreams.keys.iterator().next().toString()
-                )
+                ))
             })
 
             return
@@ -50,13 +59,13 @@ class Html5Service {
         subtitleItemNone.icon = R.drawable.ic_subtitle
         subtitleItemNone.onClick = {
             context.runTask({
-                Html5Task.convert(
+                callback(Html5Task.convert(
                     context,
                     dir,
                     files,
                     selectedLanguage,
                     "none"
-                )
+                ))
             })
         }
         subtitles.add(subtitleItemNone)
@@ -77,19 +86,19 @@ class Html5Service {
             subtitleItem.icon = R.drawable.ic_subtitle
             subtitleItem.onClick = {
                 context.runTask({
-                    Html5Task.convert(
+                    callback(Html5Task.convert(
                         context,
                         dir,
                         files,
                         selectedLanguage,
                         subtitleStreamKey.toString()
-                    )
+                    ))
                 })
             }
             subtitles.add(subtitleItem)
         }
 
-        val subtitlesDialog = AlertListDialog(context, "Untertitel", subtitles);
+        val subtitlesDialog = AlertListDialog(context, "Untertitel", subtitles)
 
         if (audioStreams.size == 1) {
             subtitlesDialog.show()
@@ -114,12 +123,12 @@ class Html5Service {
 
             if (subtitleStreams.isEmpty()) {
                 context.runTask({
-                    Html5Task.convert(
+                    callback(Html5Task.convert(
                         context,
                         dir,
                         files,
                         selectedLanguage
-                    )
+                    ))
                 })
 
                 return@forEach

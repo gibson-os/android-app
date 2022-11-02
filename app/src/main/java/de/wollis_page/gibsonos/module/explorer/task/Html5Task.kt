@@ -10,7 +10,7 @@ object Html5Task: AbstractTask() {
         val dataStore = this.getDataStore(context.getAccount(), "explorer", "html5", "convertStatus")
         dataStore.addParam("token", token)
 
-        return this.load(context, dataStore, R.string.explorer_html5_error_convert_status)
+        return this.load(context, dataStore, R.string.explorer_html5_error_convert_status, false)
     }
 
     fun savePosition(context: GibsonOsActivity, token: String, position: Long) {
@@ -28,13 +28,13 @@ object Html5Task: AbstractTask() {
         files: MutableList<String>,
         audioStream: String? = null,
         subtitleStream: String? = null
-    ) {
+    ): MutableMap<String, String> {
         val dataStore = this.getDataStore(context.getAccount(), "explorer", "html5", "convert")
         dataStore.addParam("dir", dir)
         dataStore.addParam("files", files)
         audioStream?.let { dataStore.addParam("audioStream", it) }
         subtitleStream?.let { dataStore.addParam("subtitleStream", it) }
 
-        this.run(context, dataStore)
+        return this.load(context, dataStore)
     }
 }

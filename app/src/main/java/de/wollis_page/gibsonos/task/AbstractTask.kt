@@ -51,9 +51,10 @@ abstract class AbstractTask {
     protected inline fun <reified E> load(
         context: GibsonOsActivity,
         dataStore: DataStore,
-        messageRessource: Int? = null
+        messageRessource: Int? = null,
+        showLoading: Boolean = true
     ): E {
-        val response = this.run(context, dataStore)
+        val response = this.run(context, dataStore, showLoading)
 
         return this.getJsonAdapter<E>().fromJson(response.getJSONObject("data").toString()) ?:
             throw TaskException("Object not in response!", messageRessource)
