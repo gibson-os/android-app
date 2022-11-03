@@ -7,19 +7,34 @@ import de.wollis_page.gibsonos.task.AbstractTask
 
 object Html5Task: AbstractTask() {
     fun convertStatus(context: GibsonOsActivity, token: String): ConvertStatus {
-        val dataStore = this.getDataStore(context.getAccount(), "explorer", "html5", "convertStatus")
+        val dataStore = this.getDataStore(
+            context.getAccount(),
+            "explorer",
+            "html5",
+            "convertStatus",
+        )
         dataStore.addParam("token", token)
 
-        return this.load(context, dataStore, R.string.explorer_html5_error_convert_status, false)
+        return this.load(
+            context,
+            dataStore,
+            R.string.explorer_html5_error_convert_status,
+            false
+        )
     }
 
-    fun savePosition(context: GibsonOsActivity, token: String, position: Long) {
-        val dataStore = this.getDataStore(context.getAccount(), "explorer", "html5", "savePosition")
+    fun savePosition(context: GibsonOsActivity, token: String, position: Int) {
+        val dataStore = this.getDataStore(
+            context.getAccount(),
+            "explorer",
+            "html5",
+            "savePosition"
+        )
         dataStore.addParam("token", token)
         dataStore.addParam("position", position)
-        // @todo add user id to account
-//        dataStore.addParam("userIds", context.getAccount().user)
-        this.run(context, dataStore)
+        dataStore.addParam("userIds", listOf(context.getAccount().userId))
+
+        this.run(context, dataStore, false)
     }
 
     fun convert(
@@ -29,7 +44,12 @@ object Html5Task: AbstractTask() {
         audioStream: String? = null,
         subtitleStream: String? = null
     ): MutableMap<String, String> {
-        val dataStore = this.getDataStore(context.getAccount(), "explorer", "html5", "convert")
+        val dataStore = this.getDataStore(
+            context.getAccount(),
+            "explorer",
+            "html5",
+            "convert"
+        )
         dataStore.addParam("dir", dir)
         dataStore.addParam("files", files)
         audioStream?.let { dataStore.addParam("audioStream", it) }

@@ -2,5 +2,5 @@
 <resources>
     <color name="colorAsset">#FFFFFF</color>
     <color name="colorProgressWait">#DADADA</color>
-    <color name="colorProgressGenerate">#E7AD1B</color>
+    <color name="colorProgressGenerate">#9999FF</color>
 </resources>

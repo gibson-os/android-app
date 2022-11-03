@@ -15,6 +15,13 @@ object UserTask: AbstractTask() {
         dataStore.addParam("model", Build.MODEL)
         dataStore.addParam("fcmToken", context.application.firebaseToken.toString())
 
-        return Account(username, url, this.run(context, dataStore).getJSONObject("data").getString("token"))
+        val data = this.run(context, dataStore).getJSONObject("data")
+
+        return Account(
+            data.getLong("id"),
+            data.getString("user"),
+            url,
+            data.getString("token")
+        )
     }
 }

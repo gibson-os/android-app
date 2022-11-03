@@ -20,7 +20,7 @@ import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
-import de.wollis_page.gibsonos.exception.ResponseException
+import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
@@ -159,7 +159,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                         "explorer",
                         "html5",
                         "player",
-                        item.html5VideoToken.toString(),
+                        0,
                         mapOf<String, Parcelable>("media" to Media(item.name, item.html5VideoToken, item.position))
                     )
                 })
@@ -233,18 +233,22 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         html5ImageView.visibility = View.INVISIBLE
 
         if (html5VideoStatus != null) {
-            html5ImageView.visibility = View.VISIBLE
             this.getConvertStatus(html5VideoStatus, item, progressBar, html5ImageView)
         }
 
         (view.findViewById<View>(R.id.name) as TextView).text = item.name
         (view.findViewById<View>(R.id.size) as TextView).text = item.size.toHumanReadableByte()
 
+        this.setPosition(item, progressBar)
+    }
+
+    private fun setPosition(item: Item, progressBar: ProgressBar) {
         if (
             item.metaInfos !== null &&
             item.position !== null &&
             item.metaInfos!!.containsKey("duration")
         ) {
+            progressBar.progressTintList = ColorStateList.valueOf(getColor(R.color.colorProgressDone))
             progressBar.max = item.metaInfos!!["duration"].toString().toFloat().toInt()
             progressBar.progress = item.position!!
             progressBar.visibility = View.VISIBLE
@@ -258,6 +262,9 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         html5ImageView: ImageView
     ) {
         var actualHtml5VideoStatus = html5VideoStatus
+
+        html5ImageView.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
 
         this.runTask({
             while (
@@ -284,6 +291,10 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     if (actualHtml5VideoStatus != Html5Status.GENERATE) {
                         item.html5VideoStatus = actualHtml5VideoStatus
 
+                        this.runOnUiThread {
+                            progressBar.progress = 0
+                        }
+
                         if (actualHtml5VideoStatus == Html5Status.WAIT) {
                             Thread.sleep(3000)
 
@@ -298,7 +309,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                         progressBar.progress = convertStatus.frame!!
                         progressBar.visibility = View.VISIBLE
                     }
-                } catch (_: ResponseException) {
+                } catch (_: TaskException) {
                 }
 
                 Thread.sleep(1000)
@@ -312,10 +323,8 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
             this.runOnUiThread {
                 html5ImageView.setColorFilter(color)
-                progressBar.visibility = View.INVISIBLE
                 progressBar.progressTintList = ColorStateList.valueOf(color)
             }
-            // @todo das was da unten gemacht wird. Preüfen wie weit geschaut muss ausgelagert und hier auch aufgerufen werden
         })
     }
 
@@ -354,7 +363,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     }
 
                     this.runOnUiThread { imageView.setImageBitmap(imagePath[item.name]) }
-                } catch (_: ResponseException) {}
+                } catch (_: TaskException) {}
             }
 
             this.imagesLoading = false

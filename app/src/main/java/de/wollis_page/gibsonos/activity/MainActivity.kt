@@ -98,7 +98,7 @@ class MainActivity : ListActivity() {
 
         (view.findViewById<View>(R.id.alias) as TextView).text = item.alias
         (view.findViewById<View>(R.id.url) as TextView).text = item.url
-        (view.findViewById<View>(R.id.user) as TextView).text = item.user
+        (view.findViewById<View>(R.id.user) as TextView).text = item.userName
     }
 
     override fun deleteItem(item: ListItemInterface): Boolean {

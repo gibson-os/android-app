@@ -6,10 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.animation.AlphaAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -22,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
@@ -360,6 +358,11 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         }.exceptionally { e -> e.printStackTrace() }
     }
 
+    protected fun removeHeder() {
+        val header = this.findViewById<AppBarLayout>(R.id.header)
+        (header.parent as ViewManager).removeView(header)
+    }
+
     override fun onResume() {
         super.onResume()
         val update = this.update
@@ -387,11 +390,14 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     override fun onDestroy() {
         super.onDestroy()
         Log.d(Config.LOG_TAG, "Destroy activity")
-        val account = this.application.getAccountById(this.getAccount().id) ?: return
-        val process = account.getProcesses().find {
-            it.activity == this
-        } ?: return
-        account.removeProccess(process)
+
+        if (this.account != null) {
+            val account = this.application.getAccountById(this.getAccount().id) ?: return
+            val process = account.getProcesses().find {
+                it.activity == this
+            } ?: return
+            account.removeProccess(process)
+        }
     }
 
     companion object {

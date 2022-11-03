@@ -84,11 +84,11 @@ class DataStore(url: String, token: String?) {
         this.params[key] = java.lang.Boolean.valueOf(value).toString()
     }
 
-    fun addParam(key: String, value: MutableList<*>) {
+    fun addParam(key: String, value: List<*>) {
         this.params[key] = JSONArray(value).toString()
     }
 
-    fun addParam(key: String, value: MutableMap<*, *>) {
+    fun addParam(key: String, value: Map<*, *>) {
         this.params[key] = JSONObject(value).toString()
     }
 
