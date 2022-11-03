@@ -125,7 +125,7 @@ class PlayerActivity: GibsonOsActivity() {
         var minutes = transformSeconds / 60
         val hours = minutes / 60
         val seconds = transformSeconds - minutes * 60
-        minutes -= hours * 60;
+        minutes -= hours * 60
 
         return hours.toString().padStart(2, '0') + ":" +
                 minutes.toString().padStart(2, '0') + ":" +
