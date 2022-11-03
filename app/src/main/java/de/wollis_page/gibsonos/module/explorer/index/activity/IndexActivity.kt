@@ -2,7 +2,6 @@ package de.wollis_page.gibsonos.module.explorer.index.activity
 
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.ArrayMap
@@ -265,10 +264,10 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 actualHtml5VideoStatus == Html5Status.GENERATE ||
                 actualHtml5VideoStatus == Html5Status.WAIT
             ) {
-                var color = getColor(R.color.colorProgressGenerate) //Color.rgb(0, 0, 255)
+                var color = getColor(R.color.colorProgressGenerate)
 
                 if (actualHtml5VideoStatus == Html5Status.WAIT) {
-                    color = getColor(R.color.colorProgressWait) //Color.rgb(218, 218, 218)
+                    color = getColor(R.color.colorProgressWait)
                 }
 
                 html5ImageView.setColorFilter(color)
@@ -305,15 +304,17 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 Thread.sleep(1000)
             }
 
-            var color = getColor(R.color.colorProgressDone) //Color.rgb(233, 98, 40)
+            var color = getColor(R.color.colorProgressDone)
 
             if (actualHtml5VideoStatus == Html5Status.ERROR) {
-                color = getColor(R.color.colorProgressError) //Color.rgb(255, 0, 0)
+                color = getColor(R.color.colorProgressError)
             }
 
-            html5ImageView.setColorFilter(color)
-            progressBar.visibility = View.INVISIBLE
-            progressBar.progressTintList = ColorStateList.valueOf(color)
+            this.runOnUiThread {
+                html5ImageView.setColorFilter(color)
+                progressBar.visibility = View.INVISIBLE
+                progressBar.progressTintList = ColorStateList.valueOf(color)
+            }
             // @todo das was da unten gemacht wird. Preüfen wie weit geschaut muss ausgelagert und hier auch aufgerufen werden
         })
     }
