@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -256,7 +257,11 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         }
     }
 
-    fun startActivity(shortcut: Shortcut, extras: Map<String, Any>) {
+    fun startActivity(
+        shortcut: Shortcut,
+        extras: Map<String, Any>,
+        launcher: ActivityResultLauncher<Intent>? = null
+    ) {
         val account = this.application.getAccountById(this.getAccount().id)
             ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
 
@@ -266,11 +271,19 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             shortcut.task,
             shortcut.action,
             extras,
-            account
+            account,
+            launcher
         )
     }
 
-    fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Any>) {
+    fun startActivity(
+        module: String,
+        task: String,
+        action: String,
+        id: Any,
+        extras: Map<String, Any>,
+        launcher: ActivityResultLauncher<Intent>? = null
+    ) {
         this.startActivity(
             module,
             task,
@@ -278,11 +291,20 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             id,
             extras,
             this.application.getAccountById(this.getAccount().id)
-                ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
+                ?: throw AccountException("Account " + this.getAccount().id + " not found in store!"),
+            launcher
         )
     }
 
-    fun startActivity(module: String, task: String, action: String, id: Any, extras: Map<String, Any>, account: AccountDto) {
+    fun startActivity(
+        module: String,
+        task: String,
+        action: String,
+        id: Any,
+        extras: Map<String, Any>,
+        account: AccountDto,
+        launcher: ActivityResultLauncher<Intent>? = null
+    ) {
         this.startActivity(
             this.application.getActivity(
                 account,
@@ -295,7 +317,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             task,
             action,
             extras,
-            account
+            account,
+            launcher
         )
     }
 
@@ -305,7 +328,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         task: String,
         action: String,
         extras: Map<String, Any>,
-        account: AccountDto
+        account: AccountDto,
+        launcher: ActivityResultLauncher<Intent>? = null
     ) {
         if (activity == null) {
             val intent = Intent(this, Class.forName(this.application.getActivityName(module, task, action)))
@@ -326,7 +350,13 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                 }
             }
 
-            this.startActivity(intent)
+            if (launcher == null) {
+                this.startActivity(intent)
+
+                return
+            }
+
+            launcher.launch(intent)
 
             return
         }

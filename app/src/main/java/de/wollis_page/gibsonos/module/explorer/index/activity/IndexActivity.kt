@@ -1,5 +1,7 @@
 package de.wollis_page.gibsonos.module.explorer.index.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -10,6 +12,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.mediarouter.app.MediaRouteChooserDialog
 import androidx.mediarouter.media.MediaControlIntent
 import androidx.mediarouter.media.MediaRouteSelector
@@ -40,6 +44,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     private lateinit var loadedDir: Dir
     private lateinit var castContext: CastContext
     private lateinit var mediaRouteChooserDialog: MediaRouteChooserDialog
+    private lateinit var playerLauncher: ActivityResultLauncher<Intent>
     private var loadDir: String? = null
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
     private var imageQueue = ArrayMap<ImageView, Item>()
@@ -86,6 +91,20 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 //                }
 //            }
 //        }
+
+        this.playerLauncher = this.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            Log.d(Config.LOG_TAG, it.toString())
+
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            Log.d(Config.LOG_TAG, "Position: " + it.data?.getIntExtra("position", 0))
+//            item.position = it.data?.getIntExtra("position", 0)
+//            this.listAdapter.notifyItemChanged(this.getItemIndex(item))
+        }
 
         if (savedInstanceState == null) {
             this.loadList((this.getShortcut()?.params?.get("dir") ?: "").toString())
@@ -137,7 +156,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 item.html5VideoStatus = Html5Status.WAIT
 
                 this.runOnUiThread {
-                    this.listAdapter.notifyItemChanged(this.listAdapter.items.indexOf(item))
+                    this.listAdapter.notifyItemChanged(this.getItemIndex(item))
                 }
             }
         }
@@ -154,20 +173,19 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             val playItem = DialogItem("Widergeben")
             playItem.icon = R.drawable.ic_play
             playItem.onClick = {
-                this.runTask({
-                    this.startActivity(
-                        "explorer",
-                        "html5",
-                        "player",
-                        0,
-                        mapOf<String, Parcelable>("media" to Media(
-                            item.name,
-                            item.html5VideoToken,
-                            item.metaInfos!!["duration"].toString().toFloat().toInt(),
-                            item.position,
-                        ))
-                    )
-                })
+                this.startActivity(
+                    "explorer",
+                    "html5",
+                    "player",
+                    0,
+                    mapOf<String, Parcelable>("media" to Media(
+                        item.name,
+                        item.html5VideoToken,
+                        item.metaInfos!!["duration"].toString().toFloat().toInt(),
+                        item.position,
+                    )),
+                    this.playerLauncher
+                )
             }
             options.add(playItem)
         }

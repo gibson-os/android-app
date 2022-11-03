@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.module.explorer.html5.activity
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -107,6 +108,10 @@ class PlayerActivity: GibsonOsActivity() {
             if (newPosition > 0) {
                 try {
                     Html5Task.savePosition(this, token, newPosition)
+                    val result = Intent()
+                    result.putExtra("token", token)
+                    result.putExtra("position", newPosition)
+                    this.setResult(RESULT_OK, result)
                 } catch (_: TaskException) {
                 }
             }

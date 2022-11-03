@@ -65,4 +65,8 @@ interface ListInterface {
         this.listAdapter.items = newList
         this.activity.runOnUiThread { this.listAdapter.notifyDataSetChanged() }
     }
+
+    fun getItemIndex(item: ListItemInterface): Int {
+        return this.listAdapter.items.indexOf(item)
+    }
 }
