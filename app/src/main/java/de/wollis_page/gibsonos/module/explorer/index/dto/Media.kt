@@ -6,17 +6,20 @@ import android.os.Parcelable
 data class Media(
     val name: String,
     var token: String?,
+    val duration: Int,
     val position: Int? = null,
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString().toString(),
         parcel.readString(),
+        parcel.readInt(),
         parcel.readValue(Int::class.java.classLoader) as? Int
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(token)
+        parcel.writeInt(duration)
         parcel.writeValue(position)
     }
 

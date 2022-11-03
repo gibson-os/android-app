@@ -160,7 +160,12 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                         "html5",
                         "player",
                         0,
-                        mapOf<String, Parcelable>("media" to Media(item.name, item.html5VideoToken, item.position))
+                        mapOf<String, Parcelable>("media" to Media(
+                            item.name,
+                            item.html5VideoToken,
+                            item.metaInfos!!["duration"].toString().toFloat().toInt(),
+                            item.position,
+                        ))
                     )
                 })
             }
