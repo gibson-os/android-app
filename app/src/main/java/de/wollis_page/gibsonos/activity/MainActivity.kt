@@ -68,7 +68,7 @@ class MainActivity : ListActivity() {
             this.startActivityForResult(Intent(this.applicationContext, LoginActivity::class.java), 100)
         }
 
-        this.listAdapter.items = accounts.toMutableList()
+        this.listAdapter.items = accounts as ArrayList<ListItemInterface>
         this.listAdapter.notifyItemRangeChanged(0, accounts.size)
     }
 

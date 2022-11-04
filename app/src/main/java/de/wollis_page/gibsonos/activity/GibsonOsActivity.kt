@@ -8,6 +8,7 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.*
 import android.view.animation.AlphaAnimation
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,7 +22,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textfield.TextInputEditText
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.dto.Update
@@ -386,6 +389,33 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                 }
             }
         }.exceptionally { e -> e.printStackTrace() }
+    }
+
+    protected fun addSearch() {
+        val inflater = LayoutInflater.from(this)
+        this.contentContainer.addView(inflater.inflate(
+            R.layout.base_button_search,
+            this.findViewById(android.R.id.content),
+            false
+        ))
+        val searchButton = findViewById<FloatingActionButton>(R.id.searchButton)
+        searchButton.setOnClickListener {
+            val searchInput = findViewById<TextInputEditText>(R.id.searchText)
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+            if (searchInput.visibility == View.VISIBLE) {
+                searchInput.visibility = View.INVISIBLE
+                searchInput.clearFocus()
+                searchInput.text?.clear()
+                inputMethodManager.hideSoftInputFromWindow(searchInput.windowToken, 0)
+
+                return@setOnClickListener
+            }
+
+            searchInput.visibility = View.VISIBLE
+            searchInput.requestFocus()
+            inputMethodManager.showSoftInput(searchInput, InputMethodManager.SHOW_IMPLICIT)
+        }
     }
 
     protected fun removeHeder() {

@@ -11,7 +11,19 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/outter_spacing"
         app:backgroundTint="#FF00FF00"
-        app:srcCompat="@drawable/ic_search"
-        android:contentDescription="@string/account_title" />
+        app:srcCompat="@drawable/ic_search" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/searchText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#FF00FF00"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/normal_icon_size"
+        android:layout_marginStart="@dimen/outter_spacing"
+        android:layout_marginBottom="19dp"
+        android:padding="@dimen/inner_spacing"
+        android:visibility="invisible"
+        android:inputType="text" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

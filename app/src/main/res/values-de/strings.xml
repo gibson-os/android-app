@@ -49,6 +49,11 @@
     <string name="explorer_html5_convert">Für HTML5 konvertieren</string>
     <string name="explorer_html5_play">Wiedergeben</string>
     <string name="explorer_html5_stream">An Chromecast senden</string>
+    <string name="explorer_html5_language">Sprache</string>
+    <string name="explorer_html5_subtitle">Untertitel</string>
+    <string name="explorer_html5_no_subtitle">Kein Untertitel</string>
+    <string name="explorer_html5_default">Standard</string>
+    <string name="explorer_html5_forced">Forced</string>
 
     <string name="hc_title">Homecontrol</string>
 

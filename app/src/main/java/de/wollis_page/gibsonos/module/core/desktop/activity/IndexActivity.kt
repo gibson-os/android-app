@@ -76,7 +76,7 @@ class IndexActivity : ListActivity() {
         val desktop = DesktopTask.index(this)
 
         it.apps = desktop.apps
-        this.listAdapter.items = desktop.desktop.toMutableList()
+        this.listAdapter.items = desktop.desktop as ArrayList<ListItemInterface>
         this.loadNavigation()
     }
 

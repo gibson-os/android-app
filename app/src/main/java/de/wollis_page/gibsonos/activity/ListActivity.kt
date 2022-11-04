@@ -1,19 +1,18 @@
 package de.wollis_page.gibsonos.activity
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.dto.Account
-import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.ListInterface
 import de.wollis_page.gibsonos.helper.ListItemTouchHelper
 
@@ -90,16 +89,13 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
         })
     }
 
-    protected fun addSearch() {
-        val inflater = LayoutInflater.from(this)
-        this.contentContainer.addView(inflater.inflate(
-            R.layout.base_button_search,
-            this.findViewById(android.R.id.content),
-            false
-        ))
-        val searchButton = findViewById<FloatingActionButton>(R.id.searchButton)
-        searchButton.setOnClickListener {
-            Log.d(Config.LOG_TAG, "Click")
+    protected fun addSearch(filter: (item: ListItemInterface, searchTerm: String) -> Boolean) {
+        this.listAdapter.listFilter = filter
+        this.addSearch()
+
+        val searchInput = findViewById<TextInputEditText>(R.id.searchText)
+        searchInput.addTextChangedListener {
+            this.listAdapter.filter.filter(it)
         }
     }
 }

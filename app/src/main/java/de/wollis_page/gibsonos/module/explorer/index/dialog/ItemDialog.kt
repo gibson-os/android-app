@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.module.explorer.builder
+package de.wollis_page.gibsonos.module.explorer.index.dialog
 
 import android.os.Parcelable
 import android.util.Log
@@ -6,13 +6,14 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.module.explorer.html5.dialog.ConvertDialog
 import de.wollis_page.gibsonos.module.explorer.index.activity.IndexActivity
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.index.dto.Media
 import de.wollis_page.gibsonos.module.explorer.service.Html5Service
 
-class ItemDialogBuilder(private val context: IndexActivity) {
+class ItemDialog(private val context: IndexActivity) {
     fun build(item: Item): AlertListDialog {
         val options = ArrayList<DialogItem>()
 
@@ -29,11 +30,15 @@ class ItemDialogBuilder(private val context: IndexActivity) {
     }
 
     private fun getConvertItem(item: Item): DialogItem {
-        val dialogItem = DialogItem(context.getString(R.string.explorer_html5_convert))
+        val dialogItem = DialogItem(this.context.getString(R.string.explorer_html5_convert))
 
         dialogItem.icon = R.drawable.ic_html5
         dialogItem.onClick = {
-            Html5Service().convert(this.context, this.context.loadedDir.dir, item) {
+            Html5Service(ConvertDialog(this.context)).convert(
+                this.context,
+                this.context.loadedDir.dir,
+                item
+            ) {
                 item.html5VideoToken = it[this.context.loadedDir.dir + "/" + item.name]
                 item.html5VideoStatus = Html5Status.WAIT
 
@@ -47,11 +52,11 @@ class ItemDialogBuilder(private val context: IndexActivity) {
     }
 
     private fun getPlayItem(item: Item): DialogItem {
-        val dialogItem = DialogItem(context.getString(R.string.explorer_html5_play))
+        val dialogItem = DialogItem(this.context.getString(R.string.explorer_html5_play))
 
         dialogItem.icon = R.drawable.ic_play
         dialogItem.onClick = {
-            context.startActivity(
+            this.context.startActivity(
                 "explorer",
                 "html5",
                 "player",
@@ -62,7 +67,7 @@ class ItemDialogBuilder(private val context: IndexActivity) {
                     item.metaInfos!!["duration"].toString().toFloat().toInt(),
                     item.position,
                 )),
-                context.playerLauncher
+                this.context.playerLauncher
             )
         }
 
@@ -70,13 +75,13 @@ class ItemDialogBuilder(private val context: IndexActivity) {
     }
 
     private fun getStreamItem(item: Item): DialogItem {
-        val dialogItem = DialogItem(context.getString(R.string.explorer_html5_stream))
+        val dialogItem = DialogItem(this.context.getString(R.string.explorer_html5_stream))
 
         dialogItem.icon = R.drawable.ic_chromecast
         dialogItem.onClick = {
-            Log.d(Config.LOG_TAG, context.castContext.sessionManager.currentCastSession.toString())
-            Log.d(Config.LOG_TAG, context.castContext.sessionManager.currentSession.toString())
-            context.mediaRouteChooserDialog.show()
+            Log.d(Config.LOG_TAG, this.context.castContext.sessionManager.currentCastSession.toString())
+            Log.d(Config.LOG_TAG, this.context.castContext.sessionManager.currentSession.toString())
+            this.context.mediaRouteChooserDialog.show()
         }
 
         return dialogItem

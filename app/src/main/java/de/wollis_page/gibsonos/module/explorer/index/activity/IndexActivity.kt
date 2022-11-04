@@ -27,7 +27,7 @@ import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
-import de.wollis_page.gibsonos.module.explorer.builder.ItemDialogBuilder
+import de.wollis_page.gibsonos.module.explorer.index.dialog.ItemDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
@@ -40,7 +40,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     lateinit var castContext: CastContext
     lateinit var mediaRouteChooserDialog: MediaRouteChooserDialog
     lateinit var playerLauncher: ActivityResultLauncher<Intent>
-    private lateinit var itemDialogBuilder: ItemDialogBuilder
+    private lateinit var itemDialogBuilder: ItemDialog
     private var loadDir: String? = null
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
     private var imageQueue = ArrayMap<ImageView, Item>()
@@ -76,7 +76,11 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
         super.onCreate(savedInstanceState)
 
-        this.addSearch()
+        this.addSearch { it, searchTerm ->
+            val item = it as Item
+
+            item.name.lowercase().contains(searchTerm.lowercase())
+        }
 
 //        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
 //            this.runTask {
@@ -104,7 +108,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 //            this.listAdapter.notifyItemChanged(this.getItemIndex(item))
         }
 
-        this.itemDialogBuilder = ItemDialogBuilder(this)
+        this.itemDialogBuilder = ItemDialog(this)
 
         if (savedInstanceState == null) {
             this.loadList((this.getShortcut()?.params?.get("dir") ?: "").toString())
@@ -132,7 +136,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         Log.i(Config.LOG_TAG, "Read dir $directory")
         this.loadedDir = DirTask.read(this, directory ?: "")
         this.loadDir = loadedDir.dir
-        this.listAdapter.items = this.loadedDir.data.toMutableList()
+        this.listAdapter.items = this.loadedDir.data as ArrayList<ListItemInterface>
         this.setTitle(this.loadDir.toString())
     }
 

@@ -62,7 +62,7 @@ interface ListInterface {
             }
         }
         Log.d(Config.LOG_TAG, newList.toString())
-        this.listAdapter.items = newList
+        this.listAdapter.items = newList as ArrayList<ListItemInterface>
         this.activity.runOnUiThread { this.listAdapter.notifyDataSetChanged() }
     }
 
