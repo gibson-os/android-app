@@ -27,6 +27,7 @@ import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.explorer.index.dialog.DirListDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.ItemDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
@@ -82,21 +83,24 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             item.name.lowercase().contains(searchTerm.lowercase())
         }
 
-//        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
-//            this.runTask {
-//                val dirList = DirTask.dirList(this, this.loadedDir.dir)
-//
-//                this.runOnUiThread {
-//                    val alertDialog = AlertDialog.Builder(this)
-//                        .setTitle("Test")
-//                    alertDialog.create().show()
-//                }
-//            }
-//        }
+        val dirListDialogBuilder = DirListDialog(this)
+
+        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
+            this.runTask({
+                val dirListDialog = dirListDialogBuilder.build(
+                    DirTask.dirList(this, this.loadedDir.dir)
+                )
+
+                this.runOnUiThread {
+                    dirListDialog.show()
+                }
+            })
+        }
 
         this.playerLauncher = this.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) {
+            Log.d(Config.LOG_TAG, "----- RECEIVE -----")
             Log.d(Config.LOG_TAG, it.toString())
 
             if (it.resultCode != Activity.RESULT_OK) {
@@ -244,6 +248,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         html5ImageView: ImageView
     ) {
         var actualHtml5VideoStatus = html5VideoStatus
+        this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
 
         html5ImageView.visibility = View.VISIBLE
         progressBar.visibility = View.VISIBLE
@@ -253,14 +258,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 actualHtml5VideoStatus == Html5Status.GENERATE ||
                 actualHtml5VideoStatus == Html5Status.WAIT
             ) {
-                var color = getColor(R.color.colorProgressGenerate)
-
-                if (actualHtml5VideoStatus == Html5Status.WAIT) {
-                    color = getColor(R.color.colorProgressWait)
-                }
-
-                html5ImageView.setColorFilter(color)
-                progressBar.progressTintList = ColorStateList.valueOf(color)
+                this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
 
                 try {
                     val convertStatus = Html5Task.convertStatus(
@@ -271,8 +269,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     actualHtml5VideoStatus = convertStatus.status
 
                     if (actualHtml5VideoStatus != Html5Status.GENERATE) {
-                        item.html5VideoStatus = actualHtml5VideoStatus
-
+                        this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
                         this.runOnUiThread {
                             progressBar.progress = 0
                         }
@@ -286,6 +283,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                         break
                     }
 
+                    this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
                     this.runOnUiThread {
                         progressBar.max = convertStatus.frames
                         progressBar.progress = convertStatus.frame!!
@@ -297,17 +295,30 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 Thread.sleep(1000)
             }
 
-            var color = getColor(R.color.colorProgressDone)
-
-            if (actualHtml5VideoStatus == Html5Status.ERROR) {
-                color = getColor(R.color.colorProgressError)
-            }
-
-            this.runOnUiThread {
-                html5ImageView.setColorFilter(color)
-                progressBar.progressTintList = ColorStateList.valueOf(color)
-            }
+            this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
         })
+    }
+
+    private fun setHtml5StatusColor(
+        html5VideoStatus: Html5Status?,
+        progressBar: ProgressBar,
+        html5ImageView: ImageView
+    ) {
+        if (html5VideoStatus == null) {
+            return
+        }
+
+        val color = this.getColor(when (html5VideoStatus) {
+            Html5Status.WAIT -> R.color.colorProgressWait
+            Html5Status.ERROR -> R.color.colorProgressError
+            Html5Status.GENERATE -> R.color.colorProgressGenerate
+            Html5Status.GENERATED -> R.color.colorProgressDone
+        })
+
+        this.runOnUiThread {
+            html5ImageView.setColorFilter(color)
+            progressBar.progressTintList = ColorStateList.valueOf(color)
+        }
     }
 
     private fun loadImages() {

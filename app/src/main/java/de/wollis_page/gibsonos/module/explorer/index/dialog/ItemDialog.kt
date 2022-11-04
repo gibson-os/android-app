@@ -17,14 +17,16 @@ class ItemDialog(private val context: IndexActivity) {
     fun build(item: Item): AlertListDialog {
         val options = ArrayList<DialogItem>()
 
-        var html5Item = this.getConvertItem(item)
+        if (item.category == 2 || item.category == 4) {
+            var html5Item = this.getConvertItem(item)
 
-        if (item.html5VideoStatus == Html5Status.GENERATED) {
-            html5Item = this.getStreamItem(item)
-            options.add(this.getPlayItem(item))
+            if (item.html5VideoStatus == Html5Status.GENERATED) {
+                html5Item = this.getStreamItem(item)
+                options.add(this.getPlayItem(item))
+            }
+
+            options.add(html5Item)
         }
-
-        options.add(html5Item)
 
         return AlertListDialog(this.context, item.name, options)
     }
