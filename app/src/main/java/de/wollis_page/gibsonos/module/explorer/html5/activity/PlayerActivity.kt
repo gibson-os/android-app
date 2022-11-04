@@ -108,6 +108,9 @@ class PlayerActivity: GibsonOsActivity() {
             if (newPosition > 0) {
                 try {
                     Html5Task.savePosition(this, token, newPosition)
+                } catch (_: TaskException) {
+                }
+                try {
                     val result = Intent()
                     result.putExtra("token", token)
                     result.putExtra("position", newPosition)

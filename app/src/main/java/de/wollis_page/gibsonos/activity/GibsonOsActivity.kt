@@ -337,18 +337,18 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         if (activity == null) {
             val intent = Intent(this, Class.forName(this.application.getActivityName(module, task, action)))
             intent.putExtra(ACCOUNT_KEY, account.account)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+            //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 
             extras.forEach {
                 when (val value = it.value) {
                     is Parcelable -> intent.putExtra(it.key, value)
-                    is Serializable -> intent.putExtra(it.key, value)
                     is String -> intent.putExtra(it.key, value)
                     is Int -> intent.putExtra(it.key, value)
                     is Long -> intent.putExtra(it.key, value)
                     is Float -> intent.putExtra(it.key, value)
                     is Double -> intent.putExtra(it.key, value)
                     is Boolean -> intent.putExtra(it.key, value)
+                    is Serializable -> intent.putExtra(it.key, value)
                     else -> throw ActivityException(it.key + " cant put as extra. Type not allowed")
                 }
             }
