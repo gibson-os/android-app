@@ -65,6 +65,7 @@ class PlayerActivity: GibsonOsActivity() {
         }
 
         videoView.setOnCompletionListener {
+            this.setResult(this.media.token.toString(), media.position ?: 0)
             this.finish()
         }
     }
@@ -86,12 +87,10 @@ class PlayerActivity: GibsonOsActivity() {
             if (newPosition > 0) {
                 try {
                     Html5Task.savePosition(this, token, newPosition)
+                    this.media.position = newPosition
 
                     this.runOnUiThread {
-                        val result = Intent()
-                        result.putExtra("token", token)
-                        result.putExtra("position", newPosition)
-                        this.setResult(RESULT_OK, result)
+                        this.setResult(token, newPosition)
                     }
                 } catch (_: TaskException) {
                 }
@@ -100,5 +99,12 @@ class PlayerActivity: GibsonOsActivity() {
 
         Thread.sleep(1000)
         this.savePosition(videoView, token, newPosition)
+    }
+
+    private fun setResult(token: String, position: Int) {
+        val result = Intent()
+        result.putExtra("token", token)
+        result.putExtra("position", position)
+        this.setResult(RESULT_OK, result)
     }
 }

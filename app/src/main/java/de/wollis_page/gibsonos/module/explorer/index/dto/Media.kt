@@ -7,7 +7,7 @@ data class Media(
     val name: String,
     var token: String?,
     val duration: Int,
-    val position: Int? = null,
+    var position: Int? = null,
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString().toString(),
