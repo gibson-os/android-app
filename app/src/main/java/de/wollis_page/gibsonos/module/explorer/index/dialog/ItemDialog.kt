@@ -18,14 +18,12 @@ class ItemDialog(private val context: IndexActivity) {
         val options = ArrayList<DialogItem>()
 
         if (item.category == 2 || item.category == 4) {
-            var html5Item = this.getConvertItem(item)
-
-            if (item.html5VideoStatus == Html5Status.GENERATED) {
-                html5Item = this.getStreamItem(item)
+            if (item.html5VideoStatus == null) {
+                options.add(this.getConvertItem(item))
+            } else if (item.html5VideoStatus == Html5Status.GENERATED) {
                 options.add(this.getPlayItem(item))
+                options.add(this.getStreamItem(item))
             }
-
-            options.add(html5Item)
         }
 
         return AlertListDialog(this.context, item.name, options)

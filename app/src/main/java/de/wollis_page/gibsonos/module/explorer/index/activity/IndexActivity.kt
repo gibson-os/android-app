@@ -267,6 +267,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     )
 
                     actualHtml5VideoStatus = convertStatus.status
+                    item.html5VideoStatus = actualHtml5VideoStatus
 
                     if (actualHtml5VideoStatus != Html5Status.GENERATE) {
                         this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
