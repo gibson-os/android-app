@@ -247,6 +247,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         html5ImageView: ImageView
     ) {
         var actualHtml5VideoStatus = html5VideoStatus
+        var color = getColor(R.color.colorProgressDone)
 
         html5ImageView.visibility = View.VISIBLE
         progressBar.visibility = View.VISIBLE
@@ -256,7 +257,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 actualHtml5VideoStatus == Html5Status.GENERATE ||
                 actualHtml5VideoStatus == Html5Status.WAIT
             ) {
-                var color = getColor(R.color.colorProgressGenerate)
+                color = getColor(R.color.colorProgressGenerate)
 
                 if (actualHtml5VideoStatus == Html5Status.WAIT) {
                     color = getColor(R.color.colorProgressWait)
@@ -281,6 +282,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                         }
 
                         if (actualHtml5VideoStatus == Html5Status.WAIT) {
+                            html5ImageView.setColorFilter(getColor(R.color.colorProgressWait))
                             Thread.sleep(3000)
 
                             continue
@@ -289,6 +291,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                         break
                     }
 
+                    html5ImageView.setColorFilter(getColor(R.color.colorProgressGenerate))
                     this.runOnUiThread {
                         progressBar.max = convertStatus.frames
                         progressBar.progress = convertStatus.frame!!
@@ -299,8 +302,6 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
                 Thread.sleep(1000)
             }
-
-            var color = getColor(R.color.colorProgressDone)
 
             if (actualHtml5VideoStatus == Html5Status.ERROR) {
                 color = getColor(R.color.colorProgressError)
