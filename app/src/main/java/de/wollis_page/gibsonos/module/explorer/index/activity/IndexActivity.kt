@@ -104,9 +104,16 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 return@registerForActivityResult
             }
 
-            Log.d(Config.LOG_TAG, "Position: " + it.data?.getIntExtra("position", 0))
-//            item.position = it.data?.getIntExtra("position", 0)
-//            this.listAdapter.notifyItemChanged(this.getItemIndex(item))
+            val position = it.data?.getIntExtra("position", 0)
+            val token = it.data?.getStringExtra("token")
+            val item = (this.listAdapter.items as ArrayList<Item>).find {
+                it.html5VideoToken == token
+            } ?: return@registerForActivityResult
+
+            Log.d(Config.LOG_TAG, "Set Position " + position + " to " + item.name)
+
+            item.position = position
+            this.listAdapter.notifyItemChanged(this.getItemIndex(item))
         }
 
         this.itemDialogBuilder = ItemDialog(this)
