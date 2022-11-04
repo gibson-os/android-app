@@ -26,7 +26,11 @@ class AlertListDialog(val context: GibsonOsActivity, private val title: String, 
                 val view: View = super.getView(position, convertView, parent)
 
                 val item = items[position]
-                val icon = item.icon
+                var icon = item.icon
+
+                if (item.expanded && item.iconExpanded != null) {
+                    icon = item.iconExpanded
+                }
 
                 if (icon != null) {
                     view.findViewById<ImageView>(R.id.icon).setImageResource(icon)
