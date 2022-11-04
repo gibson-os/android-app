@@ -21,15 +21,24 @@ class Html5Service(private val convertDialog: ConvertDialog) {
                 item.metaInfos = FileTask.metaInfos(context, dir + "/" + item.name)
             }
 
-            val audioStreams = (item.metaInfos?.get("audioStreams") ?: emptyMap<Any, Any>()) as Map<*, *>
-            val subtitleStreams = (item.metaInfos?.get("subtitleStreams") ?: emptyMap<Any, Any>()) as Map<*, *>
+            var audioStreams = item.metaInfos?.get("audioStreams")
+
+            if (audioStreams !is Map<*, *>) {
+                audioStreams = emptyMap<Any, Any>()
+            }
+
+            var subtitleStreams = item.metaInfos?.get("subtitleStreams")
+
+            if (subtitleStreams !is Map<*, *>) {
+                subtitleStreams = emptyMap<Any, Any>()
+            }
 
             context.runOnUiThread {
                 val dialog = this.convertDialog.build(
                     dir,
                     files,
-                    audioStreams,
-                    subtitleStreams,
+                    audioStreams as Map<*, *>,
+                    subtitleStreams as Map<*, *>,
                     callback
                 )
 
