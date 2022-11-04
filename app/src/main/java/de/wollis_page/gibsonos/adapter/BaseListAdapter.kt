@@ -41,9 +41,9 @@ class BaseListAdapter(
     override fun getItemCount() = this.filteredItems.size
 
     fun setListResponse(listResponse: ListResponse<*>) {
-        this.total = listResponse.total
+        this.total = listResponse.total ?: 0
 
-        if (listResponse.start > 0) {
+        if ((listResponse.start ?: 0) > 0) {
             this.items.addAll(listResponse.data.toMutableList() as ArrayList<ListItemInterface>)
             this.filteredItems.addAll(listResponse.data.toMutableList() as ArrayList<ListItemInterface>)
 

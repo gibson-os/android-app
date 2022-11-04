@@ -27,6 +27,7 @@ import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.explorer.html5.dialog.DirListDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.ItemDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
@@ -82,17 +83,19 @@ class IndexActivity: ListActivity(), AppActivityInterface {
             item.name.lowercase().contains(searchTerm.lowercase())
         }
 
-//        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
-//            this.runTask {
-//                val dirList = DirTask.dirList(this, this.loadedDir.dir)
-//
-//                this.runOnUiThread {
-//                    val alertDialog = AlertDialog.Builder(this)
-//                        .setTitle("Test")
-//                    alertDialog.create().show()
-//                }
-//            }
-//        }
+        val dirListDialogBuilder = DirListDialog(this)
+
+        this.findViewById<TextView>(android.R.id.title).setOnClickListener {
+            this.runTask({
+                val dirListDialog = dirListDialogBuilder.build(
+                    DirTask.dirList(this, this.loadedDir.dir)
+                )
+
+                this.runOnUiThread {
+                    dirListDialog.show()
+                }
+            })
+        }
 
         this.playerLauncher = this.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
