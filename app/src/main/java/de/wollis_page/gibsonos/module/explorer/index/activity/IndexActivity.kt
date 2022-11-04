@@ -100,9 +100,6 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         this.playerLauncher = this.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) {
-            Log.d(Config.LOG_TAG, "----- RECEIVE -----")
-            Log.d(Config.LOG_TAG, it.toString())
-
             if (it.resultCode != Activity.RESULT_OK) {
                 return@registerForActivityResult
             }

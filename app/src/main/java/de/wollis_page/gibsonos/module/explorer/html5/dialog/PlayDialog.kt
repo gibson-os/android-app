@@ -12,15 +12,17 @@ class PlayDialog(private val context: PlayerActivity) {
         val options = ArrayList<DialogItem>()
         val position = media.position ?: 0
 
-        val continueItem = DialogItem("Fortsetzen")
-        continueItem.icon = R.drawable.ic_play
-        continueItem.onClick = {
-            videoView.seekTo(position * 1000)
-            this.context.startVideo(videoView)
+        if (position + 1 < media.duration) {
+            val continueItem = DialogItem(this.context.getString(R.string.explorer_html5_continue))
+            continueItem.icon = R.drawable.ic_play
+            continueItem.onClick = {
+                videoView.seekTo(position * 1000)
+                this.context.startVideo(videoView)
+            }
+            options.add(continueItem)
         }
-        options.add(continueItem)
 
-        val restartItem = DialogItem("Abspielen")
+        val restartItem = DialogItem(this.context.getString(R.string.explorer_html5_play_again))
         restartItem.icon = R.drawable.ic_restart
         restartItem.onClick = {
             this.context.startVideo(videoView)
@@ -29,7 +31,11 @@ class PlayDialog(private val context: PlayerActivity) {
 
         return AlertListDialog(
             this.context,
-            "Bereits " + this.transformSeconds(position) + " von " + this.transformSeconds(media.duration) + " gesehen.",
+            this.context.getString(
+                R.string.explorer_html5_continue_message,
+                this.transformSeconds(position),
+                this.transformSeconds(media.duration)
+            ),
             options
         )
     }
