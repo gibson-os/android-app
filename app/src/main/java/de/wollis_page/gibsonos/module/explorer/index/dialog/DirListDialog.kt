@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.module.explorer.html5.dialog
+package de.wollis_page.gibsonos.module.explorer.index.dialog
 
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.DialogItem

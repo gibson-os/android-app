@@ -8,11 +8,10 @@ import android.widget.MediaController
 import android.widget.VideoView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
-import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.exception.TaskException
-import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.explorer.html5.dialog.PlayDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Media
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 
@@ -50,28 +49,7 @@ class PlayerActivity: GibsonOsActivity() {
         val position = this.media.position ?: 0
 
         if (position > 0) {
-            val options = ArrayList<DialogItem>()
-
-            val continueItem = DialogItem("Fortsetzen")
-            continueItem.icon = R.drawable.ic_play
-            continueItem.onClick = {
-                videoView.seekTo(position * 1000)
-                this.startVideo(videoView)
-            }
-            options.add(continueItem)
-
-            val restartItem = DialogItem("Abspielen")
-            restartItem.icon = R.drawable.ic_restart
-            restartItem.onClick = {
-                this.startVideo(videoView)
-            }
-            options.add(restartItem)
-
-            AlertListDialog(
-                this,
-                "Bereits " + this.transformSeconds(position) + " von " + this.transformSeconds(media.duration) + " gesehen.",
-                options
-            ).show()
+            PlayDialog(this).build(videoView, media).show()
         } else {
             this.startVideo(videoView)
         }
@@ -91,7 +69,7 @@ class PlayerActivity: GibsonOsActivity() {
         }
     }
 
-    private fun startVideo(videoView: VideoView) {
+    fun startVideo(videoView: VideoView) {
         videoView.start()
 
         this.runTask({
@@ -119,16 +97,5 @@ class PlayerActivity: GibsonOsActivity() {
 
         Thread.sleep(1000)
         this.savePosition(videoView, token, newPosition)
-    }
-
-    private fun transformSeconds(transformSeconds: Int): String {
-        var minutes = transformSeconds / 60
-        val hours = minutes / 60
-        val seconds = transformSeconds - minutes * 60
-        minutes -= hours * 60
-
-        return hours.toString().padStart(2, '0') + ":" +
-                minutes.toString().padStart(2, '0') + ":" +
-                seconds.toString().padStart(2, '0')
     }
 }

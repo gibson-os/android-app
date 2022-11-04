@@ -27,7 +27,7 @@ import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
-import de.wollis_page.gibsonos.module.explorer.html5.dialog.DirListDialog
+import de.wollis_page.gibsonos.module.explorer.index.dialog.DirListDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.ItemDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
@@ -100,6 +100,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         this.playerLauncher = this.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) {
+            Log.d(Config.LOG_TAG, "----- RECEIVE -----")
             Log.d(Config.LOG_TAG, it.toString())
 
             if (it.resultCode != Activity.RESULT_OK) {
