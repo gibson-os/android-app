@@ -46,6 +46,9 @@
     <string name="explorer_dir_list_error_response">Dir list not in response!</string>
     <string name="explorer_icon_description">Icon</string>
     <string name="explorer_html5_error_convert_status">Convert status not in response!</string>
+    <string name="explorer_html5_convert">Convert for HTML5</string>
+    <string name="explorer_html5_play">Play</string>
+    <string name="explorer_html5_stream">Send to chromecast</string>
 
     <string name="hc_title">Homecontrol</string>
 
