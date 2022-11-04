@@ -248,7 +248,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         html5ImageView: ImageView
     ) {
         var actualHtml5VideoStatus = html5VideoStatus
-        var color = getColor(R.color.colorProgressDone)
+        this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
 
         html5ImageView.visibility = View.VISIBLE
         progressBar.visibility = View.VISIBLE
@@ -258,14 +258,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 actualHtml5VideoStatus == Html5Status.GENERATE ||
                 actualHtml5VideoStatus == Html5Status.WAIT
             ) {
-                color = getColor(R.color.colorProgressGenerate)
-
-                if (actualHtml5VideoStatus == Html5Status.WAIT) {
-                    color = getColor(R.color.colorProgressWait)
-                }
-
-                html5ImageView.setColorFilter(color)
-                progressBar.progressTintList = ColorStateList.valueOf(color)
+                this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
 
                 try {
                     val convertStatus = Html5Task.convertStatus(
@@ -276,14 +269,12 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                     actualHtml5VideoStatus = convertStatus.status
 
                     if (actualHtml5VideoStatus != Html5Status.GENERATE) {
-                        item.html5VideoStatus = actualHtml5VideoStatus
-
+                        this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
                         this.runOnUiThread {
                             progressBar.progress = 0
                         }
 
                         if (actualHtml5VideoStatus == Html5Status.WAIT) {
-                            html5ImageView.setColorFilter(getColor(R.color.colorProgressWait))
                             Thread.sleep(3000)
 
                             continue
@@ -292,7 +283,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                         break
                     }
 
-                    html5ImageView.setColorFilter(getColor(R.color.colorProgressGenerate))
+                    this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
                     this.runOnUiThread {
                         progressBar.max = convertStatus.frames
                         progressBar.progress = convertStatus.frame!!
@@ -304,15 +295,30 @@ class IndexActivity: ListActivity(), AppActivityInterface {
                 Thread.sleep(1000)
             }
 
-            if (actualHtml5VideoStatus == Html5Status.ERROR) {
-                color = getColor(R.color.colorProgressError)
-            }
-
-            this.runOnUiThread {
-                html5ImageView.setColorFilter(color)
-                progressBar.progressTintList = ColorStateList.valueOf(color)
-            }
+            this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
         })
+    }
+
+    private fun setHtml5StatusColor(
+        html5VideoStatus: Html5Status?,
+        progressBar: ProgressBar,
+        html5ImageView: ImageView
+    ) {
+        if (html5VideoStatus == null) {
+            return
+        }
+
+        val color = this.getColor(when (html5VideoStatus) {
+            Html5Status.WAIT -> R.color.colorProgressWait
+            Html5Status.ERROR -> R.color.colorProgressError
+            Html5Status.GENERATE -> R.color.colorProgressGenerate
+            Html5Status.GENERATED -> R.color.colorProgressDone
+        })
+
+        this.runOnUiThread {
+            html5ImageView.setColorFilter(color)
+            progressBar.progressTintList = ColorStateList.valueOf(color)
+        }
     }
 
     private fun loadImages() {
