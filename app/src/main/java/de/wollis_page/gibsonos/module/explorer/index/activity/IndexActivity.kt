@@ -151,6 +151,11 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         this.loadedDir = DirTask.read(this, cleanDirectory)
         this.loadDir = loadedDir.dir
         this.listAdapter.items = this.loadedDir.data as ArrayList<ListItemInterface>
+
+        this.runOnUiThread {
+            this.listView.scrollToPosition(0)
+        }
+
         this.setTitle(this.loadDir.toString())
     }
 
