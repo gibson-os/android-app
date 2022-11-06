@@ -140,7 +140,7 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         this.loadList(this.loadDir)
     }
 
-    private fun loadList(directory: String? = "") = this.load {
+    fun loadList(directory: String? = "") = this.load {
         Log.i(Config.LOG_TAG, "Read dir $directory")
         this.loadedDir = DirTask.read(this, directory ?: "")
         this.loadDir = loadedDir.dir
