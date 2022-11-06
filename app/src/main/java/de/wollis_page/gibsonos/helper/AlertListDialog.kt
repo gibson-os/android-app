@@ -17,6 +17,7 @@ class AlertListDialog(
     private val items: ArrayList<DialogItem>
 ) {
     private val flattedItems: ArrayList<FlattedDialogItem> = ArrayList()
+    private var scrollTo: Int? = null
 
     init {
         this.flatItems(this.items)
@@ -27,6 +28,10 @@ class AlertListDialog(
             val flattedDialogItem = FlattedDialogItem(it, level, parent)
             this.flattedItems.add(flattedDialogItem)
             val children = it.children
+
+            if (it.scrollTo) {
+                this.scrollTo = this.flattedItems.count()
+            }
 
             if (children != null) {
                 this.flatItems(children, level + 1, flattedDialogItem)
@@ -73,7 +78,8 @@ class AlertListDialog(
             }
         }
 
-        return Builder(this.context)
+        val scrollToItem = this.scrollTo
+        val dialog = Builder(this.context)
             .setTitle(this.title)
             .setAdapter(adapter) { _, which ->
                 val flattedItem = this.flattedItems[which]
@@ -86,6 +92,16 @@ class AlertListDialog(
 
                 onClick(flattedItem)
             }
-            .show()
+            .create()
+
+        if (scrollToItem != null) {
+            dialog.setOnShowListener {
+                dialog.listView.smoothScrollToPosition(scrollToItem)
+            }
+        }
+
+        dialog.show()
+
+        return dialog
     }
 }

@@ -7,4 +7,5 @@ class DialogItem(val text: String) {
     var iconExpanded: Int? = null
     var fireOnClickOnExpand: Boolean = false
     var expanded: Boolean = false
+    var scrollTo: Boolean = false
 }

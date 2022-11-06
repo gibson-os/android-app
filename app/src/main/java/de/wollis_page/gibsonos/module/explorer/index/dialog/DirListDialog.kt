@@ -25,6 +25,7 @@ class DirListDialog(private val context: IndexActivity) {
             dialogItem.icon = R.drawable.ic_folder
             dialogItem.iconExpanded = R.drawable.ic_folder_open
             dialogItem.expanded = it.expanded
+            dialogItem.scrollTo = it.expanded
             dialogItem.fireOnClickOnExpand = true
             dialogItem.onClick = {
                 this.context.loadList(this.generateDir(it))
