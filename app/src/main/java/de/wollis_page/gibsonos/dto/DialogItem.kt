@@ -1,6 +1,6 @@
 package de.wollis_page.gibsonos.dto
 
-class DialogItem(val text: String) {
+class DialogItem(val text: String, val id: Any? = null) {
     var onClick: ((flattedItem: FlattedDialogItem) -> Unit?)? = null
     var icon: Int? = null
     var children: List<DialogItem>? = null

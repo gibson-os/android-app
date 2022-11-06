@@ -3,7 +3,6 @@ package de.wollis_page.gibsonos.module.explorer.index.dialog
 import android.util.Log
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.DialogItem
-import de.wollis_page.gibsonos.dto.FlattedDialogItem
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.helper.Config
@@ -21,16 +20,17 @@ class DirListDialog(private val context: IndexActivity) {
         val dialogItems = ArrayList<DialogItem>()
 
         data.forEach {
-            val dialogItem = DialogItem(it.text)
+            val dirList = it
+            val dialogItem = DialogItem(dirList.text, dirList.id)
             dialogItem.icon = R.drawable.ic_folder
             dialogItem.iconExpanded = R.drawable.ic_folder_open
-            dialogItem.expanded = it.expanded
-            dialogItem.scrollTo = it.expanded
+            dialogItem.expanded = dirList.expanded
+            dialogItem.scrollTo = dirList.expanded
             dialogItem.fireOnClickOnExpand = true
             dialogItem.onClick = {
-                this.context.loadList(this.generateDir(it))
+                this.context.loadList(dirList.id)
             }
-            val children = it.data
+            val children = dirList.data
 
             if (children != null) {
                 dialogItem.children = this.getDialogItems(children)
@@ -40,15 +40,5 @@ class DirListDialog(private val context: IndexActivity) {
         }
 
         return dialogItems
-    }
-
-    private fun generateDir(item: FlattedDialogItem, dir: String = ""): String {
-        val newDir = item.dialogItem.text + "/" + dir
-
-        if (item.parent == null) {
-            return newDir
-        }
-
-        return generateDir(item.parent, newDir)
     }
 }
