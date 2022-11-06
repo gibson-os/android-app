@@ -12,7 +12,7 @@ class PlayDialog(private val context: PlayerActivity) {
         val options = ArrayList<DialogItem>()
         val position = media.position ?: 0
 
-        if (position + 1 < media.duration) {
+        if (position + 1 < media.duration || media.duration == 0) {
             val continueItem = DialogItem(this.context.getString(R.string.explorer_html5_continue))
             continueItem.icon = R.drawable.ic_play
             continueItem.onClick = {

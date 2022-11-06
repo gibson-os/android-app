@@ -64,7 +64,7 @@ class ItemDialog(private val context: IndexActivity) {
                 mapOf<String, Parcelable>("media" to Media(
                     item.name,
                     item.html5VideoToken,
-                    item.metaInfos!!["duration"].toString().toFloat().toInt(),
+                    (item.metaInfos?.get("duration") ?: 0).toString().toFloat().toInt(),
                     item.position,
                 )),
                 this.context.playerLauncher
