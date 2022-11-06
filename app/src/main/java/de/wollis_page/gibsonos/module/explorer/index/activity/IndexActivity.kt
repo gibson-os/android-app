@@ -141,8 +141,14 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     }
 
     fun loadList(directory: String? = "") = this.load {
+        var cleanDirectory = directory ?: ""
+
+        if (cleanDirectory.last() == '/') {
+            cleanDirectory = cleanDirectory.substring(0, cleanDirectory.length - 1)
+        }
+
         Log.i(Config.LOG_TAG, "Read dir $directory")
-        this.loadedDir = DirTask.read(this, directory ?: "")
+        this.loadedDir = DirTask.read(this, cleanDirectory)
         this.loadDir = loadedDir.dir
         this.listAdapter.items = this.loadedDir.data as ArrayList<ListItemInterface>
         this.setTitle(this.loadDir.toString())
