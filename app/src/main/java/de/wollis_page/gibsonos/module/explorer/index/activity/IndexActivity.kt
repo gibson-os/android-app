@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.mediarouter.app.MediaRouteChooserDialog
 import androidx.mediarouter.media.MediaControlIntent
 import androidx.mediarouter.media.MediaRouteSelector
+import androidx.mediarouter.media.MediaRouter
 import com.google.android.gms.cast.CastMediaControlIntent
 import com.google.android.gms.cast.framework.CastContext
 import de.wollis_page.gibsonos.R
@@ -57,18 +58,6 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        this.castContext = CastContext.getSharedInstance(this)
-
-        this.castContext.sessionManager.addSessionManagerListener(Chromecast())
-//        this.castContext.sessionManager.currentCastSession?.sendMessage(
-//            "urn:x-cast:net.itronom.gibson",
-//        )
-        val mediaRouteSelector = MediaRouteSelector.Builder()
-            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
-            .addControlCategory(CastMediaControlIntent.categoryForCast(Config.CHROMECAST_RECEIVER_APPLICATION_ID))
-            .build()
-        this.mediaRouteChooserDialog = MediaRouteChooserDialog(this)
-        this.mediaRouteChooserDialog.routeSelector = mediaRouteSelector
 
         if (savedInstanceState != null) {
             this.loadedDir = savedInstanceState.getParcelable(DIRECTORY_KEY)!!
@@ -77,11 +66,34 @@ class IndexActivity: ListActivity(), AppActivityInterface {
 
         super.onCreate(savedInstanceState)
 
-        this.addSearch { it, searchTerm ->
-            val item = it as Item
+        this.castContext = CastContext.getSharedInstance(this)
+        this.castContext.sessionManager.addSessionManagerListener(Chromecast(this))
 
-            item.name.lowercase().contains(searchTerm.lowercase())
-        }
+        val mediaRouteSelector = MediaRouteSelector.Builder()
+            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+            .addControlCategory(CastMediaControlIntent.categoryForCast(Config.CHROMECAST_RECEIVER_APPLICATION_ID))
+            .build()
+        this.mediaRouteChooserDialog = MediaRouteChooserDialog(this)
+        this.mediaRouteChooserDialog.routeSelector = mediaRouteSelector
+
+        val router = MediaRouter.getInstance(this)
+        router.addCallback(mediaRouteSelector, object : MediaRouter.Callback() {
+            override fun onRouteAdded(router: MediaRouter, route: MediaRouter.RouteInfo) {
+                super.onRouteAdded(router, route)
+                Log.d(Config.LOG_TAG, "onRouteAdded: ")
+                router.selectRoute(route)
+            }
+
+            override fun onRouteChanged(router: MediaRouter, route: MediaRouter.RouteInfo) {
+                super.onRouteChanged(router, route)
+                Log.d(Config.LOG_TAG, "onRouteChanged: ")
+            }
+
+            override fun onRouteSelected(router: MediaRouter, route: MediaRouter.RouteInfo) {
+                Log.d(Config.LOG_TAG, "onRouteSelected: ")
+                super.onRouteSelected(router, route)
+            }
+        }, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY)
 
         val dirListDialogBuilder = DirListDialog(this)
 

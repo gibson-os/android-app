@@ -11,7 +11,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/outter_spacing"
         app:backgroundTint="#FF00FF00"
-        app:srcCompat="@drawable/ic_plus"
-        android:contentDescription="@string/account_title" />
+        app:srcCompat="@drawable/ic_plus" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

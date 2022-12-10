@@ -1,10 +1,13 @@
 package de.wollis_page.gibsonos.helper
 
 import android.util.Log
+import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.Session
 import com.google.android.gms.cast.framework.SessionManagerListener
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import org.json.JSONObject
 
-class Chromecast: SessionManagerListener<Session> {
+class Chromecast(val context: GibsonOsActivity): SessionManagerListener<Session> {
     override fun onSessionEnded(p0: Session, p1: Int) {
         Log.d(Config.LOG_TAG, "Session ended")
     }
@@ -29,8 +32,21 @@ class Chromecast: SessionManagerListener<Session> {
         Log.d(Config.LOG_TAG, "Session start failed")
     }
 
-    override fun onSessionStarted(p0: Session, p1: String) {
+    override fun onSessionStarted(session: Session, p1: String) {
         Log.d(Config.LOG_TAG, "Session started")
+
+        val castContext = CastContext.getSharedInstance(this.context)
+        Log.d(Config.LOG_TAG, castContext.sessionManager.currentCastSession.toString())
+        castContext.sessionManager.currentCastSession?.sendMessage(
+            "urn:x-cast:net.itronom.gibson",
+            JSONObject(mapOf(
+                "type" to "user",
+                "user" to mapOf(
+                    "id" to this.context.getAccount().userId,
+                    "user" to this.context.getAccount().userName
+                )
+            )).toString()
+        )
     }
 
     override fun onSessionStarting(p0: Session) {

@@ -81,6 +81,7 @@ class ItemDialog(private val context: IndexActivity) {
         dialogItem.onClick = {
             Log.d(Config.LOG_TAG, this.context.castContext.sessionManager.currentCastSession.toString())
             Log.d(Config.LOG_TAG, this.context.castContext.sessionManager.currentSession.toString())
+//            Log.d(Config.LOG_TAG, this.context.med)
             this.context.mediaRouteChooserDialog.show()
         }
 
