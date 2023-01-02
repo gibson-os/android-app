@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.helper.Config
@@ -47,7 +48,7 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             remoteMessage.data["id"] ?: 0,
         )
 
-        if (remoteMessage.data["payload"]?.length ?: 0 > 0) {
+        if ((remoteMessage.data["payload"]?.length ?: 0) > 0) {
             // Wenn activity nicht existiert und typ update ist = update abmelden
             activity?.updateData(remoteMessage.data["payload"].toString())
         }
@@ -60,11 +61,17 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             remoteMessage.data["id"] ?: 0,
         )
 
-        if (remoteMessage.notification != null) {
+        if (remoteMessage.data["title"] != null) {
+            var appIcon = R.drawable.icon
+
+            if (activity is AppActivityInterface) {
+                appIcon = activity.getAppIcon()
+            }
+
             val notificationBuilder = NotificationCompat.Builder(this, "test")
-                .setSmallIcon(R.drawable.ic_anchor)
-                .setContentTitle(remoteMessage.notification!!.title)
-                .setContentText(remoteMessage.notification!!.body)
+                .setSmallIcon(appIcon)
+                .setContentTitle(remoteMessage.data["title"])
+                .setContentText(remoteMessage.data["body"])
                 .setContentIntent(
                     PendingIntent.getActivity(
                         this,
