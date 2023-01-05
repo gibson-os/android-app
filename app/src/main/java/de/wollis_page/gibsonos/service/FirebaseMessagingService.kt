@@ -13,6 +13,7 @@ import com.google.firebase.messaging.RemoteMessage
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.model.Message
 
 open class FirebaseMessagingService: FirebaseMessagingService() {
     override fun onNewToken(token: String) {
@@ -35,31 +36,37 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
         val account = remoteMessage.data["token"]?.let { application.getAccountByToken(it) }
             ?: return
 
-        val intent = application.getActivityIntent(
+        val message = Message(
             account.account,
             remoteMessage.data["module"].toString(),
             remoteMessage.data["task"].toString(),
             remoteMessage.data["action"].toString(),
-            remoteMessage.data["id"] ?: 0,
-        )
-
-        AppIntentExtraService.putExtras(
-            remoteMessage.data["module"].toString(),
-            remoteMessage.data["task"].toString(),
-            remoteMessage.data["action"].toString(),
-            intent,
-            remoteMessage.data["payload"].toString()
+            remoteMessage.data["title"].toString(),
+            remoteMessage.data["body"].toString(),
+            remoteMessage.data["payload"].toString(),
         )
 
         if (remoteMessage.data["title"] != null) {
+            message.save()
+
+            val intent = application.getActivityIntent(
+                account.account,
+                message.module,
+                message.task,
+                message.action,
+                remoteMessage.data["id"] ?: 0,
+            )
+
+            AppIntentExtraService.putExtras(message, intent)
+
             val notificationBuilder = NotificationCompat.Builder(this, "test")
                 .setSmallIcon(AppIconService.getIcon(
-                    remoteMessage.data["module"].toString(),
-                    remoteMessage.data["task"].toString(),
-                    remoteMessage.data["action"].toString(),
+                    message.module,
+                    message.task,
+                    message.action,
                 ) ?: R.drawable.icon)
-                .setContentTitle(remoteMessage.data["title"])
-                .setContentText(remoteMessage.data["body"])
+                .setContentTitle(message.title)
+                .setContentText(message.body)
                 .setContentIntent(
                     PendingIntent.getActivity(
                         this,

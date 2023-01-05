@@ -5,6 +5,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.dto.ActivityExtrasInterface
+import de.wollis_page.gibsonos.model.Message
 import de.wollis_page.gibsonos.module.explorer.index.activity.IndexActivity
 import de.wollis_page.gibsonos.module.explorer.index.dto.IndexActivityExtras
 import de.wollis_page.gibsonos.module.hc.index.activity.MasterActivity
@@ -21,6 +22,10 @@ object AppIntentExtraService {
         ModuleActivity::class.java.name to ModuleActivityExtras::class.java,
         RemoteActivity::class.java.name to RemoteActivityExtras::class.java,
     )
+
+    fun putExtras(message: Message, intent: Intent) {
+        this.putExtras(message.module, message.task, message.action, intent, message.payload)
+    }
 
     fun putExtras(module: String, task: String, action: String, intent: Intent, extras: String) {
         this.putExtras(
