@@ -11,8 +11,6 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.AppActivityInterface
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.helper.Config
 
@@ -32,26 +30,10 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(Config.LOG_TAG, "Firebase message received!")
+        Log.d(Config.LOG_TAG, remoteMessage.data.toString())
         val application = this.application as GibsonOsApplication
         val account = remoteMessage.data["token"]?.let { application.getAccountByToken(it) }
-        var activity: GibsonOsActivity? = null
-
-        if (account == null) {
-            return
-        }
-
-        activity = application.getActivity(
-            account,
-            remoteMessage.data["module"].toString(),
-            remoteMessage.data["task"].toString(),
-            remoteMessage.data["action"].toString(),
-            remoteMessage.data["id"] ?: 0,
-        )
-
-        if ((remoteMessage.data["payload"]?.length ?: 0) > 0) {
-            // Wenn activity nicht existiert und typ update ist = update abmelden
-            activity?.updateData(remoteMessage.data["payload"].toString())
-        }
+            ?: return
 
         val intent = application.getActivityIntent(
             account.account,
@@ -61,15 +43,21 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             remoteMessage.data["id"] ?: 0,
         )
 
+        AppIntentExtraService.putExtras(
+            remoteMessage.data["module"].toString(),
+            remoteMessage.data["task"].toString(),
+            remoteMessage.data["action"].toString(),
+            intent,
+            remoteMessage.data["payload"].toString()
+        )
+
         if (remoteMessage.data["title"] != null) {
-            var appIcon = R.drawable.icon
-
-            if (activity is AppActivityInterface) {
-                appIcon = activity.getAppIcon()
-            }
-
             val notificationBuilder = NotificationCompat.Builder(this, "test")
-                .setSmallIcon(appIcon)
+                .setSmallIcon(AppIconService.getIcon(
+                    remoteMessage.data["module"].toString(),
+                    remoteMessage.data["task"].toString(),
+                    remoteMessage.data["action"].toString(),
+                ) ?: R.drawable.icon)
                 .setContentTitle(remoteMessage.data["title"])
                 .setContentText(remoteMessage.data["body"])
                 .setContentIntent(

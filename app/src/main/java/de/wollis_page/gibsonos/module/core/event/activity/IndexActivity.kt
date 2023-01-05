@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -13,7 +12,7 @@ import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.event.dto.Event
 import de.wollis_page.gibsonos.module.core.task.EventTask
 
-class IndexActivity: ListActivity(), AppActivityInterface {
+class IndexActivity: ListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,6 +63,4 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     }
 
     override fun getListRessource() = R.layout.core_event_index_list_item
-
-    override fun getAppIcon() = R.drawable.ic_stream
 }

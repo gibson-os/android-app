@@ -12,9 +12,9 @@ import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.helper.AlertListDialog
-import de.wollis_page.gibsonos.helper.AppManager
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DesktopTask
+import de.wollis_page.gibsonos.service.AppIconService
 
 class IndexActivity : ListActivity() {
     override fun getListRessource() = R.layout.desktop_list_item
@@ -31,7 +31,8 @@ class IndexActivity : ListActivity() {
         ))
 
         val cronjobsSetting = DialogItem(this.getString(R.string.core_cronjob_title))
-        cronjobsSetting.icon = AppManager.getAppIcon("core", "cronjob")
+        cronjobsSetting.icon = AppIconService.getIcon("core", "cronjob", "index")
+            ?: R.drawable.ic_android
         cronjobsSetting.onClick = {
             this.runTask({
                 this.startActivity(
@@ -45,7 +46,8 @@ class IndexActivity : ListActivity() {
         }
 
         val eventsSetting = DialogItem(this.getString(R.string.core_event_title))
-        eventsSetting.icon = AppManager.getAppIcon("core", "event")
+        eventsSetting.icon = AppIconService.getIcon("core", "event", "index")
+            ?: R.drawable.ic_android
         eventsSetting.onClick = {
             this.runTask({
                 this.startActivity(
@@ -101,7 +103,7 @@ class IndexActivity : ListActivity() {
 
         view.findViewById<TextView>(R.id.text).text = item.text
         view.findViewById<ImageView>(R.id.icon).setImageResource(
-            AppManager.getAppIcon(item.module, item.task)
+            AppIconService.getIcon(item.module, item.task, "index") ?: R.drawable.ic_android
         )
     }
 }

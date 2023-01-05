@@ -1,18 +1,16 @@
 package de.wollis_page.gibsonos.module.hc.index.fragment
 
 import android.os.Parcelable
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.task.ModuleTask
+import de.wollis_page.gibsonos.service.AppIconService
 
 class ModuleFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) {
@@ -42,19 +40,10 @@ class ModuleFragment: ListFragment() {
             return
         }
 
-        var imageRessource = R.drawable.ic_android
-
-        try {
-            val moduleActivity = this.getModuleActivityClass(item.helper).newInstance()
-
-            if (moduleActivity is AppActivityInterface) {
-                imageRessource = moduleActivity.getAppIcon()
-            }
-        } catch (exception: ClassNotFoundException) {
-            Log.i(Config.LOG_TAG, "Class for hc module " + item.name + "doesnt exists")
-        }
-
-        view.findViewById<ImageView>(R.id.icon).setImageResource(imageRessource)
+        view.findViewById<ImageView>(R.id.icon).setImageResource(
+            AppIconService.getIcon("hc", item.helper, "index")
+                ?: R.drawable.ic_android
+        )
         view.findViewById<TextView>(R.id.name).text = item.name
         view.findViewById<TextView>(R.id.address).text = item.address.toString()
         view.findViewById<TextView>(R.id.type).text = item.type
@@ -69,12 +58,5 @@ class ModuleFragment: ListFragment() {
             start,
             limit
         ))
-    }
-
-    private fun getModuleActivityClass(helper: String): Class<*> {
-        val packageName = "de.wollis_page.gibsonos.module.hc.$helper.activity.IndexActivity"
-        Log.i(Config.LOG_TAG, "Look for package: $packageName")
-
-        return Class.forName(packageName)
     }
 }

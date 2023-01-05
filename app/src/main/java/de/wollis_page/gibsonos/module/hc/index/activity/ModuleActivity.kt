@@ -2,14 +2,13 @@ package de.wollis_page.gibsonos.module.hc.index.activity
 
 import android.os.Bundle
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.Tab
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.index.fragment.LogFragment
 
-abstract class ModuleActivity : TabActivity(), AppActivityInterface {
+abstract class ModuleActivity : TabActivity() {
     lateinit var module: Module
 
     override fun getTabs(): Array<Tab> {

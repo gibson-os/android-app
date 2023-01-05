@@ -9,18 +9,15 @@ import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.task.IrTask
 
-class RemoteActivity: GibsonOsActivity(), AppActivityInterface {
+class RemoteActivity: GibsonOsActivity() {
     private lateinit var remote: Remote
     private lateinit var module: Module
-
-    override fun getAppIcon(): Int = R.drawable.ic_remote_control
 
     override fun getContentView(): Int = R.layout.hc_module_ir_remote_view
 

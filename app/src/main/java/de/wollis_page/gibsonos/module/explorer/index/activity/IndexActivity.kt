@@ -20,7 +20,6 @@ import androidx.mediarouter.media.MediaRouter
 import com.google.android.gms.cast.CastMediaControlIntent
 import com.google.android.gms.cast.framework.CastContext
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.AppActivityInterface
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.TaskException
@@ -37,7 +36,7 @@ import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 
-class IndexActivity: ListActivity(), AppActivityInterface {
+class IndexActivity: ListActivity() {
     lateinit var loadedDir: Dir
     lateinit var castContext: CastContext
     lateinit var mediaRouteChooserDialog: MediaRouteChooserDialog
@@ -58,7 +57,6 @@ class IndexActivity: ListActivity(), AppActivityInterface {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         if (savedInstanceState != null) {
             this.loadedDir = savedInstanceState.getParcelable(DIRECTORY_KEY)!!
             this.loadDir = loadedDir.dir
@@ -398,8 +396,6 @@ class IndexActivity: ListActivity(), AppActivityInterface {
         outState.putParcelable(DIRECTORY_KEY, this.loadedDir)
         outState.putSerializable(IMAGES_KEY, this.images)
     }
-
-    override fun getAppIcon() = R.drawable.ic_folder
 
     override fun getId(): Any = this.loadDir.toString()
 

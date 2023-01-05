@@ -31,11 +31,11 @@ import de.wollis_page.gibsonos.dto.Update
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.exception.MessageException
-import de.wollis_page.gibsonos.helper.AppManager
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
+import de.wollis_page.gibsonos.service.AppIconService
 import java.io.Serializable
 import java.util.concurrent.CompletableFuture
 import de.wollis_page.gibsonos.dto.Account as AccountDto
@@ -198,7 +198,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                     val appItem = accountMenu.add(appGroupId, appId, Menu.NONE, app.text)
                     appItem.icon = ResourcesCompat.getDrawable(
                         this.resources,
-                        AppManager.getAppIcon(app.module, app.task),
+                        AppIconService.getIcon(app.module, app.task, "index") ?: R.drawable.ic_android,
                         this.theme
                     )
 
@@ -211,7 +211,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                             val proccessItem = accountMenu.add(processGroupId, processId, Menu.NONE, activity.title)
                             proccessItem.icon = ResourcesCompat.getDrawable(
                                 this.resources,
-                                if (activity is AppActivityInterface) activity.getAppIcon() else R.drawable.ic_android,
+                                AppIconService.getIcon(activity) ?: R.drawable.ic_android,
                                 this.theme
                             )
                         }

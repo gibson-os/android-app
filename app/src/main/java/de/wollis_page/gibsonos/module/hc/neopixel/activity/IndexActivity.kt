@@ -6,8 +6,6 @@ import de.wollis_page.gibsonos.module.hc.index.activity.ModuleActivity
 import de.wollis_page.gibsonos.module.hc.neopixel.fragment.PixelFragment
 
 class IndexActivity : ModuleActivity() {
-    override fun getAppIcon(): Int = R.drawable.ic_led
-
     override fun getTabs(): Array<Tab> {
         val arguments = hashMapOf("module" to this.module)
 
