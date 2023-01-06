@@ -58,7 +58,7 @@ class IndexActivity: ListActivity() {
     override fun loadList(start: Long, limit: Long) {
         val messages = SugarRecord.findWithQuery(
             Message::class.java,
-            "SELECT * FROM Message WHERE account=?",
+            "SELECT * FROM Message WHERE account=? ORDER BY date DESC",
             this.getAccount().id.toString()
         )
 //        val messages = SugarRecord.findWithQuery(
