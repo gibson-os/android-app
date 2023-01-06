@@ -42,6 +42,8 @@
     <string name="core_event_execute">Ausführen</string>
     <string name="core_event_remove">Entfernen</string>
 
+    <string name="core_message_title">Nachrichten</string>
+
     <string name="explorer_dir_error_response">Ordern nicht empfangen!</string>
     <string name="explorer_dir_list_error_response">Ordnerliste nicht empfangen!</string>
     <string name="explorer_icon_description">Icon</string>

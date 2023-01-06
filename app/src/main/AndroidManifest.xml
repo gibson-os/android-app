@@ -33,7 +33,7 @@
 
         <meta-data
             android:name="VERSION"
-            android:value="9" />
+            android:value="11" />
 
         <meta-data
             android:name="QUERY_LOG"
@@ -91,6 +91,11 @@
         <activity
             android:name="de.wollis_page.gibsonos.module.core.cronjob.activity.IndexActivity"
             android:icon="@drawable/ic_calendar_alt"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="de.wollis_page.gibsonos.module.core.message.activity.IndexActivity"
+            android:icon="@drawable/ic_message"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity

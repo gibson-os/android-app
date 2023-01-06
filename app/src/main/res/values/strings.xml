@@ -42,6 +42,8 @@
     <string name="core_event_execute">Execute</string>
     <string name="core_event_remove">Remove</string>
 
+    <string name="core_message_title">Messages</string>
+
     <string name="explorer_dir_error_response">Dir not in response!</string>
     <string name="explorer_dir_list_error_response">Dir list not in response!</string>
     <string name="explorer_icon_description">Icon</string>

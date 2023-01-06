@@ -60,12 +60,27 @@ class IndexActivity : ListActivity() {
             })
         }
 
+        val messageSetting = DialogItem(this.getString(R.string.core_message_title))
+        messageSetting.icon = AppIconService.getIcon("core", "message", "index")
+            ?: R.drawable.ic_android
+        messageSetting.onClick = {
+            this.runTask({
+                this.startActivity(
+                    "core",
+                    "message",
+                    "index",
+                    0,
+                    emptyMap()
+                )
+            })
+        }
+
         val cogButton = this.findViewById<FloatingActionButton>(R.id.cogButton)
         cogButton.setOnClickListener {
             AlertListDialog(
                 this,
                 this.getString(R.string.core_desktop_settings),
-                arrayListOf(cronjobsSetting, eventsSetting)
+                arrayListOf(cronjobsSetting, eventsSetting, messageSetting)
             ).show()
         }
     }

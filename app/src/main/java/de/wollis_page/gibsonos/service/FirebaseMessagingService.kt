@@ -14,6 +14,8 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Message
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 open class FirebaseMessagingService: FirebaseMessagingService() {
     override fun onNewToken(token: String) {
@@ -36,6 +38,7 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
         val account = remoteMessage.data["token"]?.let { application.getAccountByToken(it) }
             ?: return
 
+        val now = LocalDateTime.now()
         val message = Message(
             account.account,
             remoteMessage.data["module"].toString(),
@@ -43,6 +46,7 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             remoteMessage.data["action"].toString(),
             remoteMessage.data["title"].toString(),
             remoteMessage.data["body"].toString(),
+            now.format(DateTimeFormatter.ISO_LOCAL_DATE) + " " + now.format(DateTimeFormatter.ISO_LOCAL_TIME),
             remoteMessage.data["payload"].toString(),
         )
 

@@ -16,6 +16,7 @@ object AppIconService {
         de.wollis_page.gibsonos.module.hc.ir.activity.IndexActivity::class.java.name to R.drawable.ic_remote_control,
         RemoteActivity::class.java.name to R.drawable.ic_remote_control,
         de.wollis_page.gibsonos.module.hc.neopixel.activity.IndexActivity::class.java.name to R.drawable.ic_led,
+        de.wollis_page.gibsonos.module.core.message.activity.IndexActivity::class.java.name to R.drawable.ic_message,
     )
 
     fun getIcon(activity: GibsonOsActivity): Int? {
