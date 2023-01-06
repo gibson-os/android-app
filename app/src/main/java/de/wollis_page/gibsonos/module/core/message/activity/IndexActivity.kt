@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.module.core.message.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -11,6 +12,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.model.Message
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.service.AppIconService
+import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 class IndexActivity: ListActivity() {
     override fun getId(): Any = 0
@@ -24,7 +26,18 @@ class IndexActivity: ListActivity() {
     }
 
     override fun onClick(item: ListItemInterface) {
-        TODO("Not yet implemented")
+        if (item !is Message) {
+            return
+        }
+
+        val intent = Intent(
+            this,
+            Class.forName(this.application.getActivityName(item.module, item.task, item.action))
+        )
+        intent.putExtra(ACCOUNT_KEY, this.getAccount())
+        AppIntentExtraService.putExtras(item, intent);
+
+        this.startActivity(intent)
     }
 
     override fun bind(item: ListItemInterface, view: View) {
