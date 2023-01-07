@@ -10,19 +10,21 @@ import de.wollis_page.gibsonos.helper.Config
 class Account: SugarRecord, Parcelable, ListItemInterface {
     var alias: String? = null
     var userId: Long = 0
-    var userName: String = ""
+    lateinit var userName: String
     var token: String? = null
-    var url: String = ""
+    lateinit var url: String
+    var deviceId: Long = 0
 
     constructor()
 
-    constructor(userId: Long, userName: String, url: String, token: String?) {
+    constructor(userId: Long, userName: String, deviceId: Long, url: String, token: String?) {
         Log.i(Config.LOG_TAG, "Create Account Model $userName@$url with token $token")
 
         this.userId = userId
         this.userName = userName
         this.url = url
         this.token = token
+        this.deviceId = deviceId
     }
 
     private constructor(parcel: Parcel) {
@@ -32,6 +34,7 @@ class Account: SugarRecord, Parcelable, ListItemInterface {
         this.userName = parcel.readString().toString()
         this.token = parcel.readString()
         this.url = parcel.readString().toString()
+        this.deviceId = parcel.readLong()
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -41,6 +44,7 @@ class Account: SugarRecord, Parcelable, ListItemInterface {
         dest.writeString(this.userName)
         dest.writeString(this.token)
         dest.writeString(this.url)
+        dest.writeLong(this.deviceId)
     }
 
     override fun describeContents(): Int {

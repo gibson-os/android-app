@@ -11,6 +11,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.core.task.UserTask
 import de.wollis_page.gibsonos.module.core.user.activity.LoginActivity
 import de.wollis_page.gibsonos.dto.Account as AccountDto
 
@@ -105,6 +106,10 @@ class MainActivity : ListActivity() {
         if (item !is Account) {
             return false
         }
+
+        this.runTask({
+            UserTask.deleteDevice(this, item)
+        })
 
         this.application.removeAccount(item)
 

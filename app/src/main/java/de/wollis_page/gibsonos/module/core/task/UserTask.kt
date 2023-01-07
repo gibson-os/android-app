@@ -20,8 +20,23 @@ object UserTask: AbstractTask() {
         return Account(
             data.getLong("id"),
             data.getString("user"),
+            data.getLong("deviceId"),
             url,
             data.getString("token")
         )
+    }
+
+    fun deleteDevice(context: GibsonOsActivity, account: Account) {
+        val dataStore = this.getDataStore(account, "core", "user", "deleteDevice")
+        dataStore.addParam("id", account.userId)
+        dataStore.addParam("devices[]", account.deviceId)
+        this.run(context, dataStore)
+    }
+
+    fun updateFcmToken(account: Account, fcmToken: String) {
+        val dataStore = this.getDataStore(account, "core", "user", "updateFcmToken")
+        dataStore.addParam("token", account.token.toString())
+        dataStore.addParam("fcmToken", fcmToken)
+        dataStore.loadJson()
     }
 }

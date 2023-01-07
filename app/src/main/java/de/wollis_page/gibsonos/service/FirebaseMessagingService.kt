@@ -14,6 +14,7 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Message
+import de.wollis_page.gibsonos.module.core.task.UserTask
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -24,10 +25,9 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
         val application = this.application as GibsonOsApplication
         application.firebaseToken = token
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // FCM registration token to your app server.
-//        sendRegistrationToServer(token)
+        application.accounts.forEach {
+            UserTask.updateFcmToken(it.account, token)
+        }
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")

@@ -61,10 +61,6 @@ class IndexActivity: ListActivity() {
             "SELECT * FROM Message WHERE account=? ORDER BY date DESC",
             this.getAccount().id.toString()
         )
-//        val messages = SugarRecord.findWithQuery(
-//            Message::class.java,
-//            "SELECT * FROM Message",
-//        )
 
         this.listAdapter.items = messages as ArrayList<ListItemInterface>
         this.listAdapter.notifyItemRangeChanged(0, messages.size)
