@@ -12,6 +12,8 @@ class Message: SugarRecord, ListItemInterface {
     lateinit var body: String
     lateinit var date: String
     var payload: String = ""
+    var vibrate: String = ""
+    var sound: String = ""
 
     constructor()
 
@@ -23,7 +25,9 @@ class Message: SugarRecord, ListItemInterface {
         title: String,
         body: String,
         date: String,
-        payload: String = ""
+        payload: String = "",
+        vibrate: String = "",
+        sound: String = "",
     ) {
         this.account = account
         this.module = module
@@ -33,5 +37,7 @@ class Message: SugarRecord, ListItemInterface {
         this.body = body
         this.date = date
         this.payload = payload
+        this.vibrate = vibrate
+        this.sound = sound
     }
 }

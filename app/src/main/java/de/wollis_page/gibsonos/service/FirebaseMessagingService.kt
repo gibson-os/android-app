@@ -5,11 +5,15 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.os.Build
+import android.media.RingtoneManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.helper.Config
@@ -17,6 +21,7 @@ import de.wollis_page.gibsonos.model.Message
 import de.wollis_page.gibsonos.module.core.task.UserTask
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
 
 open class FirebaseMessagingService: FirebaseMessagingService() {
     override fun onNewToken(token: String) {
@@ -48,9 +53,11 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             remoteMessage.data["body"].toString(),
             now.format(DateTimeFormatter.ISO_LOCAL_DATE) + " " + now.format(DateTimeFormatter.ISO_LOCAL_TIME),
             remoteMessage.data["payload"].toString(),
+            remoteMessage.data["vibrate"].toString(),
+            remoteMessage.data["sound"].toString(),
         )
 
-        if (remoteMessage.data["title"] != null) {
+        if (!remoteMessage.data["title"].isNullOrEmpty()) {
             message.save()
 
             val intent = application.getActivityIntent(
@@ -63,7 +70,9 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
 
             AppIntentExtraService.putExtras(message, intent)
 
-            val notificationBuilder = NotificationCompat.Builder(this, "test")
+            val adapter = Moshi.Builder().add(KotlinJsonAdapterFactory()).build().adapter(LongArray::class.java)
+            val vibrate = adapter.fromJson(message.vibrate) ?: longArrayOf()
+            val notificationBuilder = NotificationCompat.Builder(this, "gos")
                 .setSmallIcon(AppIconService.getIcon(
                     message.module,
                     message.task,
@@ -79,19 +88,19 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
-                .setAutoCancel(true)
-//                .setSound(defaultSoundUri)
+                .setVibrate(vibrate)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel("gos",
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channel = NotificationChannel("test",
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT)
-                notificationManager.createNotificationChannel(channel)
-            }
+            val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(VibrationEffect.createWaveform(vibrate, -1))
 
-            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+            notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
         }
     }
 }
