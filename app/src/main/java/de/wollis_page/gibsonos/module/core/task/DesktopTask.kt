@@ -13,4 +13,10 @@ object DesktopTask: AbstractTask() {
             R.string.account_error_not_exists
         )
     }
+
+    fun add(context: GibsonOsActivity) {
+        val dataStore = this.getDataStore(context.getAccount(), "core", "desktop", "add")
+
+        this.run(context, dataStore)
+    }
 }

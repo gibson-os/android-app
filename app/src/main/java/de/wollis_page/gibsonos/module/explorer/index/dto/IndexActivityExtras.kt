@@ -17,8 +17,6 @@ data class IndexActivityExtras (
             "index",
             "",
             "",
-            "",
-            0,
             mapOf("dir" to directory)
         ))
         intent.putExtra("position", this.position)

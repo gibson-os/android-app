@@ -11,9 +11,7 @@ data class Shortcut(
     var action: String,
     var text: String,
     var icon: String,
-    var thumb: String,
-    var customIcon: Long,
-    var params: Map<String, Any>?
+    var parameters: Map<String, Any>?
 ): ListItemInterface, Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString().toString(),
@@ -21,18 +19,16 @@ data class Shortcut(
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
-        parcel.readString().toString(),
-        parcel.readLong(),
         null
     ) {
-        this.params = this.readParamsFromParcel(parcel)
+        this.parameters = this.readParamsFromParcel(parcel)
     }
 
     private fun readParamsFromParcel(parcel: Parcel): Map<String, Any> {
-        val params = ArrayMap<String, Any>()
-        parcel.readMap(params, Map::class.java.classLoader)
+        val parameters = ArrayMap<String, Any>()
+        parcel.readMap(parameters, Map::class.java.classLoader)
 
-        return params
+        return parameters
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -41,9 +37,7 @@ data class Shortcut(
         parcel.writeString(this.action)
         parcel.writeString(this.text)
         parcel.writeString(this.icon)
-        parcel.writeString(this.thumb)
-        parcel.writeLong(this.customIcon)
-        parcel.writeMap(this.params)
+        parcel.writeMap(this.parameters)
     }
 
     override fun describeContents(): Int {
@@ -61,6 +55,6 @@ data class Shortcut(
     }
 
     override fun getId(): String {
-        return this.module + '_' + this.task + '_' + this.action + '_' + this.params.toString()
+        return this.module + '_' + this.task + '_' + this.action + '_' + this.parameters.toString()
     }
 }

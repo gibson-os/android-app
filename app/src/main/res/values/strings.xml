@@ -31,6 +31,7 @@
     <string name="core_desktop_title">Desktop</string>
     <string name="core_desktop_error_load">Desktop can\'t be load!</string>
     <string name="core_desktop_settings">Settings</string>
+    <string name="core_desktop_add">Add to desktop</string>
 
     <string name="core_cronjob_title">Cronjobs</string>
     <string name="core_cronjob_last_run">Last run: %s</string>

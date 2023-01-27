@@ -27,6 +27,7 @@ import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.explorer.index.dialog.DirDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.DirListDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.ItemDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
@@ -41,7 +42,8 @@ class IndexActivity: ListActivity() {
     lateinit var castContext: CastContext
     lateinit var mediaRouteChooserDialog: MediaRouteChooserDialog
     lateinit var playerLauncher: ActivityResultLauncher<Intent>
-    private lateinit var itemDialogBuilder: ItemDialog
+    private lateinit var itemDialog: ItemDialog
+    private lateinit var dirDialog: DirDialog
     private var loadDir: String? = null
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
     private var imageQueue = ArrayMap<ImageView, Item>()
@@ -126,10 +128,11 @@ class IndexActivity: ListActivity() {
             this.listAdapter.notifyItemChanged(this.getItemIndex(item))
         }
 
-        this.itemDialogBuilder = ItemDialog(this)
+        this.itemDialog = ItemDialog(this)
+        this.dirDialog = DirDialog(this)
 
         if (savedInstanceState == null) {
-            this.loadList((this.getShortcut()?.params?.get("dir") ?: "").toString())
+            this.loadList((this.getShortcut()?.parameters?.get("dir") ?: "").toString())
 
             return
         }
@@ -144,7 +147,7 @@ class IndexActivity: ListActivity() {
 
     override fun loadList(start: Long, limit: Long) {
         if (this.loadDir == null) {
-            this.loadDir = (this.getShortcut()?.params?.get("dir") ?: "").toString()
+            this.loadDir = (this.getShortcut()?.parameters?.get("dir") ?: "").toString()
         }
 
         this.loadList(this.loadDir)
@@ -180,7 +183,17 @@ class IndexActivity: ListActivity() {
             return
         }
 
-        this.itemDialogBuilder.build(item).show()
+        this.itemDialog.build(item).show()
+    }
+
+    override fun onLongClick(item: ListItemInterface): Boolean {
+        if (item !is Item || item.type != "dir") {
+            return false
+        }
+
+        this.dirDialog.build(item).show()
+
+        return true
     }
 
     override fun onBackPressed() {
@@ -400,5 +413,5 @@ class IndexActivity: ListActivity() {
     override fun getId(): Any = this.loadDir.toString()
 
     override fun isActivityforShotcut(shortcut: Shortcut): Boolean =
-        shortcut.params?.get("dir") == this.loadDir.toString()
+        shortcut.parameters?.get("dir") == this.loadDir.toString()
 }
