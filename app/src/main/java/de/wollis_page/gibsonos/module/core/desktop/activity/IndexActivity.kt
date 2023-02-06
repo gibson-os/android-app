@@ -121,4 +121,26 @@ class IndexActivity : ListActivity() {
             AppIconService.getIcon(item.module, item.task, "index") ?: R.drawable.ic_android
         )
     }
+
+    override fun deleteItem(item: ListItemInterface): Boolean {
+        if (item !is Shortcut) {
+            return false
+        }
+
+        val items = this.listAdapter.items as ArrayList<Shortcut>
+
+        this.runTask({
+            this.listAdapter.items = DesktopTask.save(this, items) as ArrayList<ListItemInterface>
+            this.listAdapter.notifyDataSetChanged()
+        })
+
+        return true
+    }
+
+    override fun getDeleteTitle() = this.getString(R.string.core_desktop_delete_title)
+
+    override fun getDeleteMessage(item: ListItemInterface) = this.getString(
+        R.string.core_desktop_delete_message,
+        if (item is Shortcut) item.text else ""
+    )
 }

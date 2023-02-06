@@ -21,4 +21,13 @@ object DesktopTask: AbstractTask() {
 
         this.run(context, dataStore)
     }
+
+    fun save(context: GibsonOsActivity, shortcuts: ArrayList<Shortcut>): MutableList<Shortcut> {
+        val dataStore = this.getDataStore(context.getAccount(), "core", "desktop", "save")
+        dataStore.addParam("items", this.getJsonAdapter<List<Shortcut>>().toJson(shortcuts))
+
+        val response = this.loadList<Shortcut>(context, dataStore)
+
+        return response.data
+    }
 }

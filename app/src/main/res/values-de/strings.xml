@@ -32,6 +32,8 @@
     <string name="core_desktop_error_load">Desktop kann nicht geladen werden!</string>
     <string name="core_desktop_settings">Einstellungen</string>
     <string name="core_desktop_add">Zum Desktop hinzufügen</string>
+    <string name="core_desktop_delete_title">Löschen</string>
+    <string name="core_desktop_delete_message">%s löschen?</string>
 
     <string name="core_cronjob_title">Cronjobs</string>
     <string name="core_cronjob_last_run">Letzter Lauf: %s</string>
