@@ -3,6 +3,8 @@ package de.wollis_page.gibsonos.module.explorer.index.dialog
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.helper.AlertListDialog
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.core.task.DesktopTask
 import de.wollis_page.gibsonos.module.explorer.index.activity.IndexActivity
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 
@@ -20,7 +22,16 @@ class DirDialog(private val context: IndexActivity) {
 
         dialogItem.icon = R.drawable.ic_plus
         dialogItem.onClick = {
-
+            this.context.runTask({
+                DesktopTask.add(this.context, Shortcut(
+                    "explorer",
+                    "index",
+                    "index",
+                    item.name,
+                    "icon_dir",
+                    mapOf("dir" to this.context.loadedDir.dir + "/" + item.name)
+                ))
+            })
         }
 
         return dialogItem

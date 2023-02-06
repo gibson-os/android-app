@@ -404,10 +404,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
             if (searchInput.visibility == View.VISIBLE) {
-                searchInput.visibility = View.INVISIBLE
-                searchInput.clearFocus()
-                searchInput.text?.clear()
-                inputMethodManager.hideSoftInputFromWindow(searchInput.windowToken, 0)
+                this.hideSearch()
 
                 return@setOnClickListener
             }
@@ -416,6 +413,16 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             searchInput.requestFocus()
             inputMethodManager.showSoftInput(searchInput, InputMethodManager.SHOW_IMPLICIT)
         }
+    }
+
+    protected fun hideSearch() {
+        val searchInput = findViewById<TextInputEditText>(R.id.searchText)
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        searchInput.visibility = View.INVISIBLE
+        searchInput.clearFocus()
+        searchInput.text?.clear()
+        inputMethodManager.hideSoftInputFromWindow(searchInput.windowToken, 0)
     }
 
     protected fun removeHeder() {

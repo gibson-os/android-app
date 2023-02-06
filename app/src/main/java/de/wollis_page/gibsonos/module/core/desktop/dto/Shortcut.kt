@@ -11,7 +11,9 @@ data class Shortcut(
     var action: String,
     var text: String,
     var icon: String,
-    var parameters: Map<String, Any>?
+    var parameters: Map<String, Any>?,
+    var id: Long = 0,
+    var position: Long = -1,
 ): ListItemInterface, Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString().toString(),
@@ -19,9 +21,13 @@ data class Shortcut(
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
-        null
+        null,
+        0,
+        -1
     ) {
         this.parameters = this.readParamsFromParcel(parcel)
+        this.id = parcel.readLong()
+        this.position = parcel.readLong()
     }
 
     private fun readParamsFromParcel(parcel: Parcel): Map<String, Any> {
@@ -38,6 +44,8 @@ data class Shortcut(
         parcel.writeString(this.text)
         parcel.writeString(this.icon)
         parcel.writeMap(this.parameters)
+        parcel.writeLong(this.id)
+        parcel.writeLong(this.position)
     }
 
     override fun describeContents(): Int {
@@ -54,7 +62,7 @@ data class Shortcut(
         }
     }
 
-    override fun getId(): String {
-        return this.module + '_' + this.task + '_' + this.action + '_' + this.parameters.toString()
+    override fun getId(): Long {
+        return this.id
     }
 }

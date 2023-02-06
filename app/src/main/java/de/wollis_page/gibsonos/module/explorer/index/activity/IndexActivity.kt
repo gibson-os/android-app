@@ -66,6 +66,12 @@ class IndexActivity: ListActivity() {
 
         super.onCreate(savedInstanceState)
 
+        this.addSearch { it, searchTerm ->
+            val item = it as Item
+
+            item.name.lowercase().contains(searchTerm.lowercase())
+        }
+
         this.castContext = CastContext.getSharedInstance(this)
         this.castContext.sessionManager.addSessionManagerListener(Chromecast(this))
 
@@ -98,6 +104,7 @@ class IndexActivity: ListActivity() {
         val dirListDialogBuilder = DirListDialog(this)
 
         this.findViewById<TextView>(android.R.id.title).setOnClickListener {
+            this.hideSearch()
             this.runTask({
                 val dirListDialog = dirListDialogBuilder.build(
                     DirTask.dirList(this, this.loadedDir.dir)
@@ -177,6 +184,8 @@ class IndexActivity: ListActivity() {
             return
         }
 
+        this.hideSearch()
+
         if (item.type == "dir") {
             this.loadList(item.path + "/" + item.name)
 
@@ -190,6 +199,8 @@ class IndexActivity: ListActivity() {
         if (item !is Item || item.type != "dir") {
             return false
         }
+
+        this.hideSearch()
 
         this.dirDialog.build(item).show()
 
