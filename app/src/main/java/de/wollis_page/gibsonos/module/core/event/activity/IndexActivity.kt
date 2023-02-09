@@ -9,6 +9,7 @@ import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.core.desktop.service.DialogItemService
 import de.wollis_page.gibsonos.module.core.event.dto.Event
 import de.wollis_page.gibsonos.module.core.task.EventTask
 
@@ -48,6 +49,27 @@ class IndexActivity: ListActivity() {
             item.name,
             arrayListOf(startEvent, deleteEvent)
         ).show()
+    }
+
+    override fun onLongClick(item: ListItemInterface): Boolean {
+        if (item !is Event) {
+            return false
+        }
+
+        AlertListDialog(
+            this,
+            item.name,
+            arrayListOf(DialogItemService.getDesktopItem(this, Shortcut(
+                "core",
+                "event",
+                "run",
+                item.name,
+                "icon_exe",
+                mapOf("eventId" to item.id)
+            )))
+        ).show()
+
+        return true
     }
 
     override fun bind(item: ListItemInterface, view: View) {
