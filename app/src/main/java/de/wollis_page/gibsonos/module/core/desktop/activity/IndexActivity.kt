@@ -8,10 +8,9 @@ import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
-import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
-import de.wollis_page.gibsonos.helper.AlertListDialog
+import de.wollis_page.gibsonos.module.core.desktop.dialog.ItemDialog
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DesktopTask
 import de.wollis_page.gibsonos.service.AppIconService
@@ -30,58 +29,10 @@ class IndexActivity : ListActivity() {
             false
         ))
 
-        val cronjobsSetting = DialogItem(this.getString(R.string.core_cronjob_title))
-        cronjobsSetting.icon = AppIconService.getIcon("core", "cronjob", "index")
-            ?: R.drawable.ic_android
-        cronjobsSetting.onClick = {
-            this.runTask({
-                this.startActivity(
-                    "core",
-                    "cronjob",
-                    "index",
-                    0,
-                    emptyMap()
-                )
-            })
-        }
-
-        val eventsSetting = DialogItem(this.getString(R.string.core_event_title))
-        eventsSetting.icon = AppIconService.getIcon("core", "event", "index")
-            ?: R.drawable.ic_android
-        eventsSetting.onClick = {
-            this.runTask({
-                this.startActivity(
-                    "core",
-                    "event",
-                    "index",
-                    0,
-                    emptyMap()
-                )
-            })
-        }
-
-        val messageSetting = DialogItem(this.getString(R.string.core_message_title))
-        messageSetting.icon = AppIconService.getIcon("core", "message", "index")
-            ?: R.drawable.ic_android
-        messageSetting.onClick = {
-            this.runTask({
-                this.startActivity(
-                    "core",
-                    "message",
-                    "index",
-                    0,
-                    emptyMap()
-                )
-            })
-        }
-
+        val itemDialog = ItemDialog(this).build()
         val cogButton = this.findViewById<FloatingActionButton>(R.id.cogButton)
         cogButton.setOnClickListener {
-            AlertListDialog(
-                this,
-                this.getString(R.string.core_desktop_settings),
-                arrayListOf(cronjobsSetting, eventsSetting, messageSetting)
-            ).show()
+            itemDialog.show()
         }
     }
 

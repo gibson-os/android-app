@@ -20,9 +20,7 @@ class SettingActivity: GibsonOsActivity() {
         }
     }
 
-    override fun getId(): Any {
-        return 0
-    }
+    override fun getId(): Long = 0
 
     override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
         return false
