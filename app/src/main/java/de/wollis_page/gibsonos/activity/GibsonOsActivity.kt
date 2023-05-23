@@ -82,7 +82,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         this.setContentView(R.layout.base_layout)
         super.onCreate(savedInstanceState)
         val intent = this.intent
-        this.application = getApplication() as GibsonOsApplication
+        this.application = this.getApplication() as GibsonOsApplication
 
         this.contentContainer = this.findViewById(R.id.content) as ConstraintLayout
         val inflater = LayoutInflater.from(this)

@@ -10,7 +10,7 @@
     <string name="account_user">Benutzername</string>
     <string name="account_password">Passwort</string>
     <string name="account_url">URL</string>
-    <string name="account_save">SPeichern</string>
+    <string name="account_save">Speichern</string>
     <string name="account_error_alias_exists">Alias existiert schon.</string>
     <string name="account_error_value_empty">Darf nicht leer sein.</string>
     <string name="account_error_no_model_found">Kein Account Model gefunden!</string>
