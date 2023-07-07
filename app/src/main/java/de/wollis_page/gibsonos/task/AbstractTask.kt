@@ -17,9 +17,10 @@ abstract class AbstractTask {
         account: Account,
         module: String,
         task: String,
-        action: String
+        action: String,
+        method: String = "GET",
     ): DataStore {
-        val dataStore = DataStore(account.url, account.token)
+        val dataStore = DataStore(account.url, method, account.token)
         dataStore.setRoute(module, task, action)
 
         return dataStore
@@ -36,7 +37,7 @@ abstract class AbstractTask {
         } catch (exception: ResponseException) {
             exception.printStackTrace()
 
-            throw TaskException(exception.message, exception.messageRessource)
+            throw TaskException(exception.message, exception.messageResource)
         } catch (exception: Exception) {
             exception.printStackTrace()
 
@@ -51,13 +52,13 @@ abstract class AbstractTask {
     protected inline fun <reified E> load(
         context: GibsonOsActivity,
         dataStore: DataStore,
-        messageRessource: Int? = null,
+        messageResource: Int? = null,
         showLoading: Boolean = true
     ): E {
         val response = this.run(context, dataStore, showLoading)
 
         return this.getJsonAdapter<E>().fromJson(response.getJSONObject("data").toString()) ?:
-            throw TaskException("Object not in response!", messageRessource)
+        throw TaskException("Object not in response!", messageResource)
     }
 
     protected inline fun <reified E> getJsonAdapter(): JsonAdapter<E>
@@ -72,7 +73,7 @@ abstract class AbstractTask {
         dataStore: DataStore,
         start: Long = 0,
         limit: Long = 1,
-        messageRessource: Int? = null
+        messageResource: Int? = null
     ): ListResponse<E> {
         dataStore.setPage(start, limit)
         val response = this.run(context, dataStore)
@@ -82,7 +83,7 @@ abstract class AbstractTask {
 
         return ListResponse(
             jsonAdapter.fromJson(response.getJSONArray("data").toString())
-                ?: throw TaskException("Data not in response!", messageRessource),
+                ?: throw TaskException("Data not in response!", messageResource),
             if (response.has("total")) response.getLong("total") else 0,
             start,
             limit

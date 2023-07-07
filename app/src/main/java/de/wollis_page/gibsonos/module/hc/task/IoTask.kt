@@ -17,7 +17,7 @@ object IoTask: AbstractTask() {
 
     @Throws(TaskException::class)
     fun toggle(context: GibsonOsActivity, moduleId: Long, id: Long) {
-        val dataStore = this.getDataStore(context.getAccount(), "hc", "io", "toggle")
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "io", "toggle", "POST")
         dataStore.addParam("moduleId", moduleId)
         dataStore.addParam("id", id)
         this.run(context, dataStore)

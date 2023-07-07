@@ -9,7 +9,7 @@ import de.wollis_page.gibsonos.task.AbstractTask
 object NeopixelTask: AbstractTask() {
     @Throws(TaskException::class)
     fun pixels(context: GibsonOsActivity, moduleId: Long): ListResponse<Pixel> {
-        val dataStore = this.getDataStore(context.getAccount(), "hc", "neopixel", "index")
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "neopixel", "")
         dataStore.addParam("moduleId", moduleId)
 
         return this.loadList(context, dataStore)

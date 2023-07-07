@@ -11,7 +11,7 @@ import de.wollis_page.gibsonos.task.AbstractTask
 object DirTask: AbstractTask() {
     @Throws(TaskException::class)
     fun read(context: GibsonOsActivity, directory: String): Dir {
-        val dataStore = this.getDataStore(context.getAccount(), "explorer", "dir", "read")
+        val dataStore = this.getDataStore(context.getAccount(), "explorer", "dir", "")
         dataStore.addParam("dir", directory)
 
         val response = this.run(context, dataStore)
@@ -23,7 +23,7 @@ object DirTask: AbstractTask() {
 
     @Throws(TaskException::class)
     fun dirList(context: GibsonOsActivity, directory: String): ListResponse<DirList> {
-        val dataStore = this.getDataStore(context.getAccount(), "explorer", "dir", "dirList")
+        val dataStore = this.getDataStore(context.getAccount(), "explorer", "dir", "list")
         dataStore.addParam("dir", directory)
 
         return this.loadList(context, dataStore, 0, 1, R.string.explorer_dir_list_error_response)

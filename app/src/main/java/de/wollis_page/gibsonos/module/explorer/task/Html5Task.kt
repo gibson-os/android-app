@@ -28,7 +28,8 @@ object Html5Task: AbstractTask() {
             context.getAccount(),
             "explorer",
             "html5",
-            "savePosition"
+            "savePosition",
+            "POST",
         )
         dataStore.addParam("token", token)
         dataStore.addParam("position", position)
@@ -48,7 +49,8 @@ object Html5Task: AbstractTask() {
             context.getAccount(),
             "explorer",
             "html5",
-            "convert"
+            "convert",
+            "POST",
         )
         dataStore.addParam("dir", dir)
         dataStore.addParam("files", files)

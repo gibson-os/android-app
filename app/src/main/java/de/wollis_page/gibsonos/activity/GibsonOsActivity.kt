@@ -375,7 +375,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             } catch (exception: MessageException) {
                 this.runOnUiThread {
                     var message = exception.message
-                    val messageRessource = exception.messageRessource
+                    val messageRessource = exception.messageResource
 
                     if (messageRessource != null) {
                         message = getString(messageRessource)

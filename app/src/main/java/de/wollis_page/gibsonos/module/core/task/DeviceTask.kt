@@ -7,7 +7,7 @@ import de.wollis_page.gibsonos.task.AbstractTask
 object DeviceTask: AbstractTask() {
     fun addPush(context: GibsonOsActivity, update: Update)
     {
-        val dataStore = this.getDataStore(context.getAccount(), "core", "device", "addPush")
+        val dataStore = this.getDataStore(context.getAccount(), "core", "device", "addPush", "POST")
         dataStore.addParam("module", update.module)
         dataStore.addParam("task", update.task)
         dataStore.addParam("action", update.action)
@@ -17,7 +17,7 @@ object DeviceTask: AbstractTask() {
 
     fun removePush(context: GibsonOsActivity, update: Update)
     {
-        val dataStore = this.getDataStore(context.getAccount(), "core", "device", "removePush")
+        val dataStore = this.getDataStore(context.getAccount(), "core", "device", "push", "DELETE")
         dataStore.addParam("module", update.module)
         dataStore.addParam("task", update.task)
         dataStore.addParam("action", update.action)

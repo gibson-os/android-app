@@ -10,20 +10,20 @@ object DesktopTask: AbstractTask() {
     fun index(context: GibsonOsActivity): Desktop {
         return this.load(
             context,
-            this.getDataStore(context.getAccount(), "core", "desktop", "index"),
+            this.getDataStore(context.getAccount(), "core", "desktop", ""),
             R.string.account_error_not_exists
         )
     }
 
     fun add(context: GibsonOsActivity, shortcut: Shortcut) {
-        val dataStore = this.getDataStore(context.getAccount(), "core", "desktop", "add")
+        val dataStore = this.getDataStore(context.getAccount(), "core", "desktop", "add", "POST")
         dataStore.addParam("items", this.getJsonAdapter<List<Shortcut>>().toJson(listOf(shortcut)))
 
         this.run(context, dataStore)
     }
 
     fun save(context: GibsonOsActivity, shortcuts: ArrayList<Shortcut>): MutableList<Shortcut> {
-        val dataStore = this.getDataStore(context.getAccount(), "core", "desktop", "save")
+        val dataStore = this.getDataStore(context.getAccount(), "core", "desktop", "", "POST")
         dataStore.addParam("items", this.getJsonAdapter<List<Shortcut>>().toJson(shortcuts))
 
         val response = this.loadList<Shortcut>(context, dataStore)

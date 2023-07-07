@@ -8,6 +8,7 @@ import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
@@ -15,9 +16,9 @@ import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
-class DataStore(url: String, token: String?) {
+class DataStore(url: String, private val method: String, token: String?) {
     private val params: HashMap<String, String> = HashMap()
-    private val seperator = "/"
+    private val separator = "/"
     private val url: String
     private val token: String
     private val client: OkHttpClient = OkHttpClient()
@@ -120,6 +121,17 @@ class DataStore(url: String, token: String?) {
         return builder.build()
     }
 
+    private fun getQueryParams(url: HttpUrl): HttpUrl {
+        val builder = url.newBuilder()
+
+        for (key in this.params.keys) {
+            Log.d(Config.LOG_TAG, "Add param '" + key + "' with value '" + this.params[key].toString() + "'")
+            builder.addQueryParameter(key, this.params[key]!!)
+        }
+
+        return builder.build()
+    }
+
     @Throws(ResponseException::class)
     fun loadJson(): JSONObject {
         try {
@@ -144,12 +156,20 @@ class DataStore(url: String, token: String?) {
     }
 
     private fun execute(): Response {
-        val requestUrl = this.getUrl()
-        Log.i(Config.LOG_TAG, requestUrl)
+        var requestUrl = this.getUrl().toHttpUrl()
+        var params: RequestBody? = null
+
+        if (method === "GET") {
+            requestUrl = this.getQueryParams(requestUrl)
+        } else {
+            params = this.getParams()
+        }
+
+        Log.i(Config.LOG_TAG, "$method $requestUrl")
         val requestBuilder = Request.Builder()
             .url(requestUrl)
             .header("X-Requested-With", "XMLHttpRequest")
-            .post(this.getParams())
+            .method(this.method, params)
 
         if (this.token.isNotEmpty()) {
             Log.i(Config.LOG_TAG, "X-Device-Token: " + this.token)
@@ -172,21 +192,21 @@ class DataStore(url: String, token: String?) {
     }
 
     private fun getUrl(): String {
-        var buildedUrl = this.url
+        var buildUrl = this.url
 
         if (!this.module.isNullOrBlank()) {
-            buildedUrl += this.module + this.seperator
+            buildUrl += this.module + this.separator
         }
 
         if (!this.task.isNullOrBlank()) {
-            buildedUrl += this.task + this.seperator
+            buildUrl += this.task + this.separator
         }
 
         if (!this.action.isNullOrBlank()) {
-            buildedUrl += this.action
+            buildUrl += this.action
         }
 
-        return buildedUrl
+        return buildUrl
     }
 
     private fun checkError(response: Response): JSONObject {

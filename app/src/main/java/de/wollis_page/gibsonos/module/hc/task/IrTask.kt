@@ -37,7 +37,7 @@ object IrTask: AbstractTask() {
         moduleId: Long,
         id: Long
     ) {
-        val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "send")
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "", "POST")
         dataStore.addParam("moduleId", moduleId)
         dataStore.addParam("id", id)
 
@@ -50,7 +50,7 @@ object IrTask: AbstractTask() {
         moduleId: Long,
         id: Long
     ) {
-        val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "sendButton")
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "ir", "button", "POST")
         dataStore.addParam("moduleId", moduleId)
         dataStore.addParam("id", id)
 
