@@ -45,7 +45,7 @@ class PlayerActivity: GibsonOsActivity() {
         val mediaController = MediaController(this)
         mediaController.setAnchorView(videoView)
         videoView.setMediaController(mediaController)
-        videoView.setVideoURI(Uri.parse(cleanUrl))
+        videoView.setVideoURI(Uri.parse(cleanUrl), mapOf("X-Device-Token" to this.getAccount().token))
         val position = this.media.position ?: 0
 
         if (position > 0) {
