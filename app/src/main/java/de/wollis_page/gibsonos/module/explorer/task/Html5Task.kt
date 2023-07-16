@@ -28,7 +28,7 @@ object Html5Task: AbstractTask() {
             context.getAccount(),
             "explorer",
             "html5",
-            "savePosition",
+            "position",
             "POST",
         )
         dataStore.addParam("token", token)
