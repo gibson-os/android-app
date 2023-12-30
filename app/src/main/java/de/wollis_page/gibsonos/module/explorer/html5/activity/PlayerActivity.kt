@@ -39,7 +39,7 @@ class PlayerActivity: GibsonOsActivity() {
             cleanUrl = "http://$cleanUrl"
         }
 
-        cleanUrl += "explorer/html5/video/token/" + this.media.token
+        cleanUrl += "explorer/html5/stream/token/" + this.media.token
 
         val videoView = findViewById<View>(R.id.video) as VideoView
         val mediaController = MediaController(this)

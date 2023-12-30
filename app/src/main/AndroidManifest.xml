@@ -134,6 +134,16 @@
             android:icon="@drawable/ic_led"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.obscura.index.activity.IndexActivity"
+            android:icon="@drawable/ic_expand"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="de.wollis_page.gibsonos.module.obscura.scanner.activity.FormActivity"
+            android:icon="@drawable/ic_expand"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">

@@ -78,4 +78,8 @@
 
     <string name="hc_module_neopixel_pixel_tab">Pixel</string>
     <string name="hc_module_neopixel_animation_tab">Animationen</string>
+
+    <string name="obscura_title">Obscura</string>
+
+    <string name="obscura_scanner_error_response">Keine Scanner gefunden!</string>
 </resources>

@@ -159,7 +159,7 @@ class DataStore(url: String, private val method: String, token: String?) {
         var requestUrl = this.getUrl().toHttpUrl()
         var params: RequestBody? = null
 
-        if (method === "GET") {
+        if (method !== "POST") {
             requestUrl = this.getQueryParams(requestUrl)
         } else {
             params = this.getParams()
