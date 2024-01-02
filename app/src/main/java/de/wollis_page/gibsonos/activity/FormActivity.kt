@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.Form
-import de.wollis_page.gibsonos.form.AutoCompleteField
+import de.wollis_page.gibsonos.form.BoolField
 import de.wollis_page.gibsonos.form.FieldInterface
+import de.wollis_page.gibsonos.form.OptionField
 import de.wollis_page.gibsonos.form.TextField
 
 abstract class FormActivity: GibsonOsActivity() {
     private var fields: Array<FieldInterface> = arrayOf(
         TextField(),
-        AutoCompleteField(),
+        OptionField(),
+        BoolField(),
     )
     private lateinit var formContainer: LinearLayout
     override fun getContentView(): Int = R.layout.base_form
