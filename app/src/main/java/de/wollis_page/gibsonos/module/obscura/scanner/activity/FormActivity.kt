@@ -1,12 +1,11 @@
 package de.wollis_page.gibsonos.module.obscura.scanner.activity
 
 import de.wollis_page.gibsonos.activity.FormActivity
-import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.obscura.task.ScannerTask
 
 class FormActivity: FormActivity() {
-    override fun getForm(): Form = this.loadForm {
+    override fun buildForm() = this.loadForm {
         ScannerTask.getForm(
             this,
             this.intent.getStringExtra("deviceName").toString(),

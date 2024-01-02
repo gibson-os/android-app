@@ -2,45 +2,55 @@ package de.wollis_page.gibsonos.activity
 
 import android.os.Bundle
 import android.widget.LinearLayout
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.Form
+import de.wollis_page.gibsonos.form.AutoCompleteField
+import de.wollis_page.gibsonos.form.FieldInterface
+import de.wollis_page.gibsonos.form.TextField
 
 abstract class FormActivity: GibsonOsActivity() {
-    lateinit var formContainer: LinearLayout
+    private var fields: Array<FieldInterface> = arrayOf(
+        TextField(),
+        AutoCompleteField(),
+    )
+    private lateinit var formContainer: LinearLayout
     override fun getContentView(): Int = R.layout.base_form
 
-    protected abstract fun getForm(): Form
+    protected abstract fun buildForm()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         this.formContainer = this.findViewById(R.id.form) as LinearLayout
-        val form = this.getForm()
+        this.buildForm()
+    }
 
-        form.fields.forEach {
-            val field = when (it.value.xtype) {
-                "gosCoreComponentFormFieldTextField" -> TextInputLayout(this)
-                else -> TextInputLayout(this)
+    protected fun setForm(form: Form) {
+        form.fields.forEach { formField ->
+            val field = formField.value
+
+            this.fields.forEach fieldEach@ {
+                if (!it.supports(field)) {
+                    return@fieldEach
+                }
+
+                val fieldView = it.getView(field, this)
+                val value = field.value
+
+                it.setValue(fieldView, field, value)
+
+                this.formContainer.addView(fieldView)
             }
-
-            val hint = TextInputEditText(this)
-            hint.hint = it.value.title
-            field.addView(hint)
-
-            this.formContainer.addView(field)
         }
     }
 
-    protected fun loadForm(run: () -> Form): Form
+    protected fun loadForm(run: () -> Form)
     {
-        var form = Form()
-
         this.runTask({
-            form = run()
+            val form = run()
+            this.runOnUiThread {
+                this.setForm(form)
+            }
         })
-
-        return form
     }
 }
