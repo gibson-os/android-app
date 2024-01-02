@@ -13,7 +13,7 @@ class OptionField: FieldInterface {
     override fun getView(field: Field, context: GibsonOsActivity): View {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(
-            R.layout.base_form_auto_complete_field,
+            R.layout.base_form_option_field,
             context.findViewById(android.R.id.content),
             false
         ) as TextInputLayout
@@ -26,7 +26,6 @@ class OptionField: FieldInterface {
         }
 
         view.hint = field.title
-        fieldView.setText(field.value.toString())
         fieldView.setAdapter(ArrayAdapter(
             context,
             R.layout.base_dropdown_item,
