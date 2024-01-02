@@ -101,7 +101,9 @@ class IndexActivity: ListActivity() {
             }
         }, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY)
 
-        val dirListDialogBuilder = DirListDialog(this)
+        val dirListDialogBuilder = DirListDialog(this) { _, dirList ->
+            this.loadList(dirList.id)
+        }
 
         this.findViewById<TextView>(android.R.id.title).setOnClickListener {
             this.hideSearch()
