@@ -7,11 +7,11 @@ import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.form.BoolField
 import de.wollis_page.gibsonos.form.FieldInterface
 import de.wollis_page.gibsonos.form.OptionField
-import de.wollis_page.gibsonos.form.TextField
+import de.wollis_page.gibsonos.form.StringField
 
 abstract class FormActivity: GibsonOsActivity() {
     private var fields: Array<FieldInterface> = arrayOf(
-        TextField(),
+        StringField(),
         OptionField(),
         BoolField(),
     )
