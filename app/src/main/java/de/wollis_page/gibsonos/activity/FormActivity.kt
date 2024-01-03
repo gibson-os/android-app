@@ -28,6 +28,7 @@ abstract class FormActivity: GibsonOsActivity() {
     private var formViews: MutableMap<String, View> = mutableMapOf()
     private var formFields: MutableMap<String, Field> = mutableMapOf()
     private var formFieldBuilders: MutableMap<String, FieldInterface> = mutableMapOf()
+    private var formConfig: MutableMap<String, Map<String, Any>> = mutableMapOf()
     override fun getContentView(): Int = R.layout.base_form
 
     protected abstract fun buildForm()
@@ -48,7 +49,9 @@ abstract class FormActivity: GibsonOsActivity() {
                     return@fieldEach
                 }
 
-                val fieldView = it.build(field, this)
+                val fieldView = it.build(field, this) {
+                    this.formConfig[formField.key] = it
+                }
                 val value = field.value
 
                 it.setValue(fieldView, field, value)
@@ -118,4 +121,7 @@ abstract class FormActivity: GibsonOsActivity() {
 
     protected fun getFieldBuilder(fieldName: String): FieldInterface = this.formFieldBuilders[fieldName]
         ?: throw FormException("Field '$fieldName' doesn't exists")
+
+    protected fun getConfig(fieldName: String): Map<String, Any> = this.formConfig[fieldName]
+        ?: throw FormException("No config found for field '$fieldName'")
 }

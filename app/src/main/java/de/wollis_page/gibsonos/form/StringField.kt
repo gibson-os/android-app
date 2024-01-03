@@ -9,7 +9,11 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.form.Field
 
 class StringField: FieldInterface {
-    override fun build(field: Field, context: GibsonOsActivity): View {
+    override fun build(
+        field: Field,
+        context: GibsonOsActivity,
+        getConfig: (config: Map<String, Any>) -> Unit,
+    ): View {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(
             R.layout.base_form_text_field,

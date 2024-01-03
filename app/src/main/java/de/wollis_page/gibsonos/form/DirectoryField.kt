@@ -13,7 +13,11 @@ import de.wollis_page.gibsonos.module.explorer.index.dialog.DirListDialog
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 
 class DirectoryField: FieldInterface {
-    override fun build(field: Field, context: GibsonOsActivity): View {
+    override fun build(
+        field: Field,
+        context: GibsonOsActivity,
+        getConfig: (config: Map<String, Any>) -> Unit,
+    ): View {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(
             R.layout.base_form_directory_field,
