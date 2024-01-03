@@ -15,6 +15,8 @@ import de.wollis_page.gibsonos.form.FieldInterface
 import de.wollis_page.gibsonos.form.OptionField
 import de.wollis_page.gibsonos.form.StringField
 import de.wollis_page.gibsonos.task.FormTask
+import org.json.JSONObject
+import de.wollis_page.gibsonos.dto.form.Button as FormButton
 
 abstract class FormActivity: GibsonOsActivity() {
     private var fields: Array<FieldInterface> = arrayOf(
@@ -56,10 +58,10 @@ abstract class FormActivity: GibsonOsActivity() {
 
                 it.setValue(fieldView, field, value)
 
-                this.formContainer.addView(fieldView)
                 this.formViews[formField.key] = fieldView
                 this.formFields[formField.key] = field
                 this.formFieldBuilders[formField.key] = it
+                this.formContainer.addView(fieldView)
             }
         }
 
@@ -71,13 +73,14 @@ abstract class FormActivity: GibsonOsActivity() {
                 parameters = parameters.plus(formButton.value.parameters)
 
                 this.runTask({
-                    FormTask.post(
+                    val response = FormTask.post(
                         this,
                         formButton.value.module,
                         formButton.value.task,
                         formButton.value.action,
                         parameters,
                     )
+                    this.afterButtonClick(formButton.value, button, response)
                 })
             }
 
@@ -90,17 +93,46 @@ abstract class FormActivity: GibsonOsActivity() {
     protected open fun afterBuild() {
     }
 
+    protected open fun afterButtonClick(formButton: FormButton, button: Button, response: JSONObject) {
+    }
+
     fun getValues(): Map<String, *> {
         val values = mutableMapOf<String, Any>()
 
         this.formFields.forEach {
-            values[it.key] = this.formFieldBuilders[it.key]?.getValue(
-                this.formViews[it.key]!!,
+            values[it.key] = this.getFieldBuilder(it.key).getValue(
+                this.getView(it.key),
                 it.value,
             ) ?: ""
         }
 
         return values
+    }
+
+    fun getValue(fieldName: String) : Any? {
+        val field = this.getField(fieldName)
+        val view = this.getView(fieldName)
+        val fieldBuilder = this.getFieldBuilder(fieldName)
+
+        return fieldBuilder.getValue(view, field)
+    }
+
+    fun setValues(values: Map<String, *>) {
+        values.forEach {
+            this.getFieldBuilder(it.key).setValue(
+                this.getView(it.key),
+                this.getField(it.key),
+                it.value,
+            )
+        }
+    }
+
+    fun setValue(fieldName: String, value: Any?) {
+        val field = this.getField(fieldName)
+        val view = this.getView(fieldName)
+        val fieldBuilder = this.getFieldBuilder(fieldName)
+
+        return fieldBuilder.setValue(view, field, value)
     }
 
     protected fun loadForm(run: () -> Form)

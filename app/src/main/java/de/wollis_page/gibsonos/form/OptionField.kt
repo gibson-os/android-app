@@ -61,7 +61,7 @@ class OptionField: FieldInterface {
         var optionValue: Map.Entry<*, *>? = null
 
         options.forEach {
-            if (it.value != value) {
+            if (it.value.toString() != value.toString()) {
                 return@forEach
             }
 
