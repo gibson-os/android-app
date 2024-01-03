@@ -38,10 +38,8 @@ class OptionField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosCoreComponentFormFieldComboBox"
 
-    override fun getValue(view: View, field: Field): Any? = this.getOptionByValue(
-        field,
-        view.findViewById<AutoCompleteTextView>(R.id.field).text,
-    )?.key
+    override fun getValue(view: View, field: Field): Any? =
+        (field.config["options"] as Map<*, *>)[view.findViewById<AutoCompleteTextView>(R.id.field).text.toString()]
 
     override fun setValue(view: View, field: Field, value: Any?) {
         view.findViewById<AutoCompleteTextView>(R.id.field).setText(

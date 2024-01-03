@@ -32,9 +32,7 @@ class AutoCompleteField: FieldInterface {
                 autoCompleteClassname,
                 field.config["parameters"] as Map<String, String>,
             )
-            val valueField = field.config["valueField"]
             val displayField = field.config["displayField"]
-            val options: MutableMap<String, String> = mutableMapOf()
             val fieldView = view.findViewById<AutoCompleteTextView>(R.id.field)
             var items: Array<String> = emptyArray()
 
@@ -43,15 +41,8 @@ class AutoCompleteField: FieldInterface {
                     throw AppException("Wrong instance")
                 }
 
-                val optionValue = it::class.declaredMemberProperties.find { it.name == valueField }!!.getter.call(it).toString()
                 val optionName = it::class.declaredMemberProperties.find { it.name == displayField }!!.getter.call(it).toString()
-                options[optionName] = optionValue
-            }
-
-//            field.config["options"] = options
-
-            options.forEach {
-                items = items.plus(it.key)
+                items = items.plus(optionName)
             }
 
             context.runOnUiThread {
