@@ -14,7 +14,7 @@ import de.wollis_page.gibsonos.module.core.task.AutoCompleteTask
 import kotlin.reflect.full.declaredMemberProperties
 
 class AutoCompleteField: FieldInterface {
-    override fun getView(field: Field, context: GibsonOsActivity): View {
+    override fun build(field: Field, context: GibsonOsActivity): View {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(
             R.layout.base_form_auto_complete_field,

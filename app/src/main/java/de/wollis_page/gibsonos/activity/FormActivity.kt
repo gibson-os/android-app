@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.dto.form.Field
+import de.wollis_page.gibsonos.exception.FormException
 import de.wollis_page.gibsonos.form.AutoCompleteField
 import de.wollis_page.gibsonos.form.BoolField
 import de.wollis_page.gibsonos.form.DirectoryField
@@ -47,7 +48,7 @@ abstract class FormActivity: GibsonOsActivity() {
                     return@fieldEach
                 }
 
-                val fieldView = it.getView(field, this)
+                val fieldView = it.build(field, this)
                 val value = field.value
 
                 it.setValue(fieldView, field, value)
@@ -79,6 +80,11 @@ abstract class FormActivity: GibsonOsActivity() {
 
             this.formContainer.addView(button)
         }
+
+        this.afterBuild()
+    }
+
+    protected open fun afterBuild() {
     }
 
     fun getValues(): Map<String, *> {
@@ -103,4 +109,13 @@ abstract class FormActivity: GibsonOsActivity() {
             }
         })
     }
+
+    protected fun getView(fieldName: String): View = this.formViews[fieldName]
+        ?: throw FormException("Field '$fieldName' doesn't exists")
+
+    protected fun getField(fieldName: String): Field = this.formFields[fieldName]
+        ?: throw FormException("Field '$fieldName' doesn't exists")
+
+    protected fun getFieldBuilder(fieldName: String): FieldInterface = this.formFieldBuilders[fieldName]
+        ?: throw FormException("Field '$fieldName' doesn't exists")
 }
