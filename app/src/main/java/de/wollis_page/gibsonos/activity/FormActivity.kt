@@ -29,8 +29,10 @@ abstract class FormActivity: GibsonOsActivity() {
     private lateinit var formContainer: LinearLayout
     private var formViews: MutableMap<String, View> = mutableMapOf()
     private var formFields: MutableMap<String, Field> = mutableMapOf()
+    private var formButtons: MutableMap<String, FormButton> = mutableMapOf()
     private var formFieldBuilders: MutableMap<String, FieldInterface> = mutableMapOf()
     private var formConfig: MutableMap<String, Map<String, Any>> = mutableMapOf()
+    private var buttonViews: MutableMap<String, Button> = mutableMapOf()
     override fun getContentView(): Int = R.layout.base_form
 
     protected abstract fun buildForm()
@@ -80,10 +82,12 @@ abstract class FormActivity: GibsonOsActivity() {
                         formButton.value.action,
                         parameters,
                     )
-                    this.afterButtonClick(formButton.value, button, response)
+                    this.afterButtonClick(formButton.key, formButton.value, button, response)
                 })
             }
 
+            this.buttonViews[formButton.key] = button
+            this.formButtons[formButton.key] = formButton.value
             this.formContainer.addView(button)
         }
 
@@ -93,7 +97,12 @@ abstract class FormActivity: GibsonOsActivity() {
     protected open fun afterBuild() {
     }
 
-    protected open fun afterButtonClick(formButton: FormButton, button: Button, response: JSONObject) {
+    protected open fun afterButtonClick(
+        name: String,
+        formButton: FormButton,
+        button: Button,
+        response: JSONObject,
+    ) {
     }
 
     fun getValues(): Map<String, *> {
@@ -156,4 +165,10 @@ abstract class FormActivity: GibsonOsActivity() {
 
     protected fun getConfig(fieldName: String): Map<String, Any> = this.formConfig[fieldName]
         ?: throw FormException("No config found for field '$fieldName'")
+
+    protected fun getButtonsView(buttonName: String): View = this.buttonViews[buttonName]
+        ?: throw FormException("Button '$buttonName' doesn't exists")
+
+    protected fun getButton(buttonName: String): FormButton = this.formButtons[buttonName]
+        ?: throw FormException("Button '$buttonName' doesn't exists")
 }

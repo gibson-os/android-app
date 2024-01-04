@@ -27,7 +27,12 @@ abstract class AbstractTask {
     }
 
     @Throws(TaskException::class)
-    protected fun run(context: GibsonOsActivity, dataStore: DataStore, showLoading: Boolean = true): JSONObject {
+    protected fun run(
+        context: GibsonOsActivity,
+        dataStore: DataStore,
+        showLoading: Boolean = true,
+        catchResponseException: Boolean = true,
+    ): JSONObject {
         if (showLoading) {
             context.showLoading()
         }
@@ -37,7 +42,11 @@ abstract class AbstractTask {
         } catch (exception: ResponseException) {
             exception.printStackTrace()
 
-            throw TaskException(exception.message, exception.messageResource)
+            if (catchResponseException) {
+                throw TaskException(exception.message, exception.messageResource)
+            }
+
+            throw exception
         } catch (exception: Exception) {
             exception.printStackTrace()
 
@@ -53,12 +62,13 @@ abstract class AbstractTask {
         context: GibsonOsActivity,
         dataStore: DataStore,
         messageResource: Int? = null,
-        showLoading: Boolean = true
+        showLoading: Boolean = true,
+        catchResponseException: Boolean = true,
     ): E {
-        val response = this.run(context, dataStore, showLoading)
+        val response = this.run(context, dataStore, showLoading, catchResponseException)
 
         return this.getJsonAdapter<E>().fromJson(response.getJSONObject("data").toString()) ?:
-        throw TaskException("Object not in response!", messageResource)
+            throw TaskException("Object not in response!", messageResource)
     }
 
     protected inline fun <reified E> getJsonAdapter(): JsonAdapter<E>

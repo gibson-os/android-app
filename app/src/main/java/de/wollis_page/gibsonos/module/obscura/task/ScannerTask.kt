@@ -28,6 +28,6 @@ object ScannerTask: AbstractTask() {
             dataStore.addParam("lastCheck", lastCheck)
         }
 
-        return this.load(context, dataStore, showLoading = false)
+        return this.load(context, dataStore, showLoading = false, catchResponseException = false)
     }
 }

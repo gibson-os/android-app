@@ -5,5 +5,5 @@ data class Button(
     val module: String,
     val task: String,
     val action: String,
-    val parameters: Map<String, *> = mapOf<String, Any>(),
+    var parameters: Map<String, Any> = mapOf(),
 )
