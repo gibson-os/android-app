@@ -67,6 +67,7 @@ class FormActivity: FormActivity() {
         }
 
         this.showLoading()
+        Thread.sleep(500)
         this.loadStatus()
         this.hideLoading()
     }
@@ -93,12 +94,15 @@ class FormActivity: FormActivity() {
             this.runOnUiThread {
                 val messageBuilder = MessageBuilder()
                 messageBuilder.build(this, message) {
-                    val button = this.getButton("scan")
-                    val oldParameters = button.parameters
-                    button.parameters = oldParameters.plus(message.extraParameters)
-                    val buttonView = this.getButtonsView("scan")
-                    buttonView.callOnClick()
-                    button.parameters = oldParameters
+                    if (exception.code == 202) {
+                        val button = this.getButton("scan")
+                        val oldParameters = button.parameters
+                        button.parameters = oldParameters.plus(message.extraParameters)
+                        val buttonView = this.getButtonsView("scan")
+                        buttonView.callOnClick()
+                        button.parameters = oldParameters
+                    }
+
                     null
                 }.show()
             }
