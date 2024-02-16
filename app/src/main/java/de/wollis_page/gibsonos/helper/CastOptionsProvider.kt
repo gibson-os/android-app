@@ -16,7 +16,7 @@ class CastOptionsProvider : OptionsProvider {
 
         return CastOptions.Builder()
             .setReceiverApplicationId(Config.CHROMECAST_RECEIVER_APPLICATION_ID)
-            .setSupportedNamespaces(supportedNamespaces)
+//            .setSupportedNamespaces(supportedNamespaces)
             .build()
     }
 

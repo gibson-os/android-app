@@ -75,8 +75,7 @@
 
         <activity
             android:name="de.wollis_page.gibsonos.module.explorer.index.activity.IndexActivity"
-            android:icon="@drawable/ic_folder"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:icon="@drawable/ic_folder"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.explorer.html5.activity.PlayerActivity"

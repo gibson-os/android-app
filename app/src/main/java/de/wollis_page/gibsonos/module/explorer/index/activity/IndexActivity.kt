@@ -7,23 +7,18 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.ArrayMap
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.mediarouter.app.MediaRouteChooserDialog
-import androidx.mediarouter.media.MediaControlIntent
-import androidx.mediarouter.media.MediaRouteSelector
-import androidx.mediarouter.media.MediaRouter
-import com.google.android.gms.cast.CastMediaControlIntent
-import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.cast.framework.CastButtonFactory
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.TaskException
-import de.wollis_page.gibsonos.helper.Chromecast
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
@@ -33,15 +28,16 @@ import de.wollis_page.gibsonos.module.explorer.index.dialog.ItemDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Dir
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
+import de.wollis_page.gibsonos.module.explorer.service.ChromecastService
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 
+
 class IndexActivity: ListActivity() {
     lateinit var loadedDir: Dir
-    lateinit var castContext: CastContext
-    lateinit var mediaRouteChooserDialog: MediaRouteChooserDialog
     lateinit var playerLauncher: ActivityResultLauncher<Intent>
+    lateinit var chromecastService: ChromecastService
     private lateinit var itemDialog: ItemDialog
     private lateinit var dirDialog: DirDialog
     private var loadDir: String? = null
@@ -66,40 +62,13 @@ class IndexActivity: ListActivity() {
 
         super.onCreate(savedInstanceState)
 
+        this.chromecastService = ChromecastService(this)
+
         this.addSearch { it, searchTerm ->
             val item = it as Item
 
             item.name.lowercase().contains(searchTerm.lowercase())
         }
-
-        this.castContext = CastContext.getSharedInstance(this)
-        this.castContext.sessionManager.addSessionManagerListener(Chromecast(this))
-
-        val mediaRouteSelector = MediaRouteSelector.Builder()
-            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
-            .addControlCategory(CastMediaControlIntent.categoryForCast(Config.CHROMECAST_RECEIVER_APPLICATION_ID))
-            .build()
-        this.mediaRouteChooserDialog = MediaRouteChooserDialog(this)
-        this.mediaRouteChooserDialog.routeSelector = mediaRouteSelector
-
-        val router = MediaRouter.getInstance(this)
-        router.addCallback(mediaRouteSelector, object : MediaRouter.Callback() {
-            override fun onRouteAdded(router: MediaRouter, route: MediaRouter.RouteInfo) {
-                super.onRouteAdded(router, route)
-                Log.d(Config.LOG_TAG, "onRouteAdded: ")
-                router.selectRoute(route)
-            }
-
-            override fun onRouteChanged(router: MediaRouter, route: MediaRouter.RouteInfo) {
-                super.onRouteChanged(router, route)
-                Log.d(Config.LOG_TAG, "onRouteChanged: ")
-            }
-
-            override fun onRouteSelected(router: MediaRouter, route: MediaRouter.RouteInfo) {
-                Log.d(Config.LOG_TAG, "onRouteSelected: ")
-                super.onRouteSelected(router, route)
-            }
-        }, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY)
 
         val dirListDialogBuilder = DirListDialog(this) { _, dirList ->
             this.loadList(dirList.id)
@@ -427,4 +396,26 @@ class IndexActivity: ListActivity() {
 
     override fun isActivityforShotcut(shortcut: Shortcut): Boolean =
         shortcut.parameters?.get("dir") == this.loadDir.toString()
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.explorer_index_menu, menu)
+        CastButtonFactory.setUpMediaRouteButton(
+            applicationContext,
+            menu,
+            R.id.media_route_menu_item
+        )
+
+        return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.chromecastService.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        this.chromecastService.onPause()
+    }
 }

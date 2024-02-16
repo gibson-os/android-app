@@ -9,11 +9,11 @@ import android.widget.VideoView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.TaskException
-import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.explorer.html5.dialog.PlayDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Media
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
+import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 class PlayerActivity: GibsonOsActivity() {
     private lateinit var media: Media
@@ -28,8 +28,8 @@ class PlayerActivity: GibsonOsActivity() {
         super.onCreate(savedInstanceState)
         this.removeHeder()
 
-        this.media = this.intent.getParcelableExtra("media")!!
-        var cleanUrl = this.intent.getParcelableExtra<Account>("account")!!.url
+        this.media = AppIntentExtraService.getIntentExtra("media", this.intent) as Media
+        var cleanUrl = this.getAccount().url
 
         if (!cleanUrl.endsWith("/")) {
             cleanUrl += '/'

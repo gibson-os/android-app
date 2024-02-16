@@ -36,6 +36,7 @@ import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
 import de.wollis_page.gibsonos.service.AppIconService
+import de.wollis_page.gibsonos.service.AppIntentExtraService
 import java.io.Serializable
 import java.util.concurrent.CompletableFuture
 import de.wollis_page.gibsonos.dto.Account as AccountDto
@@ -92,13 +93,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             false
         ))
 
-        if (intent.hasExtra(ACCOUNT_KEY)) {
-            this.account = intent.getParcelableExtra(ACCOUNT_KEY)
-        }
-
-        if (intent.hasExtra(SHORTCUT_KEY)) {
-            this.shortcut = intent.getParcelableExtra(SHORTCUT_KEY)
-        }
+        this.account = AppIntentExtraService.getIntentExtra(ACCOUNT_KEY, this.intent) as Account?
+        this.shortcut = AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, this.intent) as Shortcut?
 
         val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
         val drawer = this.findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -168,7 +164,11 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     private fun runActivity(activity: Class<*>?, account: Account? = this.account) {
         val intent = Intent(this, activity)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-        intent.putExtra(ACCOUNT_KEY, account)
+
+        if (account !== null) {
+            AppIntentExtraService.setIntentExtra(ACCOUNT_KEY, account, intent)
+        }
+
         finish()
         this.startActivity(intent)
     }
@@ -336,12 +336,12 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     ) {
         if (activity == null) {
             val intent = Intent(this, Class.forName(this.application.getActivityName(module, task, action)))
-            intent.putExtra(ACCOUNT_KEY, account.account)
+            AppIntentExtraService.setIntentExtra(ACCOUNT_KEY, account.account, intent)
             //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 
             extras.forEach {
                 when (val value = it.value) {
-                    is Parcelable -> intent.putExtra(it.key, value)
+                    is Parcelable -> AppIntentExtraService.setIntentExtra(it.key, value, intent)
                     is String -> intent.putExtra(it.key, value)
                     is Int -> intent.putExtra(it.key, value)
                     is Long -> intent.putExtra(it.key, value)

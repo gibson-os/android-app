@@ -34,7 +34,7 @@ class IndexActivity: ListActivity() {
             this,
             Class.forName(this.application.getActivityName(item.module, item.task, item.action))
         )
-        intent.putExtra(ACCOUNT_KEY, this.getAccount())
+        AppIntentExtraService.setIntentExtra(ACCOUNT_KEY, this.getAccount(), intent)
         AppIntentExtraService.putExtras(item, intent);
 
         this.startActivity(intent)

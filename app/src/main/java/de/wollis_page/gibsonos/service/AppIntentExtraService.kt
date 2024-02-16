@@ -1,6 +1,8 @@
 package de.wollis_page.gibsonos.service
 
 import android.content.Intent
+import android.os.Bundle
+import android.os.Parcelable
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -48,6 +50,15 @@ object AppIntentExtraService {
 
         extrasDto.putIntentExtras(intent)
     }
+
+    fun setIntentExtra(key: String, value: Parcelable, intent: Intent) {
+        val bundle = Bundle()
+        bundle.putParcelable(key, value)
+        intent.putExtra(key, bundle)
+    }
+
+    fun getIntentExtra(key: String, intent: Intent): Parcelable? =
+        intent.getBundleExtra(key)?.getParcelable(key)
 
     private fun getAdapter(className: Class<*>): JsonAdapter<*>
     {

@@ -1,11 +1,9 @@
 package de.wollis_page.gibsonos.module.explorer.index.dialog
 
 import android.os.Parcelable
-import android.util.Log
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.helper.AlertListDialog
-import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.explorer.html5.dialog.ConvertDialog
 import de.wollis_page.gibsonos.module.explorer.index.activity.IndexActivity
 import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
@@ -77,13 +75,43 @@ class ItemDialog(private val context: IndexActivity) {
     private fun getStreamItem(item: Item): DialogItem {
         val dialogItem = DialogItem(this.context.getString(R.string.explorer_html5_stream))
 
+//        val castContext = CastContext.getSharedInstance()
+//        castContext?.sessionManager?.addSessionManagerListener(Chromecast(this.context))
+//
+//        val mediaRouteSelector = MediaRouteSelector.Builder()
+//            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+//            .addControlCategory(CastMediaControlIntent.categoryForCast(Config.CHROMECAST_RECEIVER_APPLICATION_ID))
+//            .build()
+//        val mediaRouteChooserDialog = MediaRouteChooserDialog(this.context)
+//        mediaRouteChooserDialog.routeSelector = mediaRouteSelector
+//
+//        val router = MediaRouter.getInstance(this.context)
+//        router.addCallback(mediaRouteSelector, object : MediaRouter.Callback() {
+//            override fun onRouteAdded(router: MediaRouter, route: MediaRouter.RouteInfo) {
+//                super.onRouteAdded(router, route)
+//                Log.d(Config.LOG_TAG, "onRouteAdded: ")
+//            }
+//
+//            override fun onRouteChanged(router: MediaRouter, route: MediaRouter.RouteInfo) {
+//                super.onRouteChanged(router, route)
+//                Log.d(Config.LOG_TAG, "onRouteChanged: ")
+//            }
+//
+//            override fun onRouteSelected(router: MediaRouter, route: MediaRouter.RouteInfo, reason: Int) {
+//                Log.d(Config.LOG_TAG, "onRouteSelected: ")
+//                super.onRouteSelected(router, route, reason)
+//                router.selectRoute(route)
+//                Log.d(Config.LOG_TAG, "after onRouteSelected")
+//            }
+//        }, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY)
+
         dialogItem.icon = R.drawable.ic_chromecast
-        dialogItem.onClick = {
-            Log.d(Config.LOG_TAG, this.context.castContext.sessionManager.currentCastSession.toString())
-            Log.d(Config.LOG_TAG, this.context.castContext.sessionManager.currentSession.toString())
-//            Log.d(Config.LOG_TAG, this.context.med)
-            this.context.mediaRouteChooserDialog.show()
-        }
+//        dialogItem.onClick = {
+//            Log.d(Config.LOG_TAG, castContext?.sessionManager?.currentCastSession.toString())
+//            Log.d(Config.LOG_TAG, castContext?.sessionManager?.currentSession.toString())
+////            Log.d(Config.LOG_TAG, this.context.med)
+//            mediaRouteChooserDialog.show()
+//        }
 
         return dialogItem
     }

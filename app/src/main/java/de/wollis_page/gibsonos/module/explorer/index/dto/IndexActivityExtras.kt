@@ -4,6 +4,7 @@ import android.content.Intent
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ActivityExtrasInterface
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 data class IndexActivityExtras (
     val directory: String,
@@ -11,14 +12,14 @@ data class IndexActivityExtras (
     val token: String? = null,
 ): ActivityExtrasInterface {
     override fun putIntentExtras(intent: Intent) {
-        intent.putExtra(GibsonOsActivity.SHORTCUT_KEY, Shortcut(
+        AppIntentExtraService.setIntentExtra(GibsonOsActivity.SHORTCUT_KEY, Shortcut(
             "explorer",
             "index",
             "index",
             "",
             "",
             mapOf("dir" to directory)
-        ))
+        ), intent)
         intent.putExtra("position", this.position)
         intent.putExtra("token", this.token)
     }

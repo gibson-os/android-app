@@ -13,6 +13,7 @@ import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.UserTask
 import de.wollis_page.gibsonos.module.core.user.activity.LoginActivity
+import de.wollis_page.gibsonos.service.AppIntentExtraService
 import de.wollis_page.gibsonos.dto.Account as AccountDto
 
 class MainActivity : ListActivity() {
@@ -79,7 +80,7 @@ class MainActivity : ListActivity() {
         }
 
         val intent = Intent(this, IndexActivity::class.java)
-        intent.putExtra(ACCOUNT_KEY, item)
+        AppIntentExtraService.setIntentExtra(ACCOUNT_KEY, item, intent)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 
         this.startActivity(

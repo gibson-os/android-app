@@ -5,8 +5,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "33.0.0"
+    compileSdk 33
 
     defaultConfig {
         applicationId "de.wollis_page.gibsonos"
