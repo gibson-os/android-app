@@ -59,4 +59,17 @@ object Html5Task: AbstractTask() {
 
         return this.load(context, dataStore)
     }
+
+    fun setSession(context: GibsonOsActivity, sessionId: String) {
+        val dataStore = this.getDataStore(
+            context.getAccount(),
+            "explorer",
+            "html5",
+            "session",
+            "POST",
+        )
+        dataStore.addParam("id", sessionId)
+
+        this.run(context, dataStore)
+    }
 }

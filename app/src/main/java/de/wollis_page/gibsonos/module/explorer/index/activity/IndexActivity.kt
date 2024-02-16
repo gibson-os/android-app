@@ -14,7 +14,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.cast.framework.CastButtonFactory
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -399,12 +398,7 @@ class IndexActivity: ListActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.explorer_index_menu, menu)
-        CastButtonFactory.setUpMediaRouteButton(
-            applicationContext,
-            menu,
-            R.id.media_route_menu_item
-        )
+        this.chromecastService.onCreateOptionsMenu(menu)
 
         return true
     }
