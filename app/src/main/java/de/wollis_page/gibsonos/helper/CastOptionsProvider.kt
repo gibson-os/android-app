@@ -4,19 +4,23 @@ import android.content.Context
 import com.google.android.gms.cast.framework.CastOptions
 import com.google.android.gms.cast.framework.OptionsProvider
 import com.google.android.gms.cast.framework.SessionProvider
+import com.google.android.gms.cast.framework.media.CastMediaOptions
+import com.google.android.gms.cast.framework.media.NotificationOptions
+import de.wollis_page.gibsonos.module.explorer.html5.activity.ChromecastActivity
 
 class CastOptionsProvider : OptionsProvider {
-    companion object {
-        const val CUSTOM_NAMESPACE = "urn:x-cast:net.itronom.gibson"
-    }
-
     override fun getCastOptions(context: Context): CastOptions {
-        val supportedNamespaces: MutableList<String> = ArrayList()
-        supportedNamespaces.add(CUSTOM_NAMESPACE)
+        val notificationOptions = NotificationOptions.Builder()
+            .setTargetActivityClassName(ChromecastActivity::class.java.name)
+            .build()
+        val mediaOptions = CastMediaOptions.Builder()
+            .setNotificationOptions(notificationOptions)
+            .setExpandedControllerActivityClassName(ChromecastActivity::class.java.name)
+            .build()
 
         return CastOptions.Builder()
             .setReceiverApplicationId(Config.CHROMECAST_RECEIVER_APPLICATION_ID)
-//            .setSupportedNamespaces(supportedNamespaces)
+            .setCastMediaOptions(mediaOptions)
             .build()
     }
 

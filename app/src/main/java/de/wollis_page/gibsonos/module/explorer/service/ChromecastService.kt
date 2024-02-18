@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.module.explorer.service
 
 import android.net.Uri
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import com.google.android.gms.cast.MediaInfo
@@ -35,7 +36,14 @@ class ChromecastService(val context: GibsonOsActivity) {
         // If without context the button will not rendered on startup
         this.castContext = CastContext.getSharedInstance(this.context)
         this.sessionManager = this.castContext?.sessionManager
-//        this.sessionManager?.addSessionManagerListener(sessionManagerListener, CastSession::class.java)
+
+        val inflater = LayoutInflater.from(this.context)
+        this.context.contentContainer.addView(inflater.inflate(
+            R.layout.base_chromecast_mini_player,
+            this.context.findViewById(android.R.id.content),
+            false
+        ))
+
     }
 
     fun onResume() {
