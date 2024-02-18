@@ -7,6 +7,7 @@ import android.view.MenuItem
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaLoadOptions
 import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
@@ -17,11 +18,12 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.explorer.html5.dialog.PlayDialog
+import de.wollis_page.gibsonos.module.explorer.html5.dialog.QueueDialog
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 import org.json.JSONObject
 
-class ChromecastService(private val context: GibsonOsActivity) {
+class ChromecastService(val context: GibsonOsActivity) {
     var castContext: CastContext? = null
     var sessionManager: SessionManager? = null
     var castSession: CastSession? = null
@@ -133,12 +135,20 @@ class ChromecastService(private val context: GibsonOsActivity) {
     }
 
     fun loadMedia(item: Item) {
+        val duration = item.metaInfos?.get("duration").toString().toFloat().toInt()
         val position = item.position ?: 0
         val mediaInfo = this.buildMediaInfo(item)
+        val remoteMediaClient = this.castSession?.remoteMediaClient
+
+        if (remoteMediaClient?.isPlaying == true || remoteMediaClient?.isPaused == true) {
+            QueueDialog(this).build(mediaInfo, duration, position.toLong()).show()
+
+            return
+        }
 
         if (position > 0) {
             PlayDialog(this.context).build(
-                item.metaInfos?.get("duration").toString().toFloat().toInt(),
+                duration,
                 position,
                 {
                     this.playMedia(mediaInfo)
@@ -147,15 +157,24 @@ class ChromecastService(private val context: GibsonOsActivity) {
                     this.playMedia(mediaInfo, (item.position.toString().toFloat() * 1000).toLong())
                 },
             ).show()
-        } else {
-            this.playMedia(mediaInfo)
+
+            return
         }
+
+        this.playMedia(mediaInfo)
     }
 
-    private fun playMedia(mediaInfo: MediaInfo, position: Long = 0) {
+    fun playMedia(mediaInfo: MediaInfo, position: Long = 0) {
         this.castSession?.remoteMediaClient?.load(
             mediaInfo,
             MediaLoadOptions.Builder().setAutoplay(true).setPlayPosition(position).build()
+        )
+    }
+
+    fun addMedia(mediaInfo: MediaInfo) {
+        this.castSession?.remoteMediaClient?.queueAppendItem(
+            MediaQueueItem.Builder(mediaInfo).setAutoplay(true).build(),
+            JSONObject()
         )
     }
 

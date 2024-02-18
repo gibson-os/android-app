@@ -62,6 +62,7 @@
     <string name="explorer_html5_default">Default</string>
     <string name="explorer_html5_forced">Forced</string>
     <string name="explorer_html5_continue_message">Already %s from %s seen</string>
+    <string name="explorer_html5_add_to_playlist">Add to playlist</string>
 
     <string name="hc_title">Homecontrol</string>
 

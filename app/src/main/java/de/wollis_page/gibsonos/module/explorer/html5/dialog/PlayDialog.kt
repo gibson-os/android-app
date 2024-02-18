@@ -12,7 +12,7 @@ class PlayDialog(private val context: GibsonOsActivity) {
         position: Int,
         startAction: (FlattedDialogItem) -> Any,
         continueAction: (FlattedDialogItem) -> Any,
-        ): AlertListDialog {
+    ): AlertListDialog {
         val options = ArrayList<DialogItem>()
 
         if (position + 1 < duration || duration == 0) {
@@ -45,7 +45,7 @@ class PlayDialog(private val context: GibsonOsActivity) {
         minutes -= hours * 60
 
         return hours.toString().padStart(2, '0') + ":" +
-                minutes.toString().padStart(2, '0') + ":" +
-                seconds.toString().padStart(2, '0')
+            minutes.toString().padStart(2, '0') + ":" +
+            seconds.toString().padStart(2, '0')
     }
 }
