@@ -1,32 +1,30 @@
 package de.wollis_page.gibsonos.module.explorer.html5.dialog
 
-import android.widget.VideoView
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.DialogItem
+import de.wollis_page.gibsonos.dto.FlattedDialogItem
 import de.wollis_page.gibsonos.helper.AlertListDialog
-import de.wollis_page.gibsonos.module.explorer.html5.activity.PlayerActivity
-import de.wollis_page.gibsonos.module.explorer.index.dto.Media
 
-class PlayDialog(private val context: PlayerActivity) {
-    fun build(videoView: VideoView, media: Media): AlertListDialog {
+class PlayDialog(private val context: GibsonOsActivity) {
+    fun build(
+        duration: Int,
+        position: Int,
+        startAction: (FlattedDialogItem) -> Any,
+        continueAction: (FlattedDialogItem) -> Any,
+        ): AlertListDialog {
         val options = ArrayList<DialogItem>()
-        val position = media.position ?: 0
 
-        if (position + 1 < media.duration || media.duration == 0) {
+        if (position + 1 < duration || duration == 0) {
             val continueItem = DialogItem(this.context.getString(R.string.explorer_html5_continue))
             continueItem.icon = R.drawable.ic_play
-            continueItem.onClick = {
-                videoView.seekTo(position * 1000)
-                this.context.startVideo(videoView)
-            }
+            continueItem.onClick = continueAction
             options.add(continueItem)
         }
 
         val restartItem = DialogItem(this.context.getString(R.string.explorer_html5_play_again))
         restartItem.icon = R.drawable.ic_restart
-        restartItem.onClick = {
-            this.context.startVideo(videoView)
-        }
+        restartItem.onClick = startAction
         options.add(restartItem)
 
         return AlertListDialog(
@@ -34,7 +32,7 @@ class PlayDialog(private val context: PlayerActivity) {
             this.context.getString(
                 R.string.explorer_html5_continue_message,
                 this.transformSeconds(position),
-                this.transformSeconds(media.duration)
+                this.transformSeconds(duration)
             ),
             options
         )

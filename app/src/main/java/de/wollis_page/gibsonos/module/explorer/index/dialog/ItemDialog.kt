@@ -1,8 +1,6 @@
 package de.wollis_page.gibsonos.module.explorer.index.dialog
 
 import android.os.Parcelable
-import com.google.android.gms.cast.MediaInfo
-import com.google.android.gms.cast.MediaLoadRequestData
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.helper.AlertListDialog
@@ -76,17 +74,7 @@ class ItemDialog(private val context: IndexActivity) {
 
     private fun getStreamItem(item: Item): DialogItem {
         val dialogItem = DialogItem(this.context.getString(R.string.explorer_html5_stream))
-
         val castSession = this.context.chromecastService.castSession
-//        castContext?.sessionManager?.addSessionManagerListener(Chromecast(this.context))
-//
-//        val mediaRouteSelector = MediaRouteSelector.Builder()
-//            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
-//            .addControlCategory(CastMediaControlIntent.categoryForCast(Config.CHROMECAST_RECEIVER_APPLICATION_ID))
-//            .build()
-//        val mediaRouteChooserDialog = MediaRouteChooserDialog(this.context)
-//        mediaRouteChooserDialog.routeSelector = mediaRouteSelector
-//
 
         dialogItem.icon = R.drawable.ic_chromecast
         dialogItem.onClick = {
@@ -94,15 +82,7 @@ class ItemDialog(private val context: IndexActivity) {
                 this.context.chromecastService.showMediaRouterDialog()
                 // Show media route chooser dialog
             } else {
-                val mediaInfo = MediaInfo.Builder(item.path + item.name)
-                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                    .setContentType("videos/mp4")
-                    //                .setMetadata(movieMetadata)
-                    .setStreamDuration(item.metaInfos?.get("duration").toString().toLong() * 1000)
-                    .build()
-                castSession.remoteMediaClient?.load(
-                    MediaLoadRequestData.Builder().setMediaInfo(mediaInfo).build()
-                )
+                this.context.chromecastService.loadMedia(item)
             }
         }
 

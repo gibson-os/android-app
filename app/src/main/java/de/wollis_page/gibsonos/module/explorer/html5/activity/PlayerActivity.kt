@@ -49,7 +49,17 @@ class PlayerActivity: GibsonOsActivity() {
         val position = this.media.position ?: 0
 
         if (position > 0) {
-            PlayDialog(this).build(videoView, media).show()
+            PlayDialog(this).build(
+                media.duration,
+                position,
+                {
+                    this.startVideo(videoView)
+                },
+                {
+                    videoView.seekTo(position * 1000)
+                    this.startVideo(videoView)
+                },
+            ).show()
         } else {
             this.startVideo(videoView)
         }

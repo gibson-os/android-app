@@ -1,16 +1,23 @@
 package de.wollis_page.gibsonos.module.explorer.service
 
+import android.net.Uri
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.gms.cast.MediaInfo
+import com.google.android.gms.cast.MediaLoadOptions
+import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManager
 import com.google.android.gms.cast.framework.SessionManagerListener
+import com.google.android.gms.common.images.WebImage
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.helper.Config
+import de.wollis_page.gibsonos.module.explorer.html5.dialog.PlayDialog
+import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 import org.json.JSONObject
 
@@ -123,5 +130,73 @@ class ChromecastService(private val context: GibsonOsActivity) {
     fun showMediaRouterDialog() {
 //        val menuItem = this.context.findViewById(R.id.media_route_menu_item) as MenuItem
 //        this.context.onOptionsItemSelected(menuItem);
+    }
+
+    fun loadMedia(item: Item) {
+        val position = item.position ?: 0
+        val mediaInfo = this.buildMediaInfo(item)
+
+        if (position > 0) {
+            PlayDialog(this.context).build(
+                item.metaInfos?.get("duration").toString().toFloat().toInt(),
+                position,
+                {
+                    this.playMedia(mediaInfo)
+                },
+                {
+                    this.playMedia(mediaInfo, (item.position.toString().toFloat() * 1000).toLong())
+                },
+            ).show()
+        } else {
+            this.playMedia(mediaInfo)
+        }
+    }
+
+    private fun playMedia(mediaInfo: MediaInfo, position: Long = 0) {
+        this.castSession?.remoteMediaClient?.load(
+            mediaInfo,
+            MediaLoadOptions.Builder().setAutoplay(true).setPlayPosition(position).build()
+        )
+    }
+
+    private fun buildMediaInfo(item: Item): MediaInfo {
+        val name = item.name
+        val token = item.html5VideoToken.toString()
+        val duration = (item.metaInfos?.get("duration").toString().toFloat() * 1000).toLong()
+        var mediaType = MediaMetadata.MEDIA_TYPE_MOVIE
+        var streamType = MediaInfo.STREAM_TYPE_BUFFERED
+        var contentType = "video/mp4"
+
+        if (item.category == 4) {
+            mediaType = MediaMetadata.MEDIA_TYPE_MUSIC_TRACK
+            streamType = MediaInfo.STREAM_TYPE_NONE
+            contentType = "audio/mpeg"
+        }
+
+        val movieMetadata = MediaMetadata(mediaType)
+        movieMetadata.putString(MediaMetadata.KEY_TITLE, name)
+        var url = this.context.getAccount().url
+
+        if (!url.endsWith("/")) {
+            url += '/'
+        }
+
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://$url"
+        }
+
+        movieMetadata.addImage(WebImage(Uri.parse(
+            url + "explorer/html5/image/token/" + token + "/image.jpg?height=800"
+        )))
+
+        return MediaInfo.Builder(token)
+            .setStreamType(streamType)
+            .setContentType(contentType)
+            .setMetadata(movieMetadata)
+            .setStreamDuration(duration * 1000)
+            .setContentUrl(
+                "/middleware/chromecast/stream/token/" + token + "?id=" + this.castSession?.sessionId
+            )
+            .build()
     }
 }
