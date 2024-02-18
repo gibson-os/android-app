@@ -15,14 +15,14 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbarLeft"
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <TextView
                 android:id="@android:id/title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:textSize="@dimen/headline_font_size"
                 android:gravity="center_vertical"
@@ -30,7 +30,14 @@
                 android:singleLine="true"
                 android:layout_marginEnd="@dimen/outter_spacing"
                 android:textStyle="bold"
+                android:layout_weight="1"
                 android:text="@string/app_name" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </LinearLayout>
 

@@ -82,7 +82,6 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
     override fun onCreate(savedInstanceState: Bundle?) {
         this.setContentView(R.layout.base_layout)
         super.onCreate(savedInstanceState)
-        val intent = this.intent
         this.application = this.getApplication() as GibsonOsApplication
 
         this.contentContainer = this.findViewById(R.id.content) as ConstraintLayout
@@ -96,12 +95,15 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         this.account = AppIntentExtraService.getIntentExtra(ACCOUNT_KEY, this.intent) as Account?
         this.shortcut = AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, this.intent) as Shortcut?
 
-        val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
+        val toolbarLeft = this.findViewById<Toolbar>(R.id.toolbarLeft)
         val drawer = this.findViewById<DrawerLayout>(R.id.drawer_layout)
-        val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-
+        val toggle = ActionBarDrawerToggle(this, drawer, toolbarLeft, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+
+        val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
+        this.setSupportActionBar(toolbar);
+        this.supportActionBar?.setDisplayShowTitleEnabled(false);
 
         if (this.account != null) {
             this.application.addProcess(this)
