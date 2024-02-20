@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
+import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
@@ -41,7 +42,7 @@ class IndexActivity: ListActivity() {
     private lateinit var dirDialog: DirDialog
     private var loadDir: String? = null
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
-    private var imageQueue = ArrayMap<ImageView, Item>()
+    private var imageQueue = ArrayList<Item>()
     private var imagesLoading = false
     private var imageWidth: Int? = null
 
@@ -195,7 +196,7 @@ class IndexActivity: ListActivity() {
 
     override fun onBackPressed() {
         Log.i(Config.LOG_TAG, "Loaded dir " + this.loadedDir.dir)
-        this.imageQueue = ArrayMap<ImageView, Item>()
+        this.imageQueue = ArrayList()
         val dirs = this.loadedDir.dir.split("/").toMutableList()
 
         if (dirs.last().isEmpty()) {
@@ -227,22 +228,23 @@ class IndexActivity: ListActivity() {
             imageView.setImageResource(R.drawable.ic_folder)
         } else {
             imageView.setImageResource(R.drawable.ic_file)
+            this.imageWidth = this.imageWidth ?: imageView.width
 
-//            if (item.thumbAvailable) {
-//                var imagePath = this.images[this.loadedDir.dir]
-//
-//                if (imagePath == null) {
-//                    imagePath = ArrayMap()
-//                    this.images[this.loadedDir.dir] = imagePath
-//                }
-//
-//                if (imagePath[item.name] == null) {
-//                    this.imageQueue[imageView] = item
-//                    this.loadImages()
-//                } else {
-//                    imageView.setImageBitmap(imagePath[item.name])
-//                }
-//            }
+            if (item.thumbAvailable) {
+                var imagePath = this.images[this.loadedDir.dir]
+
+                if (imagePath == null) {
+                    imagePath = ArrayMap()
+                    this.images[this.loadedDir.dir] = imagePath
+                }
+
+                if (imagePath[item.name] == null) {
+                    this.imageQueue.add(item)
+                    this.loadImages()
+                } else {
+                    imageView.setImageBitmap(imagePath[item.name])
+                }
+            }
         }
 
         val html5VideoStatus = item.html5VideoStatus
@@ -369,14 +371,8 @@ class IndexActivity: ListActivity() {
 
         this.runTask({
             while (this.imageQueue.size != 0) {
-                val imageView = this.imageQueue.keyAt(0)
-                val item = this.imageQueue[imageView] ?: continue
-                this.imageQueue.remove(imageView)
-
-                if (this.imageWidth == null) {
-                    this.imageWidth = imageView.width
-                }
-
+                val item = this.imageQueue.first()
+                this.imageQueue.removeAt(0)
                 var imagePath = this.images[this.loadedDir.dir]
 
                 if (imagePath == null) {
@@ -394,8 +390,15 @@ class IndexActivity: ListActivity() {
                         )
                     }
 
+                    val imageView = this.getViewByItem(item)?.findViewById<ImageView>(R.id.icon)
+
+                    if (imageView === null) {
+                        continue
+                    }
+
                     this.runOnUiThread { imageView.setImageBitmap(imagePath[item.name]) }
-                } catch (_: TaskException) {}
+                } catch (_: TaskException) {
+                } catch (_: ResponseException) {}
             }
 
             this.imagesLoading = false

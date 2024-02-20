@@ -15,13 +15,13 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
+import java.util.concurrent.TimeUnit
 
 class DataStore(url: String, private val method: String, token: String?) {
     private val params: HashMap<String, String> = HashMap()
     private val separator = "/"
     private val url: String
     private val token: String
-    private val client: OkHttpClient = OkHttpClient()
 
     private var cacheTTL = (2 * 60 * 1000).toLong()
     private var timeout = 20000
@@ -176,7 +176,13 @@ class DataStore(url: String, private val method: String, token: String?) {
             requestBuilder.header("X-Device-Token", this.token)
         }
 
-        val response = this.client.newCall(requestBuilder.build()).execute()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(this.timeout.toLong(), TimeUnit.MILLISECONDS)
+            .readTimeout(this.timeout.toLong(), TimeUnit.MILLISECONDS)
+            .writeTimeout(this.timeout.toLong(), TimeUnit.MILLISECONDS)
+            .build()
+
+        val response = client.newCall(requestBuilder.build()).execute()
         Log.i(Config.LOG_TAG, "Response code: " + response.code)
 
         if (!response.isSuccessful) {

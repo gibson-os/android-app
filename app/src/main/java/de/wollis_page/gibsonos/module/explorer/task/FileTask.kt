@@ -12,6 +12,7 @@ object FileTask: AbstractTask() {
         val dataStore = this.getDataStore(account, "explorer", "file", "image")
         dataStore.addParam("dir", directory)
         dataStore.addParam("filename", filename)
+        dataStore.setTimeout(60000)
 
         if (width != null) {
             dataStore.addParam("width", width)
