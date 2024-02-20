@@ -8,9 +8,12 @@ import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.module.explorer.service.ChromecastService
 
 class QueueDialog(private val context: ChromecastService) {
-    fun build(mediaInfo: MediaInfo, duration: Int, position: Long): AlertListDialog {
+    fun build(
+        mediaInfo: MediaInfo,
+        duration: Long,
+        position: Long,
+    ): AlertListDialog {
         val options = ArrayList<DialogItem>()
-
         val addItem = DialogItem(this.context.context.getString(R.string.explorer_html5_add_to_playlist))
         addItem.icon = R.drawable.ic_plus
         addItem.onClick = {
@@ -20,7 +23,7 @@ class QueueDialog(private val context: ChromecastService) {
 
         var startItemText = this.context.context.getString(R.string.explorer_html5_play)
 
-        if (position > 0 && (position + 1 < duration || duration == 0)) {
+        if (position > 0 && (position + 1 < duration || duration.toInt() == 0)) {
             val continueItem = DialogItem(this.context.context.getString(R.string.explorer_html5_continue))
             continueItem.icon = R.drawable.ic_play
             continueItem.onClick = {

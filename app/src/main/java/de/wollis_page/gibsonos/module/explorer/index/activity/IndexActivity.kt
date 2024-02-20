@@ -62,6 +62,22 @@ class IndexActivity: ListActivity() {
         super.onCreate(savedInstanceState)
 
         this.chromecastService = ChromecastService(this)
+        this.chromecastService.updatePositionCallback = { session ->
+            val remoteMediaClient = session?.remoteMediaClient
+            val contentId = remoteMediaClient?.currentItem?.media?.contentId
+
+            val listItem = (this.listAdapter.items as ArrayList<Item>).find {
+                it.html5VideoToken == contentId
+            }
+
+            if (listItem !== null) {
+                val progressBar = this.getViewByItem(listItem)?.findViewById<ProgressBar>(R.id.position)
+
+                listItem.position = ((remoteMediaClient?.approximateStreamPosition ?: 0) / 1000).toInt()
+                Log.d(Config.LOG_TAG, "update position: " + listItem.position)
+                this.setPosition(listItem, progressBar)
+            }
+        }
 
         this.addSearch { it, searchTerm ->
             val item = it as Item
@@ -230,8 +246,8 @@ class IndexActivity: ListActivity() {
         }
 
         val html5VideoStatus = item.html5VideoStatus
-        val html5ImageView = view.findViewById<View>(R.id.html5) as ImageView
-        val progressBar = view.findViewById(R.id.position) as ProgressBar
+        val html5ImageView = view.findViewById<ImageView>(R.id.html5)
+        val progressBar = view.findViewById<ProgressBar>(R.id.position)
         progressBar.max = 1
         progressBar.progress = 0
         progressBar.visibility = View.INVISIBLE
@@ -247,17 +263,20 @@ class IndexActivity: ListActivity() {
         this.setPosition(item, progressBar)
     }
 
-    private fun setPosition(item: Item, progressBar: ProgressBar) {
+    fun setPosition(item: Item, progressBar: ProgressBar?) {
         if (
-            item.metaInfos !== null &&
-            item.position !== null &&
-            item.metaInfos!!.containsKey("duration")
+            progressBar === null ||
+            item.metaInfos === null ||
+            item.position === null ||
+            !item.metaInfos!!.containsKey("duration")
         ) {
-            progressBar.progressTintList = ColorStateList.valueOf(getColor(R.color.colorProgressDone))
-            progressBar.max = item.metaInfos!!["duration"].toString().toFloat().toInt()
-            progressBar.progress = item.position!!
-            progressBar.visibility = View.VISIBLE
+            return
         }
+
+        progressBar.progressTintList = ColorStateList.valueOf(getColor(R.color.colorProgressDone))
+        progressBar.max = item.metaInfos!!["duration"].toString().toFloat().toInt()
+        progressBar.progress = item.position!!
+        progressBar.visibility = View.VISIBLE
     }
 
     private fun getConvertStatus(

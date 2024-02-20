@@ -70,6 +70,6 @@ object Html5Task: AbstractTask() {
         )
         dataStore.addParam("id", sessionId)
 
-        this.run(context, dataStore)
+        this.run(context, dataStore, false)
     }
 }

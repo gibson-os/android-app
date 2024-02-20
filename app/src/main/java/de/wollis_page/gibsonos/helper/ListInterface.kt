@@ -69,4 +69,8 @@ interface ListInterface {
     fun getItemIndex(item: ListItemInterface): Int {
         return this.listAdapter.items.indexOf(item)
     }
+
+    fun getViewByItem(item: ListItemInterface): View? {
+        return this.listView.layoutManager?.findViewByPosition(this.getItemIndex(item))
+    }
 }

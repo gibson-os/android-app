@@ -14,6 +14,7 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManager
 import com.google.android.gms.cast.framework.SessionManagerListener
+import com.google.android.gms.cast.framework.media.RemoteMediaClient
 import com.google.android.gms.common.images.WebImage
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
@@ -31,6 +32,9 @@ class ChromecastService(val context: GibsonOsActivity) {
     var mediaRouteMenuItem: MenuItem? = null
     private val sessionManagerListener: SessionManagerListener<CastSession> =
         SessionManagerListenerImpl()
+    private var isPlaying = false
+//    private val updatePositionCallbacks = mutableMapOf<String, (castSession: CastSession?) -> Unit>()
+    var updatePositionCallback: ((castSession: CastSession?) -> Unit)? = null
 
     init {
         // If without context the button will not rendered on startup
@@ -39,11 +43,10 @@ class ChromecastService(val context: GibsonOsActivity) {
 
         val inflater = LayoutInflater.from(this.context)
         this.context.contentContainer.addView(inflater.inflate(
-            R.layout.base_chromecast_mini_player,
+            R.layout.base_chromecast_mini_controller,
             this.context.findViewById(android.R.id.content),
             false
         ))
-
     }
 
     fun onResume() {
@@ -90,13 +93,13 @@ class ChromecastService(val context: GibsonOsActivity) {
 
         override fun onSessionEnded(session: CastSession, error: Int) {
             releaseSession()
-//            context.finish()
         }
     }
 
     private fun resumeSession(session: CastSession) {
         Log.d(Config.LOG_TAG, "Start chromecast session")
         val sessionId = session.sessionId
+        Log.d(Config.LOG_TAG, "sessionId: " +  sessionId.toString())
 
         if (sessionId === null) {
             return
@@ -118,7 +121,35 @@ class ChromecastService(val context: GibsonOsActivity) {
                     "urn:x-cast:net.itronom.gibson",
                     userMessage.toString()
                 )
+Log.d(Config.LOG_TAG, "mediaClient: " + session.remoteMediaClient.toString())
+                session.remoteMediaClient?.registerCallback(object : RemoteMediaClient.Callback() {
+                    override fun onStatusUpdated() {
+                        if (isPlaying == session.remoteMediaClient?.isPlaying) {
+                            return
+                        }
+
+                        isPlaying = session.remoteMediaClient?.isPlaying ?: false
+                        Log.d(Config.LOG_TAG, "Playing: $isPlaying")
+                        updatePosition()
+                    }
+                })
+
+                this.isPlaying = session.remoteMediaClient?.isPlaying ?: false
+                this.updatePosition()
                 this.context.invalidateOptionsMenu()
+            }
+        })
+    }
+
+    private fun updatePosition() {
+        this.context.runTask({
+            while (isPlaying) {
+                this.context.runOnUiThread {
+                    val contentId = this.castSession?.remoteMediaClient?.currentItem?.media?.contentId
+                    this.updatePositionCallback?.invoke(this.castSession)
+                }
+
+                Thread.sleep(1000)
             }
         })
     }
@@ -143,33 +174,40 @@ class ChromecastService(val context: GibsonOsActivity) {
     }
 
     fun loadMedia(item: Item) {
-        val duration = item.metaInfos?.get("duration").toString().toFloat().toInt()
+        val duration = item.metaInfos?.get("duration").toString().toFloat()
         val position = item.position ?: 0
         val mediaInfo = this.buildMediaInfo(item)
         val remoteMediaClient = this.castSession?.remoteMediaClient
 
         if (remoteMediaClient?.isPlaying == true || remoteMediaClient?.isPaused == true) {
-            QueueDialog(this).build(mediaInfo, duration, position.toLong()).show()
-
-            return
-        }
-
-        if (position > 0) {
-            PlayDialog(this.context).build(
-                duration,
-                position,
-                {
-                    this.playMedia(mediaInfo)
-                },
-                {
-                    this.playMedia(mediaInfo, (item.position.toString().toFloat() * 1000).toLong())
-                },
+            QueueDialog(this).build(
+                mediaInfo,
+                duration.toLong(),
+                position.toLong(),
             ).show()
 
             return
         }
 
-        this.playMedia(mediaInfo)
+        if (position == 0) {
+            this.playMedia(mediaInfo)
+
+            return
+        }
+
+        PlayDialog(this.context).build(
+            duration.toInt(),
+            position,
+            {
+                this.playMedia(mediaInfo)
+            },
+            {
+                this.playMedia(
+                    mediaInfo,
+                    (item.position.toString().toFloat() * 1000).toLong()
+                )
+            },
+        ).show()
     }
 
     fun playMedia(mediaInfo: MediaInfo, position: Long = 0) {
@@ -177,6 +215,7 @@ class ChromecastService(val context: GibsonOsActivity) {
             mediaInfo,
             MediaLoadOptions.Builder().setAutoplay(true).setPlayPosition(position).build()
         )
+//        this.updatePositionCallbacks[mediaInfo.contentId] = updatePositionCallback
     }
 
     fun addMedia(mediaInfo: MediaInfo) {
@@ -184,6 +223,7 @@ class ChromecastService(val context: GibsonOsActivity) {
             MediaQueueItem.Builder(mediaInfo).setAutoplay(true).build(),
             JSONObject()
         )
+//        this.updatePositionCallbacks[mediaInfo.contentId] = updatePositionCallback
     }
 
     private fun buildMediaInfo(item: Item): MediaInfo {
