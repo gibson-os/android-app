@@ -239,7 +239,7 @@ class IndexActivity: ListActivity() {
                 }
 
                 if (imagePath[item.name] == null) {
-                    this.imageQueue.add(item)
+                    this.imageQueue.add(0, item)
                     this.loadImages()
                 } else {
                     imageView.setImageBitmap(imagePath[item.name])
