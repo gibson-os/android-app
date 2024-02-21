@@ -49,7 +49,7 @@ class ChromecastService(
         val inflater = LayoutInflater.from(this.context)
         this.miniControllerView = inflater.inflate(
             R.layout.base_chromecast_mini_controller,
-            this.context.findViewById(android.R.id.content),
+            this.context.findViewById(R.id.content),
             false
         )
         this.context.contentContainer.addView(this.miniControllerView)

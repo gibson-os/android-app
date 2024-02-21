@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:layout_marginEnd="@dimen/thumb_width"
         android:visibility="gone"
         class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
         tools:ignore="FragmentTagUsage" />
