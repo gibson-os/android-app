@@ -284,14 +284,16 @@ class IndexActivity: ListActivity() {
     private fun getConvertStatus(
         html5VideoStatus: Html5Status?,
         item: Item,
-        progressBar: ProgressBar,
-        html5ImageView: ImageView
+        initProgressBar: ProgressBar?,
+        initHtml5ImageView: ImageView?
     ) {
+        var progressBar = initProgressBar
+        var html5ImageView = initHtml5ImageView
         var actualHtml5VideoStatus = html5VideoStatus
         this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
 
-        html5ImageView.visibility = View.VISIBLE
-        progressBar.visibility = View.VISIBLE
+        html5ImageView?.visibility = View.VISIBLE
+        progressBar?.visibility = View.VISIBLE
 
         this.runTask({
             while (
@@ -312,7 +314,7 @@ class IndexActivity: ListActivity() {
                     if (actualHtml5VideoStatus != Html5Status.GENERATE) {
                         this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
                         this.runOnUiThread {
-                            progressBar.progress = 0
+                            progressBar?.progress = 0
                         }
 
                         if (actualHtml5VideoStatus == Html5Status.WAIT) {
@@ -326,14 +328,19 @@ class IndexActivity: ListActivity() {
 
                     this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
                     this.runOnUiThread {
-                        progressBar.max = convertStatus.frames
-                        progressBar.progress = convertStatus.frame!!
-                        progressBar.visibility = View.VISIBLE
+                        progressBar?.max = convertStatus.frames
+                        progressBar?.progress = convertStatus.frame!!
+                        progressBar?.visibility = View.VISIBLE
                     }
                 } catch (_: TaskException) {
+                } catch (_: ResponseException) {
                 }
 
                 Thread.sleep(1000)
+
+                val view = this.getViewByItem(item)
+                progressBar = view?.findViewById(R.id.position)
+                html5ImageView = view?.findViewById(R.id.html5)
             }
 
             this.setHtml5StatusColor(actualHtml5VideoStatus, progressBar, html5ImageView)
@@ -342,10 +349,14 @@ class IndexActivity: ListActivity() {
 
     private fun setHtml5StatusColor(
         html5VideoStatus: Html5Status?,
-        progressBar: ProgressBar,
-        html5ImageView: ImageView
+        progressBar: ProgressBar?,
+        html5ImageView: ImageView?
     ) {
-        if (html5VideoStatus == null) {
+        if (
+            html5VideoStatus === null ||
+            progressBar === null ||
+            html5ImageView === null
+        ) {
             return
         }
 
@@ -398,7 +409,8 @@ class IndexActivity: ListActivity() {
 
                     this.runOnUiThread { imageView.setImageBitmap(imagePath[item.name]) }
                 } catch (_: TaskException) {
-                } catch (_: ResponseException) {}
+                } catch (_: ResponseException) {
+                }
             }
 
             this.imagesLoading = false
