@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaLoadOptions
 import com.google.android.gms.cast.MediaMetadata
@@ -25,16 +26,20 @@ import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 import org.json.JSONObject
 
-class ChromecastService(val context: GibsonOsActivity) {
+
+class ChromecastService(
+    val context: GibsonOsActivity,
+    private var updatePositionCallback: ((castSession: CastSession?) -> Unit)? = null,
+    private var updateStatusCallback: ((castSession: CastSession?) -> Unit)? = null,
+) {
     var castContext: CastContext? = null
     var sessionManager: SessionManager? = null
     var castSession: CastSession? = null
     var mediaRouteMenuItem: MenuItem? = null
+    val miniControllerView: View
     private val sessionManagerListener: SessionManagerListener<CastSession> =
         SessionManagerListenerImpl()
     private var isPlaying = false
-//    private val updatePositionCallbacks = mutableMapOf<String, (castSession: CastSession?) -> Unit>()
-    var updatePositionCallback: ((castSession: CastSession?) -> Unit)? = null
 
     init {
         // If without context the button will not rendered on startup
@@ -42,11 +47,12 @@ class ChromecastService(val context: GibsonOsActivity) {
         this.sessionManager = this.castContext?.sessionManager
 
         val inflater = LayoutInflater.from(this.context)
-        this.context.contentContainer.addView(inflater.inflate(
+        this.miniControllerView = inflater.inflate(
             R.layout.base_chromecast_mini_controller,
             this.context.findViewById(android.R.id.content),
             false
-        ))
+        )
+        this.context.contentContainer.addView(this.miniControllerView)
     }
 
     fun onResume() {
@@ -121,20 +127,22 @@ class ChromecastService(val context: GibsonOsActivity) {
                     "urn:x-cast:net.itronom.gibson",
                     userMessage.toString()
                 )
-Log.d(Config.LOG_TAG, "mediaClient: " + session.remoteMediaClient.toString())
+
                 session.remoteMediaClient?.registerCallback(object : RemoteMediaClient.Callback() {
                     override fun onStatusUpdated() {
+                        updateStatusCallback?.invoke(session)
+
                         if (isPlaying == session.remoteMediaClient?.isPlaying) {
                             return
                         }
 
                         isPlaying = session.remoteMediaClient?.isPlaying ?: false
-                        Log.d(Config.LOG_TAG, "Playing: $isPlaying")
                         updatePosition()
                     }
                 })
 
                 this.isPlaying = session.remoteMediaClient?.isPlaying ?: false
+                updateStatusCallback?.invoke(session)
                 this.updatePosition()
                 this.context.invalidateOptionsMenu()
             }
@@ -145,7 +153,6 @@ Log.d(Config.LOG_TAG, "mediaClient: " + session.remoteMediaClient.toString())
         this.context.runTask({
             while (isPlaying) {
                 this.context.runOnUiThread {
-                    val contentId = this.castSession?.remoteMediaClient?.currentItem?.media?.contentId
                     this.updatePositionCallback?.invoke(this.castSession)
                 }
 
@@ -157,6 +164,7 @@ Log.d(Config.LOG_TAG, "mediaClient: " + session.remoteMediaClient.toString())
     private fun releaseSession() {
         Log.d(Config.LOG_TAG, "Release chromecast session")
         this.castSession = null
+        updateStatusCallback?.invoke(null)
     }
 
     fun onCreateOptionsMenu(menu: Menu) {
@@ -215,7 +223,6 @@ Log.d(Config.LOG_TAG, "mediaClient: " + session.remoteMediaClient.toString())
             mediaInfo,
             MediaLoadOptions.Builder().setAutoplay(true).setPlayPosition(position).build()
         )
-//        this.updatePositionCallbacks[mediaInfo.contentId] = updatePositionCallback
     }
 
     fun addMedia(mediaInfo: MediaInfo) {
@@ -223,7 +230,6 @@ Log.d(Config.LOG_TAG, "mediaClient: " + session.remoteMediaClient.toString())
             MediaQueueItem.Builder(mediaInfo).setAutoplay(true).build(),
             JSONObject()
         )
-//        this.updatePositionCallbacks[mediaInfo.contentId] = updatePositionCallback
     }
 
     private fun buildMediaInfo(item: Item): MediaInfo {
@@ -265,5 +271,12 @@ Log.d(Config.LOG_TAG, "mediaClient: " + session.remoteMediaClient.toString())
                 "/middleware/chromecast/stream/token/" + token + "?id=" + this.castSession?.sessionId
             )
             .build()
+    }
+
+    fun miniControllerShown(): Boolean {
+        return this.castSession?.remoteMediaClient?.isPlaying == true ||
+            this.castSession?.remoteMediaClient?.isPaused == true ||
+            this.castSession?.remoteMediaClient?.isBuffering == true ||
+            this.castSession?.remoteMediaClient?.isLoadingNextItem == true
     }
 }

@@ -51,7 +51,6 @@ class IndexActivity: ListActivity() {
     companion object {
         const val DIRECTORY_KEY = "directory"
         const val IMAGE_WIDTH_KEY = "image_width"
-        const val IMAGES_KEY = "images"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,23 +61,43 @@ class IndexActivity: ListActivity() {
 
         super.onCreate(savedInstanceState)
 
-        this.chromecastService = ChromecastService(this)
-        this.chromecastService.updatePositionCallback = { session ->
-            val remoteMediaClient = session?.remoteMediaClient
-            val contentId = remoteMediaClient?.currentItem?.media?.contentId
+        var mediaClientLoaded = false
+        this.chromecastService = ChromecastService(
+            this,
+            { session ->
+                val remoteMediaClient = session?.remoteMediaClient
+                val contentId = remoteMediaClient?.currentItem?.media?.contentId
 
-            val listItem = (this.listAdapter.items as ArrayList<Item>).find {
-                it.html5VideoToken == contentId
+                val listItem = (this.listAdapter.items as ArrayList<Item>).find {
+                    it.html5VideoToken == contentId
+                }
+
+                if (listItem !== null) {
+                    val progressBar = this.getViewByItem(listItem)?.findViewById<ProgressBar>(R.id.position)
+
+                    listItem.position = ((remoteMediaClient?.approximateStreamPosition ?: 0) / 1000).toInt()
+                    Log.d(Config.LOG_TAG, "update position: " + listItem.position)
+                    this.setPosition(listItem, progressBar)
+                }
+            },
+            { session ->
+                if (
+                    !mediaClientLoaded &&
+                    chromecastService.miniControllerShown()
+                ) {
+                    Log.d(Config.LOG_TAG, "media client loaded")
+                    mediaClientLoaded = true
+                }
+
+                if (
+                    mediaClientLoaded &&
+                    !chromecastService.miniControllerShown()
+                ) {
+                    Log.d(Config.LOG_TAG, "media client not loaded")
+                    mediaClientLoaded = false
+                }
             }
-
-            if (listItem !== null) {
-                val progressBar = this.getViewByItem(listItem)?.findViewById<ProgressBar>(R.id.position)
-
-                listItem.position = ((remoteMediaClient?.approximateStreamPosition ?: 0) / 1000).toInt()
-                Log.d(Config.LOG_TAG, "update position: " + listItem.position)
-                this.setPosition(listItem, progressBar)
-            }
-        }
+        )
 
         this.addSearch { it, searchTerm ->
             val item = it as Item
@@ -131,7 +150,6 @@ class IndexActivity: ListActivity() {
             return
         }
 
-        this.images = savedInstanceState.getSerializable(IMAGES_KEY) as HashMap<String, ArrayMap<String, Bitmap>>
         this.imageWidth = savedInstanceState.getInt(IMAGE_WIDTH_KEY)
 
         if (this.imageWidth == 0) {
@@ -422,7 +440,6 @@ class IndexActivity: ListActivity() {
 
         outState.putInt(IMAGE_WIDTH_KEY, this.imageWidth ?: 0)
         outState.putParcelable(DIRECTORY_KEY, this.loadedDir)
-        outState.putSerializable(IMAGES_KEY, this.images)
     }
 
     override fun getId(): Any = this.loadDir.toString()
