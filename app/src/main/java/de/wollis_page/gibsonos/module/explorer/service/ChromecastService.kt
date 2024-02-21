@@ -259,7 +259,7 @@ class ChromecastService(
         }
 
         movieMetadata.addImage(WebImage(Uri.parse(
-            url + "explorer/html5/image/token/" + token + "/image.jpg?height=800"
+            "${url}explorer/html5/image/token/$token/deviceToken/${this.context.getAccount().token}/height/800/image.jpg"
         )))
 
         return MediaInfo.Builder(token)
