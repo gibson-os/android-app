@@ -9,6 +9,7 @@ import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.dto.Master
 import de.wollis_page.gibsonos.module.hc.index.fragment.LogFragment
 import de.wollis_page.gibsonos.module.hc.index.fragment.ModuleFragment
+import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 class MasterActivity : TabActivity() {
     private lateinit var master: Master
@@ -22,7 +23,7 @@ class MasterActivity : TabActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        this.master = this.intent.getParcelableExtra("master")!!
+        this.master = AppIntentExtraService.getIntentExtra("master", intent) as Master
 
         super.onCreate(savedInstanceState)
 

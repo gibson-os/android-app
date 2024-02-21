@@ -1,0 +1,94 @@
+Index: app/src/main/java/de/wollis_page/gibsonos/application/GibsonOsApplication.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package de.wollis_page.gibsonos.application\r\n\r\nimport android.app.UiModeManager\r\nimport android.content.Intent\r\nimport android.util.Log\r\nimport androidx.appcompat.app.AppCompatDelegate\r\nimport com.google.android.gms.tasks.OnCompleteListener\r\nimport com.google.firebase.messaging.FirebaseMessaging\r\nimport com.orm.SugarApp\r\nimport com.orm.SugarRecord\r\nimport de.wollis_page.gibsonos.activity.GibsonOsActivity\r\nimport de.wollis_page.gibsonos.dto.Account\r\nimport de.wollis_page.gibsonos.exception.AccountException\r\nimport de.wollis_page.gibsonos.helper.Config\r\nimport de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut\r\nimport de.wollis_page.gibsonos.process.Process\r\nimport de.wollis_page.gibsonos.service.AppIntentExtraService\r\nimport de.wollis_page.gibsonos.model.Account as AccountModel\r\n\r\n\r\nclass GibsonOsApplication : SugarApp() {\r\n    val accounts: MutableList<Account> = ArrayList()\r\n    var firebaseToken: String? = null\r\n\r\n    override fun onCreate() {\r\n        super.onCreate()\r\n\r\n        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)\r\n//        AppCompatDelegate.setDefaultNightMode(\r\n//            if (this.useDarkMode()) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM\r\n//        )\r\n\r\n        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->\r\n            if (!task.isSuccessful) {\r\n                Log.w(Config.LOG_TAG, \"Fetching FCM registration token failed\", task.exception)\r\n                return@OnCompleteListener\r\n            }\r\n\r\n            this.firebaseToken = task.result.toString()\r\n            Log.d(Config.LOG_TAG, \"Firebase token: \" + this.firebaseToken)\r\n        })\r\n\r\n        for (account in SugarRecord.listAll(AccountModel::class.java)) {\r\n            Log.d(Config.LOG_TAG, \"onCreate: \" + account.id)\r\n            addAccount(account)\r\n        }\r\n    }\r\n\r\n    fun addAccount(account: AccountModel) {\r\n        this.accounts.add(Account(account))\r\n    }\r\n\r\n    fun removeAccount(account: AccountModel) {\r\n        this.accounts.remove(this.getAccountById(account.id))\r\n        SugarRecord.delete(account)\r\n    }\r\n\r\n    fun getAccountById(id: Long): Account? {\r\n        return this.accounts.find { it.account.id == id }\r\n    }\r\n\r\n    fun useDarkMode(): Boolean {\r\n        val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager\r\n        val sp = getSharedPreferences(\"settings\", 0)\r\n\r\n        return sp.getBoolean(\"darkMode\", uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES)\r\n    }\r\n\r\n    fun setDarkMode(darkMode: Boolean) {\r\n        val editor = getSharedPreferences(\"settings\", 0).edit()\r\n        editor.putBoolean(\"darkMode\", darkMode)\r\n        editor.apply()\r\n    }\r\n\r\n    fun addProcess(activity: GibsonOsActivity) {\r\n        val account = activity.getAccount()\r\n        val accountDto = this.getAccount(account)\r\n            ?: throw AccountException(\"Account \" + account.id + \" not found in store!\")\r\n\r\n        accountDto.addProccess(Process(account, activity))\r\n    }\r\n\r\n    fun getAccountByToken(token: String): Account? {\r\n        for (accountDto in accounts) {\r\n            if (accountDto.account.token == token) {\r\n                return accountDto\r\n            }\r\n        }\r\n\r\n        return null\r\n    }\r\n\r\n    fun getActivity(\r\n        account: Account,\r\n        module: String,\r\n        task: String,\r\n        action: String,\r\n        id: Any\r\n    ): GibsonOsActivity? {\r\n        val activityName = this.getActivityName(module, task, action)\r\n\r\n        val process = account.getProcesses().find {\r\n            it.activity::class.java.toString() == \"class $activityName\" && it.activity.getId() == id\r\n        }\r\n\r\n        return process?.activity\r\n    }\r\n\r\n    fun getActivity(\r\n        account: Account,\r\n        shortcut: Shortcut\r\n    ): GibsonOsActivity? {\r\n        val activityName = this.getActivityName(shortcut.module, shortcut.task, shortcut.action)\r\n\r\n        val process = account.getProcesses().find {\r\n            it.activity::class.java.toString() == \"class $activityName\" &&\r\n            it.activity.isActivityforShotcut(shortcut)\r\n        }\r\n\r\n        return process?.activity\r\n    }\r\n\r\n    fun getActivityIntent(\r\n        accountModel: AccountModel,\r\n        module: String,\r\n        task: String,\r\n        action: String,\r\n        id: Any\r\n    ): Intent {\r\n        val account = this.getAccountById(accountModel.id)\r\n            ?: throw AccountException(\"Account \" + accountModel.id + \" not found in store!\")\r\n\r\n        val activity = this.getActivity(account, module, task, action, id)\r\n\r\n        if (activity == null) {\r\n            val intent = Intent(this, Class.forName(this.getActivityName(module, task, action)))\r\n            AppIntentExtraService.setIntentExtra(GibsonOsActivity.ACCOUNT_KEY, accountModel, intent)\r\n//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK\r\n\r\n            return intent\r\n        }\r\n\r\n        return activity.intent\r\n    }\r\n\r\n    fun getActivityName(module: String, task: String, action: String): String\r\n    {\r\n        return \"de.wollis_page.gibsonos.module.\" +\r\n            module + \".\" +\r\n            task + \".activity.\" +\r\n            (action.replaceFirstChar { it.uppercase() }) + \"Activity\"\r\n    }\r\n\r\n    private fun getAccount(account: AccountModel): Account? {\r\n        for (accountDto in accounts) {\r\n            if (accountDto.account.id == account.id) {\r\n                return accountDto\r\n            }\r\n        }\r\n\r\n        return null\r\n    }\r\n\r\n    val accountModels: ArrayList<AccountModel>\r\n        get() {\r\n            val accounts: ArrayList<AccountModel> = ArrayList()\r\n\r\n            for (accountDto in this.accounts) {\r\n                accounts.add(accountDto.account)\r\n            }\r\n\r\n            return accounts\r\n        }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/de/wollis_page/gibsonos/application/GibsonOsApplication.kt b/app/src/main/java/de/wollis_page/gibsonos/application/GibsonOsApplication.kt
+--- a/app/src/main/java/de/wollis_page/gibsonos/application/GibsonOsApplication.kt	(revision eb1d4dab7174c0f1e9bba4c7a5150ded50204583)
++++ b/app/src/main/java/de/wollis_page/gibsonos/application/GibsonOsApplication.kt	(date 1708513689955)
+@@ -9,6 +9,7 @@
+ import com.orm.SugarApp
+ import com.orm.SugarRecord
+ import de.wollis_page.gibsonos.activity.GibsonOsActivity
++import de.wollis_page.gibsonos.cache.ImageCache
+ import de.wollis_page.gibsonos.dto.Account
+ import de.wollis_page.gibsonos.exception.AccountException
+ import de.wollis_page.gibsonos.helper.Config
+@@ -20,6 +21,7 @@
+ 
+ class GibsonOsApplication : SugarApp() {
+     val accounts: MutableList<Account> = ArrayList()
++    lateinit var imageCache: ImageCache
+     var firebaseToken: String? = null
+ 
+     override fun onCreate() {
+@@ -44,6 +46,8 @@
+             Log.d(Config.LOG_TAG, "onCreate: " + account.id)
+             addAccount(account)
+         }
++
++        this.imageCache = ImageCache()
+     }
+ 
+     fun addAccount(account: AccountModel) {
+Index: app/src/main/java/de/wollis_page/gibsonos/cache/ImageCache.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/de/wollis_page/gibsonos/cache/ImageCache.kt b/app/src/main/java/de/wollis_page/gibsonos/cache/ImageCache.kt
+new file mode 100644
+--- /dev/null	(date 1708513585820)
++++ b/app/src/main/java/de/wollis_page/gibsonos/cache/ImageCache.kt	(date 1708513585820)
+@@ -0,0 +1,30 @@
++package de.wollis_page.gibsonos.cache
++
++import android.graphics.Bitmap
++import de.wollis_page.gibsonos.dto.Image
++
++class ImageCache {
++    private var images = mutableListOf<Image>()
++
++    fun getImage(key: String, getter: () -> Bitmap): Image {
++        val image = this.images.find {
++            it.key == key
++        } ?: Image(key, getter())
++        this.images.add(image)
++
++        this.cleanCache()
++
++        return image
++    }
++
++    private fun cleanCache() {
++        val maxEntries = 250
++        val size = this.images.size
++
++        if (size < maxEntries) {
++            return
++        }
++
++        this.images = this.images.subList(size-maxEntries, size)
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/de/wollis_page/gibsonos/dto/Image.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/de/wollis_page/gibsonos/dto/Image.kt b/app/src/main/java/de/wollis_page/gibsonos/dto/Image.kt
+new file mode 100644
+--- /dev/null	(date 1708513194763)
++++ b/app/src/main/java/de/wollis_page/gibsonos/dto/Image.kt	(date 1708513194763)
+@@ -0,0 +1,8 @@
++package de.wollis_page.gibsonos.dto
++
++import android.graphics.Bitmap
++
++data class Image(
++    val key: String,
++    val bitmap: Bitmap,
++)

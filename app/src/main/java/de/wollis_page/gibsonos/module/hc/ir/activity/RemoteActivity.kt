@@ -14,6 +14,7 @@ import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.task.IrTask
+import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 class RemoteActivity: GibsonOsActivity() {
     private lateinit var remote: Remote
@@ -32,7 +33,7 @@ class RemoteActivity: GibsonOsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.module = this.intent.getParcelableExtra("module")!!
+        this.module = AppIntentExtraService.getIntentExtra("module", intent) as Module
         val layout = findViewById<View>(R.id.remote) as RelativeLayout
 
         this.runTask({

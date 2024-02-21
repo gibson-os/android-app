@@ -7,6 +7,7 @@ import de.wollis_page.gibsonos.dto.Tab
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.index.fragment.LogFragment
+import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 abstract class ModuleActivity : TabActivity() {
     lateinit var module: Module
@@ -20,7 +21,7 @@ abstract class ModuleActivity : TabActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        this.module = this.intent.getParcelableExtra("module")!!
+        this.module = AppIntentExtraService.getIntentExtra("module", intent) as Module
 
         super.onCreate(savedInstanceState)
 
