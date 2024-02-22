@@ -10,6 +10,7 @@ import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.task.ModuleTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.AppIconService
 
 class ModuleFragment: ListFragment() {
@@ -20,7 +21,8 @@ class ModuleFragment: ListFragment() {
 
         this.runTask({
             try {
-                this.activity.startActivity(
+                ActivityLauncherService.startActivity(
+                    this.activity,
                     "hc",
                     item.helper,
                     "index",

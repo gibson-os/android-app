@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.*
 import android.view.animation.AlphaAnimation
@@ -13,7 +12,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -29,17 +27,15 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.dto.Update
 import de.wollis_page.gibsonos.exception.AccountException
-import de.wollis_page.gibsonos.exception.ActivityException
 import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.AppIconService
 import de.wollis_page.gibsonos.service.AppIntentExtraService
-import java.io.Serializable
 import java.util.concurrent.CompletableFuture
-import de.wollis_page.gibsonos.dto.Account as AccountDto
 
 abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var account: Account? = null
@@ -135,7 +131,8 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             when (item.groupId and 3) {
                 this.navigationAccountGroupBit -> {
                     Log.d(Config.LOG_TAG, "Navigation account")
-                    this.startActivity(
+                    ActivityLauncherService.startActivity(
+                        this,
                         "core",
                         "desktop",
                         "index",
@@ -147,7 +144,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
                 this.navigationAppGroupBit -> {
                     Log.d(Config.LOG_TAG, "Navigation app")
                     val app = account.apps[item.itemId]
-                    this.startActivity(app.module, app.task, app.action, 0, emptyMap(), account)
+                    ActivityLauncherService.startActivity(this, app.module, app.task, app.action, 0, emptyMap(), account)
                 }
                 this.navigationProcessGroupBit -> {
                     Log.d(Config.LOG_TAG, "Navigation proccess")
@@ -165,7 +162,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     private fun runActivity(activity: Class<*>?, account: Account? = this.account) {
         val intent = Intent(this, activity)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 
         if (account !== null) {
             AppIntentExtraService.setIntentExtra(ACCOUNT_KEY, account, intent)
@@ -260,114 +257,6 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             this.setTaskDescription(ActivityManager.TaskDescription(newTitle))
             this.loadNavigation()
         }
-    }
-
-    fun startActivity(
-        shortcut: Shortcut,
-        extras: Map<String, Any>,
-        launcher: ActivityResultLauncher<Intent>? = null
-    ) {
-        val account = this.application.getAccountById(this.getAccount().id)
-            ?: throw AccountException("Account " + this.getAccount().id + " not found in store!")
-
-        this.startActivity(
-            this.application.getActivity(account, shortcut),
-            shortcut.module,
-            shortcut.task,
-            shortcut.action,
-            extras,
-            account,
-            launcher
-        )
-    }
-
-    fun startActivity(
-        module: String,
-        task: String,
-        action: String,
-        id: Any,
-        extras: Map<String, Any>,
-        launcher: ActivityResultLauncher<Intent>? = null
-    ) {
-        this.startActivity(
-            module,
-            task,
-            action,
-            id,
-            extras,
-            this.application.getAccountById(this.getAccount().id)
-                ?: throw AccountException("Account " + this.getAccount().id + " not found in store!"),
-            launcher
-        )
-    }
-
-    fun startActivity(
-        module: String,
-        task: String,
-        action: String,
-        id: Any,
-        extras: Map<String, Any>,
-        account: AccountDto,
-        launcher: ActivityResultLauncher<Intent>? = null
-    ) {
-        this.startActivity(
-            this.application.getActivity(
-                account,
-                module,
-                task,
-                action,
-                id
-            ),
-            module,
-            task,
-            action,
-            extras,
-            account,
-            launcher
-        )
-    }
-
-    private fun startActivity(
-        activity: GibsonOsActivity?,
-        module: String,
-        task: String,
-        action: String,
-        extras: Map<String, Any>,
-        account: AccountDto,
-        launcher: ActivityResultLauncher<Intent>? = null
-    ) {
-        if (activity == null) {
-            val intent = Intent(this, Class.forName(this.application.getActivityName(module, task, action)))
-            AppIntentExtraService.setIntentExtra(ACCOUNT_KEY, account.account, intent)
-            //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-
-            extras.forEach {
-                when (val value = it.value) {
-                    is Parcelable -> AppIntentExtraService.setIntentExtra(it.key, value, intent)
-                    is String -> intent.putExtra(it.key, value)
-                    is Int -> intent.putExtra(it.key, value)
-                    is Long -> intent.putExtra(it.key, value)
-                    is Float -> intent.putExtra(it.key, value)
-                    is Double -> intent.putExtra(it.key, value)
-                    is Boolean -> intent.putExtra(it.key, value)
-                    is Serializable -> intent.putExtra(it.key, value)
-                    else -> throw ActivityException(it.key + " cant put as extra. Type not allowed")
-                }
-            }
-
-            if (launcher == null) {
-                this.startActivity(intent)
-
-                return
-            }
-
-            launcher.launch(intent)
-
-            return
-        }
-
-        val activityManager = activity.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        activityManager.moveTaskToFront(activity.taskId, 0)
     }
 
     fun runTask(run: () -> Unit, runFailure: ((exception: Throwable) -> Unit)? = null) {

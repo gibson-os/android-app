@@ -4,6 +4,7 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.helper.AlertListDialog
 import de.wollis_page.gibsonos.module.core.desktop.activity.IndexActivity
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.AppIconService
 
 class ItemDialog(private val context: IndexActivity) {
@@ -13,7 +14,8 @@ class ItemDialog(private val context: IndexActivity) {
             ?: R.drawable.ic_android
         cronjobsSetting.onClick = {
             this.context.runTask({
-                this.context.startActivity(
+                ActivityLauncherService.startActivity(
+                    this.context,
                     "core",
                     "cronjob",
                     "index",
@@ -28,7 +30,8 @@ class ItemDialog(private val context: IndexActivity) {
             ?: R.drawable.ic_android
         eventsSetting.onClick = {
             this.context.runTask({
-                this.context.startActivity(
+                ActivityLauncherService.startActivity(
+                    this.context,
                     "core",
                     "event",
                     "index",
@@ -43,7 +46,8 @@ class ItemDialog(private val context: IndexActivity) {
             ?: R.drawable.ic_android
         messageSetting.onClick = {
             this.context.runTask({
-                this.context.startActivity(
+                ActivityLauncherService.startActivity(
+                    this.context,
                     "core",
                     "message",
                     "index",

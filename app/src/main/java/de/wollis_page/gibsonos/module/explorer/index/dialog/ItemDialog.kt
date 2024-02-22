@@ -10,6 +10,7 @@ import de.wollis_page.gibsonos.module.explorer.index.dto.Html5Status
 import de.wollis_page.gibsonos.module.explorer.index.dto.Item
 import de.wollis_page.gibsonos.module.explorer.index.dto.Media
 import de.wollis_page.gibsonos.module.explorer.service.Html5Service
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class ItemDialog(private val context: IndexActivity) {
     fun build(item: Item): AlertListDialog {
@@ -54,7 +55,8 @@ class ItemDialog(private val context: IndexActivity) {
 
         dialogItem.icon = R.drawable.ic_play
         dialogItem.onClick = {
-            this.context.startActivity(
+            ActivityLauncherService.startActivity(
+                this.context,
                 "explorer",
                 "html5",
                 "player",

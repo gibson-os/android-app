@@ -8,6 +8,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.obscura.scanner.dto.Scanner
 import de.wollis_page.gibsonos.module.obscura.task.IndexTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class IndexActivity: ListActivity() {
     override fun getId(): Long = 0
@@ -20,7 +21,8 @@ class IndexActivity: ListActivity() {
         }
 
         this.runTask({
-            this.activity.startActivity(
+            ActivityLauncherService.startActivity(
+                this.activity,
                 "obscura",
                 "scanner",
                 "form",

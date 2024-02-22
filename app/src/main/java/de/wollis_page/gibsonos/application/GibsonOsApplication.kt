@@ -10,10 +10,10 @@ import com.orm.SugarApp
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Account
+import de.wollis_page.gibsonos.dto.Process
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
-import de.wollis_page.gibsonos.process.Process
 import de.wollis_page.gibsonos.service.AppIntentExtraService
 import de.wollis_page.gibsonos.model.Account as AccountModel
 

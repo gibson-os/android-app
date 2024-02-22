@@ -9,6 +9,7 @@ import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
 import de.wollis_page.gibsonos.module.hc.index.dto.Master
 import de.wollis_page.gibsonos.module.hc.task.MasterTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class MasterFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) {
@@ -18,7 +19,8 @@ class MasterFragment: ListFragment() {
 
         this.runTask({
             try {
-                this.activity.startActivity(
+                ActivityLauncherService.startActivity(
+                    this.activity,
                     "hc",
                     "index",
                     "master",

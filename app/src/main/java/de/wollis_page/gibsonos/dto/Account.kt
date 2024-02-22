@@ -2,7 +2,6 @@ package de.wollis_page.gibsonos.dto
 
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.App
-import de.wollis_page.gibsonos.process.Process
 
 class Account(val account: Account) {
     private var processes: MutableList<Process> = ArrayList()

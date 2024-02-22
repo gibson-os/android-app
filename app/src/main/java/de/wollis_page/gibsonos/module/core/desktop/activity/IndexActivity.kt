@@ -13,6 +13,7 @@ import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.module.core.desktop.dialog.ItemDialog
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DesktopTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.AppIconService
 
 class IndexActivity : ListActivity() {
@@ -55,7 +56,7 @@ class IndexActivity : ListActivity() {
 
         this.runTask({
             try {
-                this.startActivity(item, mapOf(SHORTCUT_KEY to item))
+                ActivityLauncherService.startActivity(this, item, mapOf(SHORTCUT_KEY to item))
             } catch (exception: ClassNotFoundException) {
                 throw AppException("Not implemented yet!", R.string.not_implemented_yet)
             }

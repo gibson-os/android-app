@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.process
+package de.wollis_page.gibsonos.dto
 
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.model.Account

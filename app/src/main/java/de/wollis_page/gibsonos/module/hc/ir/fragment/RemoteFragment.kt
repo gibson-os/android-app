@@ -8,6 +8,7 @@ import de.wollis_page.gibsonos.fragment.ListFragment
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.task.IrTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class RemoteFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) {
@@ -18,7 +19,8 @@ class RemoteFragment: ListFragment() {
         val module = this.fragmentsArguments["module"] as Module
 
         this.runTask({
-            this.activity.startActivity(
+            ActivityLauncherService.startActivity(
+                this.activity,
                 "hc",
                 "ir",
                 "remote",
