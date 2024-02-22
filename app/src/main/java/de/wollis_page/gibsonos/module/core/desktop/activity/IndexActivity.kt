@@ -46,7 +46,7 @@ class IndexActivity : ListActivity() {
 
         it.apps = desktop.apps
         this.listAdapter.items = desktop.desktop as ArrayList<ListItemInterface>
-        this.loadNavigation()
+        this.navigationService.loadNavigation()
     }
 
     override fun onClick(item: ListItemInterface) {

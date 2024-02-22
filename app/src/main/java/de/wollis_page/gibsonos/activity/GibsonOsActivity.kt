@@ -2,22 +2,18 @@ package de.wollis_page.gibsonos.activity
 
 import android.app.ActivityManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,22 +28,19 @@ import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
-import de.wollis_page.gibsonos.service.ActivityLauncherService
-import de.wollis_page.gibsonos.service.AppIconService
 import de.wollis_page.gibsonos.service.AppIntentExtraService
+import de.wollis_page.gibsonos.service.NavigationService
 import java.util.concurrent.CompletableFuture
 
-abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+abstract class GibsonOsActivity : AppCompatActivity() {
     private var account: Account? = null
     private var shortcut: Shortcut? = null
     lateinit var application: GibsonOsApplication
     lateinit var contentContainer: ConstraintLayout
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
+    protected lateinit var navigationService: NavigationService
     var update: Update? = null
-    private val navigationAccountGroupBit = 0
-    private val navigationAppGroupBit = 1
-    private val navigationProcessGroupBit = 2
 
     protected abstract fun getContentView(): Int
 
@@ -79,7 +72,22 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
         this.setContentView(R.layout.base_layout)
         super.onCreate(savedInstanceState)
         this.application = this.getApplication() as GibsonOsApplication
+        this.account = AppIntentExtraService.getIntentExtra(ACCOUNT_KEY, this.intent) as Account?
+        this.shortcut = AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, this.intent) as Shortcut?
+        this.navigationService = NavigationService(this)
 
+        this.createContentContainer()
+        this.createToolbar()
+
+        if (this.account != null) {
+            this.application.addProcess(this)
+        }
+
+        this.navigationService.create()
+        this.progressBarHolder = this.findViewById(R.id.progressBarHolder)
+    }
+
+    private fun createContentContainer() {
         this.contentContainer = this.findViewById(R.id.content) as ConstraintLayout
         val inflater = LayoutInflater.from(this)
         this.contentContainer.addView(inflater.inflate(
@@ -87,137 +95,24 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             this.findViewById(android.R.id.content),
             false
         ))
+    }
 
-        this.account = AppIntentExtraService.getIntentExtra(ACCOUNT_KEY, this.intent) as Account?
-        this.shortcut = AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, this.intent) as Shortcut?
-
+    private fun createToolbar() {
         val toolbarLeft = this.findViewById<Toolbar>(R.id.toolbarLeft)
         val drawer = this.findViewById<DrawerLayout>(R.id.drawer_layout)
-        val toggle = ActionBarDrawerToggle(this, drawer, toolbarLeft, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawer,
+            toolbarLeft,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
         val toolbar = this.findViewById<Toolbar>(R.id.toolbar)
         this.setSupportActionBar(toolbar);
         this.supportActionBar?.setDisplayShowTitleEnabled(false);
-
-        if (this.account != null) {
-            this.application.addProcess(this)
-        }
-
-        this.navigationView = this.findViewById(R.id.nav_view)
-        this.navigationView.setNavigationItemSelectedListener(this)
-
-        this.progressBarHolder = this.findViewById(R.id.progressBarHolder)
-
-        val setting = this.findViewById<ImageView>(R.id.setting)
-        setting.setOnClickListener {
-            finish()
-            this.startActivity(Intent(this, SettingActivity::class.java))
-            findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
-        }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        Log.d(Config.LOG_TAG, "onNavigationItemSelected: " + item.itemId)
-
-        val accountId = item.groupId shr 2
-        val account = this.application.accounts[accountId]
-
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
-
-        try {
-            when (item.groupId and 3) {
-                this.navigationAccountGroupBit -> {
-                    Log.d(Config.LOG_TAG, "Navigation account")
-                    ActivityLauncherService.startActivity(
-                        this,
-                        "core",
-                        "desktop",
-                        "index",
-                        account.account.id,
-                        emptyMap(),
-                        account
-                    )
-                }
-                this.navigationAppGroupBit -> {
-                    Log.d(Config.LOG_TAG, "Navigation app")
-                    val app = account.apps[item.itemId]
-                    ActivityLauncherService.startActivity(this, app.module, app.task, app.action, 0, emptyMap(), account)
-                }
-                this.navigationProcessGroupBit -> {
-                    Log.d(Config.LOG_TAG, "Navigation proccess")
-                    val activity = account.getProcesses()[item.itemId].activity
-                    val activityManager = activity.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-                    activityManager.moveTaskToFront(activity.taskId, 0)
-                }
-            }
-        } catch (exception: ClassNotFoundException) {
-            Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG).show()
-        }
-
-        return true
-    }
-
-    private fun runActivity(activity: Class<*>?, account: Account? = this.account) {
-        val intent = Intent(this, activity)
-//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-
-        if (account !== null) {
-            AppIntentExtraService.setIntentExtra(ACCOUNT_KEY, account, intent)
-        }
-
-        finish()
-        this.startActivity(intent)
-    }
-
-    fun loadNavigation() {
-        this.runOnUiThread {
-            val menu = navigationView.menu
-            menu.clear()
-            val accounts = this.application.accounts
-
-            for ((accountId, account) in accounts.withIndex()) {
-                val accountGroupId = accountId shl 2
-                val appGroupId = accountGroupId or this.navigationAppGroupBit
-                val processGroupId = accountGroupId or this.navigationProcessGroupBit
-
-                if (account.apps.size == 0) {
-                    menu.add(accountGroupId, accountId, Menu.NONE, account.account.alias)
-                    continue
-                }
-
-                val accountMenu = menu.addSubMenu(accountGroupId, accountId, Menu.NONE, account.account.alias)
-                Log.d(Config.LOG_TAG, "Add submenu " + account.account.alias)
-                Log.d(Config.LOG_TAG, account.apps.size.toString())
-
-                for ((appId, app) in account.apps.withIndex()) {
-                    Log.d(Config.LOG_TAG, "Add task")
-                    val appItem = accountMenu.add(appGroupId, appId, Menu.NONE, app.text)
-                    appItem.icon = ResourcesCompat.getDrawable(
-                        this.resources,
-                        AppIconService.getIcon(app.module, app.task, "index") ?: R.drawable.ic_android,
-                        this.theme
-                    )
-
-                    for ((processId, process) in account.getProcesses().withIndex()) {
-                        val activityName = this.application.getActivityName(app.module, app.task, app.action)
-                        val activity = process.activity
-
-                        if (activity::class.java.toString() == "class $activityName") {
-                            Log.d(Config.LOG_TAG, "Add process")
-                            val proccessItem = accountMenu.add(processGroupId, processId, Menu.NONE, activity.title)
-                            proccessItem.icon = ResourcesCompat.getDrawable(
-                                this.resources,
-                                AppIconService.getIcon(activity) ?: R.drawable.ic_android,
-                                this.theme
-                            )
-                        }
-                    }
-                }
-            }
-        }
     }
 
     fun showLoading() {
@@ -255,7 +150,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             this.findViewById<TextView>(android.R.id.title).text = title ?: newTitle
             super.setTitle(title ?: newTitle)
             this.setTaskDescription(ActivityManager.TaskDescription(newTitle))
-            this.loadNavigation()
+            this.navigationService.loadNavigation()
         }
     }
 
@@ -331,7 +226,7 @@ abstract class GibsonOsActivity : AppCompatActivity(), NavigationView.OnNavigati
             })
         }
 
-        this.loadNavigation()
+        this.navigationService.loadNavigation()
     }
 
     override fun onPause() {
