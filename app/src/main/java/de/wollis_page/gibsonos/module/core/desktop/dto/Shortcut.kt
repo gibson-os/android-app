@@ -11,7 +11,7 @@ data class Shortcut(
     var action: String,
     var text: String,
     var icon: String,
-    var parameters: Map<String, Any>?,
+    var parameters: MutableMap<String, Any>?,
     var id: Long = 0,
     var position: Long = -1,
 ): ListItemInterface, Parcelable {
@@ -30,9 +30,9 @@ data class Shortcut(
         this.position = parcel.readLong()
     }
 
-    private fun readParamsFromParcel(parcel: Parcel): Map<String, Any> {
+    private fun readParamsFromParcel(parcel: Parcel): MutableMap<String, Any> {
         val parameters = ArrayMap<String, Any>()
-        parcel.readMap(parameters, Map::class.java.classLoader)
+        parcel.readMap(parameters, MutableMap::class.java.classLoader)
 
         return parameters
     }

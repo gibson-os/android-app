@@ -19,7 +19,6 @@ class ItemDialog(private val context: IndexActivity) {
                     "core",
                     "cronjob",
                     "index",
-                    0,
                     emptyMap()
                 )
             })
@@ -35,7 +34,6 @@ class ItemDialog(private val context: IndexActivity) {
                     "core",
                     "event",
                     "index",
-                    0,
                     emptyMap()
                 )
             })
@@ -51,7 +49,6 @@ class ItemDialog(private val context: IndexActivity) {
                     "core",
                     "message",
                     "index",
-                    0,
                     emptyMap()
                 )
             })

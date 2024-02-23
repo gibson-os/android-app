@@ -65,7 +65,6 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
                 message.module,
                 message.task,
                 message.action,
-                remoteMessage.data["id"] ?: 0,
             )
 
             AppIntentExtraService.putExtras(message, intent)

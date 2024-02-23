@@ -10,7 +10,7 @@ import com.orm.SugarApp
 import com.orm.SugarRecord
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Account
-import de.wollis_page.gibsonos.dto.Process
+import de.wollis_page.gibsonos.dto.NavigationItem
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
@@ -72,12 +72,11 @@ class GibsonOsApplication : SugarApp() {
         editor.apply()
     }
 
-    fun addProcess(activity: GibsonOsActivity) {
-        val account = activity.getAccount()
+    fun addNavigationItem(account: AccountModel, shortcut: Shortcut): NavigationItem {
         val accountDto = this.getAccount(account)
             ?: throw AccountException("Account " + account.id + " not found in store!")
 
-        accountDto.addProccess(Process(account, activity))
+        return accountDto.addNavigationItem(shortcut)
     }
 
     fun getAccountByToken(token: String): Account? {
@@ -90,57 +89,16 @@ class GibsonOsApplication : SugarApp() {
         return null
     }
 
-    fun getActivity(
-        account: Account,
-        module: String,
-        task: String,
-        action: String,
-        id: Any
-    ): GibsonOsActivity? {
-        val activityName = this.getActivityName(module, task, action)
-
-        val process = account.getProcesses().find {
-            it.activity::class.java.toString() == "class $activityName" && it.activity.getId() == id
-        }
-
-        return process?.activity
-    }
-
-    fun getActivity(
-        account: Account,
-        shortcut: Shortcut
-    ): GibsonOsActivity? {
-        val activityName = this.getActivityName(shortcut.module, shortcut.task, shortcut.action)
-
-        val process = account.getProcesses().find {
-            it.activity::class.java.toString() == "class $activityName" &&
-            it.activity.isActivityforShotcut(shortcut)
-        }
-
-        return process?.activity
-    }
-
     fun getActivityIntent(
         accountModel: AccountModel,
         module: String,
         task: String,
         action: String,
-        id: Any
     ): Intent {
-        val account = this.getAccountById(accountModel.id)
-            ?: throw AccountException("Account " + accountModel.id + " not found in store!")
+        val intent = Intent(this, Class.forName(this.getActivityName(module, task, action)))
+        AppIntentExtraService.setIntentExtra(GibsonOsActivity.ACCOUNT_KEY, accountModel, intent)
 
-        val activity = this.getActivity(account, module, task, action, id)
-
-        if (activity == null) {
-            val intent = Intent(this, Class.forName(this.getActivityName(module, task, action)))
-            AppIntentExtraService.setIntentExtra(GibsonOsActivity.ACCOUNT_KEY, accountModel, intent)
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-
-            return intent
-        }
-
-        return activity.intent
+        return intent
     }
 
     fun getActivityName(module: String, task: String, action: String): String

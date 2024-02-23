@@ -18,7 +18,7 @@ data class IndexActivityExtras (
             "index",
             "",
             "",
-            mapOf("dir" to directory)
+            mutableMapOf("dir" to directory)
         ), intent)
         intent.putExtra("position", this.position)
         intent.putExtra("token", this.token)

@@ -24,7 +24,6 @@ class RemoteFragment: ListFragment() {
                 "hc",
                 "ir",
                 "remote",
-                module.id.toString() + '_' + item.id.toString(),
                 mapOf(
                     "module" to module,
                     "remoteId" to item.id,

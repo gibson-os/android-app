@@ -65,7 +65,7 @@ class IndexActivity: ListActivity() {
                 "run",
                 item.name,
                 "icon_exe",
-                mapOf("eventId" to item.id)
+                mutableMapOf("eventId" to item.id)
             )))
         ).show()
 

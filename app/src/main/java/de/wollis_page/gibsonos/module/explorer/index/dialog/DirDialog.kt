@@ -23,7 +23,7 @@ class DirDialog(private val context: IndexActivity) {
             "index",
             item.name,
             "icon_dir",
-            mapOf("dir" to this.context.loadedDir.dir + "/" + item.name)
+            mutableMapOf("dir" to this.context.loadedDir.dir + "/" + item.name)
         ))
     }
 }

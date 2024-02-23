@@ -24,7 +24,6 @@ class MasterFragment: ListFragment() {
                     "hc",
                     "index",
                     "master",
-                    item.id,
                     mapOf<String, Parcelable>("master" to item)
                 )
             } catch (exception: ClassNotFoundException) {

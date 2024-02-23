@@ -26,7 +26,6 @@ class ModuleFragment: ListFragment() {
                     "hc",
                     item.helper,
                     "index",
-                    item.id,
                     mapOf<String, Parcelable>("module" to item)
                 )
             } catch (exception: ClassNotFoundException) {

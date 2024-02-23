@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
+import de.wollis_page.gibsonos.dto.NavigationItem
 import de.wollis_page.gibsonos.dto.Update
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.MessageException
@@ -40,6 +41,7 @@ abstract class GibsonOsActivity : AppCompatActivity() {
     private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
     protected lateinit var navigationService: NavigationService
+    private var navigationItem: NavigationItem? = null
     var update: Update? = null
 
     protected abstract fun getContentView(): Int
@@ -72,18 +74,21 @@ abstract class GibsonOsActivity : AppCompatActivity() {
         this.setContentView(R.layout.base_layout)
         super.onCreate(savedInstanceState)
         this.application = this.getApplication() as GibsonOsApplication
-        this.account = AppIntentExtraService.getIntentExtra(ACCOUNT_KEY, this.intent) as Account?
-        this.shortcut = AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, this.intent) as Shortcut?
-        this.navigationService = NavigationService(this)
+
+        val accountModel = AppIntentExtraService.getIntentExtra(ACCOUNT_KEY, this.intent) as Account?
+        val shortcutDto = AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, this.intent) as Shortcut?
+
+        this.account = accountModel
+        this.shortcut = shortcutDto
 
         this.createContentContainer()
         this.createToolbar()
 
-        if (this.account != null) {
-            this.application.addProcess(this)
+        if (accountModel !== null && shortcutDto !== null) {
+            this.navigationItem = this.application.addNavigationItem(accountModel, shortcutDto)
         }
 
-        this.navigationService.create()
+        this.navigationService = NavigationService(this)
         this.progressBarHolder = this.findViewById(R.id.progressBarHolder)
     }
 
@@ -150,6 +155,7 @@ abstract class GibsonOsActivity : AppCompatActivity() {
             this.findViewById<TextView>(android.R.id.title).text = title ?: newTitle
             super.setTitle(title ?: newTitle)
             this.setTaskDescription(ActivityManager.TaskDescription(newTitle))
+            this.navigationItem?.shortcut?.text = title ?: newTitle ?: this.shortcut?.text ?: ""
             this.navigationService.loadNavigation()
         }
     }
@@ -246,11 +252,16 @@ abstract class GibsonOsActivity : AppCompatActivity() {
 
         if (this.account != null) {
             val account = this.application.getAccountById(this.getAccount().id) ?: return
-            val process = account.getProcesses().find {
-                it.activity == this
-            } ?: return
-            account.removeProccess(process)
+            val navigationItemDto = this.navigationItem ?: return
+
+            account.removeNavigationItem(navigationItemDto)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+//        this.navigationItem?.instanceState = outState
     }
 
     companion object {

@@ -89,7 +89,6 @@ class MainActivity : ListActivity() {
             "core",
             "desktop",
             "index",
-            item.id,
             emptyMap(),
             this.application.getAccountById(item.id) ?: AccountDto(item)
         )

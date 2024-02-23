@@ -2,24 +2,39 @@ package de.wollis_page.gibsonos.dto
 
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.desktop.dto.App
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 
 class Account(val account: Account) {
-    private var processes: MutableList<Process> = ArrayList()
-    var apps: MutableList<App> = ArrayList()
+    var navigationItems: MutableList<NavigationItem> = ArrayList()
 
-    fun getProcesses(): List<Process> {
-        return processes
+    fun addNavigationItem(app: App) = this.addNavigationItem(NavigationItem(
+        this,
+        app,
+    ))
+
+    fun addNavigationItem(shortcut: Shortcut) = this.addNavigationItem(NavigationItem(
+        this,
+        null,
+        shortcut,
+    ))
+    private fun addNavigationItem(navigationItem: NavigationItem): NavigationItem {
+        val foundNavigationItem = this.navigationItems.find {
+            it.getModule() == navigationItem.getModule() &&
+            it.getTask() == navigationItem.getTask() &&
+            it.getAction() == navigationItem.getAction() &&
+            it.shortcut?.parameters == navigationItem.shortcut?.parameters
+        }
+
+        if (foundNavigationItem !== null) {
+            return foundNavigationItem;
+        }
+
+        this.navigationItems.add(navigationItem)
+
+        return navigationItem
     }
 
-    fun setProcesses(processes: MutableList<Process>) {
-        this.processes = processes
-    }
-
-    fun addProccess(process: Process) {
-        processes.add(process)
-    }
-
-    fun removeProccess(process: Process) {
-        processes.remove(process)
+    fun removeNavigationItem(navigationItem: NavigationItem) {
+        this.navigationItems.remove(navigationItem)
     }
 }

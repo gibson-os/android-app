@@ -170,6 +170,7 @@ class IndexActivity: ListActivity() {
             this.listView.scrollToPosition(0)
         }
 
+        this.getShortcut()?.parameters?.set("dir", this.loadDir.toString())
         this.setTitle(this.loadDir.toString())
     }
 

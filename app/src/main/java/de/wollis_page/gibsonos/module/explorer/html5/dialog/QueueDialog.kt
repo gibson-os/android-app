@@ -22,6 +22,7 @@ class QueueDialog(private val context: ChromecastService) {
         options.add(addItem)
 
         var startItemText = this.context.context.getString(R.string.explorer_html5_play)
+        var startItemIcon = R.drawable.ic_play
 
         if (position > 0 && (position + 1 < duration || duration.toInt() == 0)) {
             val continueItem = DialogItem(this.context.context.getString(R.string.explorer_html5_continue))
@@ -31,10 +32,11 @@ class QueueDialog(private val context: ChromecastService) {
             }
             options.add(continueItem)
             startItemText = this.context.context.getString(R.string.explorer_html5_play_again)
+            startItemIcon = R.drawable.ic_restart
         }
 
         val startItem = DialogItem(startItemText)
-        startItem.icon = R.drawable.ic_play
+        startItem.icon = startItemIcon
         startItem.onClick = {
             this.context.playMedia(mediaInfo)
         }

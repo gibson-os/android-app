@@ -60,7 +60,6 @@ class ItemDialog(private val context: IndexActivity) {
                 "explorer",
                 "html5",
                 "player",
-                0,
                 mapOf<String, Parcelable>("media" to Media(
                     item.name,
                     item.html5VideoToken,

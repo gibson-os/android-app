@@ -26,7 +26,6 @@ class IndexActivity: ListActivity() {
                 "obscura",
                 "scanner",
                 "form",
-                item.deviceName,
                 mapOf(
                     "deviceName" to item.deviceName,
                     "vendor" to item.vendor,
