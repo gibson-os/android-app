@@ -45,7 +45,7 @@ class Account(val account: Account) {
             it.getModule() == navigationItem.getModule() &&
             it.getTask() == navigationItem.getTask() &&
             it.getAction() == navigationItem.getAction() &&
-            it.shortcut?.parameters == navigationItem.shortcut?.parameters
+            (it.shortcut?.parameters ?: mutableMapOf()) == (navigationItem.shortcut?.parameters ?: mutableMapOf<String, Any>())
         }
 
         if (foundNavigationItem !== null) {
