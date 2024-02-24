@@ -5,6 +5,8 @@
     <dimen name="inner_spacing">8dp</dimen>
     <dimen name="text_spacing">2dp</dimen>
     <dimen name="headline_font_size">18sp</dimen>
+    <dimen name="navigation_font_size">16sp</dimen>
+    <dimen name="navigation_shortcut_start_spacing">32sp</dimen>
     <dimen name="subline_font_size">14sp</dimen>
     <dimen name="normal_icon_size">48dp</dimen>
     <dimen name="small_icon_size">24dp</dimen>

@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -14,35 +15,39 @@ import de.wollis_page.gibsonos.service.AppIconService
 class NavigationAdapter(
     context: Context,
     private val navigationItems: List<NavigationItem>,
-    private val layoutResource: Int = R.layout.base_navigation_item,
-): ArrayAdapter<NavigationItem>(context, layoutResource, navigationItems) {
+): ArrayAdapter<NavigationItem>(context, R.layout.base_navigation_item, navigationItems) {
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var view = convertView
-
-        if (view == null) {
-            view = LayoutInflater.from(this.context).inflate(
-                this.layoutResource,
-                parent,
-                false
-            )!!
-        }
-
         val navigationItem = this.navigationItems[position]
-        val textView = view.findViewById<TextView>(R.id.navigation_item_text)
-        val iconView = view.findViewById<ImageView>(R.id.navigation_item_icon)
+        val view = LayoutInflater.from(this.context).inflate(
+            this.getLayoutResource(navigationItem),
+            parent,
+            false
+        )!!
 
-        textView.text = navigationItem.getText()
-        iconView.visibility = View.GONE
-
-        if (!navigationItem.isAccount()) {
-            iconView.setImageResource(AppIconService.getIcon(
-                navigationItem.getModule(),
-                navigationItem.getTask(),
-                navigationItem.getAction(),
+        view.findViewById<TextView>(R.id.navigation_item_text).text = navigationItem.getText()
+        view.findViewById<ImageView?>(R.id.navigation_item_icon)?.setImageResource(AppIconService.getIcon(
+            navigationItem.getModule(),
+            navigationItem.getTask(),
+            navigationItem.getAction(),
             ) ?: R.drawable.ic_android)
-            iconView.visibility = View.VISIBLE
-        }
 
         return view
+    }
+
+    private fun getLayoutResource(navigationItem: NavigationItem): Int {
+        if (navigationItem.isAccount()) {
+            return R.layout.base_navigation_account_item
+        }
+
+        if (navigationItem.isApp()) {
+            return R.layout.base_navigation_app_item
+        }
+
+        if (navigationItem.isShortcut()) {
+            return R.layout.base_navigation_shortcut_item
+        }
+
+        return R.layout.base_navigation_item
     }
 }

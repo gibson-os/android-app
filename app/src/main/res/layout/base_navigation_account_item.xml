@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/navigation_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/outter_spacing"
+        android:layout_marginLeft="@dimen/outter_spacing"
+        android:layout_marginRight="@dimen/outter_spacing"
+        android:layout_marginBottom="@dimen/outter_spacing"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/navigation_font_size"
+        android:ellipsize="start"
+        android:singleLine="true" />
+
+</LinearLayout>

@@ -91,7 +91,7 @@ class NavigationService(private val context: GibsonOsActivity) {
             navigationView.menu.clear()
             val navigationItems = mutableListOf<NavigationItem>()
 
-            for (account in this.context.application.accounts) {
+            for (account in this.context.application.accounts.sortedBy { it.account.alias ?: it.account.url }) {
                 this.addAccount(navigationItems, account)
             }
 
@@ -104,7 +104,7 @@ class NavigationService(private val context: GibsonOsActivity) {
 
         navigationItems.add(NavigationItem(account))
 
-        for (navigationItem in account.navigationItems) {
+        for (navigationItem in account.getSortedNavigationItems()) {
             navigationItems.add(navigationItem)
         }
     }

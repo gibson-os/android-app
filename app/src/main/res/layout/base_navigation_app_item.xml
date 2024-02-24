@@ -26,8 +26,8 @@
             android:id="@+id/navigation_item_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="@dimen/navigation_font_size"
             android:gravity="center_vertical"
+            android:textSize="@dimen/navigation_font_size"
             android:ellipsize="start"
             android:singleLine="true" />
 

@@ -5,7 +5,30 @@ import de.wollis_page.gibsonos.module.core.desktop.dto.App
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 
 class Account(val account: Account) {
-    var navigationItems: MutableList<NavigationItem> = ArrayList()
+    private var navigationItems: MutableList<NavigationItem> = ArrayList()
+
+    fun getSortedNavigationItems(): MutableList<NavigationItem> {
+        val sortedNavigationItems = mutableListOf<NavigationItem>()
+
+        for (app in this.getAppNavigationItems().sortedBy { it.getText() }) {
+            sortedNavigationItems.add(app)
+
+            for (shortcut in this.getShortcutNavigationItems(app).sortedBy { it.getText() }) {
+                sortedNavigationItems.add(shortcut)
+            }
+        }
+
+        return sortedNavigationItems
+    }
+
+    private fun getAppNavigationItems() = this.navigationItems.filter { it.isApp() }
+
+    private fun getShortcutNavigationItems(navigationItem: NavigationItem) = this.navigationItems.filter {
+        it.isShortcut() &&
+        it.getModule() == navigationItem.getModule() &&
+        it.getTask() == navigationItem.getTask() &&
+        it.getAction() == navigationItem.getAction()
+    }
 
     fun addNavigationItem(app: App) = this.addNavigationItem(NavigationItem(
         this,

@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/outter_spacing"
-        android:layout_marginLeft="@dimen/outter_spacing"
-        android:layout_marginRight="@dimen/outter_spacing"
+        android:layout_marginStart="@dimen/navigation_shortcut_start_spacing"
+        android:layout_marginEnd="@dimen/outter_spacing"
         android:layout_marginBottom="@dimen/outter_spacing"
         tools:ignore="UseCompoundDrawables,UselessParent">
 
@@ -26,7 +26,7 @@
             android:id="@+id/navigation_item_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="@dimen/navigation_font_size"
+            android:textSize="@dimen/subline_font_size"
             android:gravity="center_vertical"
             android:ellipsize="start"
             android:singleLine="true" />
