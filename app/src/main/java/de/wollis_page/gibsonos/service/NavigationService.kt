@@ -58,7 +58,7 @@ class NavigationService(private val context: GibsonOsActivity) {
                             app.action,
                             app.text,
                             "",
-                            mutableMapOf(),
+                            null,
                         )),
                         account,
                     )

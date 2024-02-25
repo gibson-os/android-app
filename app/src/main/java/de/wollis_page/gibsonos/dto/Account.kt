@@ -40,6 +40,7 @@ class Account(val account: Account) {
         null,
         shortcut,
     ))
+
     private fun addNavigationItem(navigationItem: NavigationItem): NavigationItem {
         val foundNavigationItem = this.navigationItems.find {
             it.getModule() == navigationItem.getModule() &&
@@ -49,7 +50,7 @@ class Account(val account: Account) {
         }
 
         if (foundNavigationItem !== null) {
-            return foundNavigationItem;
+            return foundNavigationItem
         }
 
         this.navigationItems.add(navigationItem)
