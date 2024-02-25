@@ -52,7 +52,6 @@ class IndexActivity: ListActivity() {
 
     companion object {
         const val DIRECTORY_KEY = "directory"
-        const val IMAGE_WIDTH_KEY = "image_width"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,17 +126,7 @@ class IndexActivity: ListActivity() {
         this.itemDialog = ItemDialog(this)
         this.dirDialog = DirDialog(this)
 
-        if (savedInstanceState == null) {
             this.loadList((this.getShortcut()?.parameters?.get("dir") ?: "").toString())
-
-            return
-        }
-
-        this.imageWidth = savedInstanceState.getInt(IMAGE_WIDTH_KEY)
-
-        if (this.imageWidth == 0) {
-            this.imageWidth = null
-        }
     }
 
     override fun loadList(start: Long, limit: Long) {
@@ -230,7 +219,10 @@ class IndexActivity: ListActivity() {
             imageView.setImageResource(R.drawable.ic_folder)
         } else {
             imageView.setImageResource(R.drawable.ic_file)
-            this.imageWidth = this.imageWidth ?: imageView.width
+
+            if ((this.imageWidth ?: 0) == 0) {
+                this.imageWidth = imageView.width
+            }
 
             if (item.thumbAvailable) {
                 var imagePath = this.images[this.loadedDir.dir]
@@ -422,7 +414,6 @@ class IndexActivity: ListActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putInt(IMAGE_WIDTH_KEY, this.imageWidth ?: 0)
         outState.putParcelable(DIRECTORY_KEY, this.loadedDir)
     }
 
