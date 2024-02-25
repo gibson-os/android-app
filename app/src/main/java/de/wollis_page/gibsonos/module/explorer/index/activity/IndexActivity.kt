@@ -6,7 +6,6 @@ import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.ArrayMap
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.View
@@ -15,8 +14,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -48,9 +45,10 @@ class IndexActivity: ListActivity() {
     private var imageQueue = ArrayList<Item>()
     private var imagesLoading = false
     private var imageWidth: Int? = null
-    private var mediaClientLoaded = false
 
     override fun getListRessource() = R.layout.explorer_index_list_item
+
+    override fun getContentView() = R.layout.base_chromecast_list
 
     companion object {
         const val DIRECTORY_KEY = "directory"
@@ -65,28 +63,24 @@ class IndexActivity: ListActivity() {
 
         super.onCreate(savedInstanceState)
 
-        this.chromecastService = ChromecastService(
-            this,
-            { session ->
-                val remoteMediaClient = session?.remoteMediaClient
-                val contentId = remoteMediaClient?.currentItem?.media?.contentId
+        this.chromecastService = ChromecastService(this) { session ->
+            val remoteMediaClient = session?.remoteMediaClient
+            val contentId = remoteMediaClient?.currentItem?.media?.contentId
 
-                val listItem = (this.listAdapter.items as ArrayList<Item>).find {
-                    it.html5VideoToken == contentId
-                }
-
-                if (listItem !== null) {
-                    val progressBar = this.getViewByItem(listItem)?.findViewById<ProgressBar>(R.id.position)
-
-                    listItem.position = ((remoteMediaClient?.approximateStreamPosition ?: 0) / 1000).toInt()
-                    Log.d(Config.LOG_TAG, "update position: " + listItem.position)
-                    this.setPosition(listItem, progressBar)
-                }
-            },
-            { _ ->
-                setSearchButtonPosition()
+            val listItem = (this.listAdapter.items as ArrayList<Item>).find {
+                it.html5VideoToken == contentId
             }
-        )
+
+            if (listItem !== null) {
+                val progressBar =
+                    this.getViewByItem(listItem)?.findViewById<ProgressBar>(R.id.position)
+
+                listItem.position =
+                    ((remoteMediaClient?.approximateStreamPosition ?: 0) / 1000).toInt()
+                Log.d(Config.LOG_TAG, "update position: " + listItem.position)
+                this.setPosition(listItem, progressBar)
+            }
+        }
 
         this.addSearch { it, searchTerm ->
             val item = it as Item
@@ -447,44 +441,10 @@ class IndexActivity: ListActivity() {
     override fun onResume() {
         super.onResume()
         this.chromecastService.onResume()
-        setSearchButtonPosition()
     }
 
     override fun onPause() {
         super.onPause()
         this.chromecastService.onPause()
-    }
-
-    private fun setSearchButtonPosition() {
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        var miniControllerViewHeight = 240
-
-        if (this.chromecastService.miniControllerView.height > 0) {
-            miniControllerViewHeight = displayMetrics.heightPixels - this.chromecastService.miniControllerView.height
-        }
-
-        val searchButton = findViewById<FloatingActionButton>(R.id.searchButton)
-        val searchInput = findViewById<TextInputEditText>(R.id.searchText)
-
-        if (
-            !this.mediaClientLoaded &&
-            this.chromecastService.miniControllerShown()
-        ) {
-            Log.d(Config.LOG_TAG, "media client loaded")
-            this.mediaClientLoaded = true
-            searchButton.y -= miniControllerViewHeight
-            searchInput.y -= miniControllerViewHeight
-        }
-
-        if (
-            this.mediaClientLoaded &&
-            !this.chromecastService.miniControllerShown()
-        ) {
-            Log.d(Config.LOG_TAG, "media client not loaded")
-            this.mediaClientLoaded = false
-            searchButton.y += miniControllerViewHeight
-            searchInput.y += miniControllerViewHeight
-        }
     }
 }

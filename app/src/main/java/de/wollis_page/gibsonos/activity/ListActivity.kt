@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.activity
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -91,7 +92,7 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
 
     protected fun addSearch(filter: (item: ListItemInterface, searchTerm: String) -> Boolean) {
         this.listAdapter.listFilter = filter
-        this.addSearch()
+        this.addSearch(this.findViewById<ConstraintLayout>(R.id.listContent))
 
         val searchInput = findViewById<TextInputEditText>(R.id.searchText)
         searchInput.addTextChangedListener {

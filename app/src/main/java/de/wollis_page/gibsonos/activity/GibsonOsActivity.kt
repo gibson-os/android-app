@@ -183,9 +183,9 @@ abstract class GibsonOsActivity : AppCompatActivity() {
         }.exceptionally { e -> e.printStackTrace() }
     }
 
-    protected fun addSearch() {
+    protected fun addSearch(view: ConstraintLayout = this.contentContainer) {
         val inflater = LayoutInflater.from(this)
-        this.contentContainer.addView(inflater.inflate(
+        view.addView(inflater.inflate(
             R.layout.base_button_search,
             this.findViewById(android.R.id.content),
             false

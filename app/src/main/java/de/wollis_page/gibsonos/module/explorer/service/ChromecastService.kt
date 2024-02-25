@@ -2,7 +2,6 @@ package de.wollis_page.gibsonos.module.explorer.service
 
 import android.net.Uri
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -30,13 +29,12 @@ import org.json.JSONObject
 class ChromecastService(
     val context: GibsonOsActivity,
     private var updatePositionCallback: ((castSession: CastSession?) -> Unit)? = null,
-    private var updateStatusCallback: ((castSession: CastSession?) -> Unit)? = null,
 ) {
     var castContext: CastContext? = null
-    var sessionManager: SessionManager? = null
+    private var sessionManager: SessionManager? = null
     var castSession: CastSession? = null
-    var mediaRouteMenuItem: MenuItem? = null
-    val miniControllerView: View
+    private var mediaRouteMenuItem: MenuItem? = null
+    private val miniControllerView: View
     private val sessionManagerListener: SessionManagerListener<CastSession> =
         SessionManagerListenerImpl()
     private var isPlaying = false
@@ -45,14 +43,7 @@ class ChromecastService(
         // If without context the button will not rendered on startup
         this.castContext = CastContext.getSharedInstance(this.context)
         this.sessionManager = this.castContext?.sessionManager
-
-        val inflater = LayoutInflater.from(this.context)
-        this.miniControllerView = inflater.inflate(
-            R.layout.base_chromecast_mini_controller,
-            this.context.findViewById(R.id.content),
-            false
-        )
-        this.context.contentContainer.addView(this.miniControllerView)
+        this.miniControllerView = this.context.findViewById(R.id.castMiniController)
     }
 
     fun onResume() {
@@ -130,8 +121,6 @@ class ChromecastService(
 
                 session.remoteMediaClient?.registerCallback(object : RemoteMediaClient.Callback() {
                     override fun onStatusUpdated() {
-                        updateStatusCallback?.invoke(session)
-
                         if (isPlaying == session.remoteMediaClient?.isPlaying) {
                             return
                         }
@@ -142,7 +131,6 @@ class ChromecastService(
                 })
 
                 this.isPlaying = session.remoteMediaClient?.isPlaying ?: false
-                updateStatusCallback?.invoke(session)
                 this.updatePosition()
                 this.context.invalidateOptionsMenu()
             }
@@ -164,7 +152,6 @@ class ChromecastService(
     private fun releaseSession() {
         Log.d(Config.LOG_TAG, "Release chromecast session")
         this.castSession = null
-        updateStatusCallback?.invoke(null)
     }
 
     fun onCreateOptionsMenu(menu: Menu) {
@@ -271,12 +258,5 @@ class ChromecastService(
                 "/middleware/chromecast/stream/token/" + token + "?id=" + this.castSession?.sessionId
             )
             .build()
-    }
-
-    fun miniControllerShown(): Boolean {
-        return this.castSession?.remoteMediaClient?.isPlaying == true ||
-            this.castSession?.remoteMediaClient?.isPaused == true ||
-            this.castSession?.remoteMediaClient?.isBuffering == true ||
-            this.castSession?.remoteMediaClient?.isLoadingNextItem == true
     }
 }
