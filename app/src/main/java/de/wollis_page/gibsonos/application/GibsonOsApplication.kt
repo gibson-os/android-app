@@ -14,6 +14,7 @@ import de.wollis_page.gibsonos.dto.NavigationItem
 import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.service.ActivityMatcher
 import de.wollis_page.gibsonos.service.AppIntentExtraService
 import de.wollis_page.gibsonos.model.Account as AccountModel
 
@@ -95,18 +96,10 @@ class GibsonOsApplication : SugarApp() {
         task: String,
         action: String,
     ): Intent {
-        val intent = Intent(this, Class.forName(this.getActivityName(module, task, action)))
+        val intent = Intent(this, ActivityMatcher.getActivity(module, task, action))
         AppIntentExtraService.setIntentExtra(GibsonOsActivity.ACCOUNT_KEY, accountModel, intent)
 
         return intent
-    }
-
-    fun getActivityName(module: String, task: String, action: String): String
-    {
-        return "de.wollis_page.gibsonos.module." +
-            module + "." +
-            task + ".activity." +
-            (action.replaceFirstChar { it.uppercase() }) + "Activity"
     }
 
     private fun getAccount(account: AccountModel): Account? {

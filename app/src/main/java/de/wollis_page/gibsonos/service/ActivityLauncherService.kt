@@ -69,8 +69,11 @@ object ActivityLauncherService {
         launcher: ActivityResultLauncher<Intent>? = null,
         bundle: Bundle? = null,
     ) {
-        val application = context.application
-        val intent = Intent(context, Class.forName(application.getActivityName(module, task, action)))
+        val shortcut = extras[GibsonOsActivity.SHORTCUT_KEY] as Shortcut?
+        val intent = Intent(
+            context,
+            ActivityMatcher.getActivity(module, task, action, shortcut?.parameters),
+        )
         AppIntentExtraService.setIntentExtra(GibsonOsActivity.ACCOUNT_KEY, account.account, intent)
 
         extras.forEach {

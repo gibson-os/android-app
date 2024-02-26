@@ -11,6 +11,7 @@ import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.model.Message
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.service.ActivityMatcher
 import de.wollis_page.gibsonos.service.AppIconService
 import de.wollis_page.gibsonos.service.AppIntentExtraService
 
@@ -32,7 +33,7 @@ class IndexActivity: ListActivity() {
 
         val intent = Intent(
             this,
-            Class.forName(this.application.getActivityName(item.module, item.task, item.action))
+            ActivityMatcher.getActivity(item.module, item.task, item.action)
         )
         AppIntentExtraService.setIntentExtra(ACCOUNT_KEY, this.getAccount(), intent)
         AppIntentExtraService.putExtras(item, intent);

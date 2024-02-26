@@ -21,7 +21,16 @@ abstract class ModuleActivity : TabActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        this.module = AppIntentExtraService.getIntentExtra("module", intent) as Module
+        val parameters = (AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, this.intent) as Shortcut?)?.parameters
+        this.module = (AppIntentExtraService.getIntentExtra("module", intent) as Module?)
+            ?: Module(
+                parameters!!["id"].toString().toDouble().toLong(),
+                parameters["type"].toString(),
+                parameters["name"].toString(),
+                parameters["address"].toString().toDouble().toInt(),
+                parameters["helper"].toString(),
+                parameters["modified"].toString(),
+            )
 
         super.onCreate(savedInstanceState)
 

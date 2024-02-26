@@ -31,12 +31,7 @@ object AppIntentExtraService {
 
     fun putExtras(module: String, task: String, action: String, intent: Intent, extras: String) {
         this.putExtras(
-            Class.forName(
-                "de.wollis_page.gibsonos.module." +
-                module + "." +
-                task + ".activity." +
-                (action.replaceFirstChar { it.uppercase() }) + "Activity",
-            ),
+            ActivityMatcher.getActivity(module, task, action),
             intent,
             extras,
         )

@@ -29,13 +29,14 @@ object AppIconService {
         return this.icons[className.name] ?: this.icons[className.superclass.name]
     }
 
-    fun getIcon(module: String, task: String, action: String): Int? {
+    fun getIcon(
+        module: String,
+        task: String, action:
+        String,
+        parameters: MutableMap<String, Any>? = null,
+    ): Int? {
         return try {
-            this.getIcon(Class.forName("de.wollis_page.gibsonos.module." +
-                    module + "." +
-                    task + ".activity." +
-                    (action.replaceFirstChar { it.uppercase() }) + "Activity"
-            ))
+            this.getIcon(ActivityMatcher.getActivity(module, task, action, parameters))
         } catch (exception: ClassNotFoundException) {
             null
         }

@@ -73,7 +73,7 @@ class IndexActivity : ListActivity() {
 
         view.findViewById<TextView>(R.id.text).text = item.text
         view.findViewById<ImageView>(R.id.icon).setImageResource(
-            AppIconService.getIcon(item.module, item.task, "index") ?: R.drawable.ic_android
+            AppIconService.getIcon(item.module, item.task, item.action, item.parameters) ?: R.drawable.ic_android
         )
     }
 
