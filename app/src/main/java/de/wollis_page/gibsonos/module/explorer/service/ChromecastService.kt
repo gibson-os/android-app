@@ -171,7 +171,7 @@ class ChromecastService(
     }
 
     fun loadMedia(item: Item) {
-        val duration = item.metaInfos?.get("duration").toString()
+        val duration = item.metaInfos?.get("duration").toString().toFloat()
         val mediaInfo = this.buildMediaInfo(item)
         val remoteMediaClient = this.castSession?.remoteMediaClient
 

@@ -1,7 +1,6 @@
 package de.wollis_page.gibsonos.module.hc.index.activity
 
 import android.os.Bundle
-import android.util.Log
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.Tab
@@ -23,11 +22,19 @@ class MasterActivity : TabActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        this.master = AppIntentExtraService.getIntentExtra("master", intent) as Master
+        val shortcut = AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, this.intent) as Shortcut?
+        this.master = (AppIntentExtraService.getIntentExtra("master", intent) as Master?)
+            ?: Master(
+                (shortcut!!.parameters!!["id"] as Double).toLong(),
+                shortcut.parameters!!["name"] as String,
+                shortcut.parameters!!["address"] as String,
+                shortcut.parameters!!["protocol"] as String,
+                shortcut.parameters!!["added"] as String,
+                shortcut.parameters!!["modified"] as String,
+            )
 
         super.onCreate(savedInstanceState)
 
-        Log.d(de.wollis_page.gibsonos.helper.Config.LOG_TAG, this.master.name)
         this.setTitle(this.master.name)
     }
 

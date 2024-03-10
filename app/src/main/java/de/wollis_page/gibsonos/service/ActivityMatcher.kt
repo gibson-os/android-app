@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.service
 
+import de.wollis_page.gibsonos.module.hc.index.activity.MasterActivity
 import de.wollis_page.gibsonos.module.hc.ir.activity.IndexActivity
 import de.wollis_page.gibsonos.module.hc.ir.activity.RemoteActivity
 
@@ -8,6 +9,9 @@ object ActivityMatcher {
         "hc" to mutableMapOf(
             "ir" to mutableMapOf(
                 "remote" to RemoteActivity::class.java.name
+            ),
+            "master" to mutableMapOf(
+                "view" to MasterActivity::class.java.name
             )
         )
     )
