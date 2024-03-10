@@ -14,4 +14,11 @@ object ModuleTask: AbstractTask() {
 
         return this.loadList(context, dataStore, start, limit)
     }
+
+    fun getById(context: GibsonOsActivity, moduleId: Long): Module {
+        val dataStore = this.getDataStore(context.getAccount(), "hc", "module", "byId")
+        dataStore.addParam("id", moduleId)
+
+        return this.load(context, dataStore)
+    }
 }

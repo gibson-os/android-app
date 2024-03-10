@@ -1,15 +1,17 @@
 package de.wollis_page.gibsonos.service
 
 import de.wollis_page.gibsonos.module.hc.ir.activity.IndexActivity
+import de.wollis_page.gibsonos.module.hc.ir.activity.RemoteActivity
 
 object ActivityMatcher {
-//    private val activityMapping = mutableMapOf(
-//        "hc" to mutableMapOf(
-//            "ir" to mutableMapOf(
-//                "remote" to RemoteActivity::class.java.name
-//            )
-//        )
-//    )
+    private val activityMapping = mutableMapOf(
+        "hc" to mutableMapOf(
+            "ir" to mutableMapOf(
+                "remote" to RemoteActivity::class.java.name
+            )
+        )
+    )
+
     fun getActivity(
         module: String,
         task: String,
@@ -25,8 +27,8 @@ object ActivityMatcher {
         action: String,
         parameters: MutableMap<String, Any>? = null,
     ): String {
-//        return this.activityMapping[module]?.get(task)?.get(action)
-        return this.getActivityNameWithParameters(module, task, action, parameters)
+        return this.activityMapping[module]?.get(task)?.get(action)
+            ?: this.getActivityNameWithParameters(module, task, action, parameters)
             ?: ("de.wollis_page.gibsonos.module." +
                 module + "." +
                 task + ".activity." +

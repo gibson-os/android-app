@@ -5,17 +5,19 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.FlattedDialogItem
 import de.wollis_page.gibsonos.helper.AlertListDialog
+import de.wollis_page.gibsonos.module.explorer.html5.dto.Position
 
 class PlayDialog(private val context: GibsonOsActivity) {
     fun build(
         duration: Int,
-        position: Int,
+        position: Position?,
         startAction: (FlattedDialogItem) -> Any,
         continueAction: (FlattedDialogItem) -> Any,
     ): AlertListDialog {
+        val positionValue = position?.position ?: 0
         val options = ArrayList<DialogItem>()
 
-        if (position + 1 < duration || duration == 0) {
+        if (positionValue + 1 < duration || duration == 0) {
             val continueItem = DialogItem(this.context.getString(R.string.explorer_html5_continue))
             continueItem.icon = R.drawable.ic_play
             continueItem.onClick = continueAction
@@ -31,7 +33,7 @@ class PlayDialog(private val context: GibsonOsActivity) {
             this.context,
             this.context.getString(
                 R.string.explorer_html5_continue_message,
-                this.transformSeconds(position),
+                this.transformSeconds(positionValue),
                 this.transformSeconds(duration)
             ),
             options

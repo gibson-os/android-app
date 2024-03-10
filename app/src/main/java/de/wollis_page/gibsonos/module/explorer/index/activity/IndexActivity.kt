@@ -126,7 +126,7 @@ class IndexActivity: ListActivity() {
         this.itemDialog = ItemDialog(this)
         this.dirDialog = DirDialog(this)
 
-            this.loadList((this.getShortcut()?.parameters?.get("dir") ?: "").toString())
+        this.loadList((this.getShortcut()?.parameters?.get("dir") ?: "").toString())
     }
 
     override fun loadList(start: Long, limit: Long) {

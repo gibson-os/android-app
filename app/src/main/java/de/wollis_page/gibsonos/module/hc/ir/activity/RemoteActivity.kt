@@ -14,6 +14,7 @@ import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.ir.dto.Remote
 import de.wollis_page.gibsonos.module.hc.task.IrTask
+import de.wollis_page.gibsonos.module.hc.task.ModuleTask
 import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 class RemoteActivity: GibsonOsActivity() {
@@ -33,11 +34,18 @@ class RemoteActivity: GibsonOsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.module = AppIntentExtraService.getIntentExtra("module", intent) as Module
-        val layout = findViewById<View>(R.id.remote) as RelativeLayout
 
         this.runTask({
-            this.remote = IrTask.remote(this, this.intent.getLongExtra("remoteId", 0))
+            var remoteId = this.intent.getLongExtra("remoteId", 0)
+
+            if (remoteId.toInt() == 0) {
+                remoteId = ((AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, intent) as Shortcut).parameters?.get("remoteId") as Double).toLong()
+            }
+
+            this.module = (AppIntentExtraService.getIntentExtra("module", intent) as Module?)
+                ?: ModuleTask.getById(this, ((AppIntentExtraService.getIntentExtra(SHORTCUT_KEY, intent) as Shortcut).parameters?.get("moduleId") as Double).toLong())
+            val layout = findViewById<View>(R.id.remote) as RelativeLayout
+            this.remote = IrTask.remote(this, remoteId)
             this.setTitle(this.module.name + ": " + this.remote.name)
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)

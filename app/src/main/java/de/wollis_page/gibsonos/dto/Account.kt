@@ -25,9 +25,7 @@ class Account(val account: Account) {
 
     private fun getShortcutNavigationItems(navigationItem: NavigationItem) = this.navigationItems.filter {
         it.isShortcut() &&
-        it.getModule() == navigationItem.getModule() &&
-        it.getTask() == navigationItem.getTask() &&
-        it.getAction() == navigationItem.getAction()
+        it.app == navigationItem.app
     }
 
     fun addNavigationItem(app: App) = this.addNavigationItem(NavigationItem(
@@ -35,11 +33,30 @@ class Account(val account: Account) {
         app,
     ))
 
-    fun addNavigationItem(shortcut: Shortcut) = this.addNavigationItem(NavigationItem(
-        this,
-        null,
-        shortcut,
-    ))
+    fun addNavigationItem(shortcut: Shortcut): NavigationItem {
+        var apps = this.navigationItems.filter {
+            it.isApp() &&
+            it.getModule() == shortcut.module
+        }
+
+        if (apps.size > 1) {
+            apps = apps.filter {
+                it.getTask() == shortcut.task
+            }
+        }
+
+        if (apps.size > 1) {
+            apps = apps.filter {
+                it.getAction() == shortcut.action
+            }
+        }
+
+        return this.addNavigationItem(NavigationItem(
+            this,
+            apps[0].app,
+            shortcut,
+        ))
+    }
 
     private fun addNavigationItem(navigationItem: NavigationItem): NavigationItem {
         val foundNavigationItem = this.navigationItems.find {

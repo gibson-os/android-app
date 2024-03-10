@@ -12,12 +12,13 @@ data class NavigationItem(
 
     fun isApp() = this.app !== null && this.shortcut === null
 
-    fun isShortcut() = this.app === null && this.shortcut !== null
+    fun isShortcut() = this.shortcut !== null
 
-    fun getText() = this.app?.text ?: this.shortcut?.text ?: this.account.account.alias ?: ""
-    fun getModule() = this.app?.module ?: this.shortcut?.module ?: "core"
+    fun getText() = this.shortcut?.text ?: this.app?.text ?: this.account.account.alias ?: ""
 
-    fun getTask() = this.app?.task ?: this.shortcut?.task ?: "index"
+    fun getModule() = this.shortcut?.module ?: this.app?.module ?: "core"
 
-    fun getAction() = this.app?.action ?: this.shortcut?.action ?: "index"
+    fun getTask() = this.shortcut?.task ?: this.app?.task ?: "index"
+
+    fun getAction() = this.shortcut?.action ?: this.app?.action ?: "index"
 }

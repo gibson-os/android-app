@@ -24,9 +24,11 @@ class ModuleFragment: ListFragment() {
                 ActivityLauncherService.startActivity(
                     this.activity,
                     "hc",
-                    item.helper,
+                    item.type.lowercase(),
                     "index",
-                    mapOf<String, Parcelable>("module" to item)
+                    mapOf<String, Parcelable>(
+                        "module" to item
+                    )
                 )
             } catch (exception: ClassNotFoundException) {
                 throw AppException("Not implemented yet!", R.string.not_implemented_yet)

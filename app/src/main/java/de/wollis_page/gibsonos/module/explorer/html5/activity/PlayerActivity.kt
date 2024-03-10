@@ -11,6 +11,7 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.explorer.html5.dialog.PlayDialog
+import de.wollis_page.gibsonos.module.explorer.html5.dto.Position
 import de.wollis_page.gibsonos.module.explorer.index.dto.Media
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
 import de.wollis_page.gibsonos.service.AppIntentExtraService
@@ -46,23 +47,33 @@ class PlayerActivity: GibsonOsActivity() {
         mediaController.setAnchorView(videoView)
         videoView.setMediaController(mediaController)
         videoView.setVideoURI(Uri.parse(cleanUrl), mapOf("X-Device-Token" to this.getAccount().token))
-        val position = this.media.position ?: 0
 
-        if (position > 0) {
-            PlayDialog(this).build(
-                media.duration,
-                position,
-                {
+        this.runTask({
+            var position: Position? = null
+
+            try {
+                position = Html5Task.getPosition(this, this.media.token!!)
+            } catch (_: TaskException) {
+            }
+
+            this.runOnUiThread {
+                if ((position?.position ?: 0) > 0) {
+                    PlayDialog(this).build(
+                        media.duration,
+                        position,
+                        {
+                            this.startVideo(videoView)
+                        },
+                        {
+                            videoView.seekTo((position?.position ?: 0) * 1000)
+                            this.startVideo(videoView)
+                        },
+                    ).show()
+                } else {
                     this.startVideo(videoView)
-                },
-                {
-                    videoView.seekTo(position * 1000)
-                    this.startVideo(videoView)
-                },
-            ).show()
-        } else {
-            this.startVideo(videoView)
-        }
+                }
+            }
+        })
 
         videoView.setOnClickListener {
             if (videoView.isPlaying) {
