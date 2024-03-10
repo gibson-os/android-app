@@ -4,7 +4,6 @@ import android.app.UiModeManager
 import android.os.Bundle
 import com.google.android.material.switchmaterial.SwitchMaterial
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 
 class SettingActivity: GibsonOsActivity() {
     override fun getContentView(): Int = R.layout.setting
@@ -22,7 +21,4 @@ class SettingActivity: GibsonOsActivity() {
 
     override fun getId(): Long = 0
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return false
-    }
 }

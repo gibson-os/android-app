@@ -12,7 +12,6 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.UserTask
 
 class LoginActivity : GibsonOsActivity() {
@@ -95,7 +94,4 @@ class LoginActivity : GibsonOsActivity() {
         return 0
     }
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return false
-    }
 }

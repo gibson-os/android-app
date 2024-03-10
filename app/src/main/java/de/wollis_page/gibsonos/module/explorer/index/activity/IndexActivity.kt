@@ -21,7 +21,6 @@ import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.explorer.index.dialog.DirDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.DirListDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.ItemDialog
@@ -418,9 +417,6 @@ class IndexActivity: ListActivity() {
     }
 
     override fun getId(): Any = this.loadDir.toString()
-
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean =
-        shortcut.parameters?.get("dir") == this.loadDir.toString()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)

@@ -4,7 +4,6 @@ import android.os.Bundle
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.Tab
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.hc.index.fragment.LogFragment
 import de.wollis_page.gibsonos.module.hc.index.fragment.MasterFragment
 
@@ -24,7 +23,4 @@ class IndexActivity : TabActivity() {
         return 0
     }
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return true
-    }
 }

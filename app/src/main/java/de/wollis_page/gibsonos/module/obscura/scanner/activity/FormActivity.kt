@@ -14,7 +14,6 @@ import de.wollis_page.gibsonos.dto.form.Button
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.MessageBuilder
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.obscura.task.ScannerTask
 import de.wollis_page.gibsonos.module.obscura.template.dto.Template
 import org.json.JSONObject
@@ -30,8 +29,6 @@ class FormActivity: FormActivity() {
     }
 
     override fun getId(): Int = 0
-
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean = true
 
     override fun afterBuild() {
         val templateView = this.getView("name") as TextInputLayout

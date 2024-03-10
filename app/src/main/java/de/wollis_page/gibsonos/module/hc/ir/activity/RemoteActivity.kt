@@ -27,11 +27,6 @@ class RemoteActivity: GibsonOsActivity() {
         return this.module.id.toString() + '_' + this.remote.getId().toString()
     }
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return shortcut.parameters?.get("id") == this.remote.getId() &&
-            shortcut.parameters?.get("moduleId") == this.module.getId()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

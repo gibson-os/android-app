@@ -22,8 +22,6 @@ class IndexActivity: ListActivity() {
 
     override fun getId(): Any = 0
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean = false
-
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(EventTask.index(this, start, limit))
     }

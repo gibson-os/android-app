@@ -48,8 +48,6 @@ abstract class GibsonOsActivity : AppCompatActivity() {
 
     abstract fun getId(): Any
 
-    abstract fun isActivityforShotcut(shortcut: Shortcut): Boolean
-
     open fun updateData(data: String) {
     }
 

@@ -10,15 +10,12 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.model.Message
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.service.ActivityMatcher
 import de.wollis_page.gibsonos.service.AppIconService
 import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 class IndexActivity: ListActivity() {
     override fun getId(): Any = 0
-
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

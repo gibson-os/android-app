@@ -41,7 +41,4 @@ abstract class ModuleActivity : TabActivity() {
         return this.module.id
     }
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return shortcut.parameters?.get("id") == this.module.id
-    }
 }

@@ -39,8 +39,6 @@ class IndexActivity : ListActivity() {
 
     override fun getId(): Any = this.getAccount().id
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean = false
-
     override fun loadList(start: Long, limit: Long) = this.load {
         val desktop = DesktopTask.index(this)
 

@@ -9,7 +9,6 @@ import android.widget.VideoView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.exception.TaskException
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.explorer.html5.dialog.PlayDialog
 import de.wollis_page.gibsonos.module.explorer.html5.dto.Position
 import de.wollis_page.gibsonos.module.explorer.index.dto.Media
@@ -22,8 +21,6 @@ class PlayerActivity: GibsonOsActivity() {
     override fun getContentView(): Int = R.layout.explorer_html5_player
 
     override fun getId(): Any = 0
-
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

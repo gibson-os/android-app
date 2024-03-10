@@ -42,7 +42,4 @@ class MasterActivity : TabActivity() {
         return this.master.getId()
     }
 
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean {
-        return shortcut.parameters?.get("id") == this.master.getId()
-    }
 }

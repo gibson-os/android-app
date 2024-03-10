@@ -5,15 +5,12 @@ import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.obscura.scanner.dto.Scanner
 import de.wollis_page.gibsonos.module.obscura.task.IndexTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class IndexActivity: ListActivity() {
     override fun getId(): Long = 0
-
-    override fun isActivityforShotcut(shortcut: Shortcut): Boolean = true
 
     override fun onClick(item: ListItemInterface) {
         if (item !is Scanner) {
