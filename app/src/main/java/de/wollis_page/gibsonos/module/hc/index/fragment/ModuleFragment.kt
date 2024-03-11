@@ -5,9 +5,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
+import de.wollis_page.gibsonos.helper.AlertListDialog
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.core.desktop.service.DialogItemService
 import de.wollis_page.gibsonos.module.hc.index.dto.Module
 import de.wollis_page.gibsonos.module.hc.task.ModuleTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
@@ -27,7 +31,8 @@ class ModuleFragment: ListFragment() {
                     item.type.lowercase(),
                     "index",
                     mapOf<String, Parcelable>(
-                        "module" to item
+                        "module" to item,
+                        GibsonOsActivity.SHORTCUT_KEY to this.getShortcut(item),
                     )
                 )
             } catch (exception: ClassNotFoundException) {
@@ -61,5 +66,37 @@ class ModuleFragment: ListFragment() {
             start,
             limit
         ))
+    }
+
+    override fun onLongClick(item: ListItemInterface): Boolean {
+        if (item !is Module) {
+            return false
+        }
+
+        AlertListDialog(
+            this.activity,
+            item.name,
+            arrayListOf(DialogItemService.getDesktopItem(this.activity, this.getShortcut(item)))
+        ).show()
+
+        return true
+    }
+
+    private fun getShortcut(item: Module): Shortcut {
+        return Shortcut(
+            "hc",
+            "module",
+            "view",
+            item.name,
+            (item.settings?.get("icon") ?: "icon_homecontrol") as String,
+            mutableMapOf(
+                "id" to item.id,
+                "type" to item.type,
+                "name" to item.name,
+                "address" to item.address,
+                "helper" to item.helper,
+                "modified" to item.modified,
+            )
+        )
     }
 }

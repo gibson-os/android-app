@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.module.hc.index.dto
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.ArrayMap
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
 data class Module(
@@ -10,7 +11,8 @@ data class Module(
     var name: String,
     var address: Int,
     var helper: String,
-    var modified: String
+    var modified: String,
+    var settings: Map<String, Any>?,
 ): ListItemInterface, Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
@@ -18,8 +20,17 @@ data class Module(
         parcel.readString().toString(),
         parcel.readInt(),
         parcel.readString().toString(),
-        parcel.readString().toString()
+        parcel.readString().toString(),
+        null
     ) {
+        this.settings = this.readParamsFromParcel(parcel)
+    }
+
+    private fun readParamsFromParcel(parcel: Parcel): Map<String, Any> {
+        val settings = ArrayMap<String, Any>()
+        parcel.readMap(settings, Map::class.java.classLoader)
+
+        return settings
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -29,6 +40,7 @@ data class Module(
         parcel.writeInt(address)
         parcel.writeString(helper)
         parcel.writeString(modified)
+        parcel.writeMap(settings)
     }
 
     override fun describeContents(): Int {

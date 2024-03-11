@@ -152,8 +152,10 @@ class IndexActivity: ListActivity() {
             this.listView.scrollToPosition(0)
         }
 
-        this.getShortcut()?.parameters?.set("dir", this.loadDir.toString())
-        this.setTitle(this.loadDir.toString())
+        val loadedDir = this.loadDir.toString()
+
+        this.getShortcut()?.parameters?.set("dir", loadedDir)
+        this.setTitle(loadedDir)
     }
 
     override fun onClick(item: ListItemInterface) {

@@ -57,7 +57,7 @@ class NavigationService(private val context: GibsonOsActivity) {
                             app.task,
                             app.action,
                             app.text,
-                            "",
+                            app.icon,
                             null,
                         )),
                         account,

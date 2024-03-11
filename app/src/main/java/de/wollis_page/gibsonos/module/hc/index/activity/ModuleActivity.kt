@@ -30,6 +30,7 @@ abstract class ModuleActivity : TabActivity() {
                 parameters["address"].toString().toDouble().toInt(),
                 parameters["helper"].toString(),
                 parameters["modified"].toString(),
+                null
             )
 
         super.onCreate(savedInstanceState)

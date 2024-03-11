@@ -41,5 +41,4 @@ class MasterActivity : TabActivity() {
     override fun getId(): Any {
         return this.master.getId()
     }
-
 }
