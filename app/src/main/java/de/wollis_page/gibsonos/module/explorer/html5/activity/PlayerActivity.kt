@@ -3,7 +3,6 @@ package de.wollis_page.gibsonos.module.explorer.html5.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.MediaController
 import android.widget.VideoView
 import de.wollis_page.gibsonos.R
@@ -17,6 +16,9 @@ import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 class PlayerActivity: GibsonOsActivity() {
     private lateinit var media: Media
+    private lateinit var videoView: VideoView
+    private var pausePosition: Int = 0
+    private var isPlayingBeforePause: Boolean = false
 
     override fun getContentView(): Int = R.layout.explorer_html5_player
 
@@ -39,11 +41,11 @@ class PlayerActivity: GibsonOsActivity() {
 
         cleanUrl += "explorer/html5/stream/token/" + this.media.token
 
-        val videoView = findViewById<View>(R.id.video) as VideoView
+        this.videoView = findViewById<VideoView>(R.id.video)
         val mediaController = MediaController(this)
-        mediaController.setAnchorView(videoView)
-        videoView.setMediaController(mediaController)
-        videoView.setVideoURI(Uri.parse(cleanUrl), mapOf("X-Device-Token" to this.getAccount().token))
+        mediaController.setAnchorView(this.videoView)
+        this.videoView.setMediaController(mediaController)
+        this.videoView.setVideoURI(Uri.parse(cleanUrl), mapOf("X-Device-Token" to this.getAccount().token))
 
         this.runTask({
             var position: Position? = null
@@ -59,48 +61,48 @@ class PlayerActivity: GibsonOsActivity() {
                         media.duration,
                         position,
                         {
-                            this.startVideo(videoView)
+                            this.startVideo()
                         },
                         {
                             videoView.seekTo((position?.position ?: 0) * 1000)
-                            this.startVideo(videoView)
+                            this.startVideo()
                         },
                     ).show()
                 } else {
-                    this.startVideo(videoView)
+                    this.startVideo()
                 }
             }
         })
 
-        videoView.setOnClickListener {
-            if (videoView.isPlaying) {
-                videoView.pause()
+        this.videoView.setOnClickListener {
+            if (this.videoView.isPlaying) {
+                this.videoView.pause()
 
                 return@setOnClickListener
             }
 
-            videoView.start()
+            this.videoView.start()
         }
 
-        videoView.setOnCompletionListener {
+        this.videoView.setOnCompletionListener {
             this.setResult(this.media.token.toString(), media.position ?: 0)
             this.finish()
         }
     }
 
-    fun startVideo(videoView: VideoView) {
-        videoView.start()
+    fun startVideo() {
+        this.videoView.start()
 
         this.runTask({
-            this.savePosition(videoView, this.media.token.toString(), media.position ?: 0)
+            this.savePosition(this.media.token.toString(), media.position ?: 0)
         })
     }
 
-    private fun savePosition(videoView: VideoView, token: String, lastPosition: Int) {
+    private fun savePosition(token: String, lastPosition: Int) {
         var newPosition = lastPosition
 
-        if (videoView.currentPosition != lastPosition) {
-            newPosition = videoView.currentPosition / 1000
+        if (this.videoView.currentPosition != lastPosition) {
+            newPosition = this.videoView.currentPosition / 1000
 
             if (newPosition > 0) {
                 try {
@@ -116,7 +118,7 @@ class PlayerActivity: GibsonOsActivity() {
         }
 
         Thread.sleep(1000)
-        this.savePosition(videoView, token, newPosition)
+        this.savePosition(token, newPosition)
     }
 
     private fun setResult(token: String, position: Int) {
@@ -124,5 +126,23 @@ class PlayerActivity: GibsonOsActivity() {
         result.putExtra("token", token)
         result.putExtra("position", position)
         this.setResult(RESULT_OK, result)
+    }
+
+    override fun onPause() {
+        this.pausePosition = this.videoView.currentPosition
+        this.isPlayingBeforePause = this.videoView.isPlaying
+        this.videoView.pause()
+
+        super.onPause()
+    }
+
+    override fun onResume() {
+        this.videoView.seekTo(this.pausePosition)
+
+        if (this.isPlayingBeforePause) {
+            this.videoView.start()
+        }
+
+        super.onResume()
     }
 }
