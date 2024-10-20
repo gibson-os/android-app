@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <supports-screens
         android:anyDensity="true"
@@ -25,6 +27,7 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         android:dataExtractionRules="@xml/data_extraction_rules"
         tools:targetApi="s">
@@ -155,11 +158,30 @@
             android:icon="@drawable/ic_expand"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.growDiary.index.activity.IndexActivity"
+            android:icon="@drawable/ic_hemp"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.IndexActivity"
+            android:icon="@drawable/ic_hemp"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="de.wollis_page.gibsonos.module.explorer.service.PlaybackService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService"/>
             </intent-filter>
         </service>
     </application>

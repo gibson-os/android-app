@@ -184,6 +184,7 @@ class DataStore(url: String, private val method: String, token: String?) {
 
         val response = client.newCall(requestBuilder.build()).execute()
         Log.i(Config.LOG_TAG, "Response code: " + response.code)
+        Log.i(Config.LOG_TAG, "Response: " + response.message)
 
         if (!response.isSuccessful) {
             this.checkError(response)

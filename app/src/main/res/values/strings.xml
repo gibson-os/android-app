@@ -83,4 +83,13 @@
     <string name="obscura_title">Obscura</string>
 
     <string name="obscura_scanner_error_response">No scanners found!</string>
+
+    <string name="grow_diary_title">Grow Diary</string>
+
+    <string name="grow_diary_plant_tab">Plants</string>
+    <string name="grow_diary_seed_tab">Seeds</string>
+    <string name="grow_diary_seed_manufacture_tab">Manufacture</string>
+
+    <string name="grow_diary_plant_images_tab">Images</string>
+    <string name="grow_diary_plant_image_description">Image</string>
 </resources>

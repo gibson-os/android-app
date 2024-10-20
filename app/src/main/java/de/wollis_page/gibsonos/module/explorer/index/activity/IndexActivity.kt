@@ -43,7 +43,6 @@ class IndexActivity: ListActivity() {
     private var images = HashMap<String, ArrayMap<String, Bitmap>>()
     private var imageQueue = ArrayList<Item>()
     private var imagesLoading = false
-    private var imageWidth: Int? = null
 
     override fun getListRessource() = R.layout.explorer_index_list_item
 
@@ -221,10 +220,6 @@ class IndexActivity: ListActivity() {
         } else {
             imageView.setImageResource(R.drawable.ic_file)
 
-            if ((this.imageWidth ?: 0) == 0) {
-                this.imageWidth = imageView.width
-            }
-
             if (item.thumbAvailable) {
                 var imagePath = this.images[this.loadedDir.dir]
 
@@ -392,7 +387,7 @@ class IndexActivity: ListActivity() {
                             this.getAccount(),
                             this.loadedDir.dir,
                             item.name,
-                            this.imageWidth
+                            resources.getDimension(R.dimen.thumb_width).toInt()
                         )
                     }
 

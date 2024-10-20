@@ -215,7 +215,7 @@ abstract class GibsonOsActivity : AppCompatActivity() {
         inputMethodManager.hideSoftInputFromWindow(searchInput.windowToken, 0)
     }
 
-    protected fun removeHeder() {
+    protected fun removeHeader() {
         val header = this.findViewById<AppBarLayout>(R.id.header)
         (header.parent as ViewManager).removeView(header)
     }
