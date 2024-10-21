@@ -8,6 +8,13 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object PlantTask: AbstractTask() {
+    fun index(context: GibsonOsActivity, plantId: Long): Plant {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "index")
+        dataStore.addParam("id", plantId)
+
+        return this.load(context, dataStore)
+    }
+
     fun list(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Plant> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "plants")
 

@@ -85,11 +85,30 @@
     <string name="obscura_scanner_error_response">No scanners found!</string>
 
     <string name="grow_diary_title">Grow Diary</string>
+    <string name="grow_diary_plant_title">Plant</string>
+    <string name="grow_diary_seed_title">Seed</string>
+    <string name="grow_diary_manufacture_title">Manufacture</string>
 
     <string name="grow_diary_plant_tab">Plants</string>
-    <string name="grow_diary_seed_tab">Seeds</string>
-    <string name="grow_diary_seed_manufacture_tab">Manufacture</string>
 
+    <string name="grow_diary_plant_overview_tab">Overview</string>
     <string name="grow_diary_plant_images_tab">Images</string>
+
     <string name="grow_diary_plant_image_description">Image</string>
+    <string name="grow_diary_plant_grown_at">Grown at</string>
+    <string name="grow_diary_plant_grown_day">Days since grown</string>
+    <string name="grow_diary_plant_flowering_at">Flowering at</string>
+    <string name="grow_diary_plant_flowering_day">Days since flowering</string>
+    <string name="grow_diary_plant_harvested_at">Harvested at</string>
+    <string name="grow_diary_plant_harvested_wet">Harvested wet</string>
+    <string name="grow_diary_plant_harvested_dry">Harvested dry</string>
+
+    <string name="grow_diary_seed_tab">Seeds</string>
+
+    <string name="grow_diary_manufacture_tab">Manufacture</string>
+
+    <string name="grow_diary_seed_image_description">Image</string>
+    <string name="grow_diary_seed_type">Type</string>
+    <string name="grow_diary_seed_flowering_days">Flowering days</string>
+    <string name="grow_diary_seed_height">Height</string>
 </resources>

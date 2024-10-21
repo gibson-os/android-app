@@ -168,6 +168,16 @@
             android:icon="@drawable/ic_hemp"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.growDiary.seed.activity.IndexActivity"
+            android:icon="@drawable/ic_hemp"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="de.wollis_page.gibsonos.module.growDiary.manufacture.activity.IndexActivity"
+            android:icon="@drawable/ic_hemp"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">

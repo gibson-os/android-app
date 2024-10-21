@@ -7,6 +7,13 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Manufacture
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object ManufactureTask: AbstractTask() {
+    fun index(context: GibsonOsActivity, manufactueId: Long): Manufacture {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "manufacture", "index")
+        dataStore.addParam("id", manufactueId)
+
+        return this.load(context, dataStore)
+    }
+
     fun list(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Manufacture> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "manufactures")
 

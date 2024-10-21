@@ -40,6 +40,7 @@ class PlantFragment: ListFragment() {
 //            )
 //        }
     }
+
     override fun onClick(item: ListItemInterface) {
         if (item !is Plant) {
             return
@@ -53,7 +54,7 @@ class PlantFragment: ListFragment() {
                     "plant",
                     "index",
                     mapOf(
-                        "id" to item.id,
+                        "plantId" to item.id,
                         GibsonOsActivity.SHORTCUT_KEY to this.getShortcut(item),
                     )
                 )
@@ -99,7 +100,7 @@ class PlantFragment: ListFragment() {
             item.name,
             "icon_hemp",
             mutableMapOf(
-                "id" to item.id,
+                "plantId" to item.id,
                 "name" to item.name,
             )
         )

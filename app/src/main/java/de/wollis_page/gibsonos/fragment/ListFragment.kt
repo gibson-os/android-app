@@ -68,14 +68,6 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
         return view
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.takeIf { it.containsKey("arguments") }?.apply {
-            fragmentsArguments = getSerializable("arguments") as HashMap<String, *>
-        }
-    }
-
     protected fun load(run: (account: Account) -> Unit) {
         val accountModel = this.activity.getAccount()
 

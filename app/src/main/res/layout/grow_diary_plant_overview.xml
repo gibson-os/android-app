@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/outter_spacing"
+        android:paddingBottom="@dimen/outter_spacing"
+        android:paddingLeft="@dimen/outter_spacing"
+        android:paddingRight="@dimen/outter_spacing"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/outter_spacing"
+            android:contentDescription="@string/grow_diary_plant_image_description" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/text_spacing"
+            android:layout_marginBottom="@dimen/text_spacing"
+            android:textSize="@dimen/headline_font_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/seed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/text_spacing"
+            android:textSize="@dimen/subline_font_size"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/grownAtContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/grow_diary_plant_grown_at"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+            <TextView
+                android:id="@+id/grownAt"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/grownDayContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/grow_diary_plant_grown_day"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+            <TextView
+                android:id="@+id/grownDay"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/floweringAtContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/grow_diary_plant_flowering_at"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+            <TextView
+                android:id="@+id/floweringAt"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/floweringDayContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/grow_diary_plant_flowering_day"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+            <TextView
+                android:id="@+id/floweringDay"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/harvestedAtContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/grow_diary_plant_harvested_at"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+            <TextView
+                android:id="@+id/harvestedAt"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/harvestedWetContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/grow_diary_plant_harvested_wet"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+            <TextView
+                android:id="@+id/harvestedWet"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/harvestedDryContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/grow_diary_plant_harvested_dry"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+            <TextView
+                android:id="@+id/harvestedDry"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/text_spacing"
+                android:textSize="@dimen/subline_font_size" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -13,9 +13,7 @@ import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.fragment.ListFragment
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Manufacture
-import de.wollis_page.gibsonos.module.growDiary.index.dto.Seed
 import de.wollis_page.gibsonos.module.growDiary.task.ManufactureTask
-import de.wollis_page.gibsonos.module.growDiary.task.SeedTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class ManufactureFragment: ListFragment() {
@@ -33,10 +31,10 @@ class ManufactureFragment: ListFragment() {
                 ActivityLauncherService.startActivity(
                     this.activity,
                     "growDiary",
-                    "seed",
                     "manufacture",
+                    "index",
                     mapOf(
-                        "id" to item.id,
+                        "manufactureId" to item.id,
                         GibsonOsActivity.SHORTCUT_KEY to this.getShortcut(item),
                     )
                 )
@@ -77,12 +75,12 @@ class ManufactureFragment: ListFragment() {
     private fun getShortcut(item: Manufacture): Shortcut {
         return Shortcut(
             "growDiary",
-            "seed",
             "manufacture",
+            "index",
             item.name,
             "icon_hemp",
             mutableMapOf(
-                "id" to item.id,
+                "manufactureId" to item.id,
                 "name" to item.name,
             )
         )

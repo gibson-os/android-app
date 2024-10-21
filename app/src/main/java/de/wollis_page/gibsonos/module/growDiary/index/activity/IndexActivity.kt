@@ -12,7 +12,7 @@ class IndexActivity : TabActivity() {
     override fun getTabs(): Array<Tab> = arrayOf(
         Tab(R.string.grow_diary_plant_tab, PlantFragment::class),
         Tab(R.string.grow_diary_seed_tab, SeedFragment::class),
-        Tab(R.string.grow_diary_seed_manufacture_tab, ManufactureFragment::class),
+        Tab(R.string.grow_diary_manufacture_tab, ManufactureFragment::class),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

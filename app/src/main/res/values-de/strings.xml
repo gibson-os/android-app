@@ -85,11 +85,30 @@
     <string name="obscura_scanner_error_response">Keine Scanner gefunden!</string>
 
     <string name="grow_diary_title">Grow Diary</string>
+    <string name="grow_diary_plant_title">Pflanze</string>
+    <string name="grow_diary_seed_title">Samen</string>
+    <string name="grow_diary_manufacture_title">Hersteller</string>
 
     <string name="grow_diary_plant_tab">Pflanzen</string>
-    <string name="grow_diary_seed_tab">Samen</string>
-    <string name="grow_diary_seed_manufacture_tab">Hersteller</string>
 
+    <string name="grow_diary_plant_overview_tab">Übersicht</string>
     <string name="grow_diary_plant_images_tab">Bilder</string>
+
     <string name="grow_diary_plant_image_description">Bild</string>
+    <string name="grow_diary_plant_grown_at">Angebaut am</string>
+    <string name="grow_diary_plant_grown_day">Tage seit Anbau</string>
+    <string name="grow_diary_plant_flowering_at">Blütebeginn am</string>
+    <string name="grow_diary_plant_flowering_day">Tage sein Blütebeginn</string>
+    <string name="grow_diary_plant_harvested_at">Geernted am</string>
+    <string name="grow_diary_plant_harvested_wet">Ertrag feucht</string>
+    <string name="grow_diary_plant_harvested_dry">Ertrag trocken</string>
+
+    <string name="grow_diary_seed_tab">Samen</string>
+
+    <string name="grow_diary_manufacture_tab">Hersteller</string>
+
+    <string name="grow_diary_seed_image_description">Bild</string>
+    <string name="grow_diary_seed_type">Typ</string>
+    <string name="grow_diary_seed_flowering_days">Blütezeit</string>
+    <string name="grow_diary_seed_height">Höhe</string>
 </resources>

@@ -10,6 +10,7 @@ data class Seed(
     var maxFloweringDays: Int,
     var minHeight: Int,
     var maxHeight: Int,
+    var manufacture: Manufacture?,
 ): ListItemInterface {
     override fun getId() = this.id
 }
