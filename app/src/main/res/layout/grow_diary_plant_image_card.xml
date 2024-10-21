@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/inner_spacing"
+    app:cardCornerRadius="@dimen/inner_spacing"
+    app:cardElevation="@dimen/inner_spacing">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:paddingTop="@dimen/inner_spacing"
+        android:paddingBottom="@dimen/inner_spacing"
+        android:paddingLeft="@dimen/inner_spacing"
+        android:paddingRight="@dimen/inner_spacing">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/image_size"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/inner_spacing"
+            android:contentDescription="@string/grow_diary_plant_image_description"
+            app:srcCompat="@drawable/ic_hemp" />
+
+        <TextView
+            android:id="@+id/created"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/headline_font_size"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -16,8 +16,10 @@ class OverviewFragment: GibsonOsFragment() {
         this.activity.runTask({
             val manufacture = ManufactureTask.index(this.activity, this.fragmentsArguments["manufactureId"].toString().toLong())
 
-            this.view?.findViewById<TextView>(R.id.name)?.text = manufacture.name
-            this.view?.findViewById<TextView>(R.id.url)?.text = manufacture.url
+            this.activity.runOnUiThread {
+                this.view?.findViewById<TextView>(R.id.name)?.text = manufacture.name
+                this.view?.findViewById<TextView>(R.id.url)?.text = manufacture.url
+            }
 
             val imageView = this.view?.findViewById<ImageView>(R.id.image)
             val image = ManufactureTask.image(this.activity, manufacture.id, imageView?.width)

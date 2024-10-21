@@ -19,6 +19,8 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
     override lateinit var listAdapter: BaseListAdapter
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
+    open fun getLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
+
     override fun updateData(data: String) {
         val update = this.activity.update ?: return
 
@@ -33,7 +35,7 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
         val view = inflater.inflate(this.getContentView(), container, false)
         this.listView = view.findViewById(R.id.list)
 
-        val llm = LinearLayoutManager(activity)
+        val llm = this.getLayoutManager() as LinearLayoutManager
         llm.orientation = LinearLayoutManager.VERTICAL
         this.listView.layoutManager = llm
         val dividerItemDecoration = DividerItemDecoration(activity, llm.orientation)

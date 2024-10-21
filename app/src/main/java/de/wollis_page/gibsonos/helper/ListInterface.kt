@@ -17,15 +17,18 @@ interface ListInterface {
     var listAdapter: BaseListAdapter
     var activity: GibsonOsActivity
 
+
     fun onClick(item: ListItemInterface)
 
     fun bind(item: ListItemInterface, view: View)
 
     fun getListRessource(): Int
 
-    fun loadList(start: Long = 0, limit: Long = 100)
+    fun loadList(start: Long = 0, limit: Long = this.getDefaultLimit())
 
     fun getContentView() = R.layout.base_list
+
+    fun getDefaultLimit(): Long = 100
 
     fun onLongClick(item: ListItemInterface): Boolean {
         return false

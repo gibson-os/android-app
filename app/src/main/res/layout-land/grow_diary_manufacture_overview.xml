@@ -42,7 +42,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/text_spacing"
                 android:textSize="@dimen/subline_font_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:autoLink="web" />
 
         </LinearLayout>
 
