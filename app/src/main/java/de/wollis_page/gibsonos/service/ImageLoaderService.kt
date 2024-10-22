@@ -14,7 +14,8 @@ class ImageLoaderService<T : ListItemInterface>(
 ) {
     private var images = HashMap<Any, Bitmap>()
     private var queue = ArrayList<T>()
-    private var imagesLoading = false
+    private var imagesLoading = 0
+    var maxLoadingImages = 5
 
     fun getImage(item: T): Bitmap? {
         val image = this.images[item.getId()]
@@ -35,6 +36,7 @@ class ImageLoaderService<T : ListItemInterface>(
 
         if (image == null) {
             imageView.setImageResource(placeholderResource)
+            this.addQueue(item)
         } else {
             imageView.setImageBitmap(image)
         }
@@ -46,11 +48,11 @@ class ImageLoaderService<T : ListItemInterface>(
     }
 
     private fun loadImages() {
-        if (this.imagesLoading) {
+        if (this.imagesLoading == this.maxLoadingImages) {
             return
         }
 
-        this.imagesLoading = true
+        this.imagesLoading++
 
         this.activity.runTask({
             while (this.queue.size != 0) {
@@ -71,7 +73,7 @@ class ImageLoaderService<T : ListItemInterface>(
                 }
             }
 
-            this.imagesLoading = false
+            this.imagesLoading--
         })
     }
 }
