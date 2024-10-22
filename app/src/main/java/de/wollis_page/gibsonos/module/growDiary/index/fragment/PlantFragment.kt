@@ -1,30 +1,38 @@
 package de.wollis_page.gibsonos.module.growDiary.index.fragment
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
-import de.wollis_page.gibsonos.exception.ResponseException
-import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.fragment.ListFragment
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
-
+import de.wollis_page.gibsonos.service.ImageLoaderService
 
 class PlantFragment: ListFragment() {
-    private var images = HashMap<Long, Bitmap>()
-    private var imageQueue = ArrayList<Plant>()
-    private var imagesLoading = false
+    private lateinit var imageLoaderService: ImageLoaderService<Plant>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.imageLoaderService = ImageLoaderService(
+            this.activity,
+            {
+                PlantTask.image(
+                    this.activity,
+                    it.id,
+                    this.resources.getDimension(R.dimen.thumb_width).toInt()
+                )
+            },
+            {
+                this.getViewByItem(it)?.findViewById(R.id.image)
+            }
+        )
 
 //        val inflater = LayoutInflater.from(this.activity)
 //        this.activity.contentContainer.addView(inflater.inflate(
@@ -72,22 +80,15 @@ class PlantFragment: ListFragment() {
         view.findViewById<TextView>(R.id.name).text = item.name
         view.findViewById<TextView>(R.id.seed).text = item.seed.name
 
-        val imageView = view.findViewById<ImageView>(R.id.image)
-
-        if (this.images[item.id] != null) {
-            imageView.setImageBitmap(this.images[item.id])
-        }
+        this.imageLoaderService.viewImage(
+            item,
+            view.findViewById(R.id.image),
+            R.drawable.ic_hemp,
+        )
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        val plants = PlantTask.list(this.activity, start, limit)
-
-        plants.data.forEach {
-            this.imageQueue.add(it)
-        }
-
-        this.loadImages()
-        this.listAdapter.setListResponse(plants)
+        this.listAdapter.setListResponse(PlantTask.list(this.activity, start, limit))
     }
 
     override fun getListRessource() = R.layout.grow_diary_plant_list_item
@@ -104,42 +105,5 @@ class PlantFragment: ListFragment() {
                 "name" to item.name,
             )
         )
-    }
-
-    private fun loadImages() {
-        if (this.imagesLoading) {
-            return
-        }
-
-        this.imagesLoading = true
-
-        this.runTask({
-            while (this.imageQueue.size != 0) {
-                val item = this.imageQueue.first()
-                this.imageQueue.removeAt(0)
-
-                try {
-                    if (this.images[item.id] == null) {
-                        this.images[item.id] = PlantTask.image(
-                            this.activity,
-                            item.id,
-                            resources.getDimension(R.dimen.thumb_width).toInt()
-                        )
-                    }
-
-                    val imageView = this.getViewByItem(item)?.findViewById<ImageView>(R.id.image)
-
-                    if (imageView === null) {
-                        continue
-                    }
-
-                    this.activity.runOnUiThread { imageView.setImageBitmap(this.images[item.id]) }
-                } catch (_: TaskException) {
-                } catch (_: ResponseException) {
-                }
-            }
-
-            this.imagesLoading = false
-        })
     }
 }

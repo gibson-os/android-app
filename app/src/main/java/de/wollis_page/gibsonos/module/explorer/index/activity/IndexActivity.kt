@@ -3,9 +3,7 @@ package de.wollis_page.gibsonos.module.explorer.index.activity
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.ArrayMap
 import android.util.Log
 import android.view.Menu
 import android.view.View
@@ -31,6 +29,7 @@ import de.wollis_page.gibsonos.module.explorer.service.ChromecastService
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
+import de.wollis_page.gibsonos.service.ImageLoaderService
 
 
 class IndexActivity: ListActivity() {
@@ -40,9 +39,7 @@ class IndexActivity: ListActivity() {
     private lateinit var itemDialog: ItemDialog
     private lateinit var dirDialog: DirDialog
     private var loadDir: String? = null
-    private var images = HashMap<String, ArrayMap<String, Bitmap>>()
-    private var imageQueue = ArrayList<Item>()
-    private var imagesLoading = false
+    private lateinit var imageLoaderService: ImageLoaderService<Item>
 
     override fun getListRessource() = R.layout.explorer_index_list_item
 
@@ -53,6 +50,21 @@ class IndexActivity: ListActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        this.imageLoaderService = ImageLoaderService(
+            this.activity,
+            {
+                FileTask.image(
+                    this.getAccount(),
+                    this.loadedDir.dir,
+                    it.name,
+                    this.resources.getDimension(R.dimen.thumb_width).toInt()
+                )
+            },
+            {
+                this.getViewByItem(it)?.findViewById(R.id.icon)
+            }
+        )
+
         if (savedInstanceState != null) {
             this.loadedDir = savedInstanceState.getParcelable(DIRECTORY_KEY)!!
             this.loadDir = loadedDir.dir
@@ -187,7 +199,6 @@ class IndexActivity: ListActivity() {
 
     override fun onBackPressed() {
         Log.i(Config.LOG_TAG, "Loaded dir " + this.loadedDir.dir)
-        this.imageQueue = ArrayList()
         val dirs = this.loadedDir.dir.split("/").toMutableList()
 
         if (dirs.last().isEmpty()) {
@@ -221,19 +232,7 @@ class IndexActivity: ListActivity() {
             imageView.setImageResource(R.drawable.ic_file)
 
             if (item.thumbAvailable) {
-                var imagePath = this.images[this.loadedDir.dir]
-
-                if (imagePath == null) {
-                    imagePath = ArrayMap()
-                    this.images[this.loadedDir.dir] = imagePath
-                }
-
-                if (imagePath[item.name] == null) {
-                    this.imageQueue.add(0, item)
-                    this.loadImages()
-                } else {
-                    imageView.setImageBitmap(imagePath[item.name])
-                }
+                this.imageLoaderService.viewImage(item, imageView, R.drawable.ic_file)
             }
         }
 
@@ -361,50 +360,6 @@ class IndexActivity: ListActivity() {
             html5ImageView.setColorFilter(color)
             progressBar.progressTintList = ColorStateList.valueOf(color)
         }
-    }
-
-    private fun loadImages() {
-        if (this.imagesLoading) {
-            return
-        }
-
-        this.imagesLoading = true
-
-        this.runTask({
-            while (this.imageQueue.size != 0) {
-                val item = this.imageQueue.first()
-                this.imageQueue.removeAt(0)
-                var imagePath = this.images[this.loadedDir.dir]
-
-                if (imagePath == null) {
-                    imagePath = ArrayMap()
-                    this.images[this.loadedDir.dir] = imagePath
-                }
-
-                try {
-                    if (imagePath[item.name] == null) {
-                        imagePath[item.name] = FileTask.image(
-                            this.getAccount(),
-                            this.loadedDir.dir,
-                            item.name,
-                            resources.getDimension(R.dimen.thumb_width).toInt()
-                        )
-                    }
-
-                    val imageView = this.getViewByItem(item)?.findViewById<ImageView>(R.id.icon)
-
-                    if (imageView === null) {
-                        continue
-                    }
-
-                    this.runOnUiThread { imageView.setImageBitmap(imagePath[item.name]) }
-                } catch (_: TaskException) {
-                } catch (_: ResponseException) {
-                }
-            }
-
-            this.imagesLoading = false
-        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

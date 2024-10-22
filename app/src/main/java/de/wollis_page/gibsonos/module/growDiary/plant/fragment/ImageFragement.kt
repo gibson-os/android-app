@@ -1,24 +1,68 @@
 package de.wollis_page.gibsonos.module.growDiary.plant.fragment
 
-import android.graphics.Bitmap
+import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
-import de.wollis_page.gibsonos.exception.ResponseException
-import de.wollis_page.gibsonos.exception.TaskException
+import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.GridFragment
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
+import de.wollis_page.gibsonos.service.ImageLoaderService
 
 class ImageFragement: GridFragment() {
-    private var images = HashMap<Long, Bitmap>()
-    private var imageQueue = ArrayList<Image>()
-    private var imagesLoading = false
+    private lateinit var imageLoaderService: ImageLoaderService<Image>
+    private var plantId: Long? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        this.plantId = this.fragmentsArguments["plantId"].toString().toLong()
+
+        this.imageLoaderService = ImageLoaderService(
+            this.activity,
+            {
+                PlantTask.image(
+                    this.activity,
+                    this.plantId ?: 0,
+                    this.view?.findViewById<ImageView>(R.id.image)?.width,
+                    resources.getDimension(R.dimen.image_size).toInt(),
+                    it.created,
+                )
+            },
+            {
+                this.getViewByItem(it)?.findViewById(R.id.image)
+            }
+        )
+    }
 
     override fun onClick(item: ListItemInterface) {
-        TODO("Not yet implemented")
+        if (item !is Image) {
+            return
+        }
+
+        this.runTask({
+            try {
+                ActivityLauncherService.startActivity(
+                    this.activity,
+                    "growDiary",
+                    "plant",
+                    "image",
+                    mapOf(
+                        "plantId" to (this.plantId ?: 0),
+                        "created" to item.created,
+                        GibsonOsActivity.SHORTCUT_KEY to this.getShortcut(item),
+                    )
+                )
+            } catch (exception: ClassNotFoundException) {
+                throw AppException("Not implemented yet!", R.string.not_implemented_yet)
+            }
+        })
     }
 
     override fun bind(item: ListItemInterface, view: View) {
@@ -28,67 +72,35 @@ class ImageFragement: GridFragment() {
 
         view.findViewById<TextView>(R.id.created).text = item.created
 
-        val imageView = view.findViewById<ImageView>(R.id.image)
-
-        if (this.images[item.id] != null) {
-            imageView.setImageBitmap(this.images[item.id])
-        }
+        this.imageLoaderService.viewImage(
+            item,
+            view.findViewById(R.id.image),
+            R.drawable.ic_hemp,
+        )
     }
 
     override fun getListRessource() = R.layout.grow_diary_plant_image_card
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        val images = PlantTask.images(
+        this.listAdapter.setListResponse(PlantTask.images(
             this.activity,
             this.fragmentsArguments["plantId"].toString().toLong(),
             start,
             limit,
-        )
-
-        images.data.forEach {
-            this.imageQueue.add(it)
-        }
-
-        this.loadImages()
-        this.listAdapter.setListResponse(images)
+        ))
     }
 
-    private fun loadImages() {
-        if (this.imagesLoading) {
-            return
-        }
-
-        this.imagesLoading = true
-
-        this.runTask({
-            while (this.imageQueue.size != 0) {
-                val item = this.imageQueue.first()
-                this.imageQueue.removeAt(0)
-
-                try {
-                    if (this.images[item.id] == null) {
-                        this.images[item.id] = PlantTask.image(
-                            this.activity,
-                            this.fragmentsArguments["plantId"].toString().toLong(),
-                            this.view?.findViewById<ImageView>(R.id.image)?.width,
-                            resources.getDimension(R.dimen.image_size).toInt(),
-                            item.created,
-                        )
-                    }
-
-                    val imageView = this.getViewByItem(item)?.findViewById<ImageView>(R.id.image)
-
-                    if (imageView === null) {
-                        continue
-                    }
-
-                    this.activity.runOnUiThread { imageView.setImageBitmap(this.images[item.id]) }
-                } catch (_: TaskException) {
-                } catch (_: ResponseException) {
-                }
-            }
-
-            this.imagesLoading = false
-        })
+    private fun getShortcut(item: Image): Shortcut {
+        return Shortcut(
+            "growDiary",
+            "plant",
+            "image",
+            item.created,
+            "icon_hemp",
+            mutableMapOf(
+                "plantId" to (this.plantId ?: 0),
+                "created" to item.created,
+            )
+        )
     }
 }
