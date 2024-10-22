@@ -9,10 +9,13 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ScaleListener
 
+
 class ImageActivity: GibsonOsActivity() {
     private var plantId: Long? = null
     private var created: String? = null
     private lateinit var scaleGestureDetector: ScaleGestureDetector
+    private var previousX: Float = 0F
+    private var previousY: Float = 0F
 
     override fun getContentView() = R.layout.grow_diary_plant_image_view
 
@@ -44,6 +47,44 @@ class ImageActivity: GibsonOsActivity() {
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         this.scaleGestureDetector.onTouchEvent(event)
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                this.previousX = event.x
+                this.previousY = event.y
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val imageView = this.findViewById<ImageView>(R.id.image)
+                var newX = imageView.x + (event.x - this.previousX)
+                var newY = imageView.y + (event.y - this.previousY)
+
+//                if (newX < 0) {
+//                    newX = 0F
+//                }
+
+//                if (newX > imageView.width.toFloat()) {
+//                    newX = imageView.width.toFloat()
+//                }
+
+//                if (newY < 0) {
+//                    newY = 0F
+//                }
+
+//                if (newY > imageView.height.toFloat()) {
+//                    newY = imageView.height.toFloat()
+//                }
+
+                imageView.x = newX
+                imageView.y = newY
+
+//                Log.d(Config.LOG_TAG, imageView.x.toString())
+//                Log.d(Config.LOG_TAG, imageView.width.toString())
+//                Log.d(Config.LOG_TAG, imageView.y.toString())
+
+                this.previousX = event.x
+                this.previousY = event.y
+            }
+        }
 
         return super.dispatchTouchEvent(event)
     }
