@@ -10,15 +10,19 @@ import de.wollis_page.gibsonos.exception.TaskException
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
+
 class DataStore(url: String, private val method: String, token: String?) {
     private val params: HashMap<String, String> = HashMap()
+    private val dataParams: HashMap<String, HashMap<String, RequestBody>> = HashMap()
     private val separator = "/"
     private val url: String
     private val token: String
@@ -59,6 +63,15 @@ class DataStore(url: String, private val method: String, token: String?) {
         }
 
         this.params[key] = cleanValue
+    }
+
+    fun addParam(key: String, value: Bitmap) {
+        val stream = ByteArrayOutputStream()
+//        value.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        val byteArray = stream.toByteArray()
+        this.dataParams[key] = hashMapOf(
+            "$key.jpg" to byteArray.toRequestBody("image/*jpg".toMediaTypeOrNull())
+        )
     }
 
     fun addParam(key: String, value: String) {
@@ -116,6 +129,14 @@ class DataStore(url: String, private val method: String, token: String?) {
         for (key in this.params.keys) {
             Log.d(Config.LOG_TAG, "Add param '" + key + "' with value '" + this.params[key].toString() + "'")
             builder.addFormDataPart(key, this.params[key]!!)
+        }
+
+        for (key in this.dataParams.keys) {
+            Log.d(Config.LOG_TAG, "Add data param '" + key + "' with value '" + this.dataParams[key].toString() + "'")
+
+            for (filename in this.dataParams[key]!!.keys) {
+                builder.addFormDataPart(key, filename, this.dataParams[key]!!.get(filename)!!)
+            }
         }
 
         return builder.build()

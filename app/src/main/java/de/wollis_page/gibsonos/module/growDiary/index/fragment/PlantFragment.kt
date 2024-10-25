@@ -23,7 +23,7 @@ class PlantFragment: ListFragment() {
         this.imageLoaderService = ImageLoaderService(
             this.activity,
             {
-                PlantTask.image(
+                PlantTask.getImage(
                     this.activity,
                     it.id,
                     this.resources.getDimension(R.dimen.thumb_width).toInt()

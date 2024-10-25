@@ -21,14 +21,14 @@ object PlantTask: AbstractTask() {
         return this.loadList(context, dataStore, start, limit)
     }
 
-    fun images(context: GibsonOsActivity, plantId: Long, start: Long, limit: Long): ListResponse<Image> {
+    fun getImages(context: GibsonOsActivity, plantId: Long, start: Long, limit: Long): ListResponse<Image> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "images")
         dataStore.addParam("plantId", plantId)
 
         return this.loadList(context, dataStore, start, limit)
     }
 
-    fun image(
+    fun getImage(
         context: GibsonOsActivity,
         plantId: Long,
         width: Int? = null,
@@ -53,5 +53,28 @@ object PlantTask: AbstractTask() {
         dataStore.setTimeout(60000)
 
         return dataStore.loadBitmap()
+    }
+
+    fun postImage(
+        context: GibsonOsActivity,
+        plantId: Long,
+        image: Bitmap,
+        date: String? = null,
+    ): Image {
+        val dataStore = this.getDataStore(
+            context.getAccount(),
+            "growDiary",
+            "plant",
+            "image",
+            "POST",
+        )
+        dataStore.addParam("image", image)
+        dataStore.addParam("plantId", plantId)
+
+        if (date != null) {
+            dataStore.addParam("date", date)
+        }
+
+        return this.load(context, dataStore)
     }
 }

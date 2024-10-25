@@ -49,7 +49,7 @@ class OverviewFragment: GibsonOsFragment() {
             this.view?.findViewById<TextView>(R.id.harvestedDry)?.text = plant.harvestedDry.toString()
 
             val imageView = this.view?.findViewById<ImageView>(R.id.image)
-            val image = PlantTask.image(this.activity, plant.id, imageView?.width)
+            val image = PlantTask.getImage(this.activity, plant.id, imageView?.width)
 
             this.activity.runOnUiThread {
                 imageView?.setImageBitmap(image)
