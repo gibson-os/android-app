@@ -97,8 +97,16 @@
     <string name="grow_diary_plant_image_description">Image</string>
     <string name="grow_diary_plant_grown_at">Grown at</string>
     <string name="grow_diary_plant_grown_day">Days since grown</string>
+    <string name="grow_diary_plant_min_grown_days">Min grown days</string>
+    <string name="grow_diary_plant_max_grown_days">Max grown days</string>
+    <string name="grow_diary_plant_germinated_at">Germinated at</string>
+    <string name="grow_diary_plant_germinated_days">Days since germinated</string>
+    <string name="grow_diary_plant_germinated_days_from_start">Germination to start of flowering</string>
     <string name="grow_diary_plant_flowering_at">Flowering at</string>
-    <string name="grow_diary_plant_flowering_day">Days since flowering</string>
+    <string name="grow_diary_plant_flowering_days">Days since flowering</string>
+    <string name="grow_diary_plant_flowering_days_from_start">Start of flowering until harvest</string>
+    <string name="grow_diary_plant_min_flowering_days">Min flowering days</string>
+    <string name="grow_diary_plant_max_flowering_days">Max flowering days</string>
     <string name="grow_diary_plant_harvested_at">Harvested at</string>
     <string name="grow_diary_plant_harvested_wet">Harvested wet</string>
     <string name="grow_diary_plant_harvested_dry">Harvested dry</string>

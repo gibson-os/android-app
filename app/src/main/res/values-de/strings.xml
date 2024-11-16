@@ -97,8 +97,16 @@
     <string name="grow_diary_plant_image_description">Bild</string>
     <string name="grow_diary_plant_grown_at">Angebaut am</string>
     <string name="grow_diary_plant_grown_day">Tage seit Anbau</string>
+    <string name="grow_diary_plant_min_grown_days">Mindest Anbauzeit</string>
+    <string name="grow_diary_plant_max_grown_days">Maximale Anbauzeit</string>
+    <string name="grow_diary_plant_germinated_at">Keimung am</string>
+    <string name="grow_diary_plant_germinated_days">Tage bis Keimung</string>
+    <string name="grow_diary_plant_germinated_days_from_start">Keimung bis Blütebeginn</string>
     <string name="grow_diary_plant_flowering_at">Blütebeginn am</string>
-    <string name="grow_diary_plant_flowering_day">Tage sein Blütebeginn</string>
+    <string name="grow_diary_plant_flowering_days">Tage seit Blütebeginn</string>
+    <string name="grow_diary_plant_flowering_days_from_start">Blütebeginn bis Ernte</string>
+    <string name="grow_diary_plant_min_flowering_days">Mindest Blütezeit</string>
+    <string name="grow_diary_plant_max_flowering_days">Maximale Blütezeit</string>
     <string name="grow_diary_plant_harvested_at">Geernted am</string>
     <string name="grow_diary_plant_harvested_wet">Ertrag feucht</string>
     <string name="grow_diary_plant_harvested_dry">Ertrag trocken</string>

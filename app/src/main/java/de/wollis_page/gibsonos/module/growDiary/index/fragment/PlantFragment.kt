@@ -78,7 +78,7 @@ class PlantFragment: ListFragment() {
         }
 
         view.findViewById<TextView>(R.id.name).text = item.name
-        view.findViewById<TextView>(R.id.seed).text = item.seed.name
+        view.findViewById<TextView>(R.id.seed).text = item.seed!!.name
 
         this.imageLoaderService.viewImage(
             item,

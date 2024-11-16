@@ -1,18 +1,14 @@
 package de.wollis_page.gibsonos.module.growDiary.index.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.State
 
 data class Plant(
     var id: Long,
     var name: String,
     var seed: Seed,
-    var grownAt: String?,
-    var floweringAt: String?,
-    var harvestedAt: String?,
-    var harvestedWet: Float?,
-    var harvestedDry: Float?,
-    var grownDay: Int?,
-    var floweringDay: Int?,
+    var state: State?,
+    var states: Map<String, State>?,
 ): ListItemInterface {
     override fun getId() = this.id
 }

@@ -24,6 +24,8 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.ImageLoaderService
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class ImageFragement: GridFragment() {
     private lateinit var imageLoaderService: ImageLoaderService<Image>
@@ -42,9 +44,15 @@ class ImageFragement: GridFragment() {
             Log.d(Config.LOG_TAG, "result")
             Log.d(Config.LOG_TAG, it.data.toString())
             Log.d(Config.LOG_TAG, it.toString())
+            val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-            this.runTask({
-                PlantTask.postImage(this.activity, this.plantId ?: 0, imageBitmap)
+            this.activity.runTask({
+                PlantTask.postImage(
+                    this.activity,
+                    this.plantId!!,
+                    imageBitmap,
+                    LocalDateTime.now().format(dateFormatter),
+                )
             })
         }
 
