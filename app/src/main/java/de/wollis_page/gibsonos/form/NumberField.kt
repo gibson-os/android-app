@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.form
 
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import com.google.android.material.textfield.TextInputEditText
@@ -20,6 +21,10 @@ class NumberField: FieldInterface {
             context.findViewById(android.R.id.content),
             false
         ) as TextInputLayout
+
+        if (field.config.containsKey("decimals")) {
+            view.findViewById<TextInputEditText>(R.id.field).inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        }
 
         view.hint = field.title
 
