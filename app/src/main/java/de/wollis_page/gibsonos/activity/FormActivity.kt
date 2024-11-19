@@ -10,8 +10,10 @@ import de.wollis_page.gibsonos.dto.form.Field
 import de.wollis_page.gibsonos.exception.FormException
 import de.wollis_page.gibsonos.form.AutoCompleteField
 import de.wollis_page.gibsonos.form.BoolField
+import de.wollis_page.gibsonos.form.DateTimeField
 import de.wollis_page.gibsonos.form.DirectoryField
 import de.wollis_page.gibsonos.form.FieldInterface
+import de.wollis_page.gibsonos.form.NumberField
 import de.wollis_page.gibsonos.form.OptionField
 import de.wollis_page.gibsonos.form.StringField
 import de.wollis_page.gibsonos.task.FormTask
@@ -21,10 +23,12 @@ import de.wollis_page.gibsonos.dto.form.Button as FormButton
 abstract class FormActivity: GibsonOsActivity() {
     private var fields: Array<FieldInterface> = arrayOf(
         StringField(),
+        NumberField(),
         OptionField(),
         BoolField(),
         AutoCompleteField(),
         DirectoryField(),
+        DateTimeField(),
     )
     private lateinit var formContainer: LinearLayout
     private var formViews: MutableMap<String, View> = mutableMapOf()

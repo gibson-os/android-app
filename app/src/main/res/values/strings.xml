@@ -93,6 +93,7 @@
 
     <string name="grow_diary_plant_overview_tab">Overview</string>
     <string name="grow_diary_plant_images_tab">Images</string>
+    <string name="grow_diary_plant_climates_tab">Climate</string>
 
     <string name="grow_diary_plant_image_description">Image</string>
     <string name="grow_diary_plant_grown_at">Grown at</string>
@@ -110,6 +111,10 @@
     <string name="grow_diary_plant_harvested_at">Harvested at</string>
     <string name="grow_diary_plant_harvested_wet">Harvested wet</string>
     <string name="grow_diary_plant_harvested_dry">Harvested dry</string>
+    <string name="grow_diary_plant_climate_temperature">Temperature</string>
+    <string name="grow_diary_plant_climate_relative_humidity">Relative humidity</string>
+    <string name="grow_diary_plant_climate_air_pressure">Air pressure</string>
+    <string name="grow_diary_plant_climate_leaf_temperature">Lead temperature</string>
 
     <string name="grow_diary_seed_tab">Seeds</string>
 
