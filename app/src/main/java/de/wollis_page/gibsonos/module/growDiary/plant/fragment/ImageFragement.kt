@@ -106,7 +106,7 @@ class ImageFragement: GridFragment() {
             return
         }
 
-        view.findViewById<TextView>(R.id.created).text = item.created
+        view.findViewById<TextView>(R.id.created).text = item.created + " (Tag " + item.day + ")"
 
         this.imageLoaderService.viewImage(
             item,

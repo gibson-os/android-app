@@ -33,8 +33,8 @@ class OverviewFragment: GibsonOsFragment() {
             this.view?.findViewById<TextView>(R.id.grownAt)?.text = plant.state?.grownAt
             this.view?.findViewById<TextView>(R.id.lastDate)?.text = plant.state?.to
             this.view?.findViewById<TextView>(R.id.lastDateText)?.text = plant.state?.title
-            this.view?.findViewById<TextView>(R.id.lastStateDays)?.text = "${plant.state?.toDaysSinceStart} Tage"
-            this.view?.findViewById<TextView>(R.id.lastStateWeek)?.text = "${plant.state?.toWeekSinceStart} Wochen"
+            this.view?.findViewById<TextView>(R.id.lastStateDays)?.text = "${plant.state?.toDaysSinceStart}. Tag"
+            this.view?.findViewById<TextView>(R.id.lastStateWeek)?.text = "${plant.state?.toWeekSinceStart}. Woche"
 
             val statesContainer = this.view?.findViewById<LinearLayout>(R.id.statesContainer)
             val inflater = LayoutInflater.from(this.activity)
@@ -49,10 +49,10 @@ class OverviewFragment: GibsonOsFragment() {
                     card.findViewById<TextView>(R.id.title).text = state.title
                     card.findViewById<TextView>(R.id.from).text = state.from
                     card.findViewById<TextView>(R.id.to).text = state.to
-                    card.findViewById<TextView>(R.id.days).text = "${state.days} Tage"
-                    card.findViewById<TextView>(R.id.weeks).text = "${state.week} Wochen"
-                    card.findViewById<TextView>(R.id.grownDays).text = "${state.toDaysSinceStart} Tage"
-                    card.findViewById<TextView>(R.id.grownWeeks).text = "${state.toWeekSinceStart} Wochen"
+                    card.findViewById<TextView>(R.id.days).text = "${state.days}. Tag"
+                    card.findViewById<TextView>(R.id.weeks).text = "${state.week}. Woche"
+                    card.findViewById<TextView>(R.id.grownDays).text = "${state.toDaysSinceStart}. Tag"
+                    card.findViewById<TextView>(R.id.grownWeeks).text = "${state.toWeekSinceStart}. Woche"
                     statesContainer?.addView(card)
                 }
             }

@@ -8,6 +8,7 @@ data class Image(
     var description: String?,
     var created: String,
     var data: String?,
+    var day: Int,
 ): ListItemInterface {
     override fun getId() = this.id
 }
