@@ -1,6 +1,5 @@
 package de.wollis_page.gibsonos.module.growDiary.plant.activity
 
-import android.os.Bundle
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.Tab
@@ -12,7 +11,7 @@ class IndexActivity : TabActivity() {
     private var plantId: Long? = null
 
     override fun getTabs(): Array<Tab> {
-        val arguments = hashMapOf("plantId" to this.plantId)
+        val arguments = hashMapOf("plantId" to this.getShortcut()?.parameters?.get("plantId"))
 
         return arrayOf(
             Tab(R.string.grow_diary_plant_overview_tab, OverviewFragment::class, arguments),
@@ -21,13 +20,5 @@ class IndexActivity : TabActivity() {
         )
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        this.plantId = this.intent.getLongExtra("plantId", 0)
-
-        super.onCreate(savedInstanceState)
-
-        this.setTitle(R.string.grow_diary_plant_title)
-    }
-
-    override fun getId() = 0
+    override fun getId() = this.getShortcut()?.parameters?.get("plantId") ?: 0
 }

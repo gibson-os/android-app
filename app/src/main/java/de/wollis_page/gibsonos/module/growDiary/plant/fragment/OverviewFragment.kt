@@ -30,6 +30,8 @@ class OverviewFragment: GibsonOsFragment() {
                 this.view?.findViewById<LinearLayout>(R.id.maxGrownDaysContainer)?.visibility = View.INVISIBLE
             }
 
+            this.activity.setTitle(plant.name)
+
             this.view?.findViewById<TextView>(R.id.grownAt)?.text = plant.state?.grownAt
             this.view?.findViewById<TextView>(R.id.lastDate)?.text = plant.state?.to
             this.view?.findViewById<TextView>(R.id.lastDateText)?.text = plant.state?.title

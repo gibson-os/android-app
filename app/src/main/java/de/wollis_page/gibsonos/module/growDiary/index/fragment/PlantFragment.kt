@@ -62,7 +62,6 @@ class PlantFragment: ListFragment() {
                     "plant",
                     "index",
                     mapOf(
-                        "plantId" to item.id,
                         GibsonOsActivity.SHORTCUT_KEY to this.getShortcut(item),
                     )
                 )
@@ -102,7 +101,6 @@ class PlantFragment: ListFragment() {
             "icon_hemp",
             mutableMapOf(
                 "plantId" to item.id,
-                "name" to item.name,
             )
         )
     }
