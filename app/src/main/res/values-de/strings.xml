@@ -95,6 +95,7 @@
     <string name="grow_diary_plant_images_tab">Bilder</string>
     <string name="grow_diary_plant_climates_tab">Klima</string>
     <string name="grow_diary_plant_feed_tab">Nahrung</string>
+    <string name="grow_diary_plant_milestone_tab">Meilensteine</string>
 
     <string name="grow_diary_plant_image_description">Bild</string>
     <string name="grow_diary_plant_grown_at">Angebaut am</string>
@@ -118,6 +119,8 @@
     <string name="grow_diary_plant_climate_leaf_temperature">Blatt Temperatur</string>
     <string name="grow_diary_plant_feed_milliliter">Milliliter</string>
     <string name="grow_diary_plant_feed_additives">Zusatzstoffe</string>
+    <string name="grow_diary_plant_milestone_title">Titel</string>
+    <string name="grow_diary_plant_milestone_value">Wert</string>
 
     <string name="grow_diary_seed_tab">Samen</string>
 

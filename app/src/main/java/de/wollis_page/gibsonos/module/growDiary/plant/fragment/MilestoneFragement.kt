@@ -6,13 +6,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Climate
-import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
+import de.wollis_page.gibsonos.module.growDiary.task.MilestoneTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 
-class ClimateFragement: ListFragment() {
+class MilestoneFragement: ListFragment() {
     override fun onClick(item: ListItemInterface) {
-        if (item !is Climate) {
+        if (item !is Milestone) {
             return
         }
 
@@ -20,34 +20,31 @@ class ClimateFragement: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "plant",
-                "climateForm",
+                "milestone",
+                "form",
                 mapOf(
                     "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
-                    "climateId" to item.id
+                    "milestoneId" to item.id
                 )
             )
         })
     }
 
     override fun bind(item: ListItemInterface, view: View) {
-        if (item !is Climate) {
+        if (item !is Milestone) {
             return
         }
 
         view.findViewById<TextView>(R.id.added).text = item.added
-        view.findViewById<TextView>(R.id.temperature).text = item.temperature.toString() + "°C"
-        view.findViewById<TextView>(R.id.relativeHumidity).text = item.relativeHumidity.toString() + "%"
-        view.findViewById<TextView>(R.id.airPressure).text = item.airPressure.toString()
-        view.findViewById<TextView>(R.id.leafTemperature).text = item.leafTemperature.toString() + "°C"
-
+        view.findViewById<TextView>(R.id.title).text = item.title
+        view.findViewById<TextView>(R.id.value).text = item.value
     }
 
-    override fun getListRessource() = R.layout.grow_diary_plant_climate_list_item
+    override fun getListRessource() = R.layout.grow_diary_plant_milestone_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(
-            PlantTask.getClimates(
+            MilestoneTask.getList(
             this.activity,
             this.fragmentsArguments["plantId"].toString().toLong(),
             start,
@@ -64,8 +61,8 @@ class ClimateFragement: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "plant",
-                "climateForm",
+                "milestone",
+                "form",
                 mapOf(
                     "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
                 )
