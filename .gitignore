@@ -13,3 +13,6 @@ local.properties
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .cxx
+/app/debug/
+/app/release/
+/.idea/shelf/
