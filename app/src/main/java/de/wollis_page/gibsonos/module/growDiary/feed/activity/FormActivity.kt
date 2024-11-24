@@ -28,6 +28,7 @@ class FormActivity: FormActivity() {
         button: android.widget.Button,
         response: JSONObject
     ) {
+        this.setResult(RESULT_OK)
         this.finish()
     }
 }

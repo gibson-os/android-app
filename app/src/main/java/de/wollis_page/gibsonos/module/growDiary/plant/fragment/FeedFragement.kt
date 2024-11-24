@@ -1,7 +1,12 @@
 package de.wollis_page.gibsonos.module.growDiary.plant.fragment
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -11,6 +16,22 @@ import de.wollis_page.gibsonos.module.growDiary.task.FeedTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class FeedFragement: ListFragment() {
+    lateinit var formLauncher: ActivityResultLauncher<Intent>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        this.formLauncher = this.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            this.loadList()
+        }
+    }
+
     override fun onClick(item: ListItemInterface) {
         if (item !is Feed) {
             return
@@ -25,7 +46,8 @@ class FeedFragement: ListFragment() {
                 mapOf(
                     "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
                     "feedId" to item.id,
-                )
+                ),
+                this.formLauncher,
             )
         })
     }
@@ -38,7 +60,6 @@ class FeedFragement: ListFragment() {
         view.findViewById<TextView>(R.id.added).text = item.added
         view.findViewById<TextView>(R.id.milliliter).text = item.milliliter.toString() + "ml"
 //        view.findViewById<TextView>(R.id.additives).text = item.relativeHumidity.toString() + "%"
-
     }
 
     override fun getListRessource() = R.layout.grow_diary_plant_feed_list_item
@@ -66,7 +87,8 @@ class FeedFragement: ListFragment() {
                 "form",
                 mapOf(
                     "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
-                )
+                ),
+                this.formLauncher,
             )
         })
     }
