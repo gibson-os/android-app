@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Field
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.exception.TaskException
@@ -16,7 +16,7 @@ import kotlin.reflect.full.declaredMemberProperties
 class AutoCompleteField: FieldInterface {
     override fun build(
         field: Field,
-        context: GibsonOsActivity,
+        context: FormActivity,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)

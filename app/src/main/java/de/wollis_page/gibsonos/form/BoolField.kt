@@ -5,13 +5,13 @@ import android.view.View
 import android.widget.CheckBox
 import com.google.android.material.textfield.TextInputLayout
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Field
 
 class BoolField: FieldInterface {
     override fun build(
         field: Field,
-        context: GibsonOsActivity,
+        context: FormActivity,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)

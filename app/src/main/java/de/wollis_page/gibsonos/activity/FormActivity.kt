@@ -158,7 +158,7 @@ abstract class FormActivity: GibsonOsActivity() {
         })
     }
 
-    protected fun getView(fieldName: String): View = this.formViews[fieldName]
+    fun getView(fieldName: String): View = this.formViews[fieldName]
         ?: throw FormException("Field '$fieldName' doesn't exists")
 
     protected fun getField(fieldName: String): Field = this.formFields[fieldName]

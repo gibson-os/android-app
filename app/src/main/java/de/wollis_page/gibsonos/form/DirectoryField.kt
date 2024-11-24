@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Field
 import de.wollis_page.gibsonos.module.explorer.index.dialog.DirListDialog
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
@@ -15,7 +15,7 @@ import de.wollis_page.gibsonos.module.explorer.task.DirTask
 class DirectoryField: FieldInterface {
     override fun build(
         field: Field,
-        context: GibsonOsActivity,
+        context: FormActivity,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)

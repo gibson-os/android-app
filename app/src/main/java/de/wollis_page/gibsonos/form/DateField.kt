@@ -6,7 +6,7 @@ import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Field
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -18,7 +18,7 @@ import kotlin.math.min
 class DateField: FieldInterface {
     override fun build(
         field: Field,
-        context: GibsonOsActivity,
+        context: FormActivity,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
