@@ -102,6 +102,8 @@
     <string name="grow_diary_plant_grown_day">Tage seit Anbau</string>
     <string name="grow_diary_plant_min_grown_days">Mindest Anbauzeit</string>
     <string name="grow_diary_plant_max_grown_days">Maximale Anbauzeit</string>
+    <string name="grow_diary_plant_duration">Dauer</string>
+    <string name="grow_diary_plant_duration_since_grown">Dauer seit Anbau</string>
     <string name="grow_diary_plant_germinated_at">Keimung am</string>
     <string name="grow_diary_plant_germinated_days">Tage bis Keimung</string>
     <string name="grow_diary_plant_germinated_days_from_start">Keimung bis Blütebeginn</string>
