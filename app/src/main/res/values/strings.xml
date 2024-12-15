@@ -4,6 +4,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="date">Date</string>
 
     <string name="account_title">Add account</string>
     <string name="account_alias">Alias</string>
@@ -104,6 +105,7 @@
     <string name="grow_diary_plant_max_grown_days">Max grown days</string>
     <string name="grow_diary_plant_duration">Duration</string>
     <string name="grow_diary_plant_duration_since_grown">Duration since grown</string>
+    <string name="grow_diary_plant_remaining_time">Remaining time</string>
     <string name="grow_diary_plant_germinated_at">Germinated at</string>
     <string name="grow_diary_plant_germinated_days">Days since germinated</string>
     <string name="grow_diary_plant_germinated_days_from_start">Germination to start of flowering</string>
@@ -119,10 +121,18 @@
     <string name="grow_diary_plant_climate_relative_humidity">Relative humidity</string>
     <string name="grow_diary_plant_climate_air_pressure">Air pressure</string>
     <string name="grow_diary_plant_climate_leaf_temperature">Lead temperature</string>
+    <string name="grow_diary_plant_climate_last">Last climate</string>
+    <string name="grow_diary_plant_climate_min_temperature">Minimal temperature</string>
+    <string name="grow_diary_plant_climate_max_temperature">Maximal temperature</string>
+    <string name="grow_diary_plant_climate_min_relative_humidity">Minimal humidity</string>
+    <string name="grow_diary_plant_climate_max_relative_humidity">Maximal humidity</string>
+    <string name="grow_diary_plant_feed_last">Last feed</string>
+    <string name="grow_diary_plant_feed_sum">Sum feed</string>
     <string name="grow_diary_plant_feed_milliliter">Milliliter</string>
     <string name="grow_diary_plant_feed_additives">Additives</string>
     <string name="grow_diary_plant_milestone_title">Title</string>
     <string name="grow_diary_plant_milestone_value">Value</string>
+    <string name="grow_diary_plant_milestone_last">Last milestone</string>
 
     <string name="grow_diary_seed_tab">Seeds</string>
 
