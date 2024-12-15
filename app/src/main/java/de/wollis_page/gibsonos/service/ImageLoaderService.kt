@@ -10,7 +10,7 @@ import de.wollis_page.gibsonos.exception.TaskException
 class ImageLoaderService<T : ListItemInterface>(
     val activity: GibsonOsActivity,
     val loadFunction: (item: T) -> Bitmap,
-    val viewFunction: (item: T) -> ImageView?,
+    val viewFunction: (item: T, image: Bitmap) -> Unit?,
 ) {
     private var images = HashMap<Any, Bitmap>()
     private var queue = ArrayList<T>()
@@ -65,9 +65,7 @@ class ImageLoaderService<T : ListItemInterface>(
                         this.images[itemId] = this.loadFunction(item)
                     }
 
-                    val imageView = this.viewFunction(item) ?: continue
-
-                    this.activity.runOnUiThread { imageView.setImageBitmap(this.images[itemId]) }
+                    this.activity.runOnUiThread { this.viewFunction(item, this.images[itemId]!!) }
                 } catch (_: TaskException) {
                 } catch (_: ResponseException) {
                 }

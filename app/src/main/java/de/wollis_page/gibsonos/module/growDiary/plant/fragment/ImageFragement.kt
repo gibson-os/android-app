@@ -71,8 +71,8 @@ class ImageFragement: GridFragment() {
                     it.created,
                 )
             },
-            {
-                this.getViewByItem(it)?.findViewById(R.id.image)
+            { plantImage, image ->
+                this.getViewByItem(plantImage)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
             }
         )
     }

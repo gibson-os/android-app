@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.module.growDiary.index.fragment
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
@@ -29,8 +30,8 @@ class ManufactureFragment: ListFragment() {
                     this.resources.getDimension(R.dimen.thumb_width).toInt()
                 )
             },
-            {
-                this.getViewByItem(it)?.findViewById(R.id.image)
+            { manufacture, image ->
+                this.getViewByItem(manufacture)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
             }
         )
     }

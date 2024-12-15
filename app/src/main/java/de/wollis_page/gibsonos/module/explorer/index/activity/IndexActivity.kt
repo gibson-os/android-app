@@ -60,8 +60,8 @@ class IndexActivity: ListActivity() {
                     this.resources.getDimension(R.dimen.thumb_width).toInt()
                 )
             },
-            {
-                this.getViewByItem(it)?.findViewById(R.id.icon)
+            { item, image ->
+                this.getViewByItem(item)?.findViewById<ImageView>(R.id.icon)?.setImageBitmap(image)
             }
         )
 
