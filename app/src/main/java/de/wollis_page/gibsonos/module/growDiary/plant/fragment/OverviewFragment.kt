@@ -3,6 +3,7 @@ package de.wollis_page.gibsonos.module.growDiary.plant.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -12,6 +13,8 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Climate
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Feed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.feed.Additive
+import de.wollis_page.gibsonos.module.growDiary.task.FertilizerTask
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 
 class OverviewFragment: GibsonOsFragment() {
@@ -33,26 +36,26 @@ class OverviewFragment: GibsonOsFragment() {
             this.view?.findViewById<TextView>(R.id.name)?.text = plant.name
             this.view?.findViewById<TextView>(R.id.seed)?.text = plant.seed.name
 
-            if (plant.state != null) {
-                this.overviewContainer.addView(this.getOverviewItem(
-                    R.string.grow_diary_plant_grown_at,
-                    plant.state?.grownAt.toString(),
-                ))
-                this.overviewContainer.addView(this.getOverviewItem(
-                    plant.state?.title.toString(),
-                    plant.state?.to.toString(),
-                ))
-                this.overviewContainer.addView(this.getOverviewItem(
-                    R.string.grow_diary_plant_duration,
-                    "${plant.state?.toDaysSinceStart} Tage (${plant.state?.toWeekSinceStart} Wochen)",
-                ))
-                this.overviewContainer.addView(this.getOverviewItem(
-                    R.string.grow_diary_plant_remaining_time,
-                    "${plant.minRemainingGrowingDays} - ${plant.maxRemainingGrowingDays} Tage (${plant.minRemainingGrowingWeeks} - ${plant.maxRemainingGrowingWeeks} Wochen)",
-                ))
-            }
-
             this.activity.runOnUiThread {
+                if (plant.state != null) {
+                    this.overviewContainer.addView(this.getOverviewItem(
+                        R.string.grow_diary_plant_grown_at,
+                        plant.state?.grownAt.toString(),
+                    ))
+                    this.overviewContainer.addView(this.getOverviewItem(
+                        plant.state?.title.toString(),
+                        plant.state?.to.toString(),
+                    ))
+                    this.overviewContainer.addView(this.getOverviewItem(
+                        R.string.grow_diary_plant_duration,
+                        "${plant.state?.toDaysSinceStart} Tage (${plant.state?.toWeekSinceStart} Wochen)",
+                    ))
+                    this.overviewContainer.addView(this.getOverviewItem(
+                        R.string.grow_diary_plant_remaining_time,
+                        "${plant.minRemainingGrowingDays} - ${plant.maxRemainingGrowingDays} Tage (${plant.minRemainingGrowingWeeks} - ${plant.maxRemainingGrowingWeeks} Wochen)",
+                    ))
+                }
+
                 plant.lastClimate?.let { this.addClimateView(it, R.string.grow_diary_plant_climate_last) }
                 plant.lastFeed?.let { this.addLastFeedView(it) }
                 plant.lastMilestone?.let { this.addLastMilestoneView(it) }
@@ -141,16 +144,19 @@ class OverviewFragment: GibsonOsFragment() {
     }
 
     private fun addLastFeedView(lastFeed: Feed) {
+        val contentView = this.view?.findViewById<ViewGroup>(android.R.id.content)
         val lastFeedItemView = this.inflater.inflate(
             R.layout.grow_diary_plant_overview_container,
-            this.view?.findViewById(android.R.id.content),
-            false
+            contentView,
+            false,
         )
 
         val lastFeedContainer = lastFeedItemView.findViewById<LinearLayout>(R.id.container)
         lastFeedContainer.findViewById<TextView>(R.id.title).setText(R.string.grow_diary_plant_feed_last)
         lastFeedContainer.addView(this.getOverviewItem(R.string.date, lastFeed.added))
         lastFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${lastFeed.milliliter}ml"))
+
+        this.addAdditivesViews(lastFeed.additives, lastFeedItemView)
 
         this.overviewContainer.addView(lastFeedItemView)
     }
@@ -166,7 +172,38 @@ class OverviewFragment: GibsonOsFragment() {
         sumFeedContainer.findViewById<TextView>(R.id.title).setText(R.string.grow_diary_plant_feed_sum)
         sumFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${feedSum.milliliter}ml"))
 
+        this.addAdditivesViews(feedSum.additives, sumFeedItemView)
+
         this.overviewContainer.addView(sumFeedItemView)
+    }
+
+    private fun addAdditivesViews(additives: List<Additive>, itemView: View) {
+        val contentView = this.view?.findViewById<ViewGroup>(android.R.id.content)
+        val lastFeedContainer = itemView.findViewById<LinearLayout>(R.id.container)
+
+        additives.forEach {
+            val additiveView = this.inflater.inflate(
+                R.layout.grow_diary_plant_feed_additive,
+                contentView,
+                false,
+            )
+
+            this.activity.runTask({
+                val image = FertilizerTask.getImage(
+                    this.activity,
+                    it.fertilizer.fertilizer.id,
+                    this.resources.getDimension(R.dimen.thumb_width).toInt(),
+                    this.resources.getDimension(R.dimen.thumb_width).toInt(),
+                )
+
+                this.activity.runOnUiThread {
+                    additiveView.findViewById<ImageView>(R.id.image).setImageBitmap(image)
+                    additiveView.findViewById<TextView>(R.id.additive).text =
+                        it.milliliter.toString() + "ml " + it.fertilizer.fertilizer.name
+                    lastFeedContainer.addView(additiveView)
+                }
+            })
+        }
     }
 
     private fun addLastMilestoneView(milestone: Milestone) {
@@ -178,6 +215,7 @@ class OverviewFragment: GibsonOsFragment() {
 
         val milestoneContainer = milestoneItemView.findViewById<LinearLayout>(R.id.container)
         milestoneContainer.findViewById<TextView>(R.id.title).setText(R.string.grow_diary_plant_milestone_last)
+        milestoneContainer.addView(this.getOverviewItem(R.string.date, milestone.added))
         milestoneContainer.addView(this.getOverviewItem(milestone.title, milestone.value))
 
         this.overviewContainer.addView(milestoneItemView)
