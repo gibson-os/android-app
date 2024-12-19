@@ -58,28 +58,28 @@ class ImageActivity: GibsonOsActivity() {
                 var newX = imageView.x + (event.x - this.previousX)
                 var newY = imageView.y + (event.y - this.previousY)
 
-//                if (newX < 0) {
-//                    newX = 0F
-//                }
+                val imageWidth = imageView.width.toFloat()
+                val maxX = (imageView.scaleX - 1) * (imageWidth / 2)
+                val minX = 0 - maxX
 
-//                if (newX > imageView.width.toFloat()) {
-//                    newX = imageView.width.toFloat()
-//                }
+                if (newX < minX) {
+                    newX = minX
+                } else if (newX > maxX) {
+                    newX = maxX
+                }
 
-//                if (newY < 0) {
-//                    newY = 0F
-//                }
+                val imageHeight = imageView.height.toFloat()
+                val maxY = (imageView.scaleY - 1) * (imageHeight / 2)
+                val minY = 0 - maxY
 
-//                if (newY > imageView.height.toFloat()) {
-//                    newY = imageView.height.toFloat()
-//                }
+                if (newY < minY) {
+                    newY = minY
+                } else if (newY > maxY) {
+                    newY = maxY
+                }
 
                 imageView.x = newX
                 imageView.y = newY
-
-//                Log.d(Config.LOG_TAG, imageView.x.toString())
-//                Log.d(Config.LOG_TAG, imageView.width.toString())
-//                Log.d(Config.LOG_TAG, imageView.y.toString())
 
                 this.previousX = event.x
                 this.previousY = event.y

@@ -65,7 +65,11 @@ class ImageLoaderService<T : ListItemInterface>(
                         this.images[itemId] = this.loadFunction(item)
                     }
 
-                    this.activity.runOnUiThread { this.viewFunction(item, this.images[itemId]!!) }
+                    val image = this.images[itemId]
+
+                    if (image != null) {
+                        this.activity.runOnUiThread { this.viewFunction(item, image) }
+                    }
                 } catch (_: TaskException) {
                 } catch (_: ResponseException) {
                 }

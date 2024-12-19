@@ -7,7 +7,7 @@ import org.json.JSONObject
 
 class ClimateFormActivity: FormActivity() {
     override fun buildForm() = this.loadForm {
-        var climateId: Long? = this.intent.getLongExtra("cimateId", 0)
+        var climateId: Long? = this.intent.getLongExtra("climateId", 0)
 
         if (climateId?.toInt() == 0) {
             climateId = null
