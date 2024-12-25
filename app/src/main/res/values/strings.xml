@@ -129,6 +129,7 @@
     <string name="grow_diary_plant_feed_last">Last feed</string>
     <string name="grow_diary_plant_feed_sum">Sum feed</string>
     <string name="grow_diary_plant_feed_milliliter">Milliliter</string>
+    <string name="grow_diary_plant_feed_ph">pH</string>
     <string name="grow_diary_plant_feed_additives">Additives</string>
     <string name="grow_diary_plant_milestone_title">Title</string>
     <string name="grow_diary_plant_milestone_value">Value</string>

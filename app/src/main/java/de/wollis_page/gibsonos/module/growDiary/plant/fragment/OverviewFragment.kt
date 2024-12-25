@@ -156,6 +156,10 @@ class OverviewFragment: GibsonOsFragment() {
         lastFeedContainer.addView(this.getOverviewItem(R.string.date, lastFeed.added))
         lastFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${lastFeed.milliliter}ml"))
 
+        if (lastFeed.ph !== null) {
+            lastFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_ph, lastFeed.ph.toString()))
+        }
+
         this.addAdditivesViews(lastFeed.additives, lastFeedItemView)
 
         this.overviewContainer.addView(lastFeedItemView)

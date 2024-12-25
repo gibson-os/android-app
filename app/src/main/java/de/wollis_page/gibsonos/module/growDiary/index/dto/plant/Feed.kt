@@ -8,6 +8,7 @@ data class Feed(
     var added: String,
     var milliliter: Long,
     var additives: List<Additive>,
+    var ph: Float?,
 ): ListItemInterface {
     override fun getId() = this.id
 }

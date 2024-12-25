@@ -129,6 +129,7 @@
     <string name="grow_diary_plant_feed_last">Letzte Nahrung</string>
     <string name="grow_diary_plant_feed_sum">Gesamte Nahrung</string>
     <string name="grow_diary_plant_feed_milliliter">Milliliter</string>
+    <string name="grow_diary_plant_feed_ph">pH</string>
     <string name="grow_diary_plant_feed_additives">Zusatzstoffe</string>
     <string name="grow_diary_plant_milestone_title">Titel</string>
     <string name="grow_diary_plant_milestone_value">Wert</string>

@@ -90,6 +90,7 @@ class FeedFragement: ListFragment() {
 
         view.findViewById<TextView>(R.id.added).text = item.added
         view.findViewById<TextView>(R.id.milliliter).text = item.milliliter.toString() + "ml"
+        view.findViewById<TextView>(R.id.ph).text = item.ph.toString()
 
         val inflater = LayoutInflater.from(this.activity)
         val additivesView = view.findViewById<LinearLayout>(R.id.additives)
