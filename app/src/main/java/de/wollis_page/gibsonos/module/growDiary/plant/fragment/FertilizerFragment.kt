@@ -60,7 +60,7 @@ class FertilizerFragment: ListFragment() {
                 this.activity,
                 "growDiary",
                 "plant",
-                "Fertilizerform",
+                "fertilizerForm",
                 mapOf(
                     "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
                     "fertilizerId" to item.id

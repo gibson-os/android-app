@@ -45,7 +45,7 @@ class OptionField: FieldInterface {
     override fun getValue(view: View, field: Field): Any? =
         (field.config["options"] as Map<*, *>)[view.findViewById<AutoCompleteTextView>(R.id.field).text.toString()]
 
-    override fun setValue(view: View, field: Field, value: Any?) {
+    override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
         view.findViewById<AutoCompleteTextView>(R.id.field).setText(
             (this.getOptionByValue(field, value)?.key ?: "").toString(),
             false

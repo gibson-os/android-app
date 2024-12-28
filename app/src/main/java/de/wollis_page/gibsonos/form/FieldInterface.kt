@@ -12,5 +12,5 @@ interface FieldInterface {
     ): View
     fun supports(field: Field): Boolean
     fun getValue(view: View, field: Field): Any?
-    fun setValue(view: View, field: Field, value: Any?)
+    fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>? = null)
 }

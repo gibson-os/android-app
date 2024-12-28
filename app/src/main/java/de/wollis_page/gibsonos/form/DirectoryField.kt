@@ -28,7 +28,7 @@ class DirectoryField: FieldInterface {
         view.findViewById<TextInputLayout>(R.id.fieldLayout).hint = field.title
 
         val dirListDialogBuilder = DirListDialog(context) { item, dirList ->
-            this.setValue(view, field, dirList.id)
+            this.setValue(view, field, dirList.id,)
         }
         val button = view.findViewById<ImageButton>(R.id.button)
         button.contentDescription = field.title
@@ -52,7 +52,7 @@ class DirectoryField: FieldInterface {
     override fun getValue(view: View, field: Field): Any? =
         view.findViewById<TextInputEditText>(R.id.field).text
 
-    override fun setValue(view: View, field: Field, value: Any?) {
+    override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
         view.findViewById<TextInputEditText>(R.id.field).setText(value?.toString() ?: "")
     }
 }

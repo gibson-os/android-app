@@ -32,7 +32,7 @@ class BoolField: FieldInterface {
     override fun getValue(view: View, field: Field): Any =
         view.findViewById<CheckBox>(R.id.field).isChecked
 
-    override fun setValue(view: View, field: Field, value: Any?) {
+    override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
         var boolValue = false
 
         if (value is Boolean) {

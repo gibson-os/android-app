@@ -52,7 +52,7 @@ class DateTimeField: FieldInterface {
         return formatter.format(selectedDate.time)
     }
 
-    override fun setValue(view: View, field: Field, value: Any?) {
+    override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
         val today = GregorianCalendar()
         today.time = Date()
         val selectedDate = GregorianCalendar()

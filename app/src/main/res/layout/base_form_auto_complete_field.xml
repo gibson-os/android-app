@@ -13,4 +13,10 @@
         android:layout_height="wrap_content"
         tools:ignore="LabelFor" />
 
+    <TextView
+        android:id="@+id/value"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
 </com.google.android.material.textfield.TextInputLayout>

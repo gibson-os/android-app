@@ -23,6 +23,8 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
     override var activity: GibsonOsActivity = this
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
+    override fun getContentView() = R.layout.base_list
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.listView = this.findViewById(R.id.list)

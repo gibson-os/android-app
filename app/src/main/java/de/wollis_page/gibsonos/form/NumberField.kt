@@ -41,7 +41,7 @@ class NumberField: FieldInterface {
     override fun getValue(view: View, field: Field): Any? =
         view.findViewById<TextInputEditText>(R.id.field).text
 
-    override fun setValue(view: View, field: Field, value: Any?) {
+    override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
         view.findViewById<TextInputEditText>(R.id.field).setText(value?.toString() ?: "")
     }
 

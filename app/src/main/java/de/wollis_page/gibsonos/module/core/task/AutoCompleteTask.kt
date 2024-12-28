@@ -6,7 +6,9 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.exception.TaskException
+import de.wollis_page.gibsonos.module.growDiary.index.dto.Fertilizer
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Seed
+import de.wollis_page.gibsonos.module.growDiary.index.dto.fertilizer.Scheme
 import de.wollis_page.gibsonos.module.obscura.template.dto.Template
 import de.wollis_page.gibsonos.task.AbstractTask
 
@@ -43,6 +45,8 @@ object AutoCompleteTask: AbstractTask() {
         return mapOf(
             "GibsonOS\\Module\\Obscura\\AutoComplete\\TemplateAutoComplete" to Template::class.java,
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\SeedAutoComplete" to Seed::class.java,
+            "GibsonOS\\Module\\GrowDiary\\AutoComplete\\FertilizerAutoComplete" to Fertilizer::class.java,
+            "GibsonOS\\Module\\GrowDiary\\AutoComplete\\Fertilizer\\SchemeAutoComplete" to Scheme::class.java,
         )
     }
 }

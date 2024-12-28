@@ -64,7 +64,7 @@ abstract class FormActivity: GibsonOsActivity() {
                 }
                 val value = field.value
 
-                it.setValue(fieldView, field, value)
+                it.setValue(fieldView, field, value, this.formConfig[formField.key])
 
                 this.formViews[formField.key] = fieldView
                 this.formFields[formField.key] = field
@@ -138,6 +138,7 @@ abstract class FormActivity: GibsonOsActivity() {
                 this.getView(it.key),
                 this.getField(it.key),
                 it.value,
+                this.formConfig[it.key],
             )
         }
     }
@@ -147,7 +148,7 @@ abstract class FormActivity: GibsonOsActivity() {
         val view = this.getView(fieldName)
         val fieldBuilder = this.getFieldBuilder(fieldName)
 
-        return fieldBuilder.setValue(view, field, value)
+        return fieldBuilder.setValue(view, field, value, this.formConfig[fieldName])
     }
 
     protected fun loadForm(run: () -> Form)
