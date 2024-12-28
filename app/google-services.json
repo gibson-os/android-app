@@ -33,6 +33,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512326751345:android:56fbe63fd3cd7cda4a77d0",
+        "android_client_info": {
+          "package_name": "de.wollis_page.gibsonos.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512326751345-lahnhpo37knplp2i5i3bpnq9l0uomlcm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc3q2dkpWNsSxYXFPVfHQ5KAnAmv8NH8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512326751345-lahnhpo37knplp2i5i3bpnq9l0uomlcm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
