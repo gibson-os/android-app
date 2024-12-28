@@ -2,10 +2,12 @@ package de.wollis_page.gibsonos.module.growDiary.index.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
-data class Manufacture(
+data class Room(
     var id: Long,
     var name: String,
-    var url: String?,
+    var length: Long,
+    var width: Long,
+    var height: Long,
 ): ListItemInterface {
     override fun getId() = this.id
 }

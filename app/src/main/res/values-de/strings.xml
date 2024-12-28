@@ -137,10 +137,22 @@
 
     <string name="grow_diary_seed_tab">Samen</string>
 
-    <string name="grow_diary_manufacture_tab">Hersteller</string>
-
     <string name="grow_diary_seed_image_description">Bild</string>
     <string name="grow_diary_seed_type">Typ</string>
     <string name="grow_diary_seed_flowering_days">Blütezeit</string>
     <string name="grow_diary_seed_height">Höhe</string>
+
+    <string name="grow_diary_room_tab">Räume</string>
+
+    <string name="grow_diary_light_tab">Lampen</string>
+
+    <string name="grow_diary_climate_tab">Klimatisierung</string>
+
+    <string name="grow_diary_pot_tab">Töpfe</string>
+
+    <string name="grow_diary_substrate_tab">Substrate</string>
+
+    <string name="grow_diary_fertilizer_tab">Nährstoffe</string>
+
+    <string name="grow_diary_manufacture_tab">Hersteller</string>
 </resources>

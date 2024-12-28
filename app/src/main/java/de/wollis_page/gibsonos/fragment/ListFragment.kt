@@ -19,6 +19,8 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
     override lateinit var listAdapter: BaseListAdapter
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
+    override fun getContentView() = R.layout.base_list
+
     open fun getLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
 
     override fun updateData(data: String) {

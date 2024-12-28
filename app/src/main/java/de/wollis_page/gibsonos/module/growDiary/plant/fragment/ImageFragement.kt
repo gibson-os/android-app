@@ -14,12 +14,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.GridFragment
 import de.wollis_page.gibsonos.helper.Config
-import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
@@ -92,7 +90,6 @@ class ImageFragement: GridFragment() {
                     mapOf(
                         "plantId" to (this.plantId ?: 0),
                         "created" to item.created,
-                        GibsonOsActivity.SHORTCUT_KEY to this.getShortcut(item),
                     )
                 )
             } catch (exception: ClassNotFoundException) {
@@ -124,20 +121,6 @@ class ImageFragement: GridFragment() {
             start,
             limit,
         ))
-    }
-
-    private fun getShortcut(item: Image): Shortcut {
-        return Shortcut(
-            "growDiary",
-            "plant",
-            "image",
-            item.created,
-            "icon_hemp",
-            mutableMapOf(
-                "plantId" to (this.plantId ?: 0),
-                "created" to item.created,
-            )
-        )
     }
 
     override fun actionButton(): Int? {

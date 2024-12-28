@@ -137,10 +137,22 @@
 
     <string name="grow_diary_seed_tab">Seeds</string>
 
-    <string name="grow_diary_manufacture_tab">Manufacture</string>
-
     <string name="grow_diary_seed_image_description">Image</string>
     <string name="grow_diary_seed_type">Type</string>
     <string name="grow_diary_seed_flowering_days">Flowering days</string>
     <string name="grow_diary_seed_height">Height</string>
+
+    <string name="grow_diary_room_tab">Rooms</string>
+
+    <string name="grow_diary_light_tab">Lamps</string>
+
+    <string name="grow_diary_climate_tab">Climates</string>
+
+    <string name="grow_diary_pot_tab">Pots</string>
+
+    <string name="grow_diary_substrate_tab">Substrates</string>
+
+    <string name="grow_diary_fertilizer_tab">Fertilizers</string>
+
+    <string name="grow_diary_manufacture_tab">Manufactures</string>
 </resources>

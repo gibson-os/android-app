@@ -3,31 +3,31 @@ package de.wollis_page.gibsonos.module.growDiary.task
 import android.graphics.Bitmap
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListResponse
-import de.wollis_page.gibsonos.module.growDiary.index.dto.Fertilizer
+import de.wollis_page.gibsonos.module.growDiary.index.dto.Room
 import de.wollis_page.gibsonos.task.AbstractTask
 
-object FertilizerTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, fertilizerId: Long): Fertilizer {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "fertilizer", "index")
-        dataStore.addParam("id", fertilizerId)
+object RoomTask: AbstractTask() {
+    fun index(context: GibsonOsActivity, roomId: Long): Room {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "room", "index")
+        dataStore.addParam("id", roomId)
 
         return this.load(context, dataStore)
     }
 
-    fun list(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Fertilizer> {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "fertilizers")
+    fun list(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Room> {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "rooms")
 
         return this.loadList(context, dataStore, start, limit)
     }
 
-    fun getImage(
+    fun image(
         context: GibsonOsActivity,
-        fertilizerId: Long,
+        roomId: Long,
         width: Int? = null,
         height: Int? = null,
     ): Bitmap {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "fertilizer", "image")
-        dataStore.addParam("fertilizerId", fertilizerId)
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "room", "image")
+        dataStore.addParam("roomId", roomId)
 
         if (width != null) {
             dataStore.addParam("width", width)
