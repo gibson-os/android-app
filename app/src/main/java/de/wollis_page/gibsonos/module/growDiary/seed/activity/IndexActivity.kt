@@ -10,7 +10,7 @@ class IndexActivity : TabActivity() {
     private var seedId: Long? = null
 
     override fun getTabs(): Array<Tab> = arrayOf(
-        Tab(R.string.grow_diary_plant_overview_tab, OverviewFragment::class, hashMapOf("seedId" to this.seedId)),
+        Tab(R.string.grow_diary_overview_tab, OverviewFragment::class, hashMapOf("seedId" to this.seedId)),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

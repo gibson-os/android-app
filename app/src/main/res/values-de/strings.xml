@@ -89,10 +89,10 @@
     <string name="grow_diary_plant_title">Pflanze</string>
     <string name="grow_diary_seed_title">Samen</string>
     <string name="grow_diary_manufacture_title">Hersteller</string>
+    <string name="grow_diary_overview_tab">Übersicht</string>
 
     <string name="grow_diary_plant_tab">Pflanzen</string>
 
-    <string name="grow_diary_plant_overview_tab">Übersicht</string>
     <string name="grow_diary_plant_images_tab">Bilder</string>
     <string name="grow_diary_plant_climates_tab">Klima</string>
     <string name="grow_diary_plant_feed_tab">Nahrung</string>

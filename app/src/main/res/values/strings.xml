@@ -89,10 +89,10 @@
     <string name="grow_diary_plant_title">Plant</string>
     <string name="grow_diary_seed_title">Seed</string>
     <string name="grow_diary_manufacture_title">Manufacture</string>
+    <string name="grow_diary_overview_tab">Overview</string>
 
     <string name="grow_diary_plant_tab">Plants</string>
 
-    <string name="grow_diary_plant_overview_tab">Overview</string>
     <string name="grow_diary_plant_images_tab">Images</string>
     <string name="grow_diary_plant_climates_tab">Climate</string>
     <string name="grow_diary_plant_feed_tab">Feed</string>

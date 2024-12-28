@@ -11,13 +11,11 @@ import de.wollis_page.gibsonos.module.growDiary.plant.fragment.MilestoneFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.OverviewFragment
 
 class IndexActivity : TabActivity() {
-    private var plantId: Long? = null
-
     override fun getTabs(): Array<Tab> {
         val arguments = hashMapOf("plantId" to this.getShortcut()?.parameters?.get("plantId"))
 
         return arrayOf(
-            Tab(R.string.grow_diary_plant_overview_tab, OverviewFragment::class, arguments),
+            Tab(R.string.grow_diary_overview_tab, OverviewFragment::class, arguments),
             Tab(R.string.grow_diary_plant_images_tab, ImageFragment::class, arguments),
             Tab(R.string.grow_diary_plant_climates_tab, ClimateFragment::class, arguments),
             Tab(R.string.grow_diary_plant_feed_tab, FeedFragment::class, arguments),
