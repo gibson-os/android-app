@@ -75,7 +75,12 @@ class PotFragment: ListFragment() {
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(PotTask.list(this.activity, start, limit))
+        this.listAdapter.setListResponse(PotTask.list(
+            this.activity,
+            start,
+            limit,
+            this.fragmentsArguments["manufactureId"]?.toString()?.toLong(),
+        ))
     }
 
     override fun getListRessource() = R.layout.grow_diary_pot_list_item

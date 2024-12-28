@@ -74,7 +74,12 @@ class SubstrateFragment: ListFragment() {
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(SubstrateTask.list(this.activity, start, limit))
+        this.listAdapter.setListResponse(SubstrateTask.list(
+            this.activity,
+            start,
+            limit,
+            this.fragmentsArguments["manufactureId"]?.toString()?.toLong(),
+        ))
     }
 
     override fun getListRessource() = R.layout.grow_diary_substrate_list_item

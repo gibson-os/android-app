@@ -14,8 +14,17 @@ object SeedTask: AbstractTask() {
         return this.load(context, dataStore)
     }
 
-    fun list(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Seed> {
+    fun list(
+        context: GibsonOsActivity,
+        start: Long,
+        limit: Long,
+        manufactureId: Long? = null,
+    ): ListResponse<Seed> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "seeds")
+
+        if (manufactureId != null) {
+            dataStore.addParam("manufactureId", manufactureId)
+        }
 
         return this.loadList(context, dataStore, start, limit)
     }

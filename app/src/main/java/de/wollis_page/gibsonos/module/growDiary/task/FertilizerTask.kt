@@ -14,8 +14,17 @@ object FertilizerTask: AbstractTask() {
         return this.load(context, dataStore)
     }
 
-    fun list(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Fertilizer> {
+    fun list(
+        context: GibsonOsActivity,
+        start: Long,
+        limit: Long,
+        manufactureId: Long? = null,
+    ): ListResponse<Fertilizer> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "fertilizers")
+
+        if (manufactureId != null) {
+            dataStore.addParam("manufactureId", manufactureId)
+        }
 
         return this.loadList(context, dataStore, start, limit)
     }

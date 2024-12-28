@@ -74,7 +74,12 @@ class FertilizerFragment: ListFragment() {
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(FertilizerTask.list(this.activity, start, limit))
+        this.listAdapter.setListResponse(FertilizerTask.list(
+            this.activity,
+            start,
+            limit,
+            this.fragmentsArguments["manufactureId"]?.toString()?.toLong(),
+        ))
     }
 
     override fun getListRessource() = R.layout.grow_diary_fertilizer_list_item

@@ -75,7 +75,12 @@ class RoomFragment: ListFragment() {
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(RoomTask.list(this.activity, start, limit))
+        this.listAdapter.setListResponse(RoomTask.list(
+            this.activity,
+            start,
+            limit,
+            this.fragmentsArguments["manufactureId"]?.toString()?.toLong(),
+        ))
     }
 
     override fun getListRessource() = R.layout.grow_diary_room_list_item

@@ -75,7 +75,12 @@ class SeedFragment: ListFragment() {
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(SeedTask.list(this.activity, start, limit))
+        this.listAdapter.setListResponse(SeedTask.list(
+            this.activity,
+            start,
+            limit,
+            this.fragmentsArguments["manufactureId"]?.toString()?.toLong()
+        ))
     }
 
     override fun getListRessource() = R.layout.grow_diary_seed_list_item

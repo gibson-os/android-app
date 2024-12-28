@@ -14,8 +14,17 @@ object ClimateTask: AbstractTask() {
         return this.load(context, dataStore)
     }
 
-    fun list(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Climate> {
+    fun list(
+        context: GibsonOsActivity,
+        start: Long,
+        limit: Long,
+        manufactureId: Long? = null,
+    ): ListResponse<Climate> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "climates")
+
+        if (manufactureId != null) {
+            dataStore.addParam("manufactureId", manufactureId)
+        }
 
         return this.loadList(context, dataStore, start, limit)
     }
