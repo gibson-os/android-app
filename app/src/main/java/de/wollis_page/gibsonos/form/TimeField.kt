@@ -35,7 +35,7 @@ class TimeField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosCoreComponentFormFieldTime"
 
-    override fun getValue(view: View, field: Field): String {
+    override fun getValue(view: View, field: Field, config: Map<String, Any>?): String {
         val hourPicker = view.findViewById<NumberPicker>(R.id.hour)
         val minutePicker = view.findViewById<NumberPicker>(R.id.minute)
         val secondPicker = view.findViewById<NumberPicker>(R.id.second)

@@ -29,7 +29,7 @@ class BoolField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosCoreComponentFormFieldCheckbox"
 
-    override fun getValue(view: View, field: Field): Any =
+    override fun getValue(view: View, field: Field, config: Map<String, Any>?): Any =
         view.findViewById<CheckBox>(R.id.field).isChecked
 
     override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {

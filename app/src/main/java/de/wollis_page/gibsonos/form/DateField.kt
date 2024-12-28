@@ -36,7 +36,7 @@ class DateField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosCoreComponentFormFieldDate"
 
-    override fun getValue(view: View, field: Field): String {
+    override fun getValue(view: View, field: Field, config: Map<String, Any>?): String {
         val yearPicker = view.findViewById<NumberPicker>(R.id.year)
         val monthPicker = view.findViewById<NumberPicker>(R.id.month)
         val dayPicker = view.findViewById<NumberPicker>(R.id.day)

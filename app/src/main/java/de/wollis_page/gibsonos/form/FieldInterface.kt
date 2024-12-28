@@ -11,6 +11,6 @@ interface FieldInterface {
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View
     fun supports(field: Field): Boolean
-    fun getValue(view: View, field: Field): Any?
+    fun getValue(view: View, field: Field, config: Map<String, Any>? = null): Any?
     fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>? = null)
 }

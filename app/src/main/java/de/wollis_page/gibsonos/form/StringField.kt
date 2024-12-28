@@ -29,7 +29,7 @@ class StringField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosCoreComponentFormFieldTextField"
 
-    override fun getValue(view: View, field: Field): Any? =
+    override fun getValue(view: View, field: Field, config: Map<String, Any>?): Any? =
         view.findViewById<TextInputEditText>(R.id.field).text
 
     override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {

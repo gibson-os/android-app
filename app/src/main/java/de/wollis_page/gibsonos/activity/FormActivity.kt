@@ -17,6 +17,7 @@ import de.wollis_page.gibsonos.form.FieldInterface
 import de.wollis_page.gibsonos.form.NumberField
 import de.wollis_page.gibsonos.form.OptionField
 import de.wollis_page.gibsonos.form.StringField
+import de.wollis_page.gibsonos.form.TimeField
 import de.wollis_page.gibsonos.task.FormTask
 import org.json.JSONObject
 import de.wollis_page.gibsonos.dto.form.Button as FormButton
@@ -31,6 +32,7 @@ abstract class FormActivity: GibsonOsActivity() {
         DirectoryField(),
         DateTimeField(),
         DateField(),
+        TimeField(),
     )
     private lateinit var formContainer: LinearLayout
     private var formViews: MutableMap<String, View> = mutableMapOf()
@@ -46,11 +48,11 @@ abstract class FormActivity: GibsonOsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.formContainer = this.findViewById(R.id.form) as LinearLayout
+        this.formContainer = this.findViewById(R.id.form)
         this.buildForm()
     }
 
-    protected fun setForm(form: Form) {
+    private fun setForm(form: Form) {
         form.fields.forEach { formField ->
             val field = formField.value
 
@@ -59,8 +61,8 @@ abstract class FormActivity: GibsonOsActivity() {
                     return@fieldEach
                 }
 
-                val fieldView = it.build(field, this) {
-                    this.formConfig[formField.key] = it
+                val fieldView = it.build(field, this) { config ->
+                    this.formConfig[formField.key] = config
                 }
                 val value = field.value
 
@@ -118,6 +120,7 @@ abstract class FormActivity: GibsonOsActivity() {
             values[it.key] = this.getFieldBuilder(it.key).getValue(
                 this.getView(it.key),
                 it.value,
+                this.formConfig[it.key],
             ) ?: ""
         }
 
@@ -129,7 +132,7 @@ abstract class FormActivity: GibsonOsActivity() {
         val view = this.getView(fieldName)
         val fieldBuilder = this.getFieldBuilder(fieldName)
 
-        return fieldBuilder.getValue(view, field)
+        return fieldBuilder.getValue(view, field, this.formConfig[fieldName])
     }
 
     fun setValues(values: Map<String, *>) {
