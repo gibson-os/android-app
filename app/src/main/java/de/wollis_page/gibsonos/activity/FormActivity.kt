@@ -10,6 +10,7 @@ import de.wollis_page.gibsonos.dto.form.Field
 import de.wollis_page.gibsonos.exception.FormException
 import de.wollis_page.gibsonos.form.AutoCompleteField
 import de.wollis_page.gibsonos.form.BoolField
+import de.wollis_page.gibsonos.form.DateField
 import de.wollis_page.gibsonos.form.DateTimeField
 import de.wollis_page.gibsonos.form.DirectoryField
 import de.wollis_page.gibsonos.form.FieldInterface
@@ -29,6 +30,7 @@ abstract class FormActivity: GibsonOsActivity() {
         AutoCompleteField(),
         DirectoryField(),
         DateTimeField(),
+        DateField(),
     )
     private lateinit var formContainer: LinearLayout
     private var formViews: MutableMap<String, View> = mutableMapOf()

@@ -97,6 +97,7 @@
     <string name="grow_diary_plant_climates_tab">Klima</string>
     <string name="grow_diary_plant_feed_tab">Nahrung</string>
     <string name="grow_diary_plant_milestone_tab">Meilensteine</string>
+    <string name="grow_diary_plant_fertilizer_tab">Nährstoffe</string>
 
     <string name="grow_diary_plant_image_description">Bild</string>
     <string name="grow_diary_plant_grown_at">Angebaut am</string>

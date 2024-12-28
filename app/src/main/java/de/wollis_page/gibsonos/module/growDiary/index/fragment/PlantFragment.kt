@@ -1,9 +1,14 @@
 package de.wollis_page.gibsonos.module.growDiary.index.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -17,9 +22,20 @@ import de.wollis_page.gibsonos.service.ImageLoaderService
 
 class PlantFragment: ListFragment() {
     private lateinit var imageLoaderService: ImageLoaderService<Plant>
+    lateinit var formLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.formLauncher = this.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            this.loadList()
+        }
 
         this.imageLoaderService = ImageLoaderService(
             this.activity,
@@ -34,20 +50,6 @@ class PlantFragment: ListFragment() {
                 this.getViewByItem(plant)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
             }
         )
-
-//        val inflater = LayoutInflater.from(this.activity)
-//        this.activity.contentContainer.addView(inflater.inflate(
-//            R.layout.base_button_add,
-//            this.activity.findViewById(android.R.id.content),
-//            false
-//        ))
-//        val addButton = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
-//        addButton.setOnClickListener {
-//            startActivityForResult(
-//                Intent(this.activity.applicationContext, LoginActivity::class.java),
-//                100
-//            )
-//        }
     }
 
     override fun onClick(item: ListItemInterface) {
@@ -105,4 +107,21 @@ class PlantFragment: ListFragment() {
             )
         )
     }
+
+    override fun actionButton() = R.layout.base_button_add
+
+    override fun actionOnClickListener() {
+        this.runTask({
+            ActivityLauncherService.startActivity(
+                this.activity,
+                "growDiary",
+                "plant",
+                "form",
+                emptyMap(),
+                this.formLauncher,
+            )
+        })
+    }
+
+    override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
 }

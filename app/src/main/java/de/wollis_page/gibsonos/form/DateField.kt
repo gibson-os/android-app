@@ -64,18 +64,22 @@ class DateField: FieldInterface {
         yearPicker.minValue = min(selectedDate.get(Calendar.YEAR), todayYear-1)
         yearPicker.maxValue = todayYear+100
         yearPicker.wrapSelectorWheel = false
-        yearPicker.value = selectedDate.get(Calendar.YEAR)
 
         val monthPicker = view.findViewById<NumberPicker>(R.id.month)
         monthPicker.minValue = 1
         monthPicker.maxValue = 12
         monthPicker.wrapSelectorWheel = false
-        monthPicker.value = selectedDate.get(Calendar.MONTH)+1
 
         val dayPicker = view.findViewById<NumberPicker>(R.id.day)
         dayPicker.minValue = 1
         dayPicker.maxValue = 31
         dayPicker.wrapSelectorWheel = false
-        dayPicker.value = selectedDate.get(Calendar.DATE)
+
+        if (value is String) {
+            yearPicker.value = selectedDate.get(Calendar.YEAR)
+            monthPicker.value = selectedDate.get(Calendar.MONTH) + 1
+            dayPicker.value = selectedDate.get(Calendar.DATE)
+        }
+
     }
 }

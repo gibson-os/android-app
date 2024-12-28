@@ -19,12 +19,11 @@ abstract class TabActivity : GibsonOsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
 
         this.adapter = BaseTabAdapter(this)
 
         for (tab in this.getTabs()) {
-            this.adapter.addTab(tab)
+            this.addTab(tab)
         }
 
         val viewPager = findViewById<View>(R.id.pager) as ViewPager2
@@ -34,6 +33,10 @@ abstract class TabActivity : GibsonOsActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = getString(this.getTabs().get(position).title)
         }.attach()
+    }
+
+    fun addTab(tab: Tab) {
+        this.adapter.addTab(tab)
     }
 
     override fun updateData(data: String) {

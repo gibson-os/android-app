@@ -6,6 +6,7 @@ import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Climate
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Fertilizer
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.task.AbstractTask
 
@@ -75,6 +76,34 @@ object PlantTask: AbstractTask() {
 
         if (date != null) {
             dataStore.addParam("date", date)
+        }
+
+        return this.load(context, dataStore)
+    }
+
+    fun getForm(context: GibsonOsActivity, plantId: Long? = null): Form {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "form")
+
+        if (plantId != null) {
+            dataStore.addParam("id", plantId)
+        }
+
+        return this.load(context, dataStore)
+    }
+
+    fun getFertilizers(context: GibsonOsActivity, plantId: Long, start: Long, limit: Long): ListResponse<Fertilizer> {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "fertilizers")
+        dataStore.addParam("plantId", plantId)
+
+        return this.loadList(context, dataStore, start, limit)
+    }
+
+    fun getFertilizerForm(context: GibsonOsActivity, plantId: Long, fertilizerId: Long? = null): Form {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "fertilizerForm")
+        dataStore.addParam("plantId", plantId)
+
+        if (fertilizerId != null) {
+            dataStore.addParam("id", fertilizerId)
         }
 
         return this.load(context, dataStore)

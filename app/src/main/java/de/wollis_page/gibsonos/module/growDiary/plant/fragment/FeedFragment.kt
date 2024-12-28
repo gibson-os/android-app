@@ -22,7 +22,7 @@ import de.wollis_page.gibsonos.module.growDiary.task.FertilizerTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.ImageLoaderService
 
-class FeedFragement: ListFragment() {
+class FeedFragment: ListFragment() {
     lateinit var formLauncher: ActivityResultLauncher<Intent>
     private lateinit var imageLoaderService: ImageLoaderService<Fertilizer>
 

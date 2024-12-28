@@ -25,7 +25,7 @@ import de.wollis_page.gibsonos.service.ImageLoaderService
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class ImageFragement: GridFragment() {
+class ImageFragment: GridFragment() {
     private lateinit var imageLoaderService: ImageLoaderService<Image>
     private var plantId: Long? = null
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
