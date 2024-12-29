@@ -1,21 +1,23 @@
-package de.wollis_page.gibsonos.module.growDiary.plant.activity
+package de.wollis_page.gibsonos.module.growDiary.index.activity
 
 import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Button
-import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
+import de.wollis_page.gibsonos.module.growDiary.task.FormTask
 import org.json.JSONObject
 
 class FormActivity: FormActivity() {
     override fun buildForm() = this.loadForm {
-        var plantId: Long? = this.intent.getLongExtra("plantId", 0)
+        var id: Long? = this.intent.getLongExtra("id", 0)
 
-        if (plantId?.toInt() == 0) {
-            plantId = null
+        if (id?.toInt() == 0) {
+            id = null
         }
 
-        PlantTask.getForm(
+        FormTask.getForm(
             this,
-            plantId,
+            this.intent.getStringExtra("task")!!,
+            this.intent.getStringExtra("action") ?: "form",
+            id,
         )
     }
 

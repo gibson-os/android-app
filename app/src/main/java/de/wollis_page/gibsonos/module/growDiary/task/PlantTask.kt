@@ -81,16 +81,6 @@ object PlantTask: AbstractTask() {
         return this.load(context, dataStore)
     }
 
-    fun getForm(context: GibsonOsActivity, plantId: Long? = null): Form {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "form")
-
-        if (plantId != null) {
-            dataStore.addParam("id", plantId)
-        }
-
-        return this.load(context, dataStore)
-    }
-
     fun getFertilizers(context: GibsonOsActivity, plantId: Long, start: Long, limit: Long): ListResponse<Fertilizer> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "fertilizers")
         dataStore.addParam("plantId", plantId)

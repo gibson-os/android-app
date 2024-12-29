@@ -40,7 +40,7 @@ class AutoCompleteField: FieldInterface {
                 autoCompleteClassname,
                 field.config["parameters"] as Map<String, String>,
             )
-            val displayField = field.config["displayField"]
+            val displayField = field.config["displayField"].toString()
             val fieldView = view.findViewById<AutoCompleteTextView>(R.id.field)
             var items: Array<String> = emptyArray()
 
@@ -49,7 +49,7 @@ class AutoCompleteField: FieldInterface {
                     throw AppException("Wrong instance")
                 }
 
-                val optionName = it::class.declaredMemberProperties.find { it.name == displayField }!!.getter.call(it).toString()
+                val optionName = this.getItemDisplayValue(it, displayField)
                 items = items.plus(optionName)
             }
 
@@ -62,7 +62,10 @@ class AutoCompleteField: FieldInterface {
                 this.setViewValue(view, field, response)
             }
 
-            getConfig(mapOf("response" to response))
+            getConfig(mapOf(
+                "response" to response,
+
+            ))
         })
 
         view.hint = field.title
@@ -73,29 +76,44 @@ class AutoCompleteField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosModuleCoreParameterTypeAutoComplete"
 
-    override fun getValue(view: View, field: Field, config: Map<String, Any>?): Any? =
-        view.findViewById<AutoCompleteTextView>(R.id.value).text
+    override fun getValue(view: View, field: Field, config: Map<String, Any>?): Any? {
+        val displayValue = view.findViewById<AutoCompleteTextView>(R.id.field).text.toString()
+        val response = (config?.get("response") ?: return null) as ListResponse<*>
+        val valueFieldName = field.config["valueField"].toString()
+        val displayFieldName = field.config["displayField"].toString()
+        var returnValue: Any? = null
+
+        response.data.forEach {
+            val itemDisplayValue = this.getItemDisplayValue(it!!, displayFieldName)
+
+            if (itemDisplayValue == displayValue) {
+                returnValue = this.getItemValue(it, valueFieldName)
+            }
+        }
+
+        if (returnValue == null) {
+            return displayValue
+        }
+
+        return returnValue
+    }
 
     override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
         view.findViewById<TextView>(R.id.value).text = value?.toString() ?: ""
 
-        val response = config?.get("response") ?: return
+        val response = (config?.get("response") ?: return) as ListResponse<*>
 
-        this.setViewValue(view, field, response as ListResponse<*>)
+        this.setViewValue(view, field, response)
     }
 
     private fun setViewValue(view: View, field: Field, response: ListResponse<*>) {
         val textField = view.findViewById<AutoCompleteTextView>(R.id.field)
         val value = view.findViewById<TextView>(R.id.value).text
         val valueFieldName = field.config["valueField"].toString()
-        val displayField = field.config["displayField"]
+        val displayFieldName = field.config["displayField"].toString()
 
         response.data.forEach {
-            if (it == null) {
-                throw AppException("Wrong instance")
-            }
-
-            var itemValue = it::class.declaredMemberProperties.find { it.name == valueFieldName }!!.getter.call(it)
+            var itemValue = this.getItemValue(it!!, valueFieldName)
 
             if (itemValue is Long) {
                 itemValue = itemValue.toFloat()
@@ -108,12 +126,18 @@ class AutoCompleteField: FieldInterface {
             itemValue = itemValue.toString()
 
             if (itemValue == value.toString()) {
-                textField.setText(it::class.declaredMemberProperties.find { it.name == displayField }!!.getter.call(it).toString())
+                textField.setText(this.getItemDisplayValue(it, displayFieldName))
 
                 return
             }
         }
     }
+
+    private fun getItemDisplayValue(item: Any, displayFieldName: String) =
+        item::class.declaredMemberProperties.find { it.name == displayFieldName }!!.getter.call(item).toString()
+
+    private fun getItemValue(item: Any, valueFieldName: String) =
+        item::class.declaredMemberProperties.find { it.name == valueFieldName }!!.getter.call(item)
 
     private fun addListeners(
         field: Field,

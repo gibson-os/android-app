@@ -1,9 +1,14 @@
 package de.wollis_page.gibsonos.module.growDiary.index.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -17,9 +22,20 @@ import de.wollis_page.gibsonos.service.ImageLoaderService
 
 class SubstrateFragment: ListFragment() {
     private lateinit var imageLoaderService: ImageLoaderService<Substrate>
+    lateinit var formLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.formLauncher = this.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            this.loadList()
+        }
 
         this.imageLoaderService = ImageLoaderService(
             this.activity,
@@ -97,4 +113,23 @@ class SubstrateFragment: ListFragment() {
             )
         )
     }
+
+    override fun actionButton() = R.layout.base_button_add
+
+    override fun actionOnClickListener() {
+        this.runTask({
+            ActivityLauncherService.startActivity(
+                this.activity,
+                "growDiary",
+                "index",
+                "form",
+                mapOf(
+                    "task" to "substrate",
+                ),
+                this.formLauncher,
+            )
+        })
+    }
+
+    override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
 }

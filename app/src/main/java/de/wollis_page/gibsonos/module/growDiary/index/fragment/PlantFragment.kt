@@ -80,7 +80,7 @@ class PlantFragment: ListFragment() {
         }
 
         view.findViewById<TextView>(R.id.name).text = item.name
-        view.findViewById<TextView>(R.id.seed).text = item.seed!!.name
+        view.findViewById<TextView>(R.id.seed).text = item.seed.name
 
         this.imageLoaderService.viewImage(
             item,
@@ -115,9 +115,11 @@ class PlantFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "plant",
+                "index",
                 "form",
-                emptyMap(),
+                mapOf(
+                    "task" to "plant",
+                ),
                 this.formLauncher,
             )
         })

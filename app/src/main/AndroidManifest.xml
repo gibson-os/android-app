@@ -167,6 +167,11 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
+            android:name="de.wollis_page.gibsonos.module.growDiary.index.activity.FormActivity"
+            android:icon="@drawable/ic_hemp"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.IndexActivity"
             android:icon="@drawable/ic_hemp"
             android:theme="@style/AppTheme.NoActionBar"/>
@@ -193,11 +198,6 @@
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.FertilizerFormActivity"
-            android:icon="@drawable/ic_hemp"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity
-            android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.FormActivity"
             android:icon="@drawable/ic_hemp"
             android:theme="@style/AppTheme.NoActionBar"/>
 

@@ -7,7 +7,6 @@ data class Climate(
     var name: String,
     var type: String,
     var watt: Long,
-    var manufactureId: Long,
 ): ListItemInterface {
     override fun getId() = this.id
 }

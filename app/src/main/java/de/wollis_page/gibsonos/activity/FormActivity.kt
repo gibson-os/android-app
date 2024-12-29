@@ -117,11 +117,7 @@ abstract class FormActivity: GibsonOsActivity() {
         val values = mutableMapOf<String, Any>()
 
         this.formFields.forEach {
-            values[it.key] = this.getFieldBuilder(it.key).getValue(
-                this.getView(it.key),
-                it.value,
-                this.formConfig[it.key],
-            ) ?: ""
+            values[it.key] = this.getValue(it.key) ?: ""
         }
 
         return values

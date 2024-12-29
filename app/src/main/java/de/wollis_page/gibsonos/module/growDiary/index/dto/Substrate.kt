@@ -5,7 +5,6 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 data class Substrate(
     var id: Long,
     var name: String,
-    var manufactureId: Long,
 ): ListItemInterface {
     override fun getId() = this.id
 }

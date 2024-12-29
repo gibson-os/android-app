@@ -1,5 +1,8 @@
 package de.wollis_page.gibsonos.module.core.user.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +16,7 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
 import de.wollis_page.gibsonos.module.core.task.UserTask
+
 
 class LoginActivity : GibsonOsActivity() {
     private var editTexts: MutableList<EditText?> = ArrayList()
@@ -84,6 +88,13 @@ class LoginActivity : GibsonOsActivity() {
                 account.save()
                 me.application.addAccount(account)
 
+//                val intentFilter = IntentFilter()
+//                intentFilter.addAction("android.intent.action.VIEW")
+//                intentFilter.addCategory("android.intent.category.DEFAULT")
+//                intentFilter.addCategory("android.intent.category.BROWSABLE")
+//                intentFilter.addDataScheme("https")
+//                this.registerReceiver(this.broadcastReceiver, intentFilter)
+
                 setResult(RESULT_OK)
                 me.finish()
             })
@@ -94,4 +105,12 @@ class LoginActivity : GibsonOsActivity() {
         return 0
     }
 
+    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val extras = intent.extras
+            Log.d(Config.LOG_TAG, extras.toString())
+            Log.d(Config.LOG_TAG, context.toString())
+            Log.d(Config.LOG_TAG, intent.toString())
+        }
+    }
 }
