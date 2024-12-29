@@ -30,6 +30,21 @@ class AutoCompleteField: FieldInterface {
             false
         ) as TextInputLayout
 
+        this.loadList(field, context, view, getConfig)
+        this.addListeners(field, context, view, getConfig)
+
+        view.hint = field.title
+
+        return view
+    }
+
+    private fun loadList(
+        field: Field,
+        context: FormActivity,
+        view: TextInputLayout,
+        getConfig: (config: Map<String, Any>) -> Unit,
+        additionalParameters: Map<String, String> = emptyMap(),
+    ) {
         val autoCompleteClassname = field.config["autoCompleteClassname"].toString()
 
         context.runTask({
@@ -38,7 +53,7 @@ class AutoCompleteField: FieldInterface {
             val response = AutoCompleteTask.get(
                 context,
                 autoCompleteClassname,
-                field.config["parameters"] as Map<String, String>,
+                (field.config["parameters"] as Map<String, String>) + additionalParameters,
             )
             val displayField = field.config["displayField"].toString()
             val fieldView = view.findViewById<AutoCompleteTextView>(R.id.field)
@@ -62,15 +77,8 @@ class AutoCompleteField: FieldInterface {
                 this.setViewValue(view, field, response)
             }
 
-            getConfig(mapOf(
-                "response" to response,
-
-            ))
+            getConfig(mapOf("response" to response))
         })
-
-        view.hint = field.title
-
-        return view
     }
 
     override fun supports(field: Field): Boolean =
@@ -78,21 +86,24 @@ class AutoCompleteField: FieldInterface {
 
     override fun getValue(view: View, field: Field, config: Map<String, Any>?): Any? {
         val displayValue = view.findViewById<AutoCompleteTextView>(R.id.field).text.toString()
-        val response = (config?.get("response") ?: return null) as ListResponse<*>
         val valueFieldName = field.config["valueField"].toString()
+        val returnValue = this.getValueRecord(view, field, config) ?: return displayValue
+
+        return this.getItemValue(returnValue, valueFieldName)
+    }
+
+    fun getValueRecord(view: View, field: Field, config: Map<String, Any>?): Any? {
+        val displayValue = view.findViewById<AutoCompleteTextView>(R.id.field).text.toString()
         val displayFieldName = field.config["displayField"].toString()
+        val response = (config?.get("response") ?: return null) as ListResponse<*>
         var returnValue: Any? = null
 
         response.data.forEach {
             val itemDisplayValue = this.getItemDisplayValue(it!!, displayFieldName)
 
             if (itemDisplayValue == displayValue) {
-                returnValue = this.getItemValue(it, valueFieldName)
+                returnValue = it
             }
-        }
-
-        if (returnValue == null) {
-            return displayValue
         }
 
         return returnValue
@@ -143,6 +154,7 @@ class AutoCompleteField: FieldInterface {
         field: Field,
         context: FormActivity,
         view: TextInputLayout,
+        getConfig: (config: Map<String, Any>) -> Unit,
     ) {
         val listeners = field.config["listeners"]
 
@@ -151,13 +163,16 @@ class AutoCompleteField: FieldInterface {
         }
 
         listeners.forEach {
-            val sourceField = (context.getView(it.key.toString()) as TextInputLayout)
+            val fieldName = it.key.toString()
+            val sourceField = (context.getView(fieldName) as TextInputLayout)
                 .findViewById<AutoCompleteTextView>(R.id.field)
             val value = it.value
 
             if (value is Map<*, *>) {
                 value.forEach { listener ->
                     if (listener.key == "params") {
+                        val listenerValue = listener.value as Map<*, *>
+
                         sourceField.addTextChangedListener(object : TextWatcher {
                             override fun beforeTextChanged(
                                 s: CharSequence?,
@@ -176,12 +191,16 @@ class AutoCompleteField: FieldInterface {
                             }
 
                             override fun afterTextChanged(editable: Editable?) {
-                                val sourceValue = editable?.toString() ?: return
+                                val fieldBuilder = context.getFieldBuilder(fieldName) as AutoCompleteField
+                                val sourceRecord = fieldBuilder.getValueRecord(
+                                    sourceField,
+                                    context.getField(fieldName),
+                                    context.getConfig(fieldName)
+                                ) ?: return
 
-//                                val newEditable = Editable.Factory.getInstance().newEditable(
-//                                    (sourceValue * listener.value.toString().toFloat()).toString()
-//                                )
-//                                view.editText?.text = newEditable
+                                loadList(field, context, view, getConfig, mapOf(
+                                    (listenerValue["paramKey"] as String) to (sourceRecord::class.declaredMemberProperties.find { it.name == listenerValue["recordKey"] }!!.getter.call(sourceRecord).toString())
+                                ))
                             }
                         })
                     }

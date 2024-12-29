@@ -163,13 +163,13 @@ abstract class FormActivity: GibsonOsActivity() {
     fun getView(fieldName: String): View = this.formViews[fieldName]
         ?: throw FormException("Field '$fieldName' doesn't exists")
 
-    protected fun getField(fieldName: String): Field = this.formFields[fieldName]
+    fun getField(fieldName: String): Field = this.formFields[fieldName]
         ?: throw FormException("Field '$fieldName' doesn't exists")
 
-    protected fun getFieldBuilder(fieldName: String): FieldInterface = this.formFieldBuilders[fieldName]
+    fun getFieldBuilder(fieldName: String): FieldInterface = this.formFieldBuilders[fieldName]
         ?: throw FormException("Field '$fieldName' doesn't exists")
 
-    protected fun getConfig(fieldName: String): Map<String, Any> = this.formConfig[fieldName]
+    fun getConfig(fieldName: String): Map<String, Any> = this.formConfig[fieldName]
         ?: throw FormException("No config found for field '$fieldName'")
 
     protected fun getButtonsView(buttonName: String): View = this.buttonViews[buttonName]
