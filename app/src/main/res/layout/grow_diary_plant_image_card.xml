@@ -32,7 +32,7 @@
             android:id="@+id/created"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/headline_font_size"
+            android:textSize="@dimen/subline_font_size"
             android:textAlignment="center" />
 
     </LinearLayout>

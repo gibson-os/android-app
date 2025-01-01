@@ -1,10 +1,14 @@
 package de.wollis_page.gibsonos.form
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.NumberPicker
 import android.widget.TextView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Field
@@ -13,7 +17,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.GregorianCalendar
 import java.util.Locale
-import kotlin.math.min
 
 class DateTimeField: FieldInterface {
     override fun build(
@@ -28,7 +31,69 @@ class DateTimeField: FieldInterface {
             false
         ) as LinearLayout
 
-        view.findViewById<TextView>(R.id.label).text = field.title
+        view.findViewById<TextInputLayout>(R.id.dateFieldLayout).hint = field.title
+
+        val dateButton = view.findViewById<ImageButton>(R.id.dateButton)
+        dateButton.contentDescription = field.title
+        dateButton.setOnClickListener {
+            val valueDate = GregorianCalendar()
+            val textfield = view.findViewById<TextView>(R.id.dateField)
+            val value = textfield.text.toString()
+
+            valueDate.time = Date()
+
+            if (value != "") {
+                valueDate.time = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN).parse(value)!!
+            }
+
+            val datePickerDialog = DatePickerDialog(
+                context,
+                { _, year, monthOfYear, dayOfMonth ->
+                    val selectedDate = GregorianCalendar()
+                    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN)
+
+                    selectedDate.set(year, monthOfYear, dayOfMonth)
+                    textfield.text = formatter.format(selectedDate.time)
+                },
+                valueDate.get(Calendar.YEAR),
+                valueDate.get(Calendar.MONTH),
+                valueDate.get(Calendar.DATE),
+            )
+            datePickerDialog.show()
+        }
+
+        view.findViewById<TextInputLayout>(R.id.timeFieldLayout).hint = field.title
+
+        val timeButton = view.findViewById<ImageButton>(R.id.timeButton)
+        timeButton.contentDescription = field.title
+        timeButton.setOnClickListener {
+            val valueDate = GregorianCalendar()
+            val textfield = view.findViewById<TextView>(R.id.timeField)
+            val value = textfield.text.toString()
+
+            valueDate.time = Date()
+
+            if (value != "") {
+                valueDate.time = SimpleDateFormat("HH:mm:ss", Locale.GERMAN).parse(value)!!
+            }
+
+            val datePickerDialog = TimePickerDialog(
+                context,
+                { _, hourOfDay, minute ->
+                    val selectedDate = GregorianCalendar()
+                    val formatter = SimpleDateFormat("HH:mm:ss", Locale.GERMAN)
+
+                    selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                    selectedDate.set(Calendar.MINUTE, minute)
+                    selectedDate.set(Calendar.SECOND, 0)
+                    textfield.text = formatter.format(selectedDate.time)
+                },
+                valueDate.get(Calendar.HOUR_OF_DAY),
+                valueDate.get(Calendar.MINUTE),
+                true,
+            )
+            datePickerDialog.show()
+        }
 
         return view
     }
@@ -36,70 +101,21 @@ class DateTimeField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosCoreComponentFormFieldDateTime"
 
-    override fun getValue(view: View, field: Field, config: Map<String, Any>?): String {
-        val yearPicker = view.findViewById<NumberPicker>(R.id.year)
-        val monthPicker = view.findViewById<NumberPicker>(R.id.month)
-        val dayPicker = view.findViewById<NumberPicker>(R.id.day)
-        val hourPicker = view.findViewById<NumberPicker>(R.id.hour)
-        val minutePicker = view.findViewById<NumberPicker>(R.id.minute)
-        val secondPicker = view.findViewById<NumberPicker>(R.id.second)
-
-        val selectedDate = GregorianCalendar()
-        selectedDate.set(yearPicker.value, monthPicker.value-1, dayPicker.value, hourPicker.value, minutePicker.value, secondPicker.value)
-
-        val formatter = SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.GERMAN)
-
-        return formatter.format(selectedDate.time)
-    }
+    override fun getValue(view: View, field: Field, config: Map<String, Any>?) =
+        view.findViewById<TextInputEditText>(R.id.dateField).text.toString() + " " + view.findViewById<TextInputEditText>(R.id.timeField).text.toString()
 
     override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
-        val today = GregorianCalendar()
-        today.time = Date()
+        if (value !is String) {
+            return
+        }
+
         val selectedDate = GregorianCalendar()
-        selectedDate.time = Date()
+        val formatter = SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.GERMAN)
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN)
+        val timeFormatter = SimpleDateFormat("HH:mm:ss", Locale.GERMAN)
+        selectedDate.time = formatter.parse(value)!!
 
-        if (value is String) {
-            selectedDate.setTime(SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.GERMAN).parse(value)!!)
-        }
-
-        val todayYear = today.get(Calendar.YEAR)
-        val yearPicker = view.findViewById<NumberPicker>(R.id.year)
-        yearPicker.minValue = min(selectedDate.get(Calendar.YEAR), todayYear-1)
-        yearPicker.maxValue = todayYear+100
-        yearPicker.wrapSelectorWheel = false
-
-        val monthPicker = view.findViewById<NumberPicker>(R.id.month)
-        monthPicker.minValue = 1
-        monthPicker.maxValue = 12
-        monthPicker.wrapSelectorWheel = false
-
-        val dayPicker = view.findViewById<NumberPicker>(R.id.day)
-        dayPicker.minValue = 1
-        dayPicker.maxValue = 31
-        dayPicker.wrapSelectorWheel = false
-
-        val hourPicker = view.findViewById<NumberPicker>(R.id.hour)
-        hourPicker.minValue = 0
-        hourPicker.maxValue = 23
-        hourPicker.wrapSelectorWheel = false
-
-        val minutePicker = view.findViewById<NumberPicker>(R.id.minute)
-        minutePicker.minValue = 0
-        minutePicker.maxValue = 59
-        minutePicker.wrapSelectorWheel = false
-
-        val secondPicker = view.findViewById<NumberPicker>(R.id.second)
-        secondPicker.minValue = 0
-        secondPicker.maxValue = 59
-        secondPicker.wrapSelectorWheel = false
-
-        if (value is String) {
-            yearPicker.value = selectedDate.get(Calendar.YEAR)
-            monthPicker.value = selectedDate.get(Calendar.MONTH) + 1
-            dayPicker.value = selectedDate.get(Calendar.DATE)
-            hourPicker.value = selectedDate.get(Calendar.HOUR_OF_DAY)
-            minutePicker.value = selectedDate.get(Calendar.MINUTE)
-            secondPicker.value = selectedDate.get(Calendar.SECOND)
-        }
+        view.findViewById<TextInputEditText>(R.id.dateField).setText(dateFormatter.format(selectedDate.time))
+        view.findViewById<TextInputEditText>(R.id.timeField).setText(timeFormatter.format(selectedDate.time))
     }
 }

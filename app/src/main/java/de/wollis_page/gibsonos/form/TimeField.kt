@@ -1,10 +1,13 @@
 package de.wollis_page.gibsonos.form
 
+import android.app.TimePickerDialog
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.NumberPicker
 import android.widget.TextView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Field
@@ -27,7 +30,38 @@ class TimeField: FieldInterface {
             false
         ) as LinearLayout
 
-        view.findViewById<TextView>(R.id.label).text = field.title
+        view.findViewById<TextInputLayout>(R.id.fieldLayout).hint = field.title
+
+        val button = view.findViewById<ImageButton>(R.id.button)
+        button.contentDescription = field.title
+        button.setOnClickListener {
+            val valueDate = GregorianCalendar()
+            val textfield = view.findViewById<TextView>(R.id.field)
+            val value = textfield.text.toString()
+
+            valueDate.time = Date()
+
+            if (value != "") {
+                valueDate.time = SimpleDateFormat("HH:mm:ss", Locale.GERMAN).parse(value)!!
+            }
+
+            val datePickerDialog = TimePickerDialog(
+                context,
+                { _, hourOfDay, minute ->
+                    val selectedDate = GregorianCalendar()
+                    val formatter = SimpleDateFormat("HH:mm:ss", Locale.GERMAN)
+
+                    selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                    selectedDate.set(Calendar.MINUTE, minute)
+                    selectedDate.set(Calendar.SECOND, 0)
+                    textfield.text = formatter.format(selectedDate.time)
+                },
+                valueDate.get(Calendar.HOUR_OF_DAY),
+                valueDate.get(Calendar.MINUTE),
+                true,
+            )
+            datePickerDialog.show()
+        }
 
         return view
     }
@@ -35,47 +69,10 @@ class TimeField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosCoreComponentFormFieldTime"
 
-    override fun getValue(view: View, field: Field, config: Map<String, Any>?): String {
-        val hourPicker = view.findViewById<NumberPicker>(R.id.hour)
-        val minutePicker = view.findViewById<NumberPicker>(R.id.minute)
-        val secondPicker = view.findViewById<NumberPicker>(R.id.second)
-
-        val selectedDate = GregorianCalendar()
-        selectedDate.set(Calendar.HOUR_OF_DAY, hourPicker.value)
-        selectedDate.set(Calendar.MINUTE, minutePicker.value)
-        selectedDate.set(Calendar.SECOND, secondPicker.value)
-
-        val formatter = SimpleDateFormat("H:m:s", Locale.GERMAN)
-
-        return formatter.format(selectedDate.time)
-    }
+    override fun getValue(view: View, field: Field, config: Map<String, Any>?) =
+        view.findViewById<TextInputEditText>(R.id.field).text
 
     override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
-        val today = GregorianCalendar()
-        today.time = Date()
-        val selectedDate = GregorianCalendar()
-        selectedDate.time = Date()
-
-        if (value is String) {
-            selectedDate.setTime(SimpleDateFormat("H:m:s", Locale.GERMAN).parse(value)!!)
-        }
-
-        val hourPicker = view.findViewById<NumberPicker>(R.id.hour)
-        hourPicker.minValue = 0
-        hourPicker.maxValue = 23
-        hourPicker.wrapSelectorWheel = false
-        hourPicker.value = selectedDate.get(Calendar.HOUR_OF_DAY)
-
-        val minutePicker = view.findViewById<NumberPicker>(R.id.minute)
-        minutePicker.minValue = 0
-        minutePicker.maxValue = 59
-        minutePicker.wrapSelectorWheel = false
-        minutePicker.value = selectedDate.get(Calendar.MINUTE)
-
-        val secondPicker = view.findViewById<NumberPicker>(R.id.second)
-        secondPicker.minValue = 0
-        secondPicker.maxValue = 59
-        secondPicker.wrapSelectorWheel = false
-        secondPicker.value = selectedDate.get(Calendar.SECOND)
+        view.findViewById<TextInputEditText>(R.id.field).setText(value?.toString() ?: "")
     }
 }
