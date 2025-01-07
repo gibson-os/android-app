@@ -39,6 +39,12 @@ android {
                 checkReleaseBuilds false
                 abortOnError false
             }
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def finalName = "./" + applicationId + "-v" + versionName + "-" + versionCode + ".apk"
+                    output.outputFileName = finalName
+                }
+            }
         }
         debug {
             applicationIdSuffix ".debug"
