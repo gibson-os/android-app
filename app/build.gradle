@@ -13,6 +13,7 @@ android {
         targetSdkVersion 35
         versionCode 1
         versionName "2025-01-07"
+        setProperty("archivesBaseName", "../aab/" + applicationId + "-v" + versionName + "-" + versionCode)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
