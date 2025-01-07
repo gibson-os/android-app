@@ -3,7 +3,7 @@ package de.wollis_page.gibsonos.module.growDiary.plant.activity
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.Tab
-import de.wollis_page.gibsonos.module.growDiary.plant.fragment.ClimateFragment
+import de.wollis_page.gibsonos.module.growDiary.index.fragment.ClimateFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.FeedFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.FertilizerFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.ImageFragment

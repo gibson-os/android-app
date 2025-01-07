@@ -9,8 +9,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.fragment.GibsonOsFragment
+import de.wollis_page.gibsonos.module.growDiary.index.dto.Climate
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
-import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Climate
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Feed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.feed.Additive

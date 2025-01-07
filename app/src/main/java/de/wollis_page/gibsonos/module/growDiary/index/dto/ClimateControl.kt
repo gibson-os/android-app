@@ -2,13 +2,11 @@ package de.wollis_page.gibsonos.module.growDiary.index.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
-data class Climate(
+data class ClimateControl(
     var id: Long,
-    var added: String,
-    var temperature: Float?,
-    var relativeHumidity: Float?,
-    var airPressure: Float?,
-    var leafTemperature: Float?,
+    var name: String,
+    var type: String,
+    var watt: Long,
 ): ListItemInterface {
     override fun getId() = this.id
 }

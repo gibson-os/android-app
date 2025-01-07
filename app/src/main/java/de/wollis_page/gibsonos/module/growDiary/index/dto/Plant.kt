@@ -1,7 +1,6 @@
 package de.wollis_page.gibsonos.module.growDiary.index.dto
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
-import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Climate
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Feed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.State

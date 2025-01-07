@@ -1,11 +1,11 @@
-package de.wollis_page.gibsonos.module.growDiary.plant.activity
+package de.wollis_page.gibsonos.module.growDiary.climate.activity
 
 import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Button
-import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
+import de.wollis_page.gibsonos.module.growDiary.task.ClimateTask
 import org.json.JSONObject
 
-class ClimateFormActivity: FormActivity() {
+class FormActivity: FormActivity() {
     override fun buildForm() = this.loadForm {
         var climateId: Long? = this.intent.getLongExtra("climateId", 0)
 
@@ -13,7 +13,7 @@ class ClimateFormActivity: FormActivity() {
             climateId = null
         }
 
-        PlantTask.getClimateForm(
+        ClimateTask.getForm(
             this,
             this.intent.getLongExtra("plantId", 0),
             climateId,
