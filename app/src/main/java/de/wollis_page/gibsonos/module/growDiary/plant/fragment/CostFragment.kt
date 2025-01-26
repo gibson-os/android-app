@@ -58,7 +58,7 @@ class CostFragment: ListFragment() {
 
         if (item.type != CostType.SUM) {
             view.findViewById<TextView>(R.id.costPerUnit).text = item.costPerUnit?.let { String.format("%.2f €", it / 100) }
-            view.findViewById<TextView>(R.id.units).text = item.units?.let { String.format("%.2f", it) }
+            view.findViewById<TextView>(R.id.units).text = item.units?.let { String.format("%.3f", it) }
         }
 
         this.imageLoaderService.viewImage(item, view.findViewById(R.id.image))
