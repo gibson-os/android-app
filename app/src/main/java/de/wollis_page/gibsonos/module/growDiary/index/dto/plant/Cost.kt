@@ -10,7 +10,8 @@ data class Cost(
     var costPerUnit: Float?,
     var units: Float?,
     var totalCost: Float,
-    var type: CostType
+    var type: CostType,
+    var unitSuffix: String,
 ): ListItemInterface {
     override fun getId() = this.id
 }
