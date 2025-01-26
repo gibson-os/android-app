@@ -5,6 +5,7 @@ import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Cost
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Fertilizer
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.task.AbstractTask
@@ -96,5 +97,12 @@ object PlantTask: AbstractTask() {
         }
 
         return this.load(context, dataStore)
+    }
+
+    fun getCosts(context: GibsonOsActivity, plantId: Long): ListResponse<Cost> {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "costs")
+        dataStore.addParam("id", plantId)
+
+        return this.loadList(context, dataStore)
     }
 }

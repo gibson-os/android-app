@@ -368,7 +368,7 @@ class IndexActivity: ListActivity() {
         outState.putParcelable(DIRECTORY_KEY, this.loadedDir)
     }
 
-    override fun getId(): Any = this.loadDir.toString()
+    override fun getId() = this.loadDir.toString()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)

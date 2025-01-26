@@ -19,8 +19,6 @@ class IndexActivity : TabActivity() {
         this.setTitle(R.string.hc_title)
     }
 
-    override fun getId(): Any {
-        return 0
-    }
+    override fun getId() = 0
 
 }

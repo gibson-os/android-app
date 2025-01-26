@@ -101,9 +101,7 @@ class LoginActivity : GibsonOsActivity() {
         }
     }
 
-    override fun getId(): Any {
-        return 0
-    }
+    override fun getId() = 0
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {

@@ -17,7 +17,5 @@ data class Log(
     var text: String?,
     var rendered: String?
 ) : ListItemInterface {
-    override fun getId(): Long {
-        return this.id
-    }
+    override fun getId() = this.id
 }

@@ -19,6 +19,6 @@ class SettingActivity: GibsonOsActivity() {
         }
     }
 
-    override fun getId(): Long = 0
+    override fun getId() = 0
 
 }

@@ -19,7 +19,7 @@ class ImageActivity: GibsonOsActivity() {
 
     override fun getContentView() = R.layout.grow_diary_plant_image_view
 
-    override fun getId(): Long = this.plantId ?: 0
+    override fun getId() = this.plantId ?: 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

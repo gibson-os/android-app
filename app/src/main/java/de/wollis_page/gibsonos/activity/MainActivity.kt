@@ -46,9 +46,7 @@ class MainActivity : ListActivity() {
         loadList()
     }
 
-    override fun getId(): Any {
-        return 0
-    }
+    override fun getId() = 0
 
     @SuppressWarnings("deprecation")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -53,7 +53,5 @@ data class Port(
         }
     }
 
-    override fun getId(): Long {
-        return this.id
-    }
+    override fun getId() = this.id
 }

@@ -11,7 +11,5 @@ data class Remote(
     val background: String?,
     val buttons: MutableList<Button>
 ): ListItemInterface {
-    override fun getId(): Any {
-        return this.id
-    }
+    override fun getId() = this.id
 }

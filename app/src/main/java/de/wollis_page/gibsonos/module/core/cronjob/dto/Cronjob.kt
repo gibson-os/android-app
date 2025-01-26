@@ -7,7 +7,5 @@ class Cronjob(
     val command: String,
     val lastRun: String?
 ): ListItemInterface {
-    override fun getId(): Long {
-        return this.id
-    }
+    override fun getId() = this.id
 }

@@ -57,7 +57,5 @@ data class Module(
         }
     }
 
-    override fun getId(): Long {
-        return this.id
-    }
+    override fun getId() = this.id
 }

@@ -15,7 +15,7 @@ import de.wollis_page.gibsonos.service.AppIconService
 import de.wollis_page.gibsonos.service.AppIntentExtraService
 
 class IndexActivity: ListActivity() {
-    override fun getId(): Any = 0
+    override fun getId() = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

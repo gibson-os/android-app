@@ -10,7 +10,5 @@ data class Key(
     var protocolName: String?,
     var name: String?,
 ): ListItemInterface {
-    override fun getId(): Any {
-        return this.id
-    }
+    override fun getId() = this.id
 }

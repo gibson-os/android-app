@@ -29,7 +29,7 @@ class PlayerActivity: GibsonOsActivity() {
 
     override fun getContentView(): Int = R.layout.explorer_html5_player
 
-    override fun getId(): Any = 0
+    override fun getId() = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

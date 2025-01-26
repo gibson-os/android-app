@@ -38,8 +38,5 @@ abstract class ModuleActivity : TabActivity() {
         this.setTitle(this.module.name)
     }
 
-    override fun getId(): Any {
-        return this.module.id
-    }
-
+    override fun getId() = this.module.id
 }

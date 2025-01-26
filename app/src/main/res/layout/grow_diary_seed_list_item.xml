@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="@dimen/thumb_width"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/thumb_height"
             android:contentDescription="@string/grow_diary_plant_image_description"
             app:srcCompat="@drawable/ic_hemp" />
 

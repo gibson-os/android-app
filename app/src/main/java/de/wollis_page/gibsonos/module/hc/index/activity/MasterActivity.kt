@@ -38,7 +38,5 @@ class MasterActivity : TabActivity() {
         this.setTitle(this.master.name)
     }
 
-    override fun getId(): Any {
-        return this.master.getId()
-    }
+    override fun getId() = this.master.getId()
 }

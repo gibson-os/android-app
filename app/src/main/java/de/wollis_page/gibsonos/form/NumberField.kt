@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.form
 
+import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -81,11 +82,12 @@ class NumberField: FieldInterface {
                             ) {
                             }
 
+                            @SuppressLint("DefaultLocale")
                             override fun afterTextChanged(editable: Editable?) {
                                 val sourceValue = editable.toString().toFloatOrNull() ?: return
 
                                 val newEditable = Editable.Factory.getInstance().newEditable(
-                                    (sourceValue * listener.value.toString().toFloat()).toString()
+                                    String.format("%.2f", sourceValue * listener.value.toString().toFloat())
                                 )
                                 view.editText?.text = newEditable
                             }

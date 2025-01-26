@@ -4,6 +4,7 @@ import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.TabActivity
 import de.wollis_page.gibsonos.dto.Tab
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.ClimateFragment
+import de.wollis_page.gibsonos.module.growDiary.plant.fragment.CostFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.FeedFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.FertilizerFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.ImageFragment
@@ -20,6 +21,7 @@ class IndexActivity : TabActivity() {
             Tab(R.string.grow_diary_plant_climates_tab, ClimateFragment::class, arguments),
             Tab(R.string.grow_diary_plant_feed_tab, FeedFragment::class, arguments),
             Tab(R.string.grow_diary_plant_milestone_tab, MilestoneFragment::class, arguments),
+            Tab(R.string.grow_diary_plant_costs_tab, CostFragment::class, arguments),
             Tab(R.string.grow_diary_plant_fertilizer_tab, FertilizerFragment::class, arguments),
         )
     }
