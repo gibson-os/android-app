@@ -7,9 +7,9 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.ClimateControl
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object ClimateControlTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, climateId: Long): ClimateControl {
+    fun index(context: GibsonOsActivity, climateControlId: Long): ClimateControl {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "climateControl", "index")
-        dataStore.addParam("id", climateId)
+        dataStore.addParam("id", climateControlId)
 
         return this.load(context, dataStore)
     }
@@ -31,12 +31,12 @@ object ClimateControlTask: AbstractTask() {
 
     fun image(
         context: GibsonOsActivity,
-        climateId: Long,
+        climateControlId: Long,
         width: Int? = null,
         height: Int? = null,
     ): Bitmap {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "climateControl", "image")
-        dataStore.addParam("climateId", climateId)
+        dataStore.addParam("climateControlId", climateControlId)
 
         if (width != null) {
             dataStore.addParam("width", width)

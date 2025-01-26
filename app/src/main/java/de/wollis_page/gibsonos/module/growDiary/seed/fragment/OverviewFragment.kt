@@ -14,7 +14,7 @@ class OverviewFragment: GibsonOsFragment() {
         super.onCreate(savedInstanceState)
 
         this.activity.runTask({
-            val seed = SeedTask.index(this.activity, this.fragmentsArguments["seedId"].toString().toLong())
+            val seed = SeedTask.get(this.activity, this.fragmentsArguments["seedId"].toString().toLong())
 
             this.view?.findViewById<TextView>(R.id.name)?.text = seed.name
             this.view?.findViewById<TextView>(R.id.manufacture)?.text = seed.manufacture?.name

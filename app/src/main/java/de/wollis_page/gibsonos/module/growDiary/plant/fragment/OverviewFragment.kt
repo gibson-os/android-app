@@ -27,7 +27,7 @@ class OverviewFragment: GibsonOsFragment() {
         super.onCreate(savedInstanceState)
 
         this.activity.runTask({
-            val plant = PlantTask.index(this.activity, this.fragmentsArguments["plantId"].toString().toLong())
+            val plant = PlantTask.get(this.activity, this.fragmentsArguments["plantId"].toString().toLong())
             this.activity.setTitle(plant.name)
 
             this.overviewContainer = this.requireView().findViewById(R.id.overviewContiner)

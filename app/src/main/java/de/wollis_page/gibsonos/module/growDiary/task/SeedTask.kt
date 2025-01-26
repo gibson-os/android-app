@@ -7,8 +7,8 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Seed
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object SeedTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, seedId: Long): Seed {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "seed", "index")
+    fun get(context: GibsonOsActivity, seedId: Long): Seed {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "seed", "")
         dataStore.addParam("id", seedId)
 
         return this.load(context, dataStore)

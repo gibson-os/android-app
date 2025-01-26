@@ -2,16 +2,15 @@ package de.wollis_page.gibsonos.module.growDiary.plant.fragment
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.github.drjacky.imagepicker.ImagePicker
+import com.github.drjacky.imagepicker.constant.ImageProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
@@ -22,8 +21,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.ImageLoaderService
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+
 
 class ImageFragment: GridFragment() {
     private lateinit var imageLoaderService: ImageLoaderService<Image>
@@ -38,20 +36,16 @@ class ImageFragment: GridFragment() {
                 return@registerForActivityResult
             }
 
-            val imageBitmap = it.data?.extras?.get("data") as Bitmap
-            Log.d(Config.LOG_TAG, "result")
-            Log.d(Config.LOG_TAG, it.data.toString())
-            Log.d(Config.LOG_TAG, it.toString())
-            val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val uri = it.data?.data
+            // Use the uri to load the image
+            // Only if you are not using crop feature:
+//            uri?.let { galleryUri ->
+//                this.activity.contentResolver.takePersistableUriPermission(
+//                    galleryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
+//                )
+//            }
 
-            this.activity.runTask({
-                PlantTask.postImage(
-                    this.activity,
-                    this.plantId!!,
-                    imageBitmap,
-                    LocalDateTime.now().format(dateFormatter),
-                )
-            })
+            Log.d(Config.LOG_TAG, uri.toString())
         }
 
         super.onCreate(savedInstanceState)
@@ -123,16 +117,15 @@ class ImageFragment: GridFragment() {
         ))
     }
 
-    override fun actionButton(): Int? {
-        if (this.activity.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-            return R.layout.base_button_add
-        }
-
-        return null
-    }
+    override fun actionButton() = R.layout.base_button_add
 
     override fun actionOnClickListener() {
-        this.activityResultLauncher.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        ImagePicker.with(this.activity)
+            .provider(ImageProvider.BOTH)
+//            .setMultipleAllowed(true)
+            .crop()
+            .cropFreeStyle()
+            .createIntentFromDialog { this.activityResultLauncher.launch(it) }
     }
 
     override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)

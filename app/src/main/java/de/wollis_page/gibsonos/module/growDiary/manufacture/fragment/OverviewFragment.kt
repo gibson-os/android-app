@@ -14,7 +14,7 @@ class OverviewFragment: GibsonOsFragment() {
         super.onCreate(savedInstanceState)
 
         this.activity.runTask({
-            val manufacture = ManufactureTask.index(this.activity, this.fragmentsArguments["manufactureId"].toString().toLong())
+            val manufacture = ManufactureTask.get(this.activity, this.fragmentsArguments["manufactureId"].toString().toLong())
 
             this.activity.runOnUiThread {
                 this.view?.findViewById<TextView>(R.id.name)?.text = manufacture.name

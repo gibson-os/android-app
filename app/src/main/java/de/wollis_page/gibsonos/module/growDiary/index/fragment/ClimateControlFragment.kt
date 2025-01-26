@@ -62,10 +62,10 @@ class ClimateControlFragment: ListFragment() {
                 ActivityLauncherService.startActivity(
                     this.activity,
                     "growDiary",
-                    "climate",
+                    "climateControl",
                     "index",
                     mapOf(
-                        "climateId" to item.id,
+                        "climateControlId" to item.id,
                         GibsonOsActivity.SHORTCUT_KEY to this.getShortcut(item),
                     )
                 )
@@ -110,7 +110,7 @@ class ClimateControlFragment: ListFragment() {
             item.name,
             "icon_hemp",
             mutableMapOf(
-                "climateId" to item.id,
+                "climateControlId" to item.id,
                 "name" to item.name,
             )
         )

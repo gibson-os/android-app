@@ -7,8 +7,8 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Fertilizer
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object FertilizerTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, fertilizerId: Long): Fertilizer {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "fertilizer", "index")
+    fun get(context: GibsonOsActivity, fertilizerId: Long): Fertilizer {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "fertilizer", "")
         dataStore.addParam("id", fertilizerId)
 
         return this.load(context, dataStore)
