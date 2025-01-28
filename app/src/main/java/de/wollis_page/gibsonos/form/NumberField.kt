@@ -1,6 +1,5 @@
 package de.wollis_page.gibsonos.form
 
-import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -11,6 +10,9 @@ import com.google.android.material.textfield.TextInputLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.form.Field
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class NumberField: FieldInterface {
     override fun build(
@@ -57,6 +59,10 @@ class NumberField: FieldInterface {
             return
         }
 
+        val numberSymbols = DecimalFormatSymbols(Locale.getDefault())
+        numberSymbols.decimalSeparator = '.'
+        numberSymbols.groupingSeparator = ','
+
         listeners.forEach {
             val sourceField = (context.getView(it.key.toString()) as TextInputLayout)
                 .findViewById<TextInputEditText>(R.id.field)
@@ -82,12 +88,11 @@ class NumberField: FieldInterface {
                             ) {
                             }
 
-                            @SuppressLint("DefaultLocale")
                             override fun afterTextChanged(editable: Editable?) {
                                 val sourceValue = editable.toString().toFloatOrNull() ?: return
 
                                 val newEditable = Editable.Factory.getInstance().newEditable(
-                                    String.format("%.2f", sourceValue * listener.value.toString().toFloat())
+                                    DecimalFormat("#.##", numberSymbols).format(sourceValue * listener.value.toString().toDouble())
                                 )
                                 view.editText?.text = newEditable
                             }

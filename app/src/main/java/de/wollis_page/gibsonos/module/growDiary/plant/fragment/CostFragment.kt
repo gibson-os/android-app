@@ -1,6 +1,5 @@
 package de.wollis_page.gibsonos.module.growDiary.plant.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -17,6 +16,7 @@ import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.module.growDiary.task.SeedTask
 import de.wollis_page.gibsonos.module.growDiary.task.SubstrateTask
 import de.wollis_page.gibsonos.service.ImageLoaderService
+import java.util.Locale
 
 class CostFragment: ListFragment() {
     private lateinit var imageLoaderService: ImageLoaderService<Cost>
@@ -47,21 +47,20 @@ class CostFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) {
     }
 
-    @SuppressLint("DefaultLocale")
     override fun bind(item: ListItemInterface, view: View) {
         if (item !is Cost) {
             return
         }
 
         view.findViewById<TextView>(R.id.name).text = item.name
-        view.findViewById<TextView>(R.id.totalCost).text = String.format("%.2f €", item.totalCost / 100)
+        view.findViewById<TextView>(R.id.totalCost).text = String.format(Locale.getDefault(), "%.2f €", item.totalCost / 100)
 
         if (item.type != CostType.SUM) {
             view.findViewById<TextView>(R.id.costPerUnit).text = item.costPerUnit?.let {
-                String.format("%.2f", it / 100) + " €/" + item.unitSuffix
+                String.format(Locale.getDefault(), "%.2f", it / 100) + " €/" + item.unitSuffix
             }
             view.findViewById<TextView>(R.id.units).text = item.units?.let {
-                String.format("%.3f", it) + " " + item.unitSuffix
+                String.format(Locale.getDefault(), "%.3f", it) + " " + item.unitSuffix
             }
         }
 
