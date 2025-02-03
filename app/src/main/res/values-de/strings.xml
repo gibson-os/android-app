@@ -94,7 +94,6 @@
     <string name="grow_diary_plant_tab">Pflanzen</string>
 
     <string name="grow_diary_plant_images_tab">Bilder</string>
-    <string name="grow_diary_plant_climates_tab">Klima</string>
     <string name="grow_diary_plant_feed_tab">Nahrung</string>
     <string name="grow_diary_plant_milestone_tab">Meilensteine</string>
     <string name="grow_diary_plant_costs_tab">Kosten</string>
@@ -137,6 +136,8 @@
     <string name="grow_diary_plant_milestone_value">Wert</string>
     <string name="grow_diary_plant_milestone_last">Letzter Meilenstein</string>
 
+    <string name="grow_diary_setup_tab">Setups</string>
+
     <string name="grow_diary_seed_tab">Samen</string>
 
     <string name="grow_diary_seed_image_description">Bild</string>
@@ -157,4 +158,6 @@
     <string name="grow_diary_fertilizer_tab">Nährstoffe</string>
 
     <string name="grow_diary_manufacture_tab">Hersteller</string>
+
+    <string name="grow_diary_climates_tab">Klima</string>
 </resources>

@@ -7,16 +7,30 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Climate
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object ClimateTask: AbstractTask() {
-    fun getList(context: GibsonOsActivity, plantId: Long, start: Long, limit: Long): ListResponse<Climate> {
+    fun getList(context: GibsonOsActivity, plantId: Long?, setupId: Long?, start: Long, limit: Long): ListResponse<Climate> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "climates")
-        dataStore.addParam("plantId", plantId)
+
+        if (plantId != null) {
+            dataStore.addParam("plantId", plantId)
+        }
+
+        if (setupId != null) {
+            dataStore.addParam("setupId", setupId)
+        }
 
         return this.loadList(context, dataStore, start, limit)
     }
 
-    fun getForm(context: GibsonOsActivity, plantId: Long, climateId: Long? = null): Form {
+    fun getForm(context: GibsonOsActivity, plantId: Long?, setupId: Long?, climateId: Long? = null): Form {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "climate", "form")
-        dataStore.addParam("plantId", plantId)
+
+        if (plantId != null) {
+            dataStore.addParam("plantId", plantId)
+        }
+
+        if (setupId != null) {
+            dataStore.addParam("setupId", setupId)
+        }
 
         if (climateId != null) {
             dataStore.addParam("id", climateId)

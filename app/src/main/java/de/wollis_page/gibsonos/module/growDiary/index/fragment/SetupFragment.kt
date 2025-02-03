@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,13 +14,11 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
-import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
-import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
+import de.wollis_page.gibsonos.module.growDiary.index.dto.Setup
+import de.wollis_page.gibsonos.module.growDiary.task.SetupTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
-import de.wollis_page.gibsonos.service.ImageLoaderService
 
-class PlantFragment: ListFragment() {
-    private lateinit var imageLoaderService: ImageLoaderService<Plant>
+class SetupFragment: ListFragment() {
     lateinit var formLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,24 +33,10 @@ class PlantFragment: ListFragment() {
 
             this.loadList()
         }
-
-        this.imageLoaderService = ImageLoaderService(
-            this.activity,
-            {
-                PlantTask.getImage(
-                    this.activity,
-                    it.id,
-                    this.resources.getDimension(R.dimen.thumb_width).toInt()
-                )
-            },
-            { plant, image ->
-                this.getViewByItem(plant)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
-            }
-        )
     }
 
     override fun onClick(item: ListItemInterface) {
-        if (item !is Plant) {
+        if (item !is Setup) {
             return
         }
 
@@ -62,9 +45,10 @@ class PlantFragment: ListFragment() {
                 ActivityLauncherService.startActivity(
                     this.activity,
                     "growDiary",
-                    "plant",
+                    "setup",
                     "index",
                     mapOf(
+                        "setupId" to item.id,
                         GibsonOsActivity.SHORTCUT_KEY to this.getShortcut(item),
                     )
                 )
@@ -75,44 +59,33 @@ class PlantFragment: ListFragment() {
     }
 
     override fun bind(item: ListItemInterface, view: View) {
-        if (item !is Plant) {
+        if (item !is Setup) {
             return
         }
 
         view.findViewById<TextView>(R.id.name).text = item.name
-        view.findViewById<TextView>(R.id.seed).text = item.seed.name
-
-        this.imageLoaderService.viewImage(
-            item,
-            view.findViewById(R.id.image),
-            R.drawable.ic_hemp,
-        )
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(PlantTask.list(
+        this.listAdapter.setListResponse(SetupTask.getList(
             this.activity,
             start,
             limit,
-            this.fragmentsArguments["seedId"]?.toString()?.toLong(),
-            this.fragmentsArguments["fertilizerId"]?.toString()?.toLong(),
-            this.fragmentsArguments["substrateId"]?.toString()?.toLong(),
-            this.fragmentsArguments["potId"]?.toString()?.toLong(),
-            this.fragmentsArguments["setupId"]?.toString()?.toLong(),
         ))
     }
 
-    override fun getListRessource() = R.layout.grow_diary_plant_list_item
+    override fun getListRessource() = R.layout.grow_diary_setup_list_item
 
-    private fun getShortcut(item: Plant): Shortcut {
+    private fun getShortcut(item: Setup): Shortcut {
         return Shortcut(
             "growDiary",
-            "plant",
+            "setup",
             "index",
             item.name,
             "icon_hemp",
             mutableMapOf(
-                "plantId" to item.id,
+                "setupId" to item.id,
+                "name" to item.name,
             )
         )
     }
@@ -127,7 +100,7 @@ class PlantFragment: ListFragment() {
                 "index",
                 "form",
                 mapOf(
-                    "task" to "plant",
+                    "task" to "setup",
                 ),
                 this.formLauncher,
             )

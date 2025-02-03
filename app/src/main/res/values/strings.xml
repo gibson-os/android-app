@@ -94,7 +94,6 @@
     <string name="grow_diary_plant_tab">Plants</string>
 
     <string name="grow_diary_plant_images_tab">Images</string>
-    <string name="grow_diary_plant_climates_tab">Climate</string>
     <string name="grow_diary_plant_feed_tab">Feed</string>
     <string name="grow_diary_plant_milestone_tab">Milestones</string>
     <string name="grow_diary_plant_costs_tab">Costs</string>
@@ -137,6 +136,8 @@
     <string name="grow_diary_plant_milestone_value">Value</string>
     <string name="grow_diary_plant_milestone_last">Last milestone</string>
 
+    <string name="grow_diary_setup_tab">Setups</string>
+
     <string name="grow_diary_seed_tab">Seeds</string>
 
     <string name="grow_diary_seed_image_description">Image</string>
@@ -157,4 +158,6 @@
     <string name="grow_diary_fertilizer_tab">Fertilizers</string>
 
     <string name="grow_diary_manufacture_tab">Manufactures</string>
+
+    <string name="grow_diary_climates_tab">Climate</string>
 </resources>

@@ -13,11 +13,19 @@ class FormActivity: FormActivity() {
             climateId = null
         }
 
-        ClimateTask.getForm(
-            this,
-            this.intent.getLongExtra("plantId", 0),
-            climateId,
-        )
+        var plantId: Long? = this.intent.getLongExtra("plantId", 0)
+
+        if (plantId?.toInt() == 0) {
+            plantId = null
+        }
+
+        var setupId: Long? = this.intent.getLongExtra("setupId", 0)
+
+        if (setupId?.toInt() == 0) {
+            setupId = null
+        }
+
+        ClimateTask.getForm(this, plantId, setupId, climateId)
     }
 
     override fun getId() = 0

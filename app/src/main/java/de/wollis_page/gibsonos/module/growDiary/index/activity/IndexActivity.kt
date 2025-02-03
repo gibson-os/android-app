@@ -12,11 +12,13 @@ import de.wollis_page.gibsonos.module.growDiary.index.fragment.PlantFragment
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.PotFragment
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.RoomFragment
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.SeedFragment
+import de.wollis_page.gibsonos.module.growDiary.index.fragment.SetupFragment
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.SubstrateFragment
 
 class IndexActivity : TabActivity() {
     override fun getTabs(): Array<Tab> = arrayOf(
         Tab(R.string.grow_diary_plant_tab, PlantFragment::class),
+        Tab(R.string.grow_diary_setup_tab, SetupFragment::class),
         Tab(R.string.grow_diary_seed_tab, SeedFragment::class),
         Tab(R.string.grow_diary_room_tab, RoomFragment::class),
         Tab(R.string.grow_diary_light_tab, LightFragment::class),

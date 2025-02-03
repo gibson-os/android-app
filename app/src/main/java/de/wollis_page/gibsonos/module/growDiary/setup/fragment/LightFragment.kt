@@ -1,9 +1,10 @@
-package de.wollis_page.gibsonos.module.growDiary.index.fragment
+package de.wollis_page.gibsonos.module.growDiary.setup.fragment
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,15 +12,32 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.growDiary.index.dto.Climate
-import de.wollis_page.gibsonos.module.growDiary.task.ClimateTask
+import de.wollis_page.gibsonos.module.growDiary.index.dto.setup.Light
+import de.wollis_page.gibsonos.module.growDiary.task.LightTask
+import de.wollis_page.gibsonos.module.growDiary.task.SetupTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
+import de.wollis_page.gibsonos.service.ImageLoaderService
 
-class ClimateFragment: ListFragment() {
+class LightFragment: ListFragment() {
+    private lateinit var imageLoaderService: ImageLoaderService<Light>
     lateinit var formLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.imageLoaderService = ImageLoaderService(
+            this.activity,
+            {
+                LightTask.image(
+                    this.activity,
+                    it.light.id,
+                    this.resources.getDimension(R.dimen.thumb_width).toInt()
+                )
+            },
+            { climateControl, image ->
+                this.getViewByItem(climateControl)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
+            }
+        )
 
         this.formLauncher = this.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -33,55 +51,47 @@ class ClimateFragment: ListFragment() {
     }
 
     override fun onClick(item: ListItemInterface) {
-        if (item !is Climate) {
+        if (item !is Light) {
             return
-        }
-
-        val extras = mutableMapOf(
-            "climateId" to item.id
-        )
-
-        if (this.fragmentsArguments["plantId"] != null) {
-            extras["plantId"] = this.fragmentsArguments["plantId"].toString().toLong()
-        }
-
-        if (this.fragmentsArguments["setupId"] != null) {
-            extras["setupId"] = this.fragmentsArguments["setupId"].toString().toLong()
         }
 
         this.runTask({
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "climate",
-                "form",
-                extras,
+                "setup",
+                "lightForm",
+                mapOf(
+                    "id" to item.id,
+                    "setupId" to this.fragmentsArguments["setupId"].toString().toLong(),
+                ),
                 this.formLauncher,
             )
         })
     }
 
     override fun bind(item: ListItemInterface, view: View) {
-        if (item !is Climate) {
+        if (item !is Light) {
             return
         }
 
-        view.findViewById<TextView>(R.id.added).text = item.added
-        view.findViewById<TextView>(R.id.temperature).text = item.temperature.toString() + "°C"
-        view.findViewById<TextView>(R.id.relativeHumidity).text = item.relativeHumidity.toString() + "%"
-        view.findViewById<TextView>(R.id.airPressure).text = item.airPressure.toString()
-        view.findViewById<TextView>(R.id.leafTemperature).text = item.leafTemperature.toString() + "°C"
+        view.findViewById<TextView>(R.id.name).text = item.light.name
+        view.findViewById<TextView>(R.id.watt).text = "${item.light.watt}W"
 
+        this.imageLoaderService.viewImage(
+            item,
+            view.findViewById(R.id.image),
+            R.drawable.ic_hemp,
+        )
     }
 
-    override fun getListRessource() = R.layout.grow_diary_plant_climate_list_item
+    override fun getListRessource() = R.layout.grow_diary_setup_light_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(
-            ClimateTask.getList(
+            SetupTask.getLights(
             this.activity,
-            this.fragmentsArguments["plantId"]?.toString()?.toLong(),
-            this.fragmentsArguments["setupId"]?.toString()?.toLong(),
+            this.fragmentsArguments["setupId"].toString().toLong(),
             start,
             limit,
         ))
@@ -92,23 +102,15 @@ class ClimateFragment: ListFragment() {
     override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
 
     override fun actionOnClickListener() {
-        val extras = mutableMapOf<String, Long>()
-
-        if (this.fragmentsArguments["plantId"] != null) {
-            extras["plantId"] = this.fragmentsArguments["plantId"].toString().toLong()
-        }
-
-        if (this.fragmentsArguments["setupId"] != null) {
-            extras["setupId"] = this.fragmentsArguments["setupId"].toString().toLong()
-        }
-
         this.runTask({
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "climate",
-                "form",
-                extras,
+                "setup",
+                "lightForm",
+                mapOf(
+                    "setupId" to this.fragmentsArguments["setupId"].toString().toLong(),
+                ),
                 this.formLauncher,
             )
         })
