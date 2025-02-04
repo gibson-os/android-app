@@ -5,6 +5,7 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="date">Date</string>
+    <string name="hyphen">-</string>
 
     <string name="account_title">Add account</string>
     <string name="account_alias">Alias</string>
@@ -90,6 +91,8 @@
     <string name="grow_diary_seed_title">Seed</string>
     <string name="grow_diary_manufacture_title">Manufacture</string>
     <string name="grow_diary_overview_tab">Overview</string>
+    <string name="grow_diary_planned_runtime_tab">Planned runtime</string>
+    <string name="grow_diary_runtime_tab">Runtime</string>
 
     <string name="grow_diary_plant_tab">Plants</string>
 

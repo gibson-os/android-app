@@ -1,10 +1,9 @@
-package de.wollis_page.gibsonos.module.growDiary.setup.fragment
+package de.wollis_page.gibsonos.module.growDiary.setup.fragment.light
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,32 +11,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.growDiary.index.dto.setup.Light
-import de.wollis_page.gibsonos.module.growDiary.task.LightTask
+import de.wollis_page.gibsonos.module.growDiary.index.dto.setup.light.PlannedRuntime
 import de.wollis_page.gibsonos.module.growDiary.task.SetupTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
-import de.wollis_page.gibsonos.service.ImageLoaderService
 
-class LightFragment: ListFragment() {
-    private lateinit var imageLoaderService: ImageLoaderService<Light>
+class PlannedRuntimeFragment: ListFragment() {
     lateinit var formLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        this.imageLoaderService = ImageLoaderService(
-            this.activity,
-            {
-                LightTask.image(
-                    this.activity,
-                    it.light.id,
-                    this.resources.getDimension(R.dimen.thumb_width).toInt()
-                )
-            },
-            { climateControl, image ->
-                this.getViewByItem(climateControl)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
-            }
-        )
 
         this.formLauncher = this.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -51,7 +33,7 @@ class LightFragment: ListFragment() {
     }
 
     override fun onClick(item: ListItemInterface) {
-        if (item !is Light) {
+        if (item !is PlannedRuntime) {
             return
         }
 
@@ -60,36 +42,32 @@ class LightFragment: ListFragment() {
                 this.activity,
                 "growDiary",
                 "setup",
-                "light",
+                "plannedLightRuntimeForm",
                 mapOf(
-                    "lightId" to item.id,
+                    "id" to item.id,
+                    "lightId" to this.fragmentsArguments["lightId"].toString().toLong(),
                 ),
+                this.formLauncher,
             )
         })
     }
 
     override fun bind(item: ListItemInterface, view: View) {
-        if (item !is Light) {
+        if (item !is PlannedRuntime) {
             return
         }
 
-        view.findViewById<TextView>(R.id.name).text = item.light.name
-        view.findViewById<TextView>(R.id.watt).text = "${item.light.watt}W"
-
-        this.imageLoaderService.viewImage(
-            item,
-            view.findViewById(R.id.image),
-            R.drawable.ic_hemp,
-        )
+        view.findViewById<TextView>(R.id.from).text = item.from
+        view.findViewById<TextView>(R.id.to).text = item.to
     }
 
-    override fun getListRessource() = R.layout.grow_diary_setup_light_list_item
+    override fun getListRessource() = R.layout.grow_diary_setup_runtime_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(
-            SetupTask.getLights(
+            SetupTask.getPlannedLightRuntimes(
             this.activity,
-            this.fragmentsArguments["setupId"].toString().toLong(),
+            this.fragmentsArguments["lightId"].toString().toLong(),
             start,
             limit,
         ))
@@ -105,9 +83,9 @@ class LightFragment: ListFragment() {
                 this.activity,
                 "growDiary",
                 "setup",
-                "lightForm",
+                "plannedlightRuntimeForm",
                 mapOf(
-                    "setupId" to this.fragmentsArguments["setupId"].toString().toLong(),
+                    "lightId" to this.fragmentsArguments["lightId"].toString().toLong(),
                 ),
                 this.formLauncher,
             )
