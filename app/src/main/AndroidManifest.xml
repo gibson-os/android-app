@@ -191,6 +191,10 @@
             android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.LightActivity"
             android:icon="@drawable/ic_hemp"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.ClimateControlActivity"
+            android:icon="@drawable/ic_hemp"/>
+
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">

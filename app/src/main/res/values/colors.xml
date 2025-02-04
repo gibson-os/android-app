@@ -8,4 +8,5 @@
     <color name="colorProgressGenerate">#0000FF</color>
     <color name="colorProgressDone">#E96228</color>
     <color name="colorProgressError">#FF0000</color>
+    <color name="colorAction">#FF00FF00</color>
 </resources>
