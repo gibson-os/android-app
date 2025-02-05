@@ -1,955 +1,969 @@
-package de.wollis_page.gibsonos.view;
+package de.wollis_page.gibsonos.view
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.PointF;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.OverScroller;
-import android.widget.Scroller;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.PointF
+import android.graphics.RectF
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Bundle
+import android.os.Parcelable
+import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
+import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.OverScroller
+import android.widget.Scroller
+import androidx.appcompat.widget.AppCompatImageView
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
-import androidx.annotation.NonNull;
+@Suppress("unused")
+class TouchImageView : AppCompatImageView {
+    var currentZoom: Float = 0f
+        private set
 
-@SuppressWarnings("unused")
-public class TouchImageView extends androidx.appcompat.widget.AppCompatImageView {
+    private var matrix: Matrix? = null
+    private var prevMatrix: Matrix? = null
 
-    private static final float SUPER_MIN_MULTIPLIER = .75f;
-    private static final float SUPER_MAX_MULTIPLIER = 1.25f;
-
-    private float normalizedScale;
-
-    private Matrix matrix, prevMatrix;
-
-    private enum State { NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM }
-    private State state;
-
-    private float minScale;
-    private float maxScale;
-    private float superMinScale;
-    private float superMaxScale;
-    private float[] m;
-
-    private Context context;
-    private Fling fling;
-
-    private ScaleType mScaleType;
-
-    private boolean imageRenderedAtLeastOnce;
-    private boolean onDrawReady;
-
-    private ZoomVariables delayedZoomVariables;
-
-    private int viewWidth, viewHeight, prevViewWidth, prevViewHeight;
-
-    private float matchViewWidth, matchViewHeight, prevMatchViewWidth, prevMatchViewHeight;
-
-    private ScaleGestureDetector mScaleDetector;
-    private GestureDetector mGestureDetector;
-    private GestureDetector.OnDoubleTapListener doubleTapListener = null;
-    private OnTouchListener userTouchListener = null;
-    private OnTouchImageViewListener touchImageViewListener = null;
-
-    public TouchImageView(Context context) {
-        super(context);
-        sharedConstructing(context);
+    private enum class State {
+        NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM
     }
 
-    public TouchImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        sharedConstructing(context);
+    private var state: State? = null
+
+    private var minScale = 0f
+    private var maxScale = 0f
+    private var superMinScale = 0f
+    private var superMaxScale = 0f
+    private var m: FloatArray? = null
+
+    private var context: Context? = null
+    private var fling: Fling? = null
+
+    private var mScaleType: ScaleType? = null
+
+    private var imageRenderedAtLeastOnce = false
+    private var onDrawReady = false
+
+    private var delayedZoomVariables: ZoomVariables? = null
+
+    private var viewWidth = 0
+    private var viewHeight = 0
+    private var prevViewWidth = 0
+    private var prevViewHeight = 0
+
+    private var matchViewWidth = 0f
+    private var matchViewHeight = 0f
+    private var prevMatchViewWidth = 0f
+    private var prevMatchViewHeight = 0f
+
+    private var mScaleDetector: ScaleGestureDetector? = null
+    private var mGestureDetector: GestureDetector? = null
+    private var doubleTapListener: GestureDetector.OnDoubleTapListener? = null
+    private var userTouchListener: OnTouchListener? = null
+    private var touchImageViewListener: OnTouchImageViewListener? = null
+
+    constructor(context: Context) : super(context) {
+        sharedConstructing(context)
     }
 
-    public TouchImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        sharedConstructing(context);
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        sharedConstructing(context)
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    ) {
+        sharedConstructing(context)
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void sharedConstructing(Context context) {
-        super.setClickable(true);
-        this.context = context;
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        mGestureDetector = new GestureDetector(context, new GestureListener());
-        matrix = new Matrix();
-        prevMatrix = new Matrix();
-        m = new float[9];
-        normalizedScale = 1;
+    private fun sharedConstructing(context: Context) {
+        super.setClickable(true)
+        this.context = context
+        mScaleDetector = ScaleGestureDetector(context, ScaleListener())
+        mGestureDetector = GestureDetector(context, GestureListener())
+        matrix = Matrix()
+        prevMatrix = Matrix()
+        m = FloatArray(9)
+        currentZoom = 1f
         if (mScaleType == null) {
-            mScaleType = ScaleType.FIT_CENTER;
+            mScaleType = ScaleType.FIT_CENTER
         }
-        minScale = 1;
-        maxScale = 3;
-        superMinScale = SUPER_MIN_MULTIPLIER * minScale;
-        superMaxScale = SUPER_MAX_MULTIPLIER * maxScale;
-        setImageMatrix(matrix);
-        setScaleType(ScaleType.MATRIX);
-        setState(State.NONE);
-        onDrawReady = false;
-        super.setOnTouchListener(new PrivateOnTouchListener());
+        minScale = 1f
+        maxScale = 100f
+        superMinScale = SUPER_MIN_MULTIPLIER * minScale
+        superMaxScale = SUPER_MAX_MULTIPLIER * maxScale
+        imageMatrix = matrix
+        scaleType = ScaleType.MATRIX
+        setState(State.NONE)
+        onDrawReady = false
+        super.setOnTouchListener(PrivateOnTouchListener())
     }
 
-    @Override
-    public void setOnTouchListener(OnTouchListener l) {
-        userTouchListener = l;
+    override fun setOnTouchListener(l: OnTouchListener) {
+        userTouchListener = l
     }
 
-    public void setOnTouchImageViewListener(OnTouchImageViewListener l) {
-        touchImageViewListener = l;
+    fun setOnTouchImageViewListener(l: OnTouchImageViewListener?) {
+        touchImageViewListener = l
     }
 
-    public void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener l) {
-        doubleTapListener = l;
+    fun setOnDoubleTapListener(l: GestureDetector.OnDoubleTapListener?) {
+        doubleTapListener = l
     }
 
-    @Override
-    public void setImageResource(int resId) {
-        super.setImageResource(resId);
-        savePreviousImageValues();
-        fitImageToView();
+    override fun setImageResource(resId: Int) {
+        super.setImageResource(resId)
+        savePreviousImageValues()
+        fitImageToView()
     }
 
-    @Override
-    public void setImageBitmap(Bitmap bm) {
-        super.setImageBitmap(bm);
-        savePreviousImageValues();
-        fitImageToView();
+    override fun setImageBitmap(bm: Bitmap) {
+        super.setImageBitmap(bm)
+        savePreviousImageValues()
+        fitImageToView()
     }
 
-    @Override
-    public void setImageDrawable(Drawable drawable) {
-        super.setImageDrawable(drawable);
-        savePreviousImageValues();
-        fitImageToView();
+    override fun setImageDrawable(drawable: Drawable?) {
+        super.setImageDrawable(drawable)
+        savePreviousImageValues()
+        fitImageToView()
     }
 
-    @Override
-    public void setImageURI(Uri uri) {
-        super.setImageURI(uri);
-        savePreviousImageValues();
-        fitImageToView();
+    override fun setImageURI(uri: Uri?) {
+        super.setImageURI(uri)
+        savePreviousImageValues()
+        fitImageToView()
     }
 
-    @Override
-    public void setScaleType(ScaleType type) {
+    override fun setScaleType(type: ScaleType) {
         if (type == ScaleType.FIT_START || type == ScaleType.FIT_END) {
-            throw new UnsupportedOperationException("TouchImageView does not support FIT_START or FIT_END");
+            throw UnsupportedOperationException("TouchImageView does not support FIT_START or FIT_END")
         }
         if (type == ScaleType.MATRIX) {
-            super.setScaleType(ScaleType.MATRIX);
-
+            super.setScaleType(ScaleType.MATRIX)
         } else {
-            mScaleType = type;
+            mScaleType = type
             if (onDrawReady) {
-                setZoom(this);
+                setZoom(this)
             }
         }
     }
 
-    @Override
-    public ScaleType getScaleType() {
-        return mScaleType;
+    override fun getScaleType(): ScaleType {
+        return mScaleType!!
     }
 
-    public boolean isZoomed() {
-        return normalizedScale != 1;
-    }
+    val isZoomed: Boolean
+        get() = currentZoom != 1f
 
-    public RectF getZoomedRect() {
-        if (mScaleType == ScaleType.FIT_XY) {
-            throw new UnsupportedOperationException("getZoomedRect() not supported with FIT_XY");
+    val zoomedRect: RectF
+        get() {
+            if (mScaleType == ScaleType.FIT_XY) {
+                throw UnsupportedOperationException("getZoomedRect() not supported with FIT_XY")
+            }
+            val topLeft = transformCoordTouchToBitmap(0f, 0f, true)
+            val bottomRight =
+                transformCoordTouchToBitmap(viewWidth.toFloat(), viewHeight.toFloat(), true)
+
+            val w = drawable.intrinsicWidth.toFloat()
+            val h = drawable.intrinsicHeight.toFloat()
+            return RectF(topLeft.x / w, topLeft.y / h, bottomRight.x / w, bottomRight.y / h)
         }
-        PointF topLeft = transformCoordTouchToBitmap(0, 0, true);
-        PointF bottomRight = transformCoordTouchToBitmap(viewWidth, viewHeight, true);
 
-        float w = getDrawable().getIntrinsicWidth();
-        float h = getDrawable().getIntrinsicHeight();
-        return new RectF(topLeft.x / w, topLeft.y / h, bottomRight.x / w, bottomRight.y / h);
-    }
-
-    private void savePreviousImageValues() {
+    private fun savePreviousImageValues() {
         if (matrix != null && viewHeight != 0 && viewWidth != 0) {
-            matrix.getValues(m);
-            prevMatrix.setValues(m);
-            prevMatchViewHeight = matchViewHeight;
-            prevMatchViewWidth = matchViewWidth;
-            prevViewHeight = viewHeight;
-            prevViewWidth = viewWidth;
+            matrix!!.getValues(m)
+            prevMatrix!!.setValues(m)
+            prevMatchViewHeight = matchViewHeight
+            prevMatchViewWidth = matchViewWidth
+            prevViewHeight = viewHeight
+            prevViewWidth = viewWidth
         }
     }
 
-    @Override
-    public Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("instanceState", super.onSaveInstanceState());
-        bundle.putFloat("saveScale", normalizedScale);
-        bundle.putFloat("matchViewHeight", matchViewHeight);
-        bundle.putFloat("matchViewWidth", matchViewWidth);
-        bundle.putInt("viewWidth", viewWidth);
-        bundle.putInt("viewHeight", viewHeight);
-        matrix.getValues(m);
-        bundle.putFloatArray("matrix", m);
-        bundle.putBoolean("imageRendered", imageRenderedAtLeastOnce);
-        return bundle;
+    public override fun onSaveInstanceState(): Parcelable {
+        val bundle = Bundle()
+        bundle.putParcelable("instanceState", super.onSaveInstanceState())
+        bundle.putFloat("saveScale", currentZoom)
+        bundle.putFloat("matchViewHeight", matchViewHeight)
+        bundle.putFloat("matchViewWidth", matchViewWidth)
+        bundle.putInt("viewWidth", viewWidth)
+        bundle.putInt("viewHeight", viewHeight)
+        matrix!!.getValues(m)
+        bundle.putFloatArray("matrix", m)
+        bundle.putBoolean("imageRendered", imageRenderedAtLeastOnce)
+        return bundle
     }
 
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof Bundle) {
-            Bundle bundle = (Bundle) state;
-            normalizedScale = bundle.getFloat("saveScale");
-            m = bundle.getFloatArray("matrix");
-            prevMatrix.setValues(m);
-            prevMatchViewHeight = bundle.getFloat("matchViewHeight");
-            prevMatchViewWidth = bundle.getFloat("matchViewWidth");
-            prevViewHeight = bundle.getInt("viewHeight");
-            prevViewWidth = bundle.getInt("viewWidth");
-            imageRenderedAtLeastOnce = bundle.getBoolean("imageRendered");
-            super.onRestoreInstanceState(bundle.getParcelable("instanceState"));
-            return;
+    public override fun onRestoreInstanceState(state: Parcelable) {
+        if (state is Bundle) {
+            val bundle = state
+            currentZoom = bundle.getFloat("saveScale")
+            m = bundle.getFloatArray("matrix")
+            prevMatrix!!.setValues(m)
+            prevMatchViewHeight = bundle.getFloat("matchViewHeight")
+            prevMatchViewWidth = bundle.getFloat("matchViewWidth")
+            prevViewHeight = bundle.getInt("viewHeight")
+            prevViewWidth = bundle.getInt("viewWidth")
+            imageRenderedAtLeastOnce = bundle.getBoolean("imageRendered")
+            super.onRestoreInstanceState(bundle.getParcelable("instanceState"))
+            return
         }
 
-        super.onRestoreInstanceState(state);
+        super.onRestoreInstanceState(state)
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        onDrawReady = true;
-        imageRenderedAtLeastOnce = true;
+    override fun onDraw(canvas: Canvas) {
+        onDrawReady = true
+        imageRenderedAtLeastOnce = true
         if (delayedZoomVariables != null) {
-            setZoom(delayedZoomVariables.scale, delayedZoomVariables.focusX, delayedZoomVariables.focusY, delayedZoomVariables.scaleType);
-            delayedZoomVariables = null;
+            setZoom(
+                delayedZoomVariables!!.scale,
+                delayedZoomVariables!!.focusX,
+                delayedZoomVariables!!.focusY,
+                delayedZoomVariables!!.scaleType
+            )
+            delayedZoomVariables = null
         }
-        super.onDraw(canvas);
+        super.onDraw(canvas)
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        savePreviousImageValues();
+    public override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        savePreviousImageValues()
     }
 
-    public float getMaxZoom() {
-        return maxScale;
+    var maxZoom: Float
+        get() = maxScale
+        set(max) {
+            maxScale = max
+            superMaxScale = SUPER_MAX_MULTIPLIER * maxScale
+        }
+
+    var minZoom: Float
+        get() = minScale
+        set(min) {
+            minScale = min
+            superMinScale = SUPER_MIN_MULTIPLIER * minScale
+        }
+
+    fun resetZoom() {
+        currentZoom = 1f
+        fitImageToView()
     }
 
-    public void setMaxZoom(float max) {
-        maxScale = max;
-        superMaxScale = SUPER_MAX_MULTIPLIER * maxScale;
+    fun setZoom(scale: Float) {
+        setZoom(scale, 0.5f, 0.5f)
     }
 
-    public float getMinZoom() {
-        return minScale;
+    fun setZoom(scale: Float, focusX: Float, focusY: Float) {
+        setZoom(scale, focusX, focusY, mScaleType)
     }
 
-    public float getCurrentZoom() {
-        return normalizedScale;
-    }
-
-    public void setMinZoom(float min) {
-        minScale = min;
-        superMinScale = SUPER_MIN_MULTIPLIER * minScale;
-    }
-
-    public void resetZoom() {
-        normalizedScale = 1;
-        fitImageToView();
-    }
-
-    public void setZoom(float scale) {
-        setZoom(scale, 0.5f, 0.5f);
-    }
-
-    public void setZoom(float scale, float focusX, float focusY) {
-        setZoom(scale, focusX, focusY, mScaleType);
-    }
-
-    public void setZoom(float scale, float focusX, float focusY, ScaleType scaleType) {
+    fun setZoom(scale: Float, focusX: Float, focusY: Float, scaleType: ScaleType?) {
         if (!onDrawReady) {
-            delayedZoomVariables = new ZoomVariables(scale, focusX, focusY, scaleType);
-            return;
+            delayedZoomVariables = ZoomVariables(scale, focusX, focusY, scaleType)
+            return
         }
 
         if (scaleType != mScaleType) {
-            setScaleType(scaleType);
+            setScaleType(scaleType!!)
         }
-        resetZoom();
-        scaleImage(scale, viewWidth / 2f, viewHeight / 2f, true);
-        matrix.getValues(m);
-        m[Matrix.MTRANS_X] = -((focusX * getImageWidth()) - (viewWidth * 0.5f));
-        m[Matrix.MTRANS_Y] = -((focusY * getImageHeight()) - (viewHeight * 0.5f));
-        matrix.setValues(m);
-        fixTrans();
-        setImageMatrix(matrix);
+        resetZoom()
+        scaleImage(scale.toDouble(), viewWidth / 2f, viewHeight / 2f, true)
+        matrix!!.getValues(m)
+        m!![Matrix.MTRANS_X] = -((focusX * imageWidth) - (viewWidth * 0.5f))
+        m!![Matrix.MTRANS_Y] = -((focusY * imageHeight) - (viewHeight * 0.5f))
+        matrix!!.setValues(m)
+        fixTrans()
+        imageMatrix = matrix
     }
 
-    public void setZoom(TouchImageView img) {
-        PointF center = img.getScrollPosition();
-        setZoom(img.getCurrentZoom(), center.x, center.y, img.getScaleType());
+    fun setZoom(img: TouchImageView) {
+        val center = img.scrollPosition
+        setZoom(img.currentZoom, center!!.x, center.y, img.scaleType)
     }
 
-    public PointF getScrollPosition() {
-        Drawable drawable = getDrawable();
-        if (drawable == null) {
-            return null;
+    val scrollPosition: PointF?
+        get() {
+            val drawable = drawable ?: return null
+            val drawableWidth = drawable.intrinsicWidth
+            val drawableHeight = drawable.intrinsicHeight
+
+            val point = transformCoordTouchToBitmap(viewWidth / 2f, viewHeight / 2f, true)
+            point.x /= drawableWidth.toFloat()
+            point.y /= drawableHeight.toFloat()
+            return point
         }
-        int drawableWidth = drawable.getIntrinsicWidth();
-        int drawableHeight = drawable.getIntrinsicHeight();
 
-        PointF point = transformCoordTouchToBitmap(viewWidth / 2f, viewHeight / 2f, true);
-        point.x /= drawableWidth;
-        point.y /= drawableHeight;
-        return point;
+    fun setScrollPosition(focusX: Float, focusY: Float) {
+        setZoom(currentZoom, focusX, focusY)
     }
 
-    public void setScrollPosition(float focusX, float focusY) {
-        setZoom(normalizedScale, focusX, focusY);
-    }
+    private fun fixTrans() {
+        matrix!!.getValues(m)
+        val transX = m!![Matrix.MTRANS_X]
+        val transY = m!![Matrix.MTRANS_Y]
 
-    private void fixTrans() {
-        matrix.getValues(m);
-        float transX = m[Matrix.MTRANS_X];
-        float transY = m[Matrix.MTRANS_Y];
+        val fixTransX = getFixTrans(transX, viewWidth.toFloat(), imageWidth)
+        val fixTransY = getFixTrans(transY, viewHeight.toFloat(), imageHeight)
 
-        float fixTransX = getFixTrans(transX, viewWidth, getImageWidth());
-        float fixTransY = getFixTrans(transY, viewHeight, getImageHeight());
-
-        if (fixTransX != 0 || fixTransY != 0) {
-            matrix.postTranslate(fixTransX, fixTransY);
+        if (fixTransX != 0f || fixTransY != 0f) {
+            matrix!!.postTranslate(fixTransX, fixTransY)
         }
     }
 
-    private void fixScaleTrans() {
-        fixTrans();
-        matrix.getValues(m);
-        if (getImageWidth() < viewWidth) {
-            m[Matrix.MTRANS_X] = (viewWidth - getImageWidth()) / 2;
+    private fun fixScaleTrans() {
+        fixTrans()
+        matrix!!.getValues(m)
+        if (imageWidth < viewWidth) {
+            m!![Matrix.MTRANS_X] = (viewWidth - imageWidth) / 2
         }
 
-        if (getImageHeight() < viewHeight) {
-            m[Matrix.MTRANS_Y] = (viewHeight - getImageHeight()) / 2;
+        if (imageHeight < viewHeight) {
+            m!![Matrix.MTRANS_Y] = (viewHeight - imageHeight) / 2
         }
-        matrix.setValues(m);
+        matrix!!.setValues(m)
     }
 
-    private float getFixTrans(float trans, float viewSize, float contentSize) {
-        float minTrans, maxTrans;
+    private fun getFixTrans(trans: Float, viewSize: Float, contentSize: Float): Float {
+        val minTrans: Float
+        val maxTrans: Float
 
         if (contentSize <= viewSize) {
-            minTrans = 0;
-            maxTrans = viewSize - contentSize;
-
+            minTrans = 0f
+            maxTrans = viewSize - contentSize
         } else {
-            minTrans = viewSize - contentSize;
-            maxTrans = 0;
+            minTrans = viewSize - contentSize
+            maxTrans = 0f
         }
 
-        if (trans < minTrans)
-            return -trans + minTrans;
-        if (trans > maxTrans)
-            return -trans + maxTrans;
-        return 0;
+        if (trans < minTrans) return -trans + minTrans
+        if (trans > maxTrans) return -trans + maxTrans
+
+        return 0f
     }
 
-    private float getFixDragTrans(float delta, float viewSize, float contentSize) {
+    private fun getFixDragTrans(delta: Float, viewSize: Float, contentSize: Float): Float {
         if (contentSize <= viewSize) {
-            return 0;
-        }
-        return delta;
-    }
-
-    private float getImageWidth() {
-        return matchViewWidth * normalizedScale;
-    }
-
-    private float getImageHeight() {
-        return matchViewHeight * normalizedScale;
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Drawable drawable = getDrawable();
-        if (drawable == null || drawable.getIntrinsicWidth() == 0 || drawable.getIntrinsicHeight() == 0) {
-            setMeasuredDimension(0, 0);
-            return;
+            return 0f
         }
 
-        int drawableWidth = drawable.getIntrinsicWidth();
-        int drawableHeight = drawable.getIntrinsicHeight();
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        viewWidth = setViewSize(widthMode, widthSize, drawableWidth);
-        viewHeight = setViewSize(heightMode, heightSize, drawableHeight);
-
-        setMeasuredDimension(viewWidth, viewHeight);
-
-        fitImageToView();
+        return delta
     }
 
-    private void fitImageToView() {
-        Drawable drawable = getDrawable();
-        if (drawable == null || drawable.getIntrinsicWidth() == 0 || drawable.getIntrinsicHeight() == 0) {
-            return;
+    private val imageWidth: Float
+        get() = matchViewWidth * currentZoom
+
+    private val imageHeight: Float
+        get() = matchViewHeight * currentZoom
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val drawable = drawable
+        if (drawable == null || drawable.intrinsicWidth == 0 || drawable.intrinsicHeight == 0) {
+            setMeasuredDimension(0, 0)
+            return
+        }
+
+        val drawableWidth = drawable.intrinsicWidth
+        val drawableHeight = drawable.intrinsicHeight
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        viewWidth = setViewSize(widthMode, widthSize, drawableWidth)
+        viewHeight = setViewSize(heightMode, heightSize, drawableHeight)
+
+        setMeasuredDimension(viewWidth, viewHeight)
+
+        fitImageToView()
+    }
+
+    private fun fitImageToView() {
+        val drawable = drawable
+        if (drawable == null || drawable.intrinsicWidth == 0 || drawable.intrinsicHeight == 0) {
+            return
         }
         if (matrix == null || prevMatrix == null) {
-            return;
+            return
         }
 
-        int drawableWidth = drawable.getIntrinsicWidth();
-        int drawableHeight = drawable.getIntrinsicHeight();
+        val drawableWidth = drawable.intrinsicWidth
+        val drawableHeight = drawable.intrinsicHeight
 
-        float scaleX = (float) viewWidth / drawableWidth;
-        float scaleY = (float) viewHeight / drawableHeight;
+        var scaleX = viewWidth.toFloat() / drawableWidth
+        var scaleY = viewHeight.toFloat() / drawableHeight
 
-        switch (mScaleType) {
-            case CENTER:
-                scaleX = scaleY = 1;
-                break;
-
-            case CENTER_CROP:
-                scaleX = scaleY = Math.max(scaleX, scaleY);
-                break;
-
-            case CENTER_INSIDE:
-                scaleX = scaleY = Math.min(1, Math.min(scaleX, scaleY));
-
-            case FIT_CENTER:
-                scaleX = scaleY = Math.min(scaleX, scaleY);
-                break;
-
-            case FIT_XY:
-                break;
-
-            default:
-                throw new UnsupportedOperationException("TouchImageView does not support FIT_START or FIT_END");
-
-        }
-
-        float redundantXSpace = viewWidth - (scaleX * drawableWidth);
-        float redundantYSpace = viewHeight - (scaleY * drawableHeight);
-        matchViewWidth = viewWidth - redundantXSpace;
-        matchViewHeight = viewHeight - redundantYSpace;
-        if (!isZoomed() && !imageRenderedAtLeastOnce) {
-            matrix.setScale(scaleX, scaleY);
-            matrix.postTranslate(redundantXSpace / 2, redundantYSpace / 2);
-            normalizedScale = 1;
-
-        } else {
-            if (prevMatchViewWidth == 0 || prevMatchViewHeight == 0) {
-                savePreviousImageValues();
+        when (mScaleType) {
+            ScaleType.CENTER -> {
+                scaleY = 1f
+                scaleX = scaleY
             }
 
-            prevMatrix.getValues(m);
+            ScaleType.CENTER_CROP -> {
+                scaleY = max(scaleX.toDouble(), scaleY.toDouble()).toFloat()
+                scaleX = scaleY
+            }
 
-            m[Matrix.MSCALE_X] = matchViewWidth / drawableWidth * normalizedScale;
-            m[Matrix.MSCALE_Y] = matchViewHeight / drawableHeight * normalizedScale;
+            ScaleType.CENTER_INSIDE -> {
+                run {
+                    scaleY =
+                        min(1.0, min(scaleX.toDouble(), scaleY.toDouble())).toFloat()
+                    scaleX = scaleY
+                }
+                run {
+                    scaleY = min(scaleX.toDouble(), scaleY.toDouble()).toFloat()
+                    scaleX = scaleY
+                }
+            }
 
-            float transX = m[Matrix.MTRANS_X];
-            float transY = m[Matrix.MTRANS_Y];
+            ScaleType.FIT_CENTER -> {
+                scaleY = min(scaleX.toDouble(), scaleY.toDouble()).toFloat()
+                scaleX = scaleY
+            }
 
-            float prevActualWidth = prevMatchViewWidth * normalizedScale;
-            float actualWidth = getImageWidth();
-            translateMatrixAfterRotate(Matrix.MTRANS_X, transX, prevActualWidth, actualWidth, prevViewWidth, viewWidth, drawableWidth);
+            ScaleType.FIT_XY -> {}
+            else -> throw UnsupportedOperationException("TouchImageView does not support FIT_START or FIT_END")
 
-            float prevActualHeight = prevMatchViewHeight * normalizedScale;
-            float actualHeight = getImageHeight();
-            translateMatrixAfterRotate(Matrix.MTRANS_Y, transY, prevActualHeight, actualHeight, prevViewHeight, viewHeight, drawableHeight);
-
-            matrix.setValues(m);
         }
-        fixTrans();
-        setImageMatrix(matrix);
+
+        val redundantXSpace = viewWidth - (scaleX * drawableWidth)
+        val redundantYSpace = viewHeight - (scaleY * drawableHeight)
+        matchViewWidth = viewWidth - redundantXSpace
+        matchViewHeight = viewHeight - redundantYSpace
+        if (!isZoomed && !imageRenderedAtLeastOnce) {
+            matrix!!.setScale(scaleX, scaleY)
+            matrix!!.postTranslate(redundantXSpace / 2, redundantYSpace / 2)
+            currentZoom = 1f
+        } else {
+            if (prevMatchViewWidth == 0f || prevMatchViewHeight == 0f) {
+                savePreviousImageValues()
+            }
+
+            prevMatrix!!.getValues(m)
+
+            m!![Matrix.MSCALE_X] = matchViewWidth / drawableWidth * currentZoom
+            m!![Matrix.MSCALE_Y] = matchViewHeight / drawableHeight * currentZoom
+
+            val transX = m!![Matrix.MTRANS_X]
+            val transY = m!![Matrix.MTRANS_Y]
+
+            val prevActualWidth = prevMatchViewWidth * currentZoom
+            val actualWidth = imageWidth
+            translateMatrixAfterRotate(
+                Matrix.MTRANS_X,
+                transX,
+                prevActualWidth,
+                actualWidth,
+                prevViewWidth,
+                viewWidth,
+                drawableWidth
+            )
+
+            val prevActualHeight = prevMatchViewHeight * currentZoom
+            val actualHeight = imageHeight
+            translateMatrixAfterRotate(
+                Matrix.MTRANS_Y,
+                transY,
+                prevActualHeight,
+                actualHeight,
+                prevViewHeight,
+                viewHeight,
+                drawableHeight
+            )
+
+            matrix!!.setValues(m)
+        }
+        fixTrans()
+        imageMatrix = matrix
     }
 
-    private int setViewSize(int mode, int size, int drawableWidth) {
-        int viewSize;
-        switch (mode) {
-
-            case MeasureSpec.AT_MOST:
-                viewSize = Math.min(drawableWidth, size);
-                break;
-
-            case MeasureSpec.UNSPECIFIED:
-                viewSize = drawableWidth;
-                break;
-            case MeasureSpec.EXACTLY:
-
-            default:
-                viewSize = size;
-                break;
-        }
-        return viewSize;
+    private fun setViewSize(mode: Int, size: Int, drawableWidth: Int) = when (mode) {
+        MeasureSpec.AT_MOST -> min(drawableWidth.toDouble(), size.toDouble()).toInt()
+        MeasureSpec.UNSPECIFIED -> drawableWidth
+        MeasureSpec.EXACTLY -> size
+        else -> size
     }
 
-    private void translateMatrixAfterRotate(int axis, float trans, float prevImageSize, float imageSize, int prevViewSize, int viewSize, int drawableSize) {
+    private fun translateMatrixAfterRotate(
+        axis: Int,
+        trans: Float,
+        prevImageSize: Float,
+        imageSize: Float,
+        prevViewSize: Int,
+        viewSize: Int,
+        drawableSize: Int
+    ) {
         if (imageSize < viewSize) {
-            m[axis] = (viewSize - (drawableSize * m[Matrix.MSCALE_X])) * 0.5f;
-
+            m!![axis] = (viewSize - (drawableSize * m!![Matrix.MSCALE_X])) * 0.5f
         } else if (trans > 0) {
-            m[axis] = -((imageSize - viewSize) * 0.5f);
-
+            m!![axis] = -((imageSize - viewSize) * 0.5f)
         } else {
-            float percentage = (Math.abs(trans) + (0.5f * prevViewSize)) / prevImageSize;
-            m[axis] = -((percentage * imageSize) - (viewSize * 0.5f));
+            val percentage =
+                ((abs(trans.toDouble()) + (0.5f * prevViewSize)) / prevImageSize).toFloat()
+            m!![axis] = -((percentage * imageSize) - (viewSize * 0.5f))
         }
     }
 
-    private void setState(State state) {
-        this.state = state;
+    private fun setState(state: State) {
+        this.state = state
     }
 
-    public boolean canScrollHorizontallyFroyo(int direction) {
-        return canScrollHorizontally(direction);
+    fun canScrollHorizontallyFroyo(direction: Int): Boolean {
+        return canScrollHorizontally(direction)
     }
 
-    @Override
-    public boolean canScrollHorizontally(int direction) {
-        matrix.getValues(m);
-        float x = m[Matrix.MTRANS_X];
+    override fun canScrollHorizontally(direction: Int): Boolean {
+        matrix!!.getValues(m)
+        val x = m!![Matrix.MTRANS_X]
 
-        if (getImageWidth() < viewWidth) {
-            return false;
-
+        return if (imageWidth < viewWidth) {
+            false
         } else if (x >= -1 && direction < 0) {
-            return false;
-
-        } else return !(Math.abs(x) + viewWidth + 1 >= getImageWidth()) || direction <= 0;
-
+            false
+        } else !(abs(x.toDouble()) + viewWidth + 1 >= imageWidth) || direction <= 0
     }
 
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onSingleTapConfirmed(@NonNull  MotionEvent e)
-        {
-            if(doubleTapListener != null) {
-                return doubleTapListener.onSingleTapConfirmed(e);
+    private inner class GestureListener : SimpleOnGestureListener() {
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            if (doubleTapListener != null) {
+                return doubleTapListener!!.onSingleTapConfirmed(e)
             }
-            return performClick();
+            return performClick()
         }
 
-        @Override
-        public void onLongPress(@NonNull MotionEvent e)
-        {
-            performLongClick();
+        override fun onLongPress(e: MotionEvent) {
+            performLongClick()
         }
 
-        @Override
-        public boolean onFling(MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY)
-        {
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
             if (fling != null) {
                 //
                 // If a previous fling is still active, it should be cancelled so that two flings
                 // are not run simultaenously.
                 //
-                fling.cancelFling();
+                fling!!.cancelFling()
             }
-            fling = new Fling((int) velocityX, (int) velocityY);
-            compatPostOnAnimation(fling);
-            return super.onFling(e1, e2, velocityX, velocityY);
+            fling = Fling(velocityX.toInt(), velocityY.toInt())
+            compatPostOnAnimation(fling!!)
+            return super.onFling(e1, e2, velocityX, velocityY)
         }
 
-        @Override
-        public boolean onDoubleTap(@NonNull MotionEvent e) {
-            boolean consumed = false;
-            if(doubleTapListener != null) {
-                consumed = doubleTapListener.onDoubleTap(e);
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            var consumed = false
+            if (doubleTapListener != null) {
+                consumed = doubleTapListener!!.onDoubleTap(e)
             }
             if (state == State.NONE) {
-                float targetZoom = (normalizedScale == minScale) ? maxScale : minScale;
-                DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, e.getX(), e.getY(), false);
-                compatPostOnAnimation(doubleTap);
-                consumed = true;
+                val targetZoom = if ((currentZoom == minScale)) (maxScale / 10) else minScale
+                val doubleTap = DoubleTapZoom(targetZoom, e.x, e.y, false)
+                compatPostOnAnimation(doubleTap)
+                consumed = true
             }
-            return consumed;
+            return consumed
         }
 
-        @Override
-        public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
-            return doubleTapListener != null && doubleTapListener.onDoubleTapEvent(e);
+        override fun onDoubleTapEvent(e: MotionEvent): Boolean {
+            return doubleTapListener != null && doubleTapListener!!.onDoubleTapEvent(e)
         }
     }
 
     interface OnTouchImageViewListener {
-        void onMove();
+        fun onMove()
     }
 
-    private class PrivateOnTouchListener implements OnTouchListener {
-
-        private final PointF last = new PointF();
+    private inner class PrivateOnTouchListener : OnTouchListener {
+        private val last = PointF()
 
         @SuppressLint("ClickableViewAccessibility")
-        @Override
-        public boolean onTouch(View v, @NonNull MotionEvent event) {
-            mScaleDetector.onTouchEvent(event);
-            mGestureDetector.onTouchEvent(event);
-            PointF curr = new PointF(event.getX(), event.getY());
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+            mScaleDetector!!.onTouchEvent(event)
+            mGestureDetector!!.onTouchEvent(event)
+            val curr = PointF(event.x, event.y)
 
             if (state == State.NONE || state == State.DRAG || state == State.FLING) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        last.set(curr);
-                        if (fling != null)
-                            fling.cancelFling();
-                        setState(State.DRAG);
-                        break;
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        last.set(curr)
+                        if (fling != null) fling!!.cancelFling()
+                        setState(State.DRAG)
+                    }
 
-                    case MotionEvent.ACTION_MOVE:
-                        if (state == State.DRAG) {
-                            float deltaX = curr.x - last.x;
-                            float deltaY = curr.y - last.y;
-                            float fixTransX = getFixDragTrans(deltaX, viewWidth, getImageWidth());
-                            float fixTransY = getFixDragTrans(deltaY, viewHeight, getImageHeight());
-                            matrix.postTranslate(fixTransX, fixTransY);
-                            fixTrans();
-                            last.set(curr.x, curr.y);
-                        }
-                        break;
+                    MotionEvent.ACTION_MOVE -> if (state == State.DRAG) {
+                        val deltaX = curr.x - last.x
+                        val deltaY = curr.y - last.y
+                        val fixTransX = getFixDragTrans(
+                            deltaX, viewWidth.toFloat(),
+                            imageWidth
+                        )
+                        val fixTransY = getFixDragTrans(
+                            deltaY, viewHeight.toFloat(),
+                            imageHeight
+                        )
+                        matrix!!.postTranslate(fixTransX, fixTransY)
+                        fixTrans()
+                        last[curr.x] = curr.y
+                    }
 
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_POINTER_UP:
-                        setState(State.NONE);
-                        break;
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> setState(State.NONE)
                 }
             }
 
-            setImageMatrix(matrix);
+            imageMatrix = matrix
 
-            if(userTouchListener != null) {
-                userTouchListener.onTouch(v, event);
+            if (userTouchListener != null) {
+                userTouchListener!!.onTouch(v, event)
             }
 
             if (touchImageViewListener != null) {
-                touchImageViewListener.onMove();
+                touchImageViewListener!!.onMove()
             }
 
-            return true;
+            return true
         }
     }
 
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScaleBegin(@NonNull ScaleGestureDetector detector) {
-            setState(State.ZOOM);
-            return true;
+    private inner class ScaleListener : SimpleOnScaleGestureListener() {
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+            setState(State.ZOOM)
+            return true
         }
 
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            scaleImage(detector.getScaleFactor(), detector.getFocusX(), detector.getFocusY(), true);
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            scaleImage(detector.scaleFactor.toDouble(), detector.focusX, detector.focusY, true)
 
             if (touchImageViewListener != null) {
-                touchImageViewListener.onMove();
+                touchImageViewListener!!.onMove()
             }
-            return true;
+            return true
         }
 
-        @Override
-        public void onScaleEnd(@NonNull ScaleGestureDetector detector) {
-            super.onScaleEnd(detector);
-            setState(State.NONE);
-            boolean animateToZoomBoundary = false;
-            float targetZoom = normalizedScale;
-            if (normalizedScale > maxScale) {
-                targetZoom = maxScale;
-                animateToZoomBoundary = true;
+        override fun onScaleEnd(detector: ScaleGestureDetector) {
+            super.onScaleEnd(detector)
+            setState(State.NONE)
+            var animateToZoomBoundary = false
+            var targetZoom: Float = currentZoom
 
-            } else if (normalizedScale < minScale) {
-                targetZoom = minScale;
-                animateToZoomBoundary = true;
+            if (currentZoom > maxScale) {
+                targetZoom = maxScale
+                animateToZoomBoundary = true
+            } else if (currentZoom < minScale) {
+                targetZoom = minScale
+                animateToZoomBoundary = true
             }
 
             if (animateToZoomBoundary) {
-                DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2f, viewHeight / 2f, true);
-                compatPostOnAnimation(doubleTap);
+                val doubleTap = DoubleTapZoom(targetZoom, viewWidth / 2f, viewHeight / 2f, true)
+                compatPostOnAnimation(doubleTap)
             }
         }
     }
 
-    private void scaleImage(double deltaScale, float focusX, float focusY, boolean stretchImageToSuper) {
-
-        float lowerScale, upperScale;
+    private fun scaleImage(
+        deltaScale: Double,
+        focusX: Float,
+        focusY: Float,
+        stretchImageToSuper: Boolean
+    ) {
+        var newDeltaScale = deltaScale
+        val lowerScale: Float
+        val upperScale: Float
         if (stretchImageToSuper) {
-            lowerScale = superMinScale;
-            upperScale = superMaxScale;
-
+            lowerScale = superMinScale
+            upperScale = superMaxScale
         } else {
-            lowerScale = minScale;
-            upperScale = maxScale;
+            lowerScale = minScale
+            upperScale = maxScale
         }
 
-        float origScale = normalizedScale;
-        normalizedScale *= (float) deltaScale;
-        if (normalizedScale > upperScale) {
-            normalizedScale = upperScale;
-            deltaScale = upperScale / origScale;
-        } else if (normalizedScale < lowerScale) {
-            normalizedScale = lowerScale;
-            deltaScale = lowerScale / origScale;
+        val origScale = currentZoom
+        currentZoom *= newDeltaScale.toFloat()
+
+        if (currentZoom > upperScale) {
+            currentZoom = upperScale
+            newDeltaScale = (upperScale / origScale).toDouble()
+        } else if (currentZoom < lowerScale) {
+            currentZoom = lowerScale
+            newDeltaScale = (lowerScale / origScale).toDouble()
         }
 
-        matrix.postScale((float) deltaScale, (float) deltaScale, focusX, focusY);
-        fixScaleTrans();
+        matrix!!.postScale(newDeltaScale.toFloat(), newDeltaScale.toFloat(), focusX, focusY)
+        fixScaleTrans()
     }
 
-    private class DoubleTapZoom implements Runnable {
+    private inner class DoubleTapZoom(
+        targetZoom: Float,
+        focusX: Float,
+        focusY: Float,
+        stretchImageToSuper: Boolean
+    ) :
+        Runnable {
+        private val startTime: Long
+        private val startZoom: Float
+        private val targetZoom: Float
+        private val bitmapX: Float
+        private val bitmapY: Float
+        private val stretchImageToSuper: Boolean
+        private val interpolator = AccelerateDecelerateInterpolator()
+        private val startTouch: PointF
+        private val endTouch: PointF
 
-        private final long startTime;
-        private static final float ZOOM_TIME = 500;
-        private final float startZoom, targetZoom;
-        private final float bitmapX, bitmapY;
-        private final boolean stretchImageToSuper;
-        private final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
-        private final PointF startTouch;
-        private final PointF endTouch;
+        init {
+            setState(State.ANIMATE_ZOOM)
+            startTime = System.currentTimeMillis()
+            this.startZoom = currentZoom
+            this.targetZoom = targetZoom
+            this.stretchImageToSuper = stretchImageToSuper
+            val bitmapPoint = transformCoordTouchToBitmap(focusX, focusY, false)
+            this.bitmapX = bitmapPoint.x
+            this.bitmapY = bitmapPoint.y
 
-        DoubleTapZoom(float targetZoom, float focusX, float focusY, boolean stretchImageToSuper) {
-            setState(State.ANIMATE_ZOOM);
-            startTime = System.currentTimeMillis();
-            this.startZoom = normalizedScale;
-            this.targetZoom = targetZoom;
-            this.stretchImageToSuper = stretchImageToSuper;
-            PointF bitmapPoint = transformCoordTouchToBitmap(focusX, focusY, false);
-            this.bitmapX = bitmapPoint.x;
-            this.bitmapY = bitmapPoint.y;
-
-            startTouch = transformCoordBitmapToTouch(bitmapX, bitmapY);
-            endTouch = new PointF(viewWidth / 2f, viewHeight / 2f);
+            startTouch = transformCoordBitmapToTouch(bitmapX, bitmapY)
+            endTouch = PointF(viewWidth / 2f, viewHeight / 2f)
         }
 
-        @Override
-        public void run() {
-            float t = interpolate();
-            double deltaScale = calculateDeltaScale(t);
-            scaleImage(deltaScale, bitmapX, bitmapY, stretchImageToSuper);
-            translateImageToCenterTouchPosition(t);
-            fixScaleTrans();
-            setImageMatrix(matrix);
+        override fun run() {
+            val t = interpolate()
+            val deltaScale = calculateDeltaScale(t)
+            scaleImage(deltaScale, bitmapX, bitmapY, stretchImageToSuper)
+            translateImageToCenterTouchPosition(t)
+            fixScaleTrans()
+            imageMatrix = matrix
 
             if (touchImageViewListener != null) {
-                touchImageViewListener.onMove();
+                touchImageViewListener!!.onMove()
             }
 
             if (t < 1f) {
-                compatPostOnAnimation(this);
-
+                compatPostOnAnimation(this)
             } else {
-                setState(State.NONE);
+                setState(State.NONE)
             }
         }
 
-        private void translateImageToCenterTouchPosition(float t) {
-            float targetX = startTouch.x + t * (endTouch.x - startTouch.x);
-            float targetY = startTouch.y + t * (endTouch.y - startTouch.y);
-            PointF curr = transformCoordBitmapToTouch(bitmapX, bitmapY);
-            matrix.postTranslate(targetX - curr.x, targetY - curr.y);
+        fun translateImageToCenterTouchPosition(t: Float) {
+            val targetX = startTouch.x + t * (endTouch.x - startTouch.x)
+            val targetY = startTouch.y + t * (endTouch.y - startTouch.y)
+            val curr = transformCoordBitmapToTouch(bitmapX, bitmapY)
+            matrix!!.postTranslate(targetX - curr.x, targetY - curr.y)
         }
 
-        private float interpolate() {
-            long currTime = System.currentTimeMillis();
-            float elapsed = (currTime - startTime) / ZOOM_TIME;
-            elapsed = Math.min(1f, elapsed);
-            return interpolator.getInterpolation(elapsed);
+        fun interpolate(): Float {
+            val currTime = System.currentTimeMillis()
+            var elapsed = (currTime - startTime) / 500f
+            elapsed = min(1.0, elapsed.toDouble()).toFloat()
+            return interpolator.getInterpolation(elapsed)
         }
 
-        private double calculateDeltaScale(float t) {
-            double zoom = startZoom + t * (targetZoom - startZoom);
-            return zoom / normalizedScale;
+        fun calculateDeltaScale(t: Float): Double {
+            val zoom = (startZoom + t * (targetZoom - startZoom)).toDouble()
+            return zoom / currentZoom
         }
     }
 
-    private PointF transformCoordTouchToBitmap(float x, float y, boolean clipToBitmap) {
-        matrix.getValues(m);
-        float origW = getDrawable().getIntrinsicWidth();
-        float origH = getDrawable().getIntrinsicHeight();
-        float transX = m[Matrix.MTRANS_X];
-        float transY = m[Matrix.MTRANS_Y];
-        float finalX = ((x - transX) * origW) / getImageWidth();
-        float finalY = ((y - transY) * origH) / getImageHeight();
+    private fun transformCoordTouchToBitmap(x: Float, y: Float, clipToBitmap: Boolean): PointF {
+        matrix!!.getValues(m)
+        val origW = drawable.intrinsicWidth.toFloat()
+        val origH = drawable.intrinsicHeight.toFloat()
+        val transX = m!![Matrix.MTRANS_X]
+        val transY = m!![Matrix.MTRANS_Y]
+        var finalX = ((x - transX) * origW) / imageWidth
+        var finalY = ((y - transY) * origH) / imageHeight
 
         if (clipToBitmap) {
-            finalX = Math.min(Math.max(finalX, 0), origW);
-            finalY = Math.min(Math.max(finalY, 0), origH);
+            finalX = min(max(finalX.toDouble(), 0.0), origW.toDouble()).toFloat()
+            finalY = min(max(finalY.toDouble(), 0.0), origH.toDouble()).toFloat()
         }
 
-        return new PointF(finalX , finalY);
+        return PointF(finalX, finalY)
     }
 
-    private PointF transformCoordBitmapToTouch(float bx, float by) {
-        matrix.getValues(m);
-        float origW = getDrawable().getIntrinsicWidth();
-        float origH = getDrawable().getIntrinsicHeight();
-        float px = bx / origW;
-        float py = by / origH;
-        float finalX = m[Matrix.MTRANS_X] + getImageWidth() * px;
-        float finalY = m[Matrix.MTRANS_Y] + getImageHeight() * py;
-        return new PointF(finalX , finalY);
+    private fun transformCoordBitmapToTouch(bx: Float, by: Float): PointF {
+        matrix!!.getValues(m)
+        val origW = drawable.intrinsicWidth.toFloat()
+        val origH = drawable.intrinsicHeight.toFloat()
+        val px = bx / origW
+        val py = by / origH
+        val finalX = m!![Matrix.MTRANS_X] + imageWidth * px
+        val finalY = m!![Matrix.MTRANS_Y] + imageHeight * py
+        return PointF(finalX, finalY)
     }
 
-    private class Fling implements Runnable {
+    private inner class Fling(velocityX: Int, velocityY: Int) : Runnable {
+        var scroller: CompatScroller?
+        var currX: Int
+        var currY: Int
 
-        CompatScroller scroller;
-        int currX, currY;
+        init {
+            setState(State.FLING)
+            scroller = CompatScroller(context)
+            matrix!!.getValues(m)
 
-        Fling(int velocityX, int velocityY) {
-            setState(State.FLING);
-            scroller = new CompatScroller(context);
-            matrix.getValues(m);
+            val startX = m!![Matrix.MTRANS_X].toInt()
+            val startY = m!![Matrix.MTRANS_Y].toInt()
+            val minX: Int
+            val maxX: Int
+            val minY: Int
+            val maxY: Int
 
-            int startX = (int) m[Matrix.MTRANS_X];
-            int startY = (int) m[Matrix.MTRANS_Y];
-            int minX, maxX, minY, maxY;
-
-            if (getImageWidth() > viewWidth) {
-                minX = viewWidth - (int) getImageWidth();
-                maxX = 0;
-
+            if (imageWidth > viewWidth) {
+                minX = viewWidth - imageWidth.toInt()
+                maxX = 0
             } else {
-                minX = maxX = startX;
+                maxX = startX
+                minX = maxX
             }
 
-            if (getImageHeight() > viewHeight) {
-                minY = viewHeight - (int) getImageHeight();
-                maxY = 0;
-
+            if (imageHeight > viewHeight) {
+                minY = viewHeight - imageHeight.toInt()
+                maxY = 0
             } else {
-                minY = maxY = startY;
+                maxY = startY
+                minY = maxY
             }
 
-            scroller.fling(startX, startY, velocityX, velocityY, minX,
-                    maxX, minY, maxY);
-            currX = startX;
-            currY = startY;
+            scroller!!.fling(
+                startX, startY, velocityX, velocityY, minX,
+                maxX, minY, maxY
+            )
+            currX = startX
+            currY = startY
         }
 
-        void cancelFling() {
+        fun cancelFling() {
             if (scroller != null) {
-                setState(State.NONE);
-                scroller.forceFinished();
+                setState(State.NONE)
+                scroller!!.forceFinished()
             }
         }
 
-        @Override
-        public void run() {
-
+        override fun run() {
             if (touchImageViewListener != null) {
-                touchImageViewListener.onMove();
+                touchImageViewListener!!.onMove()
             }
 
-            if (scroller.isFinished()) {
-                scroller = null;
-                return;
+            if (scroller!!.isFinished) {
+                scroller = null
+                return
             }
 
-            if (scroller.computeScrollOffset()) {
-                int newX = scroller.getCurrX();
-                int newY = scroller.getCurrY();
-                int transX = newX - currX;
-                int transY = newY - currY;
-                currX = newX;
-                currY = newY;
-                matrix.postTranslate(transX, transY);
-                fixTrans();
-                setImageMatrix(matrix);
-                compatPostOnAnimation(this);
-            }
-        }
-    }
-
-    private static class CompatScroller {
-        Scroller scroller;
-        OverScroller overScroller;
-        boolean isPreGingerbread;
-
-        CompatScroller(Context context) {
-            isPreGingerbread = false;
-            overScroller = new OverScroller(context);
-        }
-
-        void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY) {
-            if (isPreGingerbread) {
-                scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
-            } else {
-                overScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
-            }
-        }
-
-        void forceFinished() {
-            if (isPreGingerbread) {
-                scroller.forceFinished(true);
-            } else {
-                overScroller.forceFinished(true);
-            }
-        }
-
-        boolean isFinished() {
-            if (isPreGingerbread) {
-                return scroller.isFinished();
-            } else {
-                return overScroller.isFinished();
-            }
-        }
-
-        boolean computeScrollOffset() {
-            if (isPreGingerbread) {
-                return scroller.computeScrollOffset();
-            } else {
-                overScroller.computeScrollOffset();
-                return overScroller.computeScrollOffset();
-            }
-        }
-
-        int getCurrX() {
-            if (isPreGingerbread) {
-                return scroller.getCurrX();
-            } else {
-                return overScroller.getCurrX();
-            }
-        }
-
-        int getCurrY() {
-            if (isPreGingerbread) {
-                return scroller.getCurrY();
-            } else {
-                return overScroller.getCurrY();
+            if (scroller!!.computeScrollOffset()) {
+                val newX = scroller!!.currX
+                val newY = scroller!!.currY
+                val transX = newX - currX
+                val transY = newY - currY
+                currX = newX
+                currY = newY
+                matrix!!.postTranslate(transX.toFloat(), transY.toFloat())
+                fixTrans()
+                imageMatrix = matrix
+                compatPostOnAnimation(this)
             }
         }
     }
 
-    private void compatPostOnAnimation(Runnable runnable) {
-        postOnAnimation(runnable);
-    }
+    private class CompatScroller(context: Context?) {
+        var scroller: Scroller? = null
+        var overScroller: OverScroller = OverScroller(context)
+        var isPreGingerbread: Boolean = false
 
-    private static class ZoomVariables {
-        float scale;
-        float focusX;
-        float focusY;
-        ScaleType scaleType;
-
-        ZoomVariables(float scale, float focusX, float focusY, ScaleType scaleType) {
-            this.scale = scale;
-            this.focusX = focusX;
-            this.focusY = focusY;
-            this.scaleType = scaleType;
+        fun fling(
+            startX: Int,
+            startY: Int,
+            velocityX: Int,
+            velocityY: Int,
+            minX: Int,
+            maxX: Int,
+            minY: Int,
+            maxY: Int
+        ) {
+            if (isPreGingerbread) {
+                scroller!!.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY)
+            } else {
+                overScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY)
+            }
         }
+
+        fun forceFinished() {
+            if (isPreGingerbread) {
+                scroller!!.forceFinished(true)
+            } else {
+                overScroller.forceFinished(true)
+            }
+        }
+
+        val isFinished: Boolean
+            get() = if (isPreGingerbread) {
+                scroller!!.isFinished
+            } else {
+                overScroller.isFinished
+            }
+
+        fun computeScrollOffset(): Boolean {
+            if (isPreGingerbread) {
+                return scroller!!.computeScrollOffset()
+            } else {
+                overScroller.computeScrollOffset()
+                return overScroller.computeScrollOffset()
+            }
+        }
+
+        val currX: Int
+            get() {
+                return if (isPreGingerbread) {
+                    scroller!!.currX
+                } else {
+                    overScroller.currX
+                }
+            }
+
+        val currY: Int
+            get() {
+                return if (isPreGingerbread) {
+                    scroller!!.currY
+                } else {
+                    overScroller.currY
+                }
+            }
     }
 
-    private void printMatrixInfo() {
-        float[] n = new float[9];
-        matrix.getValues(n);
+    private fun compatPostOnAnimation(runnable: Runnable) {
+        postOnAnimation(runnable)
+    }
+
+    private class ZoomVariables(
+        var scale: Float,
+        var focusX: Float,
+        var focusY: Float,
+        var scaleType: ScaleType?
+    )
+
+    private fun printMatrixInfo() {
+        val n = FloatArray(9)
+        matrix!!.getValues(n)
+    }
+
+    companion object {
+        private const val SUPER_MIN_MULTIPLIER = .75f
+        private const val SUPER_MAX_MULTIPLIER = 1.25f
     }
 }
