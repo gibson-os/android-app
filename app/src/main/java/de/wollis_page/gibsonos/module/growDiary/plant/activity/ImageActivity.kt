@@ -1,10 +1,10 @@
 package de.wollis_page.gibsonos.module.growDiary.plant.activity
 
 import android.os.Bundle
-import android.widget.ImageView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
+import de.wollis_page.gibsonos.view.TouchImageView
 
 
 class ImageActivity: GibsonOsActivity() {
@@ -18,7 +18,7 @@ class ImageActivity: GibsonOsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val imageView = this.findViewById<ImageView>(R.id.image)
+        val imageView = this.findViewById<TouchImageView>(R.id.image)
 
         this.plantId = this.intent.getLongExtra("plantId", 0)
         this.created = this.intent.getStringExtra("created")
