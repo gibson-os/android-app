@@ -23,6 +23,8 @@ class ImageActivity: GibsonOsActivity() {
         this.plantId = this.intent.getLongExtra("plantId", 0)
         this.created = this.intent.getStringExtra("created")
 
+        this.setTitle(this.created)
+
         this.runTask({
             val image = PlantTask.getImage(
                 this,

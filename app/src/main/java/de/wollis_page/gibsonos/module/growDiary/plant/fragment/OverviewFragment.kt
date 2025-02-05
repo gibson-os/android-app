@@ -1,5 +1,7 @@
 package de.wollis_page.gibsonos.module.growDiary.plant.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.fragment.GibsonOsFragment
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Climate
@@ -16,16 +21,32 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.feed.Additive
 import de.wollis_page.gibsonos.module.growDiary.task.FertilizerTask
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class OverviewFragment: GibsonOsFragment() {
     private lateinit var inflater: LayoutInflater
     private lateinit var overviewContainer: LinearLayout
+    lateinit var formLauncher: ActivityResultLauncher<Intent>
 
     override fun getContentView() = R.layout.grow_diary_plant_overview
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        this.formLauncher = this.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            this.load()
+        }
+
+        this.load()
+    }
+
+    private fun load() {
         this.activity.runTask({
             val plant = PlantTask.get(this.activity, this.fragmentsArguments["plantId"].toString().toLong())
             this.activity.setTitle(plant.name)
@@ -239,4 +260,24 @@ class OverviewFragment: GibsonOsFragment() {
 
         return overviewItem
     }
+
+    override fun actionButton() = R.layout.base_button_edit
+
+    override fun actionOnClickListener() {
+        this.activity.runTask({
+            ActivityLauncherService.startActivity(
+                this.activity,
+                "growDiary",
+                "index",
+                "form",
+                mapOf(
+                    "task" to "plant",
+                    "id" to this.fragmentsArguments["plantId"].toString().toLong(),
+                ),
+                this.formLauncher,
+            )
+        })
+    }
+
+    override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.editButton)
 }

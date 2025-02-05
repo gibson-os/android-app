@@ -9,6 +9,7 @@ import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Fertilizer
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Manufacture
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Seed
+import de.wollis_page.gibsonos.module.growDiary.index.dto.Setup
 import de.wollis_page.gibsonos.module.growDiary.index.dto.climate.MeasuringPoint
 import de.wollis_page.gibsonos.module.growDiary.index.dto.fertilizer.Scheme
 import de.wollis_page.gibsonos.module.obscura.template.dto.Template
@@ -51,6 +52,7 @@ object AutoCompleteTask: AbstractTask() {
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\Fertilizer\\SchemeAutoComplete" to Scheme::class.java,
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\ManufactureAutoComplete" to Manufacture::class.java,
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\MeasuringPointAutoComplete" to MeasuringPoint::class.java,
+            "GibsonOS\\Module\\GrowDiary\\AutoComplete\\SetupAutoComplete" to Setup::class.java,
         )
     }
 }
