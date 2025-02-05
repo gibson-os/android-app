@@ -82,7 +82,7 @@ class SetupFragment: ListFragment() {
             "setup",
             "index",
             item.name,
-            "icon_hemp",
+            "icon_grow_setup",
             mutableMapOf(
                 "setupId" to item.id,
                 "name" to item.name,

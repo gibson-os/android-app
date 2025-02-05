@@ -4,6 +4,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 
 data class Climate(
     var id: Long,
+    var measuringPoint: String,
     var added: String,
     var temperature: Float?,
     var relativeHumidity: Float?,

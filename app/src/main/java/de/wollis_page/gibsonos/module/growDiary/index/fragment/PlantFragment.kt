@@ -85,7 +85,7 @@ class PlantFragment: ListFragment() {
         this.imageLoaderService.viewImage(
             item,
             view.findViewById(R.id.image),
-            R.drawable.ic_hemp,
+            R.drawable.ic_hemp_plant,
         )
     }
 
@@ -110,7 +110,7 @@ class PlantFragment: ListFragment() {
             "plant",
             "index",
             item.name,
-            "icon_hemp",
+            "icon_hemp_plant",
             mutableMapOf(
                 "plantId" to item.id,
             )

@@ -16,6 +16,8 @@ class OverviewFragment: GibsonOsFragment() {
         this.activity.runTask({
             val seed = SeedTask.get(this.activity, this.fragmentsArguments["seedId"].toString().toLong())
 
+            this.activity.setTitle(seed.name)
+
             this.view?.findViewById<TextView>(R.id.name)?.text = seed.name
             this.view?.findViewById<TextView>(R.id.manufacture)?.text = seed.manufacture?.name
             this.view?.findViewById<TextView>(R.id.floweringDays)?.text = seed.minFloweringDays.toString() + " - " + seed.maxFloweringDays.toString()

@@ -19,7 +19,7 @@
             android:layout_width="@dimen/thumb_width"
             android:layout_height="@dimen/thumb_height"
             android:contentDescription="@string/grow_diary_plant_image_description"
-            app:srcCompat="@drawable/ic_hemp" />
+            app:srcCompat="@drawable/ic_hemp_plant" />
 
         <LinearLayout
             android:orientation="vertical"

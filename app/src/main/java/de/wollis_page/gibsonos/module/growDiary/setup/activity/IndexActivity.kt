@@ -22,6 +22,7 @@ class IndexActivity : TabActivity() {
             Tab(R.string.grow_diary_plant_tab, PlantFragment::class, arguments),
         )
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

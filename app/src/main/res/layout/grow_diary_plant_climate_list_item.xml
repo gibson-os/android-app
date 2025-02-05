@@ -16,6 +16,13 @@
         android:textSize="@dimen/headline_font_size"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/measuringPoint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/text_spacing"
+        android:textSize="@dimen/headline_font_size" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

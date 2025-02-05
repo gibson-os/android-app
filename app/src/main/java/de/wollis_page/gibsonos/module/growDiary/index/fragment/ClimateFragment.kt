@@ -67,6 +67,7 @@ class ClimateFragment: ListFragment() {
         }
 
         view.findViewById<TextView>(R.id.added).text = item.added
+        view.findViewById<TextView>(R.id.measuringPoint).text = item.measuringPoint
         view.findViewById<TextView>(R.id.temperature).text = item.temperature.toString() + "°C"
         view.findViewById<TextView>(R.id.relativeHumidity).text = item.relativeHumidity.toString() + "%"
         view.findViewById<TextView>(R.id.airPressure).text = item.airPressure.toString()

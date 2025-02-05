@@ -153,15 +153,15 @@
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.IndexActivity"
-            android:icon="@drawable/ic_hemp"/>
+            android:icon="@drawable/ic_hemp_plant"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.ImageActivity"
-            android:icon="@drawable/ic_hemp"/>
+            android:icon="@drawable/ic_hemp_plant"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.seed.activity.IndexActivity"
-            android:icon="@drawable/ic_hemp"/>
+            android:icon="@drawable/ic_seed"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.manufacture.activity.IndexActivity"
@@ -173,7 +173,7 @@
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.FertilizerFormActivity"
-            android:icon="@drawable/ic_hemp"/>
+            android:icon="@drawable/ic_hemp_plant"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.feed.activity.FormActivity"
@@ -185,15 +185,15 @@
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.IndexActivity"
-            android:icon="@drawable/ic_hemp"/>
+            android:icon="@drawable/ic_grow_setup"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.LightActivity"
-            android:icon="@drawable/ic_hemp"/>
+            android:icon="@drawable/ic_grow_setup"/>
 
         <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.ClimateControlActivity"
-            android:icon="@drawable/ic_hemp"/>
+            android:icon="@drawable/ic_grow_setup"/>
 
         <service
             android:name=".service.FirebaseMessagingService"
