@@ -2,7 +2,7 @@ package de.wollis_page.gibsonos.module.growDiary.index.dto.setup.light
 
 import de.wollis_page.gibsonos.dto.ListItemInterface
 
-class Runtime(
+data class Runtime(
     var id: Long,
     var from: String,
     var to: String?,
