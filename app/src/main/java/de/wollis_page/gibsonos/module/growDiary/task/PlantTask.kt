@@ -1,6 +1,7 @@
 package de.wollis_page.gibsonos.module.growDiary.task
 
 import android.graphics.Bitmap
+import android.net.Uri
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.dto.ListResponse
@@ -11,7 +12,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.task.AbstractTask
 import java.io.File
 
-object PlantTask: AbstractTask() {
+object PlantTask : AbstractTask() {
     fun get(context: GibsonOsActivity, plantId: Long): Plant {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "")
         dataStore.addParam("id", plantId)
@@ -54,7 +55,12 @@ object PlantTask: AbstractTask() {
         return this.loadList(context, dataStore, start, limit)
     }
 
-    fun getImages(context: GibsonOsActivity, plantId: Long, start: Long, limit: Long): ListResponse<Image> {
+    fun getImages(
+        context: GibsonOsActivity,
+        plantId: Long,
+        start: Long,
+        limit: Long
+    ): ListResponse<Image> {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "images")
         dataStore.addParam("plantId", plantId)
 
@@ -91,7 +97,7 @@ object PlantTask: AbstractTask() {
     fun postImage(
         context: GibsonOsActivity,
         plantId: Long,
-        image: File,
+        image: Uri,
         date: String? = null,
     ): Image {
         val dataStore = this.getDataStore(
@@ -101,38 +107,59 @@ object PlantTask: AbstractTask() {
             "image",
             "POST",
         )
-        dataStore.addParam("image", image, "image/jpg")
-        dataStore.addParam("plantId", plantId)
 
-        if (date != null) {
-            dataStore.addParam("date", date)
+        context.contentResolver.openInputStream(image)?.use { input ->
+            val tempFile = File.createTempFile("upload", ".jpg", context.cacheDir)
+            tempFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+
+            dataStore.addParam("image", tempFile, "image/jpg")
+
+            //tempFile.delete()
+        }
+            dataStore.addParam("plantId", plantId)
+
+            if (date != null) {
+                dataStore.addParam("date", date)
+            }
+
+            return this.load(context, dataStore)
         }
 
-        return this.load(context, dataStore)
-    }
+        fun getFertilizers(
+            context: GibsonOsActivity,
+            plantId: Long,
+            start: Long,
+            limit: Long
+        ): ListResponse<Fertilizer> {
+            val dataStore =
+                this.getDataStore(context.getAccount(), "growDiary", "plant", "fertilizers")
+            dataStore.addParam("plantId", plantId)
 
-    fun getFertilizers(context: GibsonOsActivity, plantId: Long, start: Long, limit: Long): ListResponse<Fertilizer> {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "fertilizers")
-        dataStore.addParam("plantId", plantId)
-
-        return this.loadList(context, dataStore, start, limit)
-    }
-
-    fun getFertilizerForm(context: GibsonOsActivity, plantId: Long, fertilizerId: Long? = null): Form {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "fertilizerForm")
-        dataStore.addParam("plantId", plantId)
-
-        if (fertilizerId != null) {
-            dataStore.addParam("id", fertilizerId)
+            return this.loadList(context, dataStore, start, limit)
         }
 
-        return this.load(context, dataStore)
-    }
+        fun getFertilizerForm(
+            context: GibsonOsActivity,
+            plantId: Long,
+            fertilizerId: Long? = null
+        ): Form {
+            val dataStore =
+                this.getDataStore(context.getAccount(), "growDiary", "plant", "fertilizerForm")
+            dataStore.addParam("plantId", plantId)
 
-    fun getCosts(context: GibsonOsActivity, plantId: Long): ListResponse<Cost> {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "costs")
-        dataStore.addParam("id", plantId)
+            if (fertilizerId != null) {
+                dataStore.addParam("id", fertilizerId)
+            }
 
-        return this.loadList(context, dataStore)
+            return this.load(context, dataStore)
+        }
+
+        fun getCosts(context: GibsonOsActivity, plantId: Long): ListResponse<Cost> {
+            val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "costs")
+            dataStore.addParam("id", plantId)
+
+            return this.loadList(context, dataStore)
+        }
     }
-}

@@ -34,7 +34,7 @@ class ImageFragment: GridFragment() {
                 PlantTask.postImage(
                     this.activity,
                     this.fragmentsArguments["plantId"].toString().toLong(),
-                    File(uri.path!!),
+                    uri,
                 )
             })
         }
