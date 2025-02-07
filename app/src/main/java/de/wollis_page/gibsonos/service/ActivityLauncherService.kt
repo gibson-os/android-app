@@ -74,6 +74,8 @@ object ActivityLauncherService {
             context,
             ActivityMatcher.getActivity(module, task, action, shortcut?.parameters),
         )
+        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         AppIntentExtraService.setIntentExtra(GibsonOsActivity.ACCOUNT_KEY, account.account, intent)
 
         extras.forEach {

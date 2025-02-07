@@ -9,6 +9,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Cost
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Fertilizer
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.task.AbstractTask
+import java.io.File
 
 object PlantTask: AbstractTask() {
     fun get(context: GibsonOsActivity, plantId: Long): Plant {
@@ -90,7 +91,7 @@ object PlantTask: AbstractTask() {
     fun postImage(
         context: GibsonOsActivity,
         plantId: Long,
-        image: Bitmap,
+        image: File,
         date: String? = null,
     ): Image {
         val dataStore = this.getDataStore(
@@ -100,7 +101,7 @@ object PlantTask: AbstractTask() {
             "image",
             "POST",
         )
-        dataStore.addParam("image", image)
+        dataStore.addParam("image", image, "image/jpg")
         dataStore.addParam("plantId", plantId)
 
         if (date != null) {

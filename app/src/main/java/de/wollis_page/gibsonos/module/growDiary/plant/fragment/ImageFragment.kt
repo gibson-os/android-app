@@ -1,52 +1,70 @@
 package de.wollis_page.gibsonos.module.growDiary.plant.fragment
 
-import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import com.github.drjacky.imagepicker.ImagePicker
-import com.github.drjacky.imagepicker.constant.ImageProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.GridFragment
-import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.ImageLoaderService
+import java.io.File
 
 
 class ImageFragment: GridFragment() {
     private lateinit var imageLoaderService: ImageLoaderService<Image>
     private var plantId: Long? = null
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        this.activityResultLauncher = this.registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode != RESULT_OK) {
+        this.pickMedia = this.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri == null) {
                 return@registerForActivityResult
             }
 
-            val uri = it.data?.data
-            // Use the uri to load the image
-            // Only if you are not using crop feature:
-//            uri?.let { galleryUri ->
-//                this.activity.contentResolver.takePersistableUriPermission(
-//                    galleryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
-//                )
-//            }
-
-            Log.d(Config.LOG_TAG, uri.toString())
+            this.activity.runTask({
+                PlantTask.postImage(
+                    this.activity,
+                    this.fragmentsArguments["plantId"].toString().toLong(),
+                    File(uri.path!!),
+                )
+            })
         }
+//        this.activityResultLauncher = this.registerForActivityResult(
+//            ActivityResultContracts.StartActivityForResult()
+//        ) {
+//            if (it.resultCode != RESULT_OK) {
+//                return@registerForActivityResult
+//            }
+//
+//            val uri = it.data!!.data!!
+//
+//            this.activity.runTask({
+//                this.activity.grantUriPermission(
+//                    this.activity.packageName,
+//                    uri,
+//                    Intent.FLAG_GRANT_READ_URI_PERMISSION and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION,
+//                )
+//                this.activity.contentResolver.takePersistableUriPermission(
+//                    uri,
+//                    Intent.FLAG_GRANT_READ_URI_PERMISSION,
+//                )
+//
+//                PlantTask.postImage(
+//                    this.activity,
+//                    this.fragmentsArguments["plantId"].toString().toLong(),
+//                    File(uri.path!!),
+//                )
+//            })
+//        }
 
         super.onCreate(savedInstanceState)
 
@@ -120,12 +138,7 @@ class ImageFragment: GridFragment() {
     override fun actionButton() = R.layout.base_button_add
 
     override fun actionOnClickListener() {
-        ImagePicker.with(this.activity)
-            .provider(ImageProvider.BOTH)
-//            .setMultipleAllowed(true)
-            .crop()
-            .cropFreeStyle()
-            .createIntentFromDialog { this.activityResultLauncher.launch(it) }
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
