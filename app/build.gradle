@@ -12,7 +12,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 35
         versionCode 1
-        versionName "2025-02-05"
+        versionName "2025-02-07"
         setProperty("archivesBaseName", "../aab/" + applicationId + "-v" + versionName + "-" + versionCode)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
