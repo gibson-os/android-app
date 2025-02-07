@@ -16,7 +16,6 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.ImageLoaderService
-import java.io.File
 
 
 class ImageFragment: GridFragment() {
@@ -36,35 +35,9 @@ class ImageFragment: GridFragment() {
                     this.fragmentsArguments["plantId"].toString().toLong(),
                     uri,
                 )
+                this.loadList()
             })
         }
-//        this.activityResultLauncher = this.registerForActivityResult(
-//            ActivityResultContracts.StartActivityForResult()
-//        ) {
-//            if (it.resultCode != RESULT_OK) {
-//                return@registerForActivityResult
-//            }
-//
-//            val uri = it.data!!.data!!
-//
-//            this.activity.runTask({
-//                this.activity.grantUriPermission(
-//                    this.activity.packageName,
-//                    uri,
-//                    Intent.FLAG_GRANT_READ_URI_PERMISSION and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION,
-//                )
-//                this.activity.contentResolver.takePersistableUriPermission(
-//                    uri,
-//                    Intent.FLAG_GRANT_READ_URI_PERMISSION,
-//                )
-//
-//                PlantTask.postImage(
-//                    this.activity,
-//                    this.fragmentsArguments["plantId"].toString().toLong(),
-//                    File(uri.path!!),
-//                )
-//            })
-//        }
 
         super.onCreate(savedInstanceState)
 
