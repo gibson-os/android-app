@@ -125,7 +125,7 @@ object PlantTask : AbstractTask() {
             dataStore.addParam("date", date)
         }
 
-        val loadResponse = this.load<Image>(context, dataStore)
+        val loadResponse = this.load<Image>(context, dataStore, catchResponseException = false)
 
         tempFile.delete()
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,6 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
+import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.fragment.GridFragment
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
@@ -24,17 +26,30 @@ class ImageFragment: GridFragment() {
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        this.pickMedia = this.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri == null) {
+        this.pickMedia = this.registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
+            if (uris.isEmpty()) {
                 return@registerForActivityResult
             }
 
             this.activity.runTask({
-                PlantTask.postImage(
-                    this.activity,
-                    this.fragmentsArguments["plantId"].toString().toLong(),
-                    uri,
-                )
+                uris.forEach { uri ->
+                    try {
+                        PlantTask.postImage(
+                            this.activity,
+                            this.fragmentsArguments["plantId"].toString().toLong(),
+                            uri,
+                        )
+                    } catch (exception: ResponseException) {
+                        if (exception.code != 409) {
+                            throw exception
+                        }
+
+                        this.activity.runOnUiThread {
+                            Toast.makeText(this.activity, exception.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+
                 this.loadList()
             })
         }
@@ -111,7 +126,7 @@ class ImageFragment: GridFragment() {
     override fun actionButton() = R.layout.base_button_add
 
     override fun actionOnClickListener() {
-        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.SingleMimeType("image/jpeg")))
     }
 
     override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)

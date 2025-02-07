@@ -132,8 +132,6 @@ class DataStore(url: String, private val method: String, token: String?) {
             Log.d(Config.LOG_TAG, "Add data param '" + key + "' with value '" + this.dataParams[key].toString() + "'")
 
             for (filename in this.dataParams[key]!!.keys) {
-                Log.d(Config.LOG_TAG, this.dataParams[key]!![filename]!!.contentType().toString())
-                Log.d(Config.LOG_TAG, this.dataParams[key]!![filename]!!.contentLength().toString())
                 builder.addFormDataPart(key, filename, this.dataParams[key]!![filename]!!)
             }
         }
@@ -244,15 +242,17 @@ class DataStore(url: String, private val method: String, token: String?) {
             (jsonResponse.has("failure") && jsonResponse.getBoolean("failure")) ||
             (!jsonResponse.has("success") || !jsonResponse.getBoolean("success"))
         ) {
-            val message = if (jsonResponse.has("data")) {
-                val data = jsonResponse.getJSONObject("data")
+            var data = jsonResponse
 
-                when {
-                    data.has("message") -> data.getString("message")
-                    data.has("msg") -> data.getString("msg")
-                    else -> "Response error!"
-                }
-            } else "Response error!"
+            if (data.has("data")) {
+                data = data.getJSONObject("data")
+            }
+
+            val message = when {
+                data.has("message") -> data.getString("message")
+                data.has("msg") -> data.getString("msg")
+                else -> "Response error!"
+            }
 
             throw ResponseException(message, jsonResponse.toString(2), response.code)
         }
