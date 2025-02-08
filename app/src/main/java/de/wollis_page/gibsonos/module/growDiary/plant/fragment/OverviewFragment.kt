@@ -13,7 +13,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.fragment.GibsonOsFragment
+import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Climate
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Feed
@@ -54,10 +56,65 @@ class OverviewFragment: GibsonOsFragment() {
             this.overviewContainer = this.requireView().findViewById(R.id.overviewContiner)
             this.inflater = LayoutInflater.from(this.activity)
 
-            this.view?.findViewById<TextView>(R.id.name)?.text = plant.name
-            this.view?.findViewById<TextView>(R.id.seed)?.text = plant.seed.name
-
             this.activity.runOnUiThread {
+                this.view?.findViewById<TextView>(R.id.name)?.text = plant.name
+                val seedText = this.view?.findViewById<TextView>(R.id.seed)
+                seedText?.text = plant.seed.name
+                seedText?.setOnClickListener {
+                    ActivityLauncherService.startActivity(
+                        this.activity,
+                        "growDiary",
+                        "seed",
+                        "index",
+                        mapOf(
+                            "seedId" to plant.seed.id,
+                            GibsonOsActivity.SHORTCUT_KEY to Shortcut(
+                                "growDiary",
+                                "seed",
+                                "index",
+                                plant.seed.name,
+                                "icon_seed",
+                                mutableMapOf(
+                                    "seedId" to plant.seed.id,
+                                    "name" to plant.seed.name,
+                                )
+                            ),
+                        )
+                    )
+                }
+
+                val currentSetup = plant.currentSetup
+
+                if (currentSetup != null) {
+                    val currentSetupView = this.getOverviewItem(
+                        R.string.grow_diary_plant_current_setup,
+                        currentSetup.setup.name,
+                    )
+                    currentSetupView.findViewById<TextView>(R.id.value).setOnClickListener {
+                        ActivityLauncherService.startActivity(
+                            this.activity,
+                            "growDiary",
+                            "setup",
+                            "index",
+                            mapOf(
+                                "setupId" to currentSetup.setup.id,
+                                GibsonOsActivity.SHORTCUT_KEY to Shortcut(
+                                    "growDiary",
+                                    "setup",
+                                    "index",
+                                    currentSetup.setup.name,
+                                    "icon_grow_setup",
+                                    mutableMapOf(
+                                        "setupId" to currentSetup.setup.id,
+                                        "name" to currentSetup.setup.name,
+                                    )
+                                ),
+                            )
+                        )
+                    }
+                    this.overviewContainer.addView(currentSetupView)
+                }
+
                 if (plant.state != null) {
                     this.overviewContainer.addView(this.getOverviewItem(
                         R.string.grow_diary_plant_grown_at,
@@ -71,9 +128,45 @@ class OverviewFragment: GibsonOsFragment() {
                         R.string.grow_diary_plant_duration,
                         "${plant.state?.toDaysSinceStart} Tage (${plant.state?.toWeekSinceStart} Wochen)",
                     ))
+
+                    if ((plant.maxRemainingGrowingDays ?: 0) > 0) {
+                        var value = "${plant.minRemainingGrowingDays} - ${plant.maxRemainingGrowingDays} Tage (${plant.minRemainingGrowingWeeks} - ${plant.maxRemainingGrowingWeeks} Wochen)"
+
+                        if (plant.minRemainingGrowingDays == plant.maxRemainingGrowingDays) {
+                            value = "${plant.maxRemainingGrowingDays} Tage (${plant.maxRemainingGrowingWeeks} Wochen)"
+                        }
+
+                        this.overviewContainer.addView(this.getOverviewItem(
+                            R.string.grow_diary_plant_remaining_time_manufacture,
+                            value,
+                        ))
+                    }
+
+                    if ((plant.maxRemainingGrowingDaysOtherPlants ?: 0) > 0) {
+                        var value = "${plant.minRemainingGrowingDaysOtherPlants} - ${plant.maxRemainingGrowingDaysOtherPlants} Tage (${plant.minRemainingGrowingWeeksOtherPlants} - ${plant.maxRemainingGrowingWeeksOtherPlants} Wochen)"
+
+                        if (plant.minRemainingGrowingDaysOtherPlants == plant.maxRemainingGrowingDaysOtherPlants) {
+                            value = "${plant.maxRemainingGrowingDaysOtherPlants} Tage (${plant.maxRemainingGrowingWeeksOtherPlants} Wochen)"
+                        }
+
+                        this.overviewContainer.addView(this.getOverviewItem(
+                            R.string.grow_diary_plant_remaining_time_other_plants,
+                            value,
+                        ))
+                    }
+                }
+
+                if (plant.harvestedWet != null) {
                     this.overviewContainer.addView(this.getOverviewItem(
-                        R.string.grow_diary_plant_remaining_time,
-                        "${plant.minRemainingGrowingDays} - ${plant.maxRemainingGrowingDays} Tage (${plant.minRemainingGrowingWeeks} - ${plant.maxRemainingGrowingWeeks} Wochen)",
+                        R.string.grow_diary_plant_harvested_wet,
+                        "${plant.harvestedWet} g",
+                    ))
+                }
+
+                if (plant.harvestedDry != null) {
+                    this.overviewContainer.addView(this.getOverviewItem(
+                        R.string.grow_diary_plant_harvested_dry,
+                        "${plant.harvestedWet} g",
                     ))
                 }
 

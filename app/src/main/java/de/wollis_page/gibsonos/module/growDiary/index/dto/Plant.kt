@@ -3,6 +3,7 @@ package de.wollis_page.gibsonos.module.growDiary.index.dto
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Feed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Setup
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.State
 
 data class Plant(
@@ -23,6 +24,13 @@ data class Plant(
     var maxRemainingGrowingDays: Int?,
     var minRemainingGrowingWeeks: Int?,
     var maxRemainingGrowingWeeks: Int?,
+    var minRemainingGrowingDaysOtherPlants: Int?,
+    var maxRemainingGrowingDaysOtherPlants: Int?,
+    var minRemainingGrowingWeeksOtherPlants: Int?,
+    var maxRemainingGrowingWeeksOtherPlants: Int?,
+    var harvestedWet: Float?,
+    var harvestedDry: Float?,
+    var currentSetup: Setup?
 ): ListItemInterface {
     override fun getId() = this.id
 }

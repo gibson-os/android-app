@@ -109,7 +109,8 @@
     <string name="grow_diary_plant_max_grown_days">Max grown days</string>
     <string name="grow_diary_plant_duration">Duration</string>
     <string name="grow_diary_plant_duration_since_grown">Duration since grown</string>
-    <string name="grow_diary_plant_remaining_time">Remaining time</string>
+    <string name="grow_diary_plant_remaining_time_manufacture">Remaining time (manufacture)</string>
+    <string name="grow_diary_plant_remaining_time_other_plants">Remaining time (other grows with this seed)</string>
     <string name="grow_diary_plant_germinated_at">Germinated at</string>
     <string name="grow_diary_plant_germinated_days">Days since germinated</string>
     <string name="grow_diary_plant_germinated_days_from_start">Germination to start of flowering</string>
@@ -138,6 +139,7 @@
     <string name="grow_diary_plant_milestone_title">Title</string>
     <string name="grow_diary_plant_milestone_value">Value</string>
     <string name="grow_diary_plant_milestone_last">Last milestone</string>
+    <string name="grow_diary_plant_current_setup">Current setup</string>
 
     <string name="grow_diary_setup_tab">Setups</string>
 

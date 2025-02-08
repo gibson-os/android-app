@@ -108,7 +108,8 @@
     <string name="grow_diary_plant_max_grown_days">Maximale Anbauzeit</string>
     <string name="grow_diary_plant_duration">Dauer</string>
     <string name="grow_diary_plant_duration_since_grown">Dauer seit Anbau</string>
-    <string name="grow_diary_plant_remaining_time">Verbleibende Zeit</string>
+    <string name="grow_diary_plant_remaining_time_manufacture">Verbleibende Zeit (Hersteller)</string>
+    <string name="grow_diary_plant_remaining_time_other_plants">Verbleibende Zeit (Andere Grows dieses Samens)</string>
     <string name="grow_diary_plant_germinated_at">Keimung am</string>
     <string name="grow_diary_plant_germinated_days">Tage bis Keimung</string>
     <string name="grow_diary_plant_germinated_days_from_start">Keimung bis Blütebeginn</string>
@@ -137,6 +138,7 @@
     <string name="grow_diary_plant_milestone_title">Titel</string>
     <string name="grow_diary_plant_milestone_value">Wert</string>
     <string name="grow_diary_plant_milestone_last">Letzter Meilenstein</string>
+    <string name="grow_diary_plant_current_setup">Aktuelles Setup</string>
 
     <string name="grow_diary_setup_tab">Setups</string>
 
