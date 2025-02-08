@@ -22,7 +22,7 @@
             android:contentDescription="@string/grow_diary_plant_image_description" />
 
         <LinearLayout
-            android:id="@+id/overviewContiner"
+            android:id="@+id/overviewContainer"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -43,7 +43,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/text_spacing"
                 android:textSize="@dimen/subline_font_size"
-                
                 android:textStyle="bold" />
 
         </LinearLayout>

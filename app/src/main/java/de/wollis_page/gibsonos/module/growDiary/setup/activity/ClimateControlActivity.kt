@@ -12,8 +12,8 @@ class ClimateControlActivity : TabActivity() {
         val arguments = hashMapOf("climateControlId" to this.intent.getLongExtra("climateControlId", 0))
 
         return arrayOf(
-            Tab(R.string.grow_diary_planned_runtime_tab, PlannedRuntimeFragment::class, arguments),
             Tab(R.string.grow_diary_runtime_tab, RuntimeFragment::class, arguments),
+            Tab(R.string.grow_diary_planned_runtime_tab, PlannedRuntimeFragment::class, arguments),
         )
     }
 

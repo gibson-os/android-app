@@ -81,7 +81,7 @@ class PotFragment: ListFragment() {
         }
 
         view.findViewById<TextView>(R.id.name).text = item.name
-        view.findViewById<TextView>(R.id.liter).text = "${item.liter}l"
+        view.findViewById<TextView>(R.id.liter).text = "${item.liter} l"
 
         this.imageLoaderService.viewImage(
             item,

@@ -12,8 +12,8 @@ class LightActivity : TabActivity() {
         val arguments = hashMapOf("lightId" to this.intent.getLongExtra("lightId", 0))
 
         return arrayOf(
-            Tab(R.string.grow_diary_planned_runtime_tab, PlannedRuntimeFragment::class, arguments),
             Tab(R.string.grow_diary_runtime_tab, RuntimeFragment::class, arguments),
+            Tab(R.string.grow_diary_planned_runtime_tab, PlannedRuntimeFragment::class, arguments),
         )
     }
 

@@ -89,7 +89,7 @@ class FeedFragment: ListFragment() {
         }
 
         view.findViewById<TextView>(R.id.added).text = item.added
-        view.findViewById<TextView>(R.id.milliliter).text = item.milliliter.toString() + "ml"
+        view.findViewById<TextView>(R.id.milliliter).text = item.milliliter.toString() + " ml"
         view.findViewById<TextView>(R.id.ph).text = item.ph.toString()
 
         val inflater = LayoutInflater.from(this.activity)
@@ -104,7 +104,7 @@ class FeedFragment: ListFragment() {
             )
 
             additiveView.tag = it.fertilizer.fertilizer.id
-            additiveView.findViewById<TextView>(R.id.additive).text = it.milliliter.toString() + "ml " + it.fertilizer.fertilizer.name
+            additiveView.findViewById<TextView>(R.id.additive).text = it.milliliter.toString() + " ml " + it.fertilizer.fertilizer.name
             additivesView.addView(additiveView)
 
             val imageView = additiveView.findViewById<ImageView>(R.id.image)

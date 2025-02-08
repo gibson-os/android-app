@@ -3,10 +3,10 @@ package de.wollis_page.gibsonos.module.growDiary.setup.fragment
 import android.os.Bundle
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.fragment.GibsonOsFragment
+import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
 import de.wollis_page.gibsonos.module.growDiary.task.SetupTask
 
-class OverviewFragment: GibsonOsFragment() {
+class OverviewFragment: AbstractOverviewFragment() {
     override fun getContentView() = R.layout.grow_diary_setup_overview
 
     override fun onCreate(savedInstanceState: Bundle?) {

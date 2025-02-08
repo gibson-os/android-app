@@ -22,6 +22,7 @@
             android:contentDescription="@string/grow_diary_seed_image_description" />
 
         <LinearLayout
+            android:id="@+id/overviewContainer"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -43,78 +44,6 @@
                 android:layout_marginBottom="@dimen/text_spacing"
                 android:textSize="@dimen/subline_font_size"
                 android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/typeContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:text="@string/grow_diary_seed_type"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/text_spacing"
-                    android:textSize="@dimen/subline_font_size" />
-
-                <TextView
-                    android:id="@+id/type"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/text_spacing"
-                    android:textSize="@dimen/subline_font_size" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/floweringDaysContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:text="@string/grow_diary_seed_flowering_days"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/text_spacing"
-                    android:textSize="@dimen/subline_font_size" />
-
-                <TextView
-                    android:id="@+id/floweringDays"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/text_spacing"
-                    android:textSize="@dimen/subline_font_size" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/heightContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:text="@string/grow_diary_seed_height"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/text_spacing"
-                    android:textSize="@dimen/subline_font_size" />
-
-                <TextView
-                    android:id="@+id/height"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/text_spacing"
-                    android:textSize="@dimen/subline_font_size" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

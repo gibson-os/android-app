@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -16,21 +15,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
-import de.wollis_page.gibsonos.fragment.GibsonOsFragment
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Climate
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Feed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.feed.Additive
+import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
 import de.wollis_page.gibsonos.module.growDiary.task.FertilizerTask
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 
-class OverviewFragment: GibsonOsFragment() {
-    private lateinit var inflater: LayoutInflater
-    private lateinit var overviewContainer: LinearLayout
+class OverviewFragment: AbstractOverviewFragment() {
     lateinit var formLauncher: ActivityResultLauncher<Intent>
+    lateinit var overviewContainerLayout: LinearLayout
 
     override fun getContentView() = R.layout.grow_diary_plant_overview
 
@@ -55,8 +53,7 @@ class OverviewFragment: GibsonOsFragment() {
             val plant = PlantTask.get(this.activity, this.fragmentsArguments["plantId"].toString().toLong())
             this.activity.setTitle(plant.name)
 
-            this.overviewContainer = this.requireView().findViewById(R.id.overviewContiner)
-            this.inflater = LayoutInflater.from(this.activity)
+            this.overviewContainerLayout = this.getOverviewContainer()
 
             this.activity.runOnUiThread {
                 this.view?.findViewById<TextView>(R.id.name)?.text = plant.name
@@ -90,43 +87,31 @@ class OverviewFragment: GibsonOsFragment() {
                 }
 
                 if (plant.state != null) {
-                    this.overviewContainer.addView(this.getOverviewItem(
-                        R.string.grow_diary_plant_grown_at,
-                        plant.state?.grownAt.toString(),
-                    ))
-                    this.overviewContainer.addView(this.getOverviewItem(
-                        plant.state?.title.toString(),
-                        plant.state?.to.toString(),
-                    ))
-                    this.overviewContainer.addView(this.getOverviewItem(
+                    this.addOverviewItem(R.string.grow_diary_plant_grown_at, plant.state?.grownAt.toString())
+                    this.addOverviewItem(plant.state?.title.toString(), plant.state?.to.toString())
+                    this.addOverviewItem(
                         R.string.grow_diary_plant_duration,
                         "${plant.state?.toDaysSinceStart} Tage (${plant.state?.toWeekSinceStart} Wochen)",
-                    ))
+                    )
 
                     if ((plant.maxRemainingGrowingDays ?: 0) > 0) {
-                        var value = "${plant.minRemainingGrowingDays} - ${plant.maxRemainingGrowingDays} Tage (${plant.minRemainingGrowingWeeks} - ${plant.maxRemainingGrowingWeeks} Wochen)"
-
-                        if (plant.minRemainingGrowingDays == plant.maxRemainingGrowingDays) {
-                            value = "${plant.maxRemainingGrowingDays} Tage (${plant.maxRemainingGrowingWeeks} Wochen)"
-                        }
-
-                        this.overviewContainer.addView(this.getOverviewItem(
+                        this.addOverviewRangeItem(
                             R.string.grow_diary_plant_remaining_time_manufacture,
-                            value,
-                        ))
+                            plant.minRemainingGrowingDays,
+                            plant.maxRemainingGrowingDays,
+                            "${plant.minRemainingGrowingDays} - ${plant.maxRemainingGrowingDays} Tage (${plant.minRemainingGrowingWeeks} - ${plant.maxRemainingGrowingWeeks} Wochen)",
+                            "${plant.maxRemainingGrowingDays} Tage (${plant.maxRemainingGrowingWeeks} Wochen)",
+                        )
                     }
 
                     if ((plant.maxRemainingGrowingDaysOtherPlants ?: 0) > 0) {
-                        var value = "${plant.minRemainingGrowingDaysOtherPlants} - ${plant.maxRemainingGrowingDaysOtherPlants} Tage (${plant.minRemainingGrowingWeeksOtherPlants} - ${plant.maxRemainingGrowingWeeksOtherPlants} Wochen)"
-
-                        if (plant.minRemainingGrowingDaysOtherPlants == plant.maxRemainingGrowingDaysOtherPlants) {
-                            value = "${plant.maxRemainingGrowingDaysOtherPlants} Tage (${plant.maxRemainingGrowingWeeksOtherPlants} Wochen)"
-                        }
-
-                        this.overviewContainer.addView(this.getOverviewItem(
-                            R.string.grow_diary_plant_remaining_time_other_plants,
-                            value,
-                        ))
+                        this.addOverviewRangeItem(
+                            R.string.grow_diary_plant_remaining_time_manufacture,
+                            plant.minRemainingGrowingDaysOtherPlants,
+                            plant.maxRemainingGrowingDaysOtherPlants,
+                            "${plant.minRemainingGrowingDaysOtherPlants} - ${plant.maxRemainingGrowingDaysOtherPlants} Tage (${plant.minRemainingGrowingWeeksOtherPlants} - ${plant.maxRemainingGrowingWeeksOtherPlants} Wochen)",
+                            "${plant.maxRemainingGrowingDaysOtherPlants} Tage (${plant.maxRemainingGrowingWeeksOtherPlants} Wochen)",
+                        )
                     }
                 }
 
@@ -165,25 +150,16 @@ class OverviewFragment: GibsonOsFragment() {
                             )
                         )
                     }
-                    this.overviewContainer.addView(currentSetupView)
-                    this.overviewContainer.addView(this.getOverviewItem(
-                        R.string.since,
-                        currentSetup.from,
-                    ))
+                    this.overviewContainerLayout.addView(currentSetupView)
+                    this.addOverviewItem(R.string.since, currentSetup.from)
                 }
 
                 if (plant.harvestedWet != null) {
-                    this.overviewContainer.addView(this.getOverviewItem(
-                        R.string.grow_diary_plant_harvested_wet,
-                        "${plant.harvestedWet} g",
-                    ))
+                    this.addOverviewItem(R.string.grow_diary_plant_harvested_wet, "${plant.harvestedWet} g")
                 }
 
                 if (plant.harvestedDry != null) {
-                    this.overviewContainer.addView(this.getOverviewItem(
-                        R.string.grow_diary_plant_harvested_dry,
-                        "${plant.harvestedWet} g",
-                    ))
+                    this.addOverviewItem(R.string.grow_diary_plant_harvested_dry, "${plant.harvestedWet} g")
                 }
 
                 plant.lastClimate?.let { this.addClimateView(it, R.string.grow_diary_plant_climate_last) }
@@ -227,7 +203,7 @@ class OverviewFragment: GibsonOsFragment() {
                 "${state.toDaysSinceStart} Tage (${state.toWeekSinceStart} Wochen)"
             ))
 
-            this.overviewContainer.addView(stateItemView)
+            this.overviewContainerLayout.addView(stateItemView)
         }
     }
 
@@ -270,7 +246,7 @@ class OverviewFragment: GibsonOsFragment() {
             ))
         }
 
-        this.overviewContainer.addView(climateItemView)
+        this.overviewContainerLayout.addView(climateItemView)
     }
 
     private fun addLastFeedView(lastFeed: Feed) {
@@ -284,7 +260,7 @@ class OverviewFragment: GibsonOsFragment() {
         val lastFeedContainer = lastFeedItemView.findViewById<LinearLayout>(R.id.container)
         lastFeedContainer.findViewById<TextView>(R.id.title).setText(R.string.grow_diary_plant_feed_last)
         lastFeedContainer.addView(this.getOverviewItem(R.string.date, lastFeed.added))
-        lastFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${lastFeed.milliliter}ml"))
+        lastFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${lastFeed.milliliter} ml"))
 
         if (lastFeed.ph !== null) {
             lastFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_ph, lastFeed.ph.toString()))
@@ -292,7 +268,7 @@ class OverviewFragment: GibsonOsFragment() {
 
         this.addAdditivesViews(lastFeed.additives, lastFeedItemView)
 
-        this.overviewContainer.addView(lastFeedItemView)
+        this.overviewContainerLayout.addView(lastFeedItemView)
     }
 
     private fun addSumFeedView(feedSum: Feed) {
@@ -304,11 +280,11 @@ class OverviewFragment: GibsonOsFragment() {
 
         val sumFeedContainer = sumFeedItemView.findViewById<LinearLayout>(R.id.container)
         sumFeedContainer.findViewById<TextView>(R.id.title).setText(R.string.grow_diary_plant_feed_sum)
-        sumFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${feedSum.milliliter}ml"))
+        sumFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${feedSum.milliliter} ml"))
 
         this.addAdditivesViews(feedSum.additives, sumFeedItemView)
 
-        this.overviewContainer.addView(sumFeedItemView)
+        this.overviewContainerLayout.addView(sumFeedItemView)
     }
 
     private fun addAdditivesViews(additives: List<Additive>, itemView: View) {
@@ -333,7 +309,7 @@ class OverviewFragment: GibsonOsFragment() {
                 this.activity.runOnUiThread {
                     additiveView.findViewById<ImageView>(R.id.image).setImageBitmap(image)
                     additiveView.findViewById<TextView>(R.id.additive).text =
-                        it.milliliter.toString() + "ml " + it.fertilizer.fertilizer.name
+                        it.milliliter.toString() + " ml " + it.fertilizer.fertilizer.name
                     lastFeedContainer.addView(additiveView)
                 }
             })
@@ -352,22 +328,7 @@ class OverviewFragment: GibsonOsFragment() {
         milestoneContainer.addView(this.getOverviewItem(R.string.date, milestone.added))
         milestoneContainer.addView(this.getOverviewItem(milestone.title, milestone.value))
 
-        this.overviewContainer.addView(milestoneItemView)
-    }
-
-    private fun getOverviewItem(label: Int, value: String) = this.getOverviewItem(this.getString(label), value)
-
-    private fun getOverviewItem(label: String, value: String): View {
-        val overviewItem = this.inflater.inflate(
-            R.layout.grow_diary_overview_item,
-            this.view?.findViewById(android.R.id.content),
-            false
-        )
-
-        overviewItem.findViewById<TextView>(R.id.label).text = label
-        overviewItem.findViewById<TextView>(R.id.value).text = value
-
-        return overviewItem
+        this.overviewContainerLayout.addView(milestoneItemView)
     }
 
     override fun actionButton() = R.layout.base_button_edit
