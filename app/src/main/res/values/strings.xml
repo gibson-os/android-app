@@ -6,6 +6,7 @@
     <string name="delete">Delete</string>
     <string name="date">Date</string>
     <string name="hyphen">-</string>
+    <string name="since">Since</string>
 
     <string name="account_title">Add account</string>
     <string name="account_alias">Alias</string>

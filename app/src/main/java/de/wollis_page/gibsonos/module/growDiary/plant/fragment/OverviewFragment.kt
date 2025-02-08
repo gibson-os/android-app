@@ -3,6 +3,8 @@ package de.wollis_page.gibsonos.module.growDiary.plant.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,8 +60,12 @@ class OverviewFragment: GibsonOsFragment() {
 
             this.activity.runOnUiThread {
                 this.view?.findViewById<TextView>(R.id.name)?.text = plant.name
+
                 val seedText = this.view?.findViewById<TextView>(R.id.seed)
-                seedText?.text = plant.seed.name
+                val seedString = SpannableString(plant.seed.name)
+
+                seedString.setSpan(UnderlineSpan(), 0, seedString.length, 0)
+                seedText?.text = seedString
                 seedText?.setOnClickListener {
                     ActivityLauncherService.startActivity(
                         this.activity,
@@ -81,38 +87,6 @@ class OverviewFragment: GibsonOsFragment() {
                             ),
                         )
                     )
-                }
-
-                val currentSetup = plant.currentSetup
-
-                if (currentSetup != null) {
-                    val currentSetupView = this.getOverviewItem(
-                        R.string.grow_diary_plant_current_setup,
-                        currentSetup.setup.name,
-                    )
-                    currentSetupView.findViewById<TextView>(R.id.value).setOnClickListener {
-                        ActivityLauncherService.startActivity(
-                            this.activity,
-                            "growDiary",
-                            "setup",
-                            "index",
-                            mapOf(
-                                "setupId" to currentSetup.setup.id,
-                                GibsonOsActivity.SHORTCUT_KEY to Shortcut(
-                                    "growDiary",
-                                    "setup",
-                                    "index",
-                                    currentSetup.setup.name,
-                                    "icon_grow_setup",
-                                    mutableMapOf(
-                                        "setupId" to currentSetup.setup.id,
-                                        "name" to currentSetup.setup.name,
-                                    )
-                                ),
-                            )
-                        )
-                    }
-                    this.overviewContainer.addView(currentSetupView)
                 }
 
                 if (plant.state != null) {
@@ -154,6 +128,48 @@ class OverviewFragment: GibsonOsFragment() {
                             value,
                         ))
                     }
+                }
+
+                val currentSetup = plant.currentSetup
+
+                if (currentSetup != null) {
+                    val currentSetupView = this.getOverviewItem(
+                        R.string.grow_diary_plant_current_setup,
+                        currentSetup.setup.name,
+                    )
+                    val currentSetupText = currentSetupView.findViewById<TextView>(R.id.value)
+                    val currentSetupString = SpannableString(currentSetup.setup.name)
+
+                    currentSetupString.setSpan(UnderlineSpan(), 0, currentSetupString.length, 0)
+                    currentSetupText.text = currentSetupString
+
+                    currentSetupText.setOnClickListener {
+                        ActivityLauncherService.startActivity(
+                            this.activity,
+                            "growDiary",
+                            "setup",
+                            "index",
+                            mapOf(
+                                "setupId" to currentSetup.setup.id,
+                                GibsonOsActivity.SHORTCUT_KEY to Shortcut(
+                                    "growDiary",
+                                    "setup",
+                                    "index",
+                                    currentSetup.setup.name,
+                                    "icon_grow_setup",
+                                    mutableMapOf(
+                                        "setupId" to currentSetup.setup.id,
+                                        "name" to currentSetup.setup.name,
+                                    )
+                                ),
+                            )
+                        )
+                    }
+                    this.overviewContainer.addView(currentSetupView)
+                    this.overviewContainer.addView(this.getOverviewItem(
+                        R.string.since,
+                        currentSetup.from,
+                    ))
                 }
 
                 if (plant.harvestedWet != null) {

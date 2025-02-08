@@ -4,5 +4,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Setup
 
 data class Setup(
     var id: Long,
-    var setup: Setup
+    var setup: Setup,
+    var from: String,
+    var to: String?,
 )
