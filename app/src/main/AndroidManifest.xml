@@ -55,6 +55,26 @@
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="de.wollis_page.gibsonos.helper.CastOptionsProvider"/>
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="de.wollis_page.gibsonos.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="de.wollis_page.gibsonos.debug.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
         <activity
             android:name=".module.core.user.activity.LoginActivity"/>
 

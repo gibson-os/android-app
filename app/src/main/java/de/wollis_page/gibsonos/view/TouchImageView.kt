@@ -574,7 +574,7 @@ class TouchImageView : AppCompatImageView {
                 consumed = doubleTapListener!!.onDoubleTap(e)
             }
             if (state == State.NONE) {
-                val targetZoom = if ((currentZoom == minScale)) (maxScale / 10) else minScale
+                val targetZoom = if ((currentZoom == minScale)) 3f else minScale
                 val doubleTap = DoubleTapZoom(targetZoom, e.x, e.y, false)
                 compatPostOnAnimation(doubleTap)
                 consumed = true

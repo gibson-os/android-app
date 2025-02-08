@@ -125,11 +125,9 @@ object PlantTask : AbstractTask() {
             dataStore.addParam("date", date)
         }
 
-        val loadResponse = this.load<Image>(context, dataStore, catchResponseException = false)
+        tempFile.deleteOnExit()
 
-        tempFile.delete()
-
-        return loadResponse
+        return this.load(context, dataStore, catchResponseException = false)
     }
 
     fun getFertilizers(

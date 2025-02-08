@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addButton"
+        android:id="@+id/shareButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/outter_spacing"
-        app:backgroundTint="@color/colorAction"
-        app:srcCompat="@drawable/ic_plus" />
+        app:backgroundTint="@color/colorProgressGenerate"
+        app:srcCompat="@drawable/ic_share" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
