@@ -75,7 +75,7 @@ class ImageActivity: GibsonOsActivity() {
             if (contentUri != null) {
                 val shareIntent = Intent()
                 shareIntent.setAction(Intent.ACTION_SEND)
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.grow_diary_title))
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, this.created)
                 shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 shareIntent.setDataAndType(contentUri, contentResolver.getType(contentUri))
                 shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
