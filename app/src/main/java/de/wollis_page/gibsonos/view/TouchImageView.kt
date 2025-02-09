@@ -73,6 +73,11 @@ class TouchImageView : AppCompatImageView {
     private var userTouchListener: OnTouchListener? = null
     private var touchImageViewListener: OnTouchImageViewListener? = null
 
+    var onSwipeLeft: (() -> Unit)? = null;
+    var onSwipeRight: (() -> Unit)? = null;
+    var onSwipeTop: (() -> Unit)? = null;
+    var onSwipeBottom: (() -> Unit)? = null;
+
     constructor(context: Context) : super(context) {
         sharedConstructing(context)
     }
@@ -563,9 +568,51 @@ class TouchImageView : AppCompatImageView {
                 //
                 fling!!.cancelFling()
             }
+
             fling = Fling(velocityX.toInt(), velocityY.toInt())
             compatPostOnAnimation(fling!!)
-            return super.onFling(e1, e2, velocityX, velocityY)
+
+            return !this.detectSwipe(e1, e2, velocityX, velocityY) || super.onFling(e1, e2, velocityX, velocityY)
+        }
+
+        private fun detectSwipe(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float,
+        ): Boolean {
+            if (currentZoom != minScale) {
+                return false
+            }
+
+            try {
+                val diffY = e2.y - e1!!.y
+                val diffX = e2.x - e1.x
+
+                if (abs(diffX) > abs(diffY)) {
+                    if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            onSwipeRight?.invoke()
+                        } else {
+                            onSwipeLeft?.invoke()
+                        }
+
+                        return true
+                    }
+                } else if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffY > 0) {
+                        onSwipeBottom?.invoke()
+                    } else {
+                        onSwipeTop?.invoke()
+                    }
+
+                    return true
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+            }
+
+            return false
         }
 
         override fun onDoubleTap(e: MotionEvent): Boolean {
@@ -965,5 +1012,7 @@ class TouchImageView : AppCompatImageView {
     companion object {
         private const val SUPER_MIN_MULTIPLIER = .75f
         private const val SUPER_MAX_MULTIPLIER = 1.25f
+        private const val SWIPE_THRESHOLD = 100
+        private const val SWIPE_VELOCITY_THRESHOLD = 100
     }
 }
