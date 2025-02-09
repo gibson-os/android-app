@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
@@ -32,6 +33,13 @@ class ImageActivity: GibsonOsActivity() {
         this.created = this.intent.getStringExtra("created")
 
         this.setTitle(this.created)
+
+        imageView.onSwipeLeft = {
+            Toast.makeText(this, "swipe left", Toast.LENGTH_LONG).show()
+        }
+        imageView.onSwipeRight = {
+            Toast.makeText(this, "swipe right", Toast.LENGTH_LONG).show()
+        }
 
         this.runTask({
             this.image = PlantTask.getImage(

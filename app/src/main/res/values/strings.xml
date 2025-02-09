@@ -153,6 +153,7 @@
     <string name="grow_diary_seed_growing_days">Growing days</string>
     <string name="grow_diary_seed_plant_days">Time required for grows</string>
     <string name="grow_diary_seed_height">Height</string>
+    <string name="grow_diary_seed_price">Preis</string>
 
     <string name="grow_diary_room_tab">Rooms</string>
 
