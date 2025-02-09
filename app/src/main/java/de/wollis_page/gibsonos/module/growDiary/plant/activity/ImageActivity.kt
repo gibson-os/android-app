@@ -2,18 +2,16 @@ package de.wollis_page.gibsonos.module.growDiary.plant.activity
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.view.LayoutInflater
+import androidx.core.content.FileProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.view.TouchImageView
-import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 
 
 class ImageActivity: GibsonOsActivity() {
@@ -57,31 +55,32 @@ class ImageActivity: GibsonOsActivity() {
         ))
         val shareButton = findViewById<FloatingActionButton>(R.id.shareButton)
         shareButton.setOnClickListener {
-            val share = Intent(Intent.ACTION_SEND)
-            share.setType("image/jpeg")
-            val tempFile: File
 
-            val bytes = ByteArrayOutputStream()
-            this.image.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-            val path: String = MediaStore.Images.Media.insertImage(
-                this.contentResolver,
-                this.image,
-                "Share image",
-                null
+            val cachePath = cacheDir
+            cachePath.mkdirs()
+
+            val shareFile = File(cachePath, "sharedImage.jpg")
+            val stream = FileOutputStream(shareFile)
+            val sharetBitmap: Bitmap = image
+            sharetBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            stream.close()
+
+            val newFile = File(cachePath, "sharedImage.jpg")
+            val contentUri = FileProvider.getUriForFile(
+                applicationContext,
+                "${applicationContext.packageName}.fileprovider",
+                newFile
             )
 
-            val fileName = Environment.getExternalStorageDirectory().path + File.separator + "temporary_file.jpg"
-
-            this.contentResolver.openInputStream(Uri.parse(path))!!.use { input ->
-                tempFile = File.createTempFile("sharedImage", ".jpg", this.cacheDir)
-
-                tempFile.outputStream().use { output ->
-                    input.copyTo(output)
-                }
+            if (contentUri != null) {
+                val shareIntent = Intent()
+                shareIntent.setAction(Intent.ACTION_SEND)
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.grow_diary_title))
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                shareIntent.setDataAndType(contentUri, contentResolver.getType(contentUri))
+                shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_image)))
             }
-
-            share.putExtra(Intent.EXTRA_STREAM, Uri.parse(fileName))
-            startActivity(Intent.createChooser(share, this.getString(R.string.share_image)))
         }
     }
 }

@@ -57,7 +57,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="de.wollis_page.gibsonos.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data
@@ -65,15 +65,17 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <provider
+        <!--<provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="de.wollis_page.gibsonos.debug.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
+                android:resource="@xml/provider_paths"/>
+
+        </provider>-->
 
         <activity
             android:name=".module.core.user.activity.LoginActivity"/>
@@ -231,6 +233,7 @@
                 <action android:name="androidx.media3.session.MediaSessionService"/>
             </intent-filter>
         </service>
+
     </application>
 
 </manifest>
