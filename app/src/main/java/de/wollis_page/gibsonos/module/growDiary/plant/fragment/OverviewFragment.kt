@@ -25,6 +25,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewF
 import de.wollis_page.gibsonos.module.growDiary.task.FertilizerTask
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
+import kotlin.math.round
 
 class OverviewFragment: AbstractOverviewFragment() {
     lateinit var formLauncher: ActivityResultLauncher<Intent>
@@ -154,12 +155,16 @@ class OverviewFragment: AbstractOverviewFragment() {
                     this.addOverviewItem(R.string.since, currentSetup.from)
                 }
 
-                if (plant.harvestedWet != null) {
-                    this.addOverviewItem(R.string.grow_diary_plant_harvested_wet, "${plant.harvestedWet} g")
+                val harvestedWet = plant.harvestedWet ?: 0F
+                val harvestedDry = plant.harvestedDry ?: 0F
+
+                if (harvestedWet > 0F) {
+                    this.addOverviewItem(R.string.grow_diary_plant_harvested_wet, "$harvestedWet g")
                 }
 
-                if (plant.harvestedDry != null) {
-                    this.addOverviewItem(R.string.grow_diary_plant_harvested_dry, "${plant.harvestedWet} g")
+                if (harvestedDry > 0F) {
+                    this.addOverviewItem(R.string.grow_diary_plant_harvested_dry, "$harvestedDry g")
+                    this.addOverviewItem(R.string.grow_diary_plant_harvested_ratio, "1:" + (round((harvestedWet / harvestedDry) * 100) / 100))
                 }
 
                 plant.lastClimate?.let { this.addClimateView(it, R.string.grow_diary_plant_climate_last) }

@@ -124,6 +124,7 @@
     <string name="grow_diary_plant_harvested_at">Harvested at</string>
     <string name="grow_diary_plant_harvested_wet">Harvested wet</string>
     <string name="grow_diary_plant_harvested_dry">Harvested dry</string>
+    <string name="grow_diary_plant_harvested_ratio">Ratio</string>
     <string name="grow_diary_plant_climate_temperature">Temperature</string>
     <string name="grow_diary_plant_climate_relative_humidity">Relative humidity</string>
     <string name="grow_diary_plant_climate_air_pressure">Air pressure</string>

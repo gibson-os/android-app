@@ -123,6 +123,7 @@
     <string name="grow_diary_plant_harvested_at">Geernted am</string>
     <string name="grow_diary_plant_harvested_wet">Ertrag feucht</string>
     <string name="grow_diary_plant_harvested_dry">Ertrag trocken</string>
+    <string name="grow_diary_plant_harvested_ratio">Verhältnis</string>
     <string name="grow_diary_plant_climate_temperature">Temperatur</string>
     <string name="grow_diary_plant_climate_relative_humidity">Relative Luftfeuchtigkeit</string>
     <string name="grow_diary_plant_climate_air_pressure">Luftdruck</string>
