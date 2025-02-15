@@ -89,7 +89,7 @@ class ImageFragment: GridFragment() {
                     "image",
                     mapOf(
                         "plantId" to (this.plantId ?: 0),
-                        "created" to item.created,
+                        "image" to item,
                     )
                 )
             } catch (exception: ClassNotFoundException) {

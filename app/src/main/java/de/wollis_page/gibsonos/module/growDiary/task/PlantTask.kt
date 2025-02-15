@@ -67,6 +67,28 @@ object PlantTask : AbstractTask() {
         return this.loadList(context, dataStore, start, limit)
     }
 
+    fun getImagesBefore(
+        context: GibsonOsActivity,
+        imageId: Long,
+        limit: Long,
+    ): ListResponse<Image> {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "imagesBefore")
+        dataStore.addParam("id", imageId)
+
+        return this.loadList(context, dataStore, 0, limit)
+    }
+
+    fun getImagesAfter(
+        context: GibsonOsActivity,
+        imageId: Long,
+        limit: Long,
+    ): ListResponse<Image> {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "imagesAfter")
+        dataStore.addParam("id", imageId)
+
+        return this.loadList(context, dataStore, 0, limit)
+    }
+
     fun getImage(
         context: GibsonOsActivity,
         plantId: Long,
