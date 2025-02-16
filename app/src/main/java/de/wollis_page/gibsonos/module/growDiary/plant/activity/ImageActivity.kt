@@ -22,6 +22,8 @@ class ImageActivity: GibsonOsActivity() {
     private lateinit var image: Image
     private var plantId: Long? = null
     private var images: MutableList<Image> = mutableListOf()
+    private var beforeCompleteLoaded = false
+    private var afterCompleteLoaded = false
 
     override fun getContentView() = R.layout.grow_diary_plant_image_view
 
@@ -34,12 +36,10 @@ class ImageActivity: GibsonOsActivity() {
 
         this.plantId = this.intent.getLongExtra("plantId", 0)
         this.image = AppIntentExtraService.getIntentExtra("image", this.intent) as Image
+        this.images.add(this.image)
 
-        this.runTask({
-            this.images.addAll(PlantTask.getImagesBefore(this, this.image.id, 10).data)
-            this.images.add(this.image)
-            this.images.addAll(PlantTask.getImagesAfter(this, this.image.id, 10).data)
-        })
+        this.loadImagesBefore()
+        this.loadImagesAfter()
 
         this.setTitle(this.image.created)
 
@@ -53,7 +53,7 @@ class ImageActivity: GibsonOsActivity() {
             }
 
             if (index == 1) {
-                this.images.addAll(0, PlantTask.getImagesBefore(this, this.image.id, 10).data)
+                this.loadImagesBefore()
             }
         }
         imageView.onSwipeRight = {
@@ -66,7 +66,7 @@ class ImageActivity: GibsonOsActivity() {
             }
 
             if (index + 1 == this.images.lastIndex) {
-                this.images.addAll(PlantTask.getImagesAfter(this, this.image.id, 10).data)
+                this.loadImagesAfter()
             }
         }
 
@@ -123,5 +123,30 @@ class ImageActivity: GibsonOsActivity() {
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share_image)))
             }
         }
+    }
+
+    private fun loadImagesAfter() {
+        if (this.afterCompleteLoaded) {
+            return
+        }
+
+        this.runTask({
+            val images = PlantTask.getImagesAfter(this, this.image.id, 10).data
+            this.images.addAll(images)
+            this.afterCompleteLoaded = images.count() != 10
+        })
+    }
+
+    private fun loadImagesBefore() {
+        if (this.beforeCompleteLoaded) {
+            return
+        }
+
+        this.runTask({
+            val images = PlantTask.getImagesBefore(this, this.image.id, 10).data
+
+            this.images.addAll(0, images.reversed())
+            this.beforeCompleteLoaded = images.count() != 10
+        })
     }
 }
