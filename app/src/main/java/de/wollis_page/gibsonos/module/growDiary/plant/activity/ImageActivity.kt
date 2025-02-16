@@ -103,7 +103,7 @@ class ImageActivity: GibsonOsActivity() {
             val shareFile = File(cachePath, "sharedImage.jpg")
             val stream = FileOutputStream(shareFile)
             val sharetBitmap: Bitmap = this.imageLoaderService.getImage(image)!!
-            sharetBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            sharetBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             stream.close()
 
             val newFile = File(cachePath, "sharedImage.jpg")
