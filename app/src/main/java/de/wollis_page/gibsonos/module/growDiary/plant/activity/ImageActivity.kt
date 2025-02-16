@@ -81,8 +81,10 @@ class ImageActivity: GibsonOsActivity() {
                     this.image.created,
                 )
             },
-            { _, image ->
-                imageView.setImageBitmap(image)
+            { plantImage, image ->
+                if (plantImage.id == this.image.id) {
+                    imageView.setImageBitmap(image)
+                }
             }
         )
         this.imageLoaderService.viewImage(this.image, imageView, R.drawable.ic_hemp)

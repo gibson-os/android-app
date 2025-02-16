@@ -36,7 +36,6 @@ class ImageLoaderService<T : ListItemInterface>(
 
         if (image == null) {
             placeholderResource?.let { imageView.setImageResource(it) }
-            this.addQueue(item)
         } else {
             imageView.setImageBitmap(image)
         }
