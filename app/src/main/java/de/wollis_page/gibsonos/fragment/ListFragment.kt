@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
+import de.wollis_page.gibsonos.dialog.FilterDialog
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.helper.ListInterface
 
@@ -20,6 +22,8 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     override fun getContentView() = R.layout.base_list
+
+    override fun getMenuView() = R.menu.base_list_menu
 
     open fun getLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
 
@@ -34,7 +38,7 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(this.getContentView(), container, false)
+        val view = super.onCreateView(inflater, container, savedInstanceState)
         this.listView = view.findViewById(R.id.list)
 
         val llm = this.getLayoutManager() as LinearLayoutManager
@@ -88,8 +92,22 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface {
             }
 
             run(account)
-            activity.runOnUiThread { this.listView.adapter?.notifyDataSetChanged() }
+            this.activity.runOnUiThread { this.listView.adapter?.notifyDataSetChanged() }
         })
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when(menuItem.itemId){
+            R.id.filter_menu_item -> {
+                FilterDialog(this.activity).build(this.listAdapter.filters!!).show()
+
+                true
+            }
+            R.id.sort_menu_item -> {
+                true
+            }
+            else -> false
+        }
     }
 
     fun runTask(run: () -> Unit, runFailure: ((exception: Throwable) -> Unit)? = null) {

@@ -2,16 +2,22 @@ package de.wollis_page.gibsonos.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.ContentFrameLayout
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 
 abstract class GibsonOsFragment: Fragment() {
     lateinit var activity: GibsonOsActivity
     protected lateinit var fragmentsArguments: HashMap<String, *>
     private var actionView: View? = null
+    protected var menu: Menu? = null
 
     protected abstract fun getContentView(): Int
 
@@ -27,11 +33,50 @@ abstract class GibsonOsFragment: Fragment() {
     open fun updateData(data: String) {
     }
 
+    open fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return true
+    }
+
+    open fun getMenuView(): Int? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        val menuView = this.getMenuView()
+
+        if (menuView != null) {
+            val fragment = this;
+
+            this.requireActivity().addMenuProvider(object : MenuProvider {
+//                override fun onPrepareMenu(menu: Menu) {
+//                    super.onPrepareMenu(menu)
+//                }
+
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    fragment.menu = menu
+                    menuInflater.inflate(menuView, menu)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return fragment.onMenuItemSelected(menuItem)
+                }
+
+                //            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                //                return when(menuItem.itemId){
+                //                    R.id.navigation_notifications -> {
+                //                        true
+                //                    }
+                //                    R.id.navigation_wallet -> {
+                //                        true
+                //                    }
+                //                    else -> false
+                //                }
+                //            }
+            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }
+
         return inflater.inflate(this.getContentView(), container, false);
     }
 

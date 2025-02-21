@@ -7,6 +7,8 @@
     <string name="date">Datum</string>
     <string name="since">Seit</string>
     <string name="share_image">Bild teilen</string>
+    <string name="filter">Filter</string>
+    <string name="sort">Sortieren</string>
 
     <string name="account_title">Account hinzufügen</string>
     <string name="account_alias">Alias</string>

@@ -8,6 +8,8 @@
     <string name="hyphen">-</string>
     <string name="since">Since</string>
     <string name="share_image">Share image</string>
+    <string name="filter">Filter</string>
+    <string name="sort">Sort</string>
 
     <string name="account_title">Add account</string>
     <string name="account_alias">Alias</string>

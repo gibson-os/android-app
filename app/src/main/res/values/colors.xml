@@ -9,4 +9,5 @@
     <color name="colorProgressDone">#E96228</color>
     <color name="colorProgressError">#FF0000</color>
     <color name="colorAction">#FF00FF00</color>
+    <color name="menuIcon">#FFFFFFFF</color>
 </resources>

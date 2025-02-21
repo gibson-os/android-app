@@ -16,7 +16,7 @@ abstract class AbstractOverviewFragment: GibsonOsFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         this.inflater = inflater

@@ -6,6 +6,7 @@ import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListResponse
+import de.wollis_page.gibsonos.dto.response.Filter
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.DataStore
@@ -90,13 +91,31 @@ abstract class AbstractTask {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val listType = Types.newParameterizedType(MutableList::class.java, E::class.java)
         val jsonAdapter = moshi.adapter<MutableList<E>>(listType)
+        var filters: MutableMap<String, Filter>? = null
+        var possibleOrders: MutableList<String>? = null
+
+        if (response.has("filters")) {
+            val responseFilters = response.get("filters")
+
+            if (responseFilters is JSONObject) {
+                val filterListType = Types.newParameterizedType(MutableMap::class.java, String::class.java, Filter::class.java)
+                filters = moshi.adapter<MutableMap<String, Filter>?>(filterListType).fromJson(responseFilters.toString())
+            }
+        }
+
+        if (response.has("possibleOrders")) {
+            val stringListType = Types.newParameterizedType(MutableList::class.java, String::class.java)
+            possibleOrders = moshi.adapter<MutableList<String>?>(stringListType).fromJson(response.getJSONArray("possibleOrders").toString())
+        }
 
         return ListResponse(
             jsonAdapter.fromJson(response.getJSONArray("data").toString())
                 ?: throw TaskException("Data not in response!", messageResource),
             if (response.has("total")) response.getLong("total") else 0,
             start,
-            limit
+            limit,
+            filters,
+            possibleOrders,
         )
     }
 }

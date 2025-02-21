@@ -12,6 +12,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.ListInterface
+import de.wollis_page.gibsonos.dto.response.Filter as FilterResponse
 
 class BaseListAdapter(
     private val context: Activity,
@@ -26,6 +27,8 @@ class BaseListAdapter(
         }
     var filteredItems = ArrayList<ListItemInterface>()
     var total: Long = 0
+    var filters: MutableMap<String, FilterResponse>? = null
+    var possibleOrders: MutableList<String>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
@@ -42,6 +45,8 @@ class BaseListAdapter(
 
     fun setListResponse(listResponse: ListResponse<*>) {
         this.total = listResponse.total ?: 0
+        this.filters = listResponse.filters
+        this.possibleOrders = listResponse.possibleOrders
 
         if ((listResponse.start ?: 0) > 0) {
             this.items.addAll(listResponse.data.toMutableList() as ArrayList<ListItemInterface>)

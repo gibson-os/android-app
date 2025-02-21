@@ -1,6 +1,7 @@
 package de.wollis_page.gibsonos.activity
 
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -100,5 +101,13 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
         searchInput.addTextChangedListener {
             this.listAdapter.filter.filter(it)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+
+        this.menuInflater.inflate(R.menu.base_list_menu, menu)
+
+        return true
     }
 }
