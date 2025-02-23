@@ -92,7 +92,7 @@ class OverviewFragment: AbstractOverviewFragment() {
                     this.addOverviewItem(plant.state?.title.toString(), plant.state?.to.toString())
                     this.addOverviewItem(
                         R.string.grow_diary_plant_duration,
-                        "${plant.state?.toDaysSinceStart} Tage (${plant.state?.toWeekSinceStart} Wochen)",
+                        "Tag ${plant.state?.toDaysSinceStart} (Woche ${plant.state?.toWeekSinceStart})",
                     )
 
                     if ((plant.maxRemainingGrowingDays ?: 0) > 0) {
@@ -201,11 +201,11 @@ class OverviewFragment: AbstractOverviewFragment() {
             stateContainer.addView(this.getOverviewItem(state.from!!, state.to!!))
             stateContainer.addView(this.getOverviewItem(
                 R.string.grow_diary_plant_duration,
-                "${state.days} Tage (${state.week} Wochen)",
+                "Tag ${state.days} (Woche ${state.week})",
             ))
             stateContainer.addView(this.getOverviewItem(
                 R.string.grow_diary_plant_duration_since_grown,
-                "${state.toDaysSinceStart} Tage (${state.toWeekSinceStart} Wochen)"
+                "Tag ${state.toDaysSinceStart} (Woche ${state.toWeekSinceStart})"
             ))
 
             this.overviewContainerLayout.addView(stateItemView)

@@ -41,7 +41,7 @@ class ImageActivity: GibsonOsActivity() {
         this.loadImagesBefore()
         this.loadImagesAfter()
 
-        this.setTitle(this.image.created)
+        this.setTitle(this.image.created + "(Tag " + this.image.day + ")")
 
         imageView.onSwipeLeft = {
             val index = this.images.indexOf(image)
