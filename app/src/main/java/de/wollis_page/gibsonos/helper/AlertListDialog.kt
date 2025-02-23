@@ -5,7 +5,11 @@ import android.app.AlertDialog.Builder
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ListAdapter
+import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.DialogItem
@@ -14,7 +18,7 @@ import de.wollis_page.gibsonos.dto.FlattedDialogItem
 class AlertListDialog(
     private val context: GibsonOsActivity,
     private val title: String,
-    private val items: ArrayList<DialogItem>
+    private val items: ArrayList<DialogItem>,
 ) {
     private val flattedItems: ArrayList<FlattedDialogItem> = ArrayList()
     private var scrollTo: Int? = null
@@ -41,7 +45,7 @@ class AlertListDialog(
 
     var layout: Int = R.layout.base_alert_dialog_item
 
-    fun show(): AlertDialog? {
+    fun show(): AlertDialog {
         val adapter: ListAdapter = object : ArrayAdapter<FlattedDialogItem>(
             this.context,
             this.layout,
