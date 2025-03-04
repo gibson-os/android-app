@@ -12,7 +12,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 35
         versionCode 1
-        versionName "2025-02-16"
+        versionName "2025-02-23"
         setProperty("archivesBaseName", "../aab/" + applicationId + "-v" + versionName + "-" + versionCode)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -64,22 +64,22 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.15.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.mediarouter:mediarouter:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
-    implementation 'com.github.satyan:sugar:1.5'
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'com.squareup.moshi:moshi:1.13.0'
-    implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.google.android.gms:play-services-cast-framework:22.0.0'
     implementation 'androidx.media3:media3-session:1.5.1'
     implementation 'androidx.media3:media3-exoplayer:1.5.1'
     implementation 'androidx.glance:glance:1.1.1'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.google.android.gms:play-services-cast-framework:22.0.0'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.github.satyan:sugar:1.5'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.moshi:moshi:1.15.2'
+    implementation "com.squareup.moshi:moshi-kotlin:1.15.2"
     implementation platform('com.google.firebase:firebase-bom:33.9.0')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.13.2'
