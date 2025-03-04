@@ -6,6 +6,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.feed.Additive
 data class Feed(
     var id: Long,
     var added: String,
+    var day: Int,
     var milliliter: Long,
     var additives: List<Additive>,
     var ph: Float?,

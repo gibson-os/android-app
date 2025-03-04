@@ -41,7 +41,7 @@ class ImageActivity: GibsonOsActivity() {
         this.loadImagesBefore()
         this.loadImagesAfter()
 
-        this.setTitle(this.image.created + "(Tag " + this.image.day + ")")
+        this.setTitle(this.image.created + " (Tag " + this.image.day + ")")
 
         imageView.onSwipeLeft = {
             val index = this.images.indexOf(image)
@@ -49,7 +49,7 @@ class ImageActivity: GibsonOsActivity() {
             if (index != 0) {
                 this.image = this.images[index-1]
                 this.imageLoaderService.viewImage(this.image, imageView, R.drawable.ic_hemp)
-                this.setTitle(this.image.created)
+                this.setTitle(this.image.created + " (Tag " + this.image.day + ")")
             }
 
             if (index == 1) {
@@ -62,7 +62,7 @@ class ImageActivity: GibsonOsActivity() {
             if (index != this.images.lastIndex) {
                 this.image = this.images[index+1]
                 this.imageLoaderService.viewImage(this.image, imageView, R.drawable.ic_hemp)
-                this.setTitle(this.image.created)
+                this.setTitle(this.image.created + " (Tag " + this.image.day + ")")
             }
 
             if (index + 1 == this.images.lastIndex) {

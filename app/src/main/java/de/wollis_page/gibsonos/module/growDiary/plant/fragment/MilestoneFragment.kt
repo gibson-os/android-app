@@ -57,7 +57,7 @@ class MilestoneFragment: ListFragment() {
             return
         }
 
-        view.findViewById<TextView>(R.id.added).text = item.added
+        view.findViewById<TextView>(R.id.added).text = "${item.added} (Tag ${item.day})"
         view.findViewById<TextView>(R.id.title).text = item.title
         view.findViewById<TextView>(R.id.value).text = item.value
     }

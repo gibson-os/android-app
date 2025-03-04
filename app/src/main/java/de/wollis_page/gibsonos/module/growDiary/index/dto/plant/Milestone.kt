@@ -7,6 +7,7 @@ data class Milestone(
     var title: String,
     var value: String,
     var added: String,
+    var day: Int,
 ): ListItemInterface {
     override fun getId() = this.id
 }

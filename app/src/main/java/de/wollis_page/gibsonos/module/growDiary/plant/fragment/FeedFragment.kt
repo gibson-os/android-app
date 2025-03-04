@@ -88,7 +88,7 @@ class FeedFragment: ListFragment() {
             return
         }
 
-        view.findViewById<TextView>(R.id.added).text = item.added
+        view.findViewById<TextView>(R.id.added).text = "${item.added} (Tag ${item.day})"
         view.findViewById<TextView>(R.id.milliliter).text = item.milliliter.toString() + " ml"
         view.findViewById<TextView>(R.id.ph).text = item.ph.toString()
 
