@@ -5,6 +5,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Feed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Setup
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.State
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Climate as PlantClimate
 
 data class Plant(
     var id: Long,
@@ -12,14 +13,11 @@ data class Plant(
     var seed: Seed,
     var state: State?,
     var states: Map<String, State>?,
-    var lastClimate: Climate?,
+    var lastClimates: List<Climate>?,
+    var climates: List<PlantClimate>?,
     var lastFeed: Feed?,
     var sumFeed: Feed?,
     var lastMilestone: Milestone?,
-    var minTemperature: Climate?,
-    var maxTemperature: Climate?,
-    var minRelativeHumidity: Climate?,
-    var maxRelativeHumidity: Climate?,
     var minRemainingGrowingDays: Int?,
     var maxRemainingGrowingDays: Int?,
     var minRemainingGrowingWeeks: Int?,

@@ -126,11 +126,13 @@
     <string name="grow_diary_plant_harvested_wet">Ertrag feucht</string>
     <string name="grow_diary_plant_harvested_dry">Ertrag trocken</string>
     <string name="grow_diary_plant_harvested_ratio">Verhältnis</string>
+    <string name="grow_diary_plant_climate_measuring_point">Messstelle</string>
     <string name="grow_diary_plant_climate_temperature">Temperatur</string>
     <string name="grow_diary_plant_climate_relative_humidity">Relative Luftfeuchtigkeit</string>
     <string name="grow_diary_plant_climate_air_pressure">Luftdruck</string>
     <string name="grow_diary_plant_climate_leaf_temperature">Blatt Temperatur</string>
-    <string name="grow_diary_plant_climate_last">Letztes Klima</string>
+    <string name="grow_diary_plant_climates">Klima</string>
+    <string name="grow_diary_plant_climates_last">Letztes Klima</string>
     <string name="grow_diary_plant_climate_min_temperature">Minimale Temperatur</string>
     <string name="grow_diary_plant_climate_max_temperature">Maximale Temperatur</string>
     <string name="grow_diary_plant_climate_min_relative_humidity">Minimale Luftfeuchtigkeit</string>

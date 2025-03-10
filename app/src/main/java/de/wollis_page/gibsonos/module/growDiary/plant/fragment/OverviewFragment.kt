@@ -26,6 +26,7 @@ import de.wollis_page.gibsonos.module.growDiary.task.FertilizerTask
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 import kotlin.math.round
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Climate as PlantClimate
 
 class OverviewFragment: AbstractOverviewFragment() {
     lateinit var formLauncher: ActivityResultLauncher<Intent>
@@ -167,14 +168,11 @@ class OverviewFragment: AbstractOverviewFragment() {
                     this.addOverviewItem(R.string.grow_diary_plant_harvested_ratio, "1:" + (round((harvestedWet / harvestedDry) * 100) / 100))
                 }
 
-                plant.lastClimate?.let { this.addClimateView(it, R.string.grow_diary_plant_climate_last) }
+                plant.lastClimates?.let { this.addLastClimatesView(it) }
                 plant.lastFeed?.let { this.addLastFeedView(it) }
                 plant.lastMilestone?.let { this.addLastMilestoneView(it) }
                 plant.sumFeed?.let { this.addSumFeedView(it) }
-                plant.minTemperature?.let { this.addClimateView(it, R.string.grow_diary_plant_climate_min_temperature) }
-                plant.maxTemperature?.let { this.addClimateView(it, R.string.grow_diary_plant_climate_max_temperature) }
-                plant.minRelativeHumidity?.let { this.addClimateView(it, R.string.grow_diary_plant_climate_min_relative_humidity) }
-                plant.maxRelativeHumidity?.let { this.addClimateView(it, R.string.grow_diary_plant_climate_max_relative_humidity) }
+                plant.climates?.let { this.addClimatesView(it) }
                 this.addStateViews(plant)
             }
 
@@ -194,10 +192,9 @@ class OverviewFragment: AbstractOverviewFragment() {
                 this.view?.findViewById(android.R.id.content),
                 false
             )
-
-            stateItemView.findViewById<TextView>(R.id.title).text = state.title
-
             val stateContainer = stateItemView.findViewById<LinearLayout>(R.id.container)
+
+            stateContainer.addView(this.getOverviewHeadline(state.title))
             stateContainer.addView(this.getOverviewItem(state.from!!, state.to!!))
             stateContainer.addView(this.getOverviewItem(
                 R.string.grow_diary_plant_duration,
@@ -212,43 +209,102 @@ class OverviewFragment: AbstractOverviewFragment() {
         }
     }
 
-    private fun addClimateView(climate: Climate, title: Int) {
+    private fun addClimatesView(climates: List<PlantClimate>) {
         val climateItemView = this.inflater.inflate(
             R.layout.grow_diary_plant_overview_container,
             this.view?.findViewById(android.R.id.content),
             false
         )
-
         val climateContainer = climateItemView.findViewById<LinearLayout>(R.id.container)
-        climateContainer.findViewById<TextView>(R.id.title).setText(title)
-        climateContainer.addView(this.getOverviewItem(R.string.date, climate.added))
 
-        if (climate.temperature !== null) {
-            climateContainer.addView(this.getOverviewItem(
-                R.string.grow_diary_plant_climate_temperature,
-                "${climate.temperature}°C",
-            ))
+        climateContainer.addView(this.getOverviewHeadline(R.string.grow_diary_plant_climates))
+        climates.forEach { climate ->
+            climateContainer.addView(this.getOverviewSubeadline(climate.measuringPoint))
+
+            if (climate.minTemperature !== null) {
+                climateContainer.addView(this.getOverviewRangeItem(
+                    R.string.grow_diary_plant_climate_temperature,
+                    climate.minTemperature,
+                    climate.maxTemperature,
+                    "${climate.minTemperature}°C - ${climate.maxTemperature}°C",
+                    "${climate.maxTemperature}°C",
+                ))
+            }
+
+            if (climate.minRelativeHumidity !== null) {
+                climateContainer.addView(this.getOverviewRangeItem(
+                    R.string.grow_diary_plant_climate_relative_humidity,
+                    climate.minRelativeHumidity,
+                    climate.maxRelativeHumidity,
+                    "${climate.minRelativeHumidity}% - ${climate.maxRelativeHumidity}%",
+                    "${climate.maxRelativeHumidity}%",
+                ))
+            }
+
+            if (climate.minAirPressure !== null) {
+                climateContainer.addView(this.getOverviewRangeItem(
+                    R.string.grow_diary_plant_climate_air_pressure,
+                    climate.minAirPressure,
+                    climate.maxAirPressure,
+                    "${climate.minAirPressure}% - ${climate.maxAirPressure}%",
+                    "${climate.maxAirPressure}%",
+                ))
+            }
+
+            if (climate.minLeafTemperature !== null) {
+                climateContainer.addView(this.getOverviewRangeItem(
+                    R.string.grow_diary_plant_climate_leaf_temperature,
+                    climate.minLeafTemperature,
+                    climate.maxLeafTemperature,
+                    "${climate.minLeafTemperature}% - ${climate.maxLeafTemperature}%",
+                    "${climate.maxLeafTemperature}%",
+                ))
+            }
         }
 
-        if (climate.relativeHumidity !== null) {
-            climateContainer.addView(this.getOverviewItem(
-                R.string.grow_diary_plant_climate_relative_humidity,
-                "${climate.relativeHumidity}%",
-            ))
-        }
+        this.overviewContainerLayout.addView(climateItemView)
+    }
 
-        if (climate.airPressure !== null) {
-            climateContainer.addView(this.getOverviewItem(
-                R.string.grow_diary_plant_climate_air_pressure,
-                "${climate.airPressure}hPa",
-            ))
-        }
+    private fun addLastClimatesView(climates: List<Climate>) {
+        val climateItemView = this.inflater.inflate(
+            R.layout.grow_diary_plant_overview_container,
+            this.view?.findViewById(android.R.id.content),
+            false
+        )
+        val climateContainer = climateItemView.findViewById<LinearLayout>(R.id.container)
 
-        if (climate.leafTemperature !== null) {
-            climateContainer.addView(this.getOverviewItem(
-                R.string.grow_diary_plant_climate_leaf_temperature,
-                "${climate.leafTemperature}°C",
-            ))
+        climateContainer.addView(this.getOverviewHeadline(R.string.grow_diary_plant_climates_last))
+        climates.forEach { climate ->
+            climateContainer.addView(this.getOverviewSubeadline(climate.measuringPoint))
+            climateContainer.addView(this.getOverviewItem(R.string.date, climate.added))
+
+            if (climate.temperature !== null) {
+                climateContainer.addView(this.getOverviewItem(
+                    R.string.grow_diary_plant_climate_temperature,
+                    "${climate.temperature}°C",
+                ))
+            }
+
+            if (climate.relativeHumidity !== null) {
+                climateContainer.addView(this.getOverviewItem(
+                    R.string.grow_diary_plant_climate_relative_humidity,
+                    "${climate.relativeHumidity}%",
+                ))
+            }
+
+            if (climate.airPressure !== null) {
+                climateContainer.addView(this.getOverviewItem(
+                    R.string.grow_diary_plant_climate_air_pressure,
+                    "${climate.airPressure}hPa",
+                ))
+            }
+
+            if (climate.leafTemperature !== null) {
+                climateContainer.addView(this.getOverviewItem(
+                    R.string.grow_diary_plant_climate_leaf_temperature,
+                    "${climate.leafTemperature}°C",
+                ))
+            }
         }
 
         this.overviewContainerLayout.addView(climateItemView)
@@ -263,7 +319,7 @@ class OverviewFragment: AbstractOverviewFragment() {
         )
 
         val lastFeedContainer = lastFeedItemView.findViewById<LinearLayout>(R.id.container)
-        lastFeedContainer.findViewById<TextView>(R.id.title).setText(R.string.grow_diary_plant_feed_last)
+        lastFeedContainer.addView(this.getOverviewHeadline(R.string.grow_diary_plant_feed_last))
         lastFeedContainer.addView(this.getOverviewItem(R.string.date, lastFeed.added))
         lastFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${lastFeed.milliliter} ml"))
 
@@ -284,7 +340,7 @@ class OverviewFragment: AbstractOverviewFragment() {
         )
 
         val sumFeedContainer = sumFeedItemView.findViewById<LinearLayout>(R.id.container)
-        sumFeedContainer.findViewById<TextView>(R.id.title).setText(R.string.grow_diary_plant_feed_sum)
+        sumFeedContainer.addView(this.getOverviewHeadline(R.string.grow_diary_plant_feed_sum))
         sumFeedContainer.addView(this.getOverviewItem(R.string.grow_diary_plant_feed_milliliter, "${feedSum.milliliter} ml"))
 
         this.addAdditivesViews(feedSum.additives, sumFeedItemView)
@@ -329,7 +385,7 @@ class OverviewFragment: AbstractOverviewFragment() {
         )
 
         val milestoneContainer = milestoneItemView.findViewById<LinearLayout>(R.id.container)
-        milestoneContainer.findViewById<TextView>(R.id.title).setText(R.string.grow_diary_plant_milestone_last)
+        milestoneContainer.addView(this.getOverviewHeadline(R.string.grow_diary_plant_milestone_last))
         milestoneContainer.addView(this.getOverviewItem(R.string.date, milestone.added))
         milestoneContainer.addView(this.getOverviewItem(milestone.title, milestone.value))
 

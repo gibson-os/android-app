@@ -30,11 +30,39 @@ abstract class AbstractOverviewFragment: GibsonOsFragment() {
         this.getOverviewContainer().addView(this.getOverviewItem(label, value))
     }
 
-    protected fun getOverviewItem(label: Int, value: String) = this.getOverviewItem(this.getString(label), value)
-
     protected fun addOverviewItem(label: String, value: String) {
         this.getOverviewContainer().addView(this.getOverviewItem(label, value))
     }
+
+    protected fun getOverviewHeadline(title: Int) = this.getOverviewHeadline(this.getString(title))
+
+    protected fun getOverviewHeadline(title: String): View {
+        val overviewItem = this.inflater.inflate(
+            R.layout.grow_diary_overview_headline,
+            this.view?.findViewById(android.R.id.content),
+            false
+        )
+
+        overviewItem.findViewById<TextView>(R.id.title).text = title
+
+        return overviewItem
+    }
+
+    protected fun getOverviewSubheadline(title: Int) = this.getOverviewSubeadline(this.getString(title))
+
+    protected fun getOverviewSubeadline(title: String): View {
+        val overviewItem = this.inflater.inflate(
+            R.layout.grow_diary_overview_subheadline,
+            this.view?.findViewById(android.R.id.content),
+            false
+        )
+
+        overviewItem.findViewById<TextView>(R.id.title).text = title
+
+        return overviewItem
+    }
+
+    protected fun getOverviewItem(label: Int, value: String) = this.getOverviewItem(this.getString(label), value)
 
     protected fun getOverviewItem(label: String, value: String): View {
         val overviewItem = this.inflater.inflate(
@@ -47,6 +75,22 @@ abstract class AbstractOverviewFragment: GibsonOsFragment() {
         overviewItem.findViewById<TextView>(R.id.value).text = value
 
         return overviewItem
+    }
+
+    protected fun getOverviewRangeItem(
+        label: Int,
+        min: Any?,
+        max: Any?,
+        differentValue: String,
+        sameValue: String,
+    ): View {
+        var value = differentValue
+
+        if (min == max) {
+            value = sameValue
+        }
+
+        return this.getOverviewItem(label, value)
     }
 
     protected fun addOverviewRangeItem(
