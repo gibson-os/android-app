@@ -15,4 +15,6 @@ enum class State {
     DRYING,
     @Json(name="FINISHED")
     FINISHED,
+    @Json(name="DIED")
+    DIED,
 }
