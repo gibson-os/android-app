@@ -10,9 +10,10 @@ android {
     defaultConfig {
         applicationId "de.wollis_page.gibsonos"
         minSdkVersion 26
+        //noinspection OldTargetApi
         targetSdkVersion 35
         versionCode 1
-        versionName "2025-03-10"
+        versionName "2025-03-25"
         setProperty("archivesBaseName", "../aab/" + applicationId + "-v" + versionName + "-" + versionCode)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -80,5 +81,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'com.squareup.moshi:moshi:1.15.2'
     implementation "com.squareup.moshi:moshi-kotlin:1.15.2"
-    implementation platform('com.google.firebase:firebase-bom:33.10.0')
+    implementation platform('com.google.firebase:firebase-bom:33.11.0')
 }
