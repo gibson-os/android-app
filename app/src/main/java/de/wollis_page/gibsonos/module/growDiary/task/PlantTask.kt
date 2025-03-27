@@ -185,6 +185,6 @@ object PlantTask : AbstractTask() {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "plant", "costs")
         dataStore.addParam("id", plantId)
 
-        return this.loadList(context, dataStore)
+        return this.loadList(context, dataStore, 0, 100)
     }
 }

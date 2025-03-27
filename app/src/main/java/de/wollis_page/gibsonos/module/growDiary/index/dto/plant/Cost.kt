@@ -4,7 +4,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.module.growDiary.enum.plant.CostType
 
 data class Cost(
-    @get:JvmName("getOriginalId") var id: String,
+    var id: Int,
     var foreignId: Long,
     var name: String,
     var costPerUnit: Float?,
