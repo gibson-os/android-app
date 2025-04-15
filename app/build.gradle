@@ -13,7 +13,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 35
         versionCode 1
-        versionName "2025-03-25"
+        versionName "2025-04-14"
         setProperty("archivesBaseName", "../aab/" + applicationId + "-v" + versionName + "-" + versionCode)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -62,14 +62,14 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.core:core-ktx:1.16.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.mediarouter:mediarouter:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'androidx.media3:media3-session:1.5.1'
-    implementation 'androidx.media3:media3-exoplayer:1.5.1'
+    implementation 'androidx.media3:media3-session:1.6.1'
+    implementation 'androidx.media3:media3-exoplayer:1.6.1'
     implementation 'androidx.glance:glance:1.1.1'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'com.google.android.gms:play-services-cast-framework:22.0.0'
@@ -81,5 +81,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'com.squareup.moshi:moshi:1.15.2'
     implementation "com.squareup.moshi:moshi-kotlin:1.15.2"
-    implementation platform('com.google.firebase:firebase-bom:33.11.0')
+    implementation platform('com.google.firebase:firebase-bom:33.12.0')
 }
