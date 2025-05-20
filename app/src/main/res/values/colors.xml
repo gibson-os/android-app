@@ -10,4 +10,7 @@
     <color name="colorProgressError">#FF0000</color>
     <color name="colorAction">#FF00FF00</color>
     <color name="menuIcon">#FFFFFFFF</color>
+    <color name="pressed_color">#FFFFFFFF</color>
+    <color name="selected_color">#FFFFFFFF</color>
+    <color name="focused_color">#802C2C</color>
 </resources>
