@@ -13,7 +13,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 35
         versionCode 1
-        versionName "2025-05-19"
+        versionName "2025-05-20"
         setProperty("archivesBaseName", "../aab/" + applicationId + "-v" + versionName + "-" + versionCode)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
