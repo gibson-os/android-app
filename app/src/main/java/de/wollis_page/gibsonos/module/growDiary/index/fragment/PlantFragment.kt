@@ -15,6 +15,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.exception.AppException
 import de.wollis_page.gibsonos.fragment.ListFragment
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
+import de.wollis_page.gibsonos.module.growDiary.enum.State
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
@@ -81,6 +82,19 @@ class PlantFragment: ListFragment() {
 
         view.findViewById<TextView>(R.id.name).text = item.name
         view.findViewById<TextView>(R.id.seed).text = item.seed.name
+
+        val state = item.state
+
+        view.findViewById<TextView>(R.id.state).text = ""
+        view.findViewById<TextView>(R.id.date).text = ""
+
+        if (state != null) {
+            view.findViewById<TextView>(R.id.state).text =
+                "${state.title} | Tag ${state.days} (Woche ${state.week})"
+            view.findViewById<TextView>(R.id.date).text =
+                item.states?.get(State.GERMINATION.toString())?.from +
+                " - ${state.to} | Tag ${state.days} (Woche ${state.week})"
+        }
 
         this.imageLoaderService.viewImage(
             item,
