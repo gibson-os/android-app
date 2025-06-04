@@ -93,7 +93,7 @@ class PlantFragment: ListFragment() {
                 "${state.title} | Tag ${state.days} (Woche ${state.week})"
             view.findViewById<TextView>(R.id.date).text =
                 item.states?.get(State.GERMINATION.toString())?.from +
-                " - ${state.to} | Tag ${state.days} (Woche ${state.week})"
+                " - ${state.to} | Tag ${state.toDaysSinceStart} (Woche ${state.toWeekSinceStart})"
         }
 
         this.imageLoaderService.viewImage(
