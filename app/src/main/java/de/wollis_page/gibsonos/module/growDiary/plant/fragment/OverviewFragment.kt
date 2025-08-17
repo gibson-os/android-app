@@ -108,7 +108,7 @@ class OverviewFragment: AbstractOverviewFragment() {
 
                     if ((plant.maxRemainingGrowingDaysOtherPlants ?: 0) > 0) {
                         this.addOverviewRangeItem(
-                            R.string.grow_diary_plant_remaining_time_manufacture,
+                            R.string.grow_diary_plant_remaining_time_other_plants,
                             plant.minRemainingGrowingDaysOtherPlants,
                             plant.maxRemainingGrowingDaysOtherPlants,
                             "${plant.minRemainingGrowingDaysOtherPlants} - ${plant.maxRemainingGrowingDaysOtherPlants} Tage (${plant.minRemainingGrowingWeeksOtherPlants} - ${plant.maxRemainingGrowingWeeksOtherPlants} Wochen)",

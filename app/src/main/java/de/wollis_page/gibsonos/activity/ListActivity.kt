@@ -2,6 +2,7 @@ package de.wollis_page.gibsonos.activity
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -13,15 +14,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.textfield.TextInputEditText
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.adapter.BaseListAdapter
+import de.wollis_page.gibsonos.callback.MenuVisibilityCallback
 import de.wollis_page.gibsonos.dto.Account
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.ListInterface
 import de.wollis_page.gibsonos.helper.ListItemTouchHelper
 
-abstract class ListActivity : GibsonOsActivity(), ListInterface {
+abstract class ListActivity : GibsonOsActivity(), ListInterface, MenuVisibilityCallback {
     override lateinit var listView: RecyclerView
     override lateinit var listAdapter: BaseListAdapter
     override var activity: GibsonOsActivity = this
+    private var filterMenuItem: MenuItem? = null
+    private var sortMenuItem: MenuItem? = null
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     override fun getContentView() = R.layout.base_list
@@ -40,7 +44,11 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
         val dividerItemDecoration = DividerItemDecoration(this, llm.orientation)
         this.listView.addItemDecoration(dividerItemDecoration)
 
-        this.listAdapter = BaseListAdapter(this, this)
+        this.listAdapter = BaseListAdapter(
+            this,
+            this,
+            this,
+            )
         this.listView.adapter = this.listAdapter
 
         this.loadList()
@@ -108,6 +116,19 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface {
 
         this.menuInflater.inflate(R.menu.base_list_menu, menu)
 
+        this.filterMenuItem = menu.findItem(R.id.filter_menu_item)
+        this.filterMenuItem?.isVisible = false
+        this.sortMenuItem = menu.findItem(R.id.sort_menu_item)
+        this.sortMenuItem?.isVisible = false
+
         return true
+    }
+
+    override fun updateFilterVisibility(visible: Boolean) {
+        this.filterMenuItem?.isVisible = visible
+    }
+
+    override fun updateSortVisibility(visible: Boolean) {
+        this.sortMenuItem?.isVisible = visible
     }
 }

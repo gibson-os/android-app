@@ -37,6 +37,9 @@ abstract class GibsonOsFragment: Fragment() {
         return true
     }
 
+    open fun onPrepareMenu(menu: Menu) {
+    }
+
     open fun getMenuView(): Int? = null
 
     override fun onCreateView(
@@ -61,6 +64,12 @@ abstract class GibsonOsFragment: Fragment() {
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                     return fragment.onMenuItemSelected(menuItem)
+                }
+
+                override fun onPrepareMenu(menu: Menu) {
+                    super.onPrepareMenu(menu)
+
+                    fragment.onPrepareMenu(menu)
                 }
 
                 //            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
