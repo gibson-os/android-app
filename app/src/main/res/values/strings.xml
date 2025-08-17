@@ -132,7 +132,7 @@
     <string name="grow_diary_plant_climate_temperature">Temperature</string>
     <string name="grow_diary_plant_climate_relative_humidity">Relative humidity</string>
     <string name="grow_diary_plant_climate_air_pressure">Air pressure</string>
-    <string name="grow_diary_plant_climate_leaf_temperature">Lead temperature</string>
+    <string name="grow_diary_plant_climate_leaf_temperature">Leaf temperature</string>
     <string name="grow_diary_plant_climates">Climates</string>
     <string name="grow_diary_plant_climates_last">Last climates</string>
     <string name="grow_diary_plant_climate_min_temperature">Minimal temperature</string>
@@ -159,7 +159,7 @@
     <string name="grow_diary_seed_growing_days">Growing days</string>
     <string name="grow_diary_seed_plant_days">Time required for grows</string>
     <string name="grow_diary_seed_height">Height</string>
-    <string name="grow_diary_seed_price">Preis</string>
+    <string name="grow_diary_seed_price">Price</string>
 
     <string name="grow_diary_room_tab">Rooms</string>
 
