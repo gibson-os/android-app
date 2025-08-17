@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
+import de.wollis_page.gibsonos.callback.MenuVisibilityCallback
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.helper.Config
@@ -17,6 +18,7 @@ import de.wollis_page.gibsonos.dto.response.Filter as FilterResponse
 class BaseListAdapter(
     private val context: Activity,
     private val list: ListInterface,
+    private val menuVisibilityCallback: MenuVisibilityCallback,
 ): RecyclerView.Adapter<BaseListAdapter.ItemHolder>(), Filterable {
     private val inflater = LayoutInflater.from(context)
     var listFilter: ((item: ListItemInterface, searchTerm: String) -> Boolean)? = null
@@ -57,6 +59,9 @@ class BaseListAdapter(
 
         this.items = listResponse.data.toMutableList() as ArrayList<ListItemInterface>
         this.filteredItems = listResponse.data.toMutableList() as ArrayList<ListItemInterface>
+
+        menuVisibilityCallback.updateFilterVisibility((this.filters?.size ?: 0) > 0)
+        menuVisibilityCallback.updateSortVisibility((this.possibleOrders?.size ?: 0) > 0)
     }
 
     class ItemHolder(
