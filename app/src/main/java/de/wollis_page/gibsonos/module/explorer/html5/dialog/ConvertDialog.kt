@@ -86,7 +86,7 @@ class ConvertDialog(private var context: GibsonOsActivity) {
         val dialogItem = DialogItem(languageTitle)
 
         dialogItem.icon = R.drawable.ic_language
-        dialogItem.onClick = {
+        dialogItem.onClick = { flattedItem, adapter ->
             if (subtitleStreams.isEmpty()) {
                 this.context.runTask({
                     callback(Html5Task.convert(
@@ -115,7 +115,7 @@ class ConvertDialog(private var context: GibsonOsActivity) {
         val dialogItem = DialogItem(this.context.getString(R.string.explorer_html5_no_subtitle))
 
         dialogItem.icon = R.drawable.ic_subtitle
-        dialogItem.onClick = {
+        dialogItem.onClick = { flattedItem, adapter ->
             this.context.runTask({
                 callback(
                     Html5Task.convert(
@@ -151,7 +151,7 @@ class ConvertDialog(private var context: GibsonOsActivity) {
         val dialogItem = DialogItem(subtitleTitle)
 
         dialogItem.icon = R.drawable.ic_subtitle
-        dialogItem.onClick = {
+        dialogItem.onClick = { flattedItem, adapter ->
             this.context.runTask({
                 callback(
                     Html5Task.convert(

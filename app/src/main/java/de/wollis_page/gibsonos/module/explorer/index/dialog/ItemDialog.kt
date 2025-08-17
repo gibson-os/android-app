@@ -32,7 +32,7 @@ class ItemDialog(private val context: IndexActivity) {
         val dialogItem = DialogItem(this.context.getString(R.string.explorer_html5_convert))
 
         dialogItem.icon = R.drawable.ic_html5
-        dialogItem.onClick = {
+        dialogItem.onClick = { flattedItem, adapter ->
             Html5Service(ConvertDialog(this.context)).convert(
                 this.context,
                 this.context.loadedDir.dir,
@@ -54,7 +54,7 @@ class ItemDialog(private val context: IndexActivity) {
         val dialogItem = DialogItem(this.context.getString(R.string.explorer_html5_play))
 
         dialogItem.icon = R.drawable.ic_play
-        dialogItem.onClick = {
+        dialogItem.onClick = { flattedItem, adapter ->
             ActivityLauncherService.startActivity(
                 this.context,
                 "explorer",
@@ -78,7 +78,7 @@ class ItemDialog(private val context: IndexActivity) {
         val castSession = this.context.chromecastService.castSession
 
         dialogItem.icon = R.drawable.ic_chromecast
-        dialogItem.onClick = {
+        dialogItem.onClick = { flattedItem, adapter ->
             if (castSession === null) {
                 this.context.chromecastService.showMediaRouterDialog()
                 // Show media route chooser dialog

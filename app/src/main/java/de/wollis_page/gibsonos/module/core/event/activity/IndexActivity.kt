@@ -33,7 +33,7 @@ class IndexActivity: ListActivity() {
 
         val startEvent = DialogItem(this.getString(R.string.core_event_execute))
         startEvent.icon = R.drawable.ic_play
-        startEvent.onClick = {
+        startEvent.onClick = { flattedItem, adapter ->
             this.runTask({
                 EventTask.run(this, item.id)
             })

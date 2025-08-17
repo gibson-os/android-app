@@ -60,10 +60,10 @@ class PlayerActivity: GibsonOsActivity() {
                     PlayDialog(this).build(
                         media.duration,
                         position,
-                        {
+                        { flattedItem, adapter ->
                             this.startVideo()
                         },
-                        {
+                        { flattedItem, adapter ->
                             videoView.seekTo((position?.position ?: 0) * 1000)
                             this.startVideo()
                         },

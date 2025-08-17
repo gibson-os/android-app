@@ -204,10 +204,10 @@ class ChromecastService(
                 PlayDialog(this.context).build(
                     duration.toInt(),
                     position,
-                    {
+                    { flattedItem, adapter ->
                         this.playMedia(mediaInfo)
                     },
-                    {
+                    { flattedItem, adapter ->
                         this.playMedia(
                             mediaInfo,
                             (position?.position.toString().toFloat() * 1000).toLong()

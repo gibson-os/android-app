@@ -15,8 +15,8 @@ class MessageBuilder {
 
         message.buttons.forEach { button ->
             val item = DialogItem(button.text)
-            item.onClick = onClick ?: {
-            }
+//            item.onClick = onClick ?: {
+//            }
             options.add(item)
         }
 

@@ -12,7 +12,7 @@ class ItemDialog(private val context: IndexActivity) {
         val cronjobsSetting = DialogItem(this.context.getString(R.string.core_cronjob_title))
         cronjobsSetting.icon = AppIconService.getIcon("core", "cronjob", "index")
             ?: R.drawable.ic_android
-        cronjobsSetting.onClick = {
+        cronjobsSetting.onClick = { flattedItem, adapter ->
             this.context.runTask({
                 ActivityLauncherService.startActivity(
                     this.context,
@@ -27,7 +27,7 @@ class ItemDialog(private val context: IndexActivity) {
         val eventsSetting = DialogItem(this.context.getString(R.string.core_event_title))
         eventsSetting.icon = AppIconService.getIcon("core", "event", "index")
             ?: R.drawable.ic_android
-        eventsSetting.onClick = {
+        eventsSetting.onClick = { flattedItem, adapter ->
             this.context.runTask({
                 ActivityLauncherService.startActivity(
                     this.context,
@@ -42,7 +42,7 @@ class ItemDialog(private val context: IndexActivity) {
         val messageSetting = DialogItem(this.context.getString(R.string.core_message_title))
         messageSetting.icon = AppIconService.getIcon("core", "message", "index")
             ?: R.drawable.ic_android
-        messageSetting.onClick = {
+        messageSetting.onClick = { flattedItem, adapter ->
             this.context.runTask({
                 ActivityLauncherService.startActivity(
                     this.context,

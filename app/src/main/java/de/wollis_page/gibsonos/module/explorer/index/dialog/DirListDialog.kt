@@ -30,8 +30,8 @@ class DirListDialog(
             dialogItem.expanded = dirList.expanded
             dialogItem.scrollTo = dirList.expanded
             dialogItem.fireOnClickOnExpand = true
-            dialogItem.onClick = {
-                this.run(it, dirList)
+            dialogItem.onClick = { flattedItem, adapter ->
+                this.run(flattedItem, dirList)
             }
             val children = dirList.data
 

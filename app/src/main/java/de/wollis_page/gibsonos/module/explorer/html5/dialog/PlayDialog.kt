@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.module.explorer.html5.dialog
 
+import android.widget.ArrayAdapter
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.DialogItem
@@ -11,8 +12,8 @@ class PlayDialog(private val context: GibsonOsActivity) {
     fun build(
         duration: Int,
         position: Position?,
-        startAction: (FlattedDialogItem) -> Any,
-        continueAction: (FlattedDialogItem) -> Any,
+        startAction: (FlattedDialogItem, ArrayAdapter<FlattedDialogItem>) -> Any,
+        continueAction: (FlattedDialogItem, ArrayAdapter<FlattedDialogItem>) -> Any,
     ): AlertListDialog {
         val positionValue = position?.position ?: 0
         val options = ArrayList<DialogItem>()

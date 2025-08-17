@@ -16,7 +16,7 @@ object DialogItemService {
         val drawable: Drawable = DrawableCompat.wrap(AppCompatResources.getDrawable(context, R.drawable.ic_plus)!!)
         DrawableCompat.setTint(drawable, context.resources.getColor(R.color.colorAsset, context.theme))
         dialogItem.icon = R.drawable.ic_plus
-        dialogItem.onClick = {
+        dialogItem.onClick = { flattedItem, adapter ->
             context.runTask({
                 DesktopTask.add(context, shortcut)
             })

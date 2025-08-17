@@ -3,16 +3,17 @@ package de.wollis_page.gibsonos.helper
 import android.app.AlertDialog
 import android.app.AlertDialog.Builder
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListAdapter
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.dto.DialogButton
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.FlattedDialogItem
 
@@ -20,6 +21,9 @@ class AlertListDialog(
     private val context: GibsonOsActivity,
     private val title: String,
     private val items: ArrayList<DialogItem>,
+    private val positiveButton: DialogButton? = null,
+    private val negativeButton: DialogButton? = null,
+    private val neutralButton: DialogButton? = null,
 ) {
     private val flattedItems: ArrayList<FlattedDialogItem> = ArrayList()
     private var scrollTo: Int? = null
@@ -71,6 +75,24 @@ class AlertListDialog(
 
                 val container = view.findViewById<LinearLayout>(R.id.container)
                 view.findViewById<TextView>(R.id.name).text = dialogItem.text
+
+                var checkboxVisibility = View.GONE
+
+                if (dialogItem.checkbox) {
+                    checkboxVisibility = View.VISIBLE
+                }
+
+                val checkbox = view.findViewById<CheckBox>(R.id.checkbox)
+                checkbox.visibility = checkboxVisibility
+                checkbox.isChecked = dialogItem.selected
+                checkbox.setOnClickListener {
+                    dialogItem.selected = checkbox.isChecked
+
+                    if (dialogItem.onClickCheckbox != null) {
+                        dialogItem.onClickCheckbox?.invoke(item, this)
+                    }
+                }
+
                 val layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -90,17 +112,22 @@ class AlertListDialog(
                     val clickedFlattedItem = flattedItems[position]
                     val clickedDialogItem = clickedFlattedItem.dialogItem
 
-                    Log.d(Config.LOG_TAG, clickedDialogItem.children.toString())
-                    Log.d(Config.LOG_TAG, clickedDialogItem.fireOnClickOnExpand.toString())
-
                     if (clickedDialogItem.children != null && !clickedDialogItem.fireOnClickOnExpand) {
                         clickedDialogItem.expanded = !clickedDialogItem.expanded
                         notifyDataSetChanged()
-                        Log.d(Config.LOG_TAG, "hier")
+
                         return@setOnClickListener
                     }
 
-                    clickedDialogItem.onClick?.invoke(clickedFlattedItem)
+                    clickedDialogItem.onClick?.invoke(clickedFlattedItem, this)
+
+                    if (clickedFlattedItem.dialogItem.checkbox) {
+                        checkbox.isChecked = !checkbox.isChecked
+                        clickedFlattedItem.dialogItem.selected = checkbox.isChecked
+
+                        return@setOnClickListener
+                    }
+
                     this@AlertListDialog.dialog?.dismiss()
                 }
 
@@ -109,10 +136,29 @@ class AlertListDialog(
         }
 
         val scrollToItem = this.scrollTo
-        this.dialog = Builder(this.context)
+        val dialogBuilder = Builder(this.context)
             .setTitle(this.title)
             .setAdapter(adapter, null)
-            .create()
+
+        if (this.positiveButton != null) {
+            dialogBuilder.setPositiveButton(this.positiveButton.text) { _, _ ->
+                this.positiveButton.onClick()
+            }
+        }
+
+        if (this.negativeButton != null) {
+            dialogBuilder.setNegativeButton(this.negativeButton.text) { _, _ ->
+                this.negativeButton.onClick()
+            }
+        }
+
+        if (this.neutralButton != null) {
+            dialogBuilder.setNeutralButton(this.neutralButton.text) { _, _ ->
+                this.neutralButton.onClick()
+            }
+        }
+
+        this.dialog = dialogBuilder.create()
 
         if (scrollToItem != null) {
             this.dialog?.setOnShowListener {
