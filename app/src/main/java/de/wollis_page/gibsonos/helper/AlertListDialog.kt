@@ -3,6 +3,7 @@ package de.wollis_page.gibsonos.helper
 import android.app.AlertDialog
 import android.app.AlertDialog.Builder
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -22,6 +23,7 @@ class AlertListDialog(
 ) {
     private val flattedItems: ArrayList<FlattedDialogItem> = ArrayList()
     private var scrollTo: Int? = null
+    private var dialog: AlertDialog? = null
 
     init {
         this.flatItems(this.items)
@@ -67,6 +69,7 @@ class AlertListDialog(
                     view.findViewById<ImageView>(R.id.icon).setImageResource(icon)
                 }
 
+                val container = view.findViewById<LinearLayout>(R.id.container)
                 view.findViewById<TextView>(R.id.name).text = dialogItem.text
                 val layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -76,36 +79,49 @@ class AlertListDialog(
                     (context.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
                 ).toInt()
                 layoutParams.setMargins(item.level * px, px, px, px)
-                view.findViewById<LinearLayout>(R.id.container).layoutParams = layoutParams
+                container.layoutParams = layoutParams
+                container.visibility = View.VISIBLE
+
+                if (item.parent?.dialogItem?.expanded == false) {
+                    container.visibility = View.GONE
+                }
+
+                view.setOnClickListener {
+                    val clickedFlattedItem = flattedItems[position]
+                    val clickedDialogItem = clickedFlattedItem.dialogItem
+
+                    Log.d(Config.LOG_TAG, clickedDialogItem.children.toString())
+                    Log.d(Config.LOG_TAG, clickedDialogItem.fireOnClickOnExpand.toString())
+
+                    if (clickedDialogItem.children != null && !clickedDialogItem.fireOnClickOnExpand) {
+                        clickedDialogItem.expanded = !clickedDialogItem.expanded
+                        notifyDataSetChanged()
+                        Log.d(Config.LOG_TAG, "hier")
+                        return@setOnClickListener
+                    }
+
+                    clickedDialogItem.onClick?.invoke(clickedFlattedItem)
+                    this@AlertListDialog.dialog?.dismiss()
+                }
 
                 return view
             }
         }
 
         val scrollToItem = this.scrollTo
-        val dialog = Builder(this.context)
+        this.dialog = Builder(this.context)
             .setTitle(this.title)
-            .setAdapter(adapter) { _, which ->
-                val flattedItem = this.flattedItems[which]
-                val item = flattedItem.dialogItem
-                val onClick = item.onClick ?: return@setAdapter
-
-                if (item.children != null && !item.fireOnClickOnExpand) {
-                    return@setAdapter
-                }
-
-                onClick(flattedItem)
-            }
+            .setAdapter(adapter, null)
             .create()
 
         if (scrollToItem != null) {
-            dialog.setOnShowListener {
-                dialog.listView.smoothScrollToPosition(scrollToItem)
+            this.dialog?.setOnShowListener {
+                (it as AlertDialog).listView.smoothScrollToPosition(scrollToItem)
             }
         }
 
-        dialog.show()
+        this.dialog?.show()
 
-        return dialog
+        return this.dialog!!
     }
 }

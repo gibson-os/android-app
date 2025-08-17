@@ -1,11 +1,13 @@
 package de.wollis_page.gibsonos.dialog
 
+import android.util.Log
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.DialogItem
 import de.wollis_page.gibsonos.dto.response.Filter
 import de.wollis_page.gibsonos.dto.response.filter.Option
 import de.wollis_page.gibsonos.helper.AlertListDialog
+import de.wollis_page.gibsonos.helper.Config
 
 class FilterDialog(private val context: GibsonOsActivity) {
     fun build(filters: MutableMap<String, Filter>): AlertListDialog {
@@ -13,7 +15,6 @@ class FilterDialog(private val context: GibsonOsActivity) {
 
         filters.forEach {
             val filterItem = this.getFilterItem(it.key, it.value)
-            filterItem.fireOnClickOnExpand = true
 
             options.add(filterItem)
         }
@@ -23,8 +24,9 @@ class FilterDialog(private val context: GibsonOsActivity) {
 
     private fun getFilterItem(key: String, filter: Filter): DialogItem {
         val dialogItem = DialogItem(filter.name)
-        dialogItem.icon = R.drawable.ic_filter
-        dialogItem.fireOnClickOnExpand = true
+        dialogItem.icon = R.drawable.ic_filter_menu
+        dialogItem.expanded = false
+        dialogItem.fireOnClickOnExpand = false
         dialogItem.children = this.getOptionItem(filter.options)
 
         return dialogItem
@@ -35,8 +37,9 @@ class FilterDialog(private val context: GibsonOsActivity) {
 
         options.forEach {
             val dialogItem = DialogItem(it.name)
-            dialogItem.icon = R.drawable.ic_filter
+            dialogItem.icon = R.drawable.ic_filter_menu
             dialogItem.onClick = {
+                Log.d(Config.LOG_TAG, "Option clicked: ${it.dialogItem.text}")
             }
 
             children.add(dialogItem)
