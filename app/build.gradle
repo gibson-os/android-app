@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId "de.wollis_page.gibsonos"
@@ -13,7 +13,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 35
         versionCode 1
-        versionName "2025-06-04"
+        versionName "2025-08-18"
         setProperty("archivesBaseName", "../aab/" + applicationId + "-v" + versionName + "-" + versionCode)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -62,24 +62,23 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.16.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.mediarouter:mediarouter:1.7.0'
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.mediarouter:mediarouter:1.8.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'androidx.media3:media3-session:1.7.1'
-    implementation 'androidx.media3:media3-exoplayer:1.7.1'
+    implementation 'androidx.media3:media3-session:1.8.0'
+    implementation 'androidx.media3:media3-exoplayer:1.8.0'
     implementation 'androidx.glance:glance:1.1.1'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'com.google.android.gms:play-services-cast-framework:22.1.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-auth-ktx'
-    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.github.satyan:sugar:1.5'
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.1.0'
     implementation 'com.squareup.moshi:moshi:1.15.2'
     implementation "com.squareup.moshi:moshi-kotlin:1.15.2"
-    implementation platform('com.google.firebase:firebase-bom:33.14.0')
+    implementation platform('com.google.firebase:firebase-bom:34.1.0')
 }
