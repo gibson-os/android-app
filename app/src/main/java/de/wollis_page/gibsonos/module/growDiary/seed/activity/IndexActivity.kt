@@ -12,7 +12,7 @@ class IndexActivity : TabActivity() {
 
     override fun getTabs(): Array<Tab> = arrayOf(
         Tab(R.string.grow_diary_overview_tab, OverviewFragment::class, hashMapOf("seedId" to this.seedId)),
-        Tab(R.string.grow_diary_plant_tab, PlantFragment::class, hashMapOf("seedId" to this.seedId)),
+        Tab(R.string.grow_diary_plant_tab, PlantFragment::class, hashMapOf("selectedFilters" to mutableMapOf("seed" to mutableListOf(this.seedId)))),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

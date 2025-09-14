@@ -32,6 +32,14 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface, MenuVisibilityC
 
     open fun getLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (this.fragmentsArguments["selectedFilters"] is MutableMap<*, *>) {
+            this.selectedFilters = this.fragmentsArguments["selectedFilters"] as MutableMap<String, MutableList<String>>
+        }
+    }
+
     override fun updateData(data: String) {
         val update = this.activity.update ?: return
 

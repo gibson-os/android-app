@@ -25,33 +25,8 @@ object PlantTask : AbstractTask() {
         context: GibsonOsFragment,
         start: Long,
         limit: Long,
-        seedId: Long? = null,
-        fertilizerId: Long? = null,
-        substrateId: Long? = null,
-        potId: Long? = null,
-        setupId: Long? = null,
     ): ListResponse<Plant> {
         val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "plants")
-
-        if (seedId != null) {
-            dataStore.addParam("seedId", seedId)
-        }
-
-        if (fertilizerId != null) {
-            dataStore.addParam("fertilizerId", fertilizerId)
-        }
-
-        if (substrateId != null) {
-            dataStore.addParam("substrateId", substrateId)
-        }
-
-        if (potId != null) {
-            dataStore.addParam("potId", potId)
-        }
-
-        if (setupId != null) {
-            dataStore.addParam("setupId", setupId)
-        }
 
         return this.loadList(context, dataStore, start, limit)
     }

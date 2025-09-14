@@ -108,11 +108,6 @@ class PlantFragment: ListFragment() {
             this,
             start,
             limit,
-            this.fragmentsArguments["seedId"]?.toString()?.toLong(),
-            this.fragmentsArguments["fertilizerId"]?.toString()?.toLong(),
-            this.fragmentsArguments["substrateId"]?.toString()?.toLong(),
-            this.fragmentsArguments["potId"]?.toString()?.toLong(),
-            this.fragmentsArguments["setupId"]?.toString()?.toLong(),
         ))
     }
 
