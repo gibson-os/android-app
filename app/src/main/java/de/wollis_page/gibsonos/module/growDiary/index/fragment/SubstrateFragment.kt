@@ -91,7 +91,7 @@ class SubstrateFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(SubstrateTask.list(
-            this.activity,
+            this,
             start,
             limit,
             this.fragmentsArguments["manufactureId"]?.toString()?.toLong(),

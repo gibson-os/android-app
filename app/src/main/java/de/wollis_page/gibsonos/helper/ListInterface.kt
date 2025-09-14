@@ -16,7 +16,7 @@ interface ListInterface {
     var listView: RecyclerView
     var listAdapter: BaseListAdapter
     var activity: GibsonOsActivity
-
+    var selectedFilters: MutableMap<String, MutableList<String>>
 
     fun onClick(item: ListItemInterface)
 

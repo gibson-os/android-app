@@ -80,7 +80,7 @@ class ClimateFragment: ListFragment() {
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(
             ClimateTask.getList(
-            this.activity,
+            this,
             this.fragmentsArguments["plantId"]?.toString()?.toLong(),
             this.fragmentsArguments["setupId"]?.toString()?.toLong(),
             start,

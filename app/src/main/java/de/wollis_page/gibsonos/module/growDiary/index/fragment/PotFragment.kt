@@ -92,7 +92,7 @@ class PotFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(PotTask.list(
-            this.activity,
+            this,
             start,
             limit,
             this.fragmentsArguments["manufactureId"]?.toString()?.toLong(),

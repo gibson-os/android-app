@@ -1,5 +1,6 @@
 package de.wollis_page.gibsonos.task
 
+import android.util.Log
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -9,7 +10,10 @@ import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.dto.response.Filter
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
+import de.wollis_page.gibsonos.fragment.GibsonOsFragment
+import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.DataStore
+import de.wollis_page.gibsonos.helper.ListInterface
 import de.wollis_page.gibsonos.model.Account
 import org.json.JSONObject
 
@@ -80,6 +84,27 @@ abstract class AbstractTask {
     }
 
     protected inline fun <reified E> loadList(
+        context: GibsonOsFragment,
+        dataStore: DataStore,
+        start: Long = 0,
+        limit: Long = 1,
+        messageResource: Int? = null
+    ): ListResponse<E> {
+        if (context is ListInterface) {
+            Log.d(Config.LOG_TAG, "loadList: add filter")
+            dataStore.addParam("filters", context.selectedFilters)
+        }
+
+        return this.loadList<E>(
+            context.activity,
+            dataStore,
+            start,
+            limit,
+            messageResource
+        )
+    }
+
+    protected inline fun <reified E> loadList(
         context: GibsonOsActivity,
         dataStore: DataStore,
         start: Long = 0,
@@ -87,11 +112,17 @@ abstract class AbstractTask {
         messageResource: Int? = null
     ): ListResponse<E> {
         dataStore.setPage(start, limit)
+
+        if (context is ListInterface) {
+            Log.d(Config.LOG_TAG, "loadList: add filter")
+            dataStore.addParam("filters", context.selectedFilters)
+        }
+
         val response = this.run(context, dataStore)
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val listType = Types.newParameterizedType(MutableList::class.java, E::class.java)
         val jsonAdapter = moshi.adapter<MutableList<E>>(listType)
-        var filters: MutableMap<String, Filter>? = null
+        var possilbeFilters: MutableMap<String, Filter>? = null
         var possibleOrders: MutableList<String>? = null
 
         if (response.has("filters")) {
@@ -99,7 +130,7 @@ abstract class AbstractTask {
 
             if (responseFilters is JSONObject) {
                 val filterListType = Types.newParameterizedType(MutableMap::class.java, String::class.java, Filter::class.java)
-                filters = moshi.adapter<MutableMap<String, Filter>?>(filterListType).fromJson(responseFilters.toString())
+                possilbeFilters = moshi.adapter<MutableMap<String, Filter>?>(filterListType).fromJson(responseFilters.toString())
             }
         }
 
@@ -114,7 +145,7 @@ abstract class AbstractTask {
             if (response.has("total")) response.getLong("total") else 0,
             start,
             limit,
-            filters,
+            possilbeFilters,
             possibleOrders,
         )
     }

@@ -86,9 +86,8 @@ class ClimateControlFragment: ListFragment() {
     override fun getListRessource() = R.layout.grow_diary_setup_climate_control_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(
-            SetupTask.getClimateControls(
-            this.activity,
+        this.listAdapter.setListResponse(SetupTask.getClimateControls(
+            this,
             this.fragmentsArguments["setupId"].toString().toLong(),
             start,
             limit,

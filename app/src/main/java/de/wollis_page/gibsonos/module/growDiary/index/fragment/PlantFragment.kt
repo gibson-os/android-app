@@ -105,7 +105,7 @@ class PlantFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(PlantTask.list(
-            this.activity,
+            this,
             start,
             limit,
             this.fragmentsArguments["seedId"]?.toString()?.toLong(),

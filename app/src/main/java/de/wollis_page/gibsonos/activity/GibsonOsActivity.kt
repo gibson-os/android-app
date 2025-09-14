@@ -4,7 +4,9 @@ import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewManager
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
@@ -17,7 +19,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
@@ -38,7 +39,6 @@ abstract class GibsonOsActivity : AppCompatActivity() {
     private var shortcut: Shortcut? = null
     lateinit var application: GibsonOsApplication
     lateinit var contentContainer: ConstraintLayout
-    private lateinit var navigationView: NavigationView
     private lateinit var progressBarHolder: FrameLayout
     protected lateinit var navigationService: NavigationService
     private var navigationItem: NavigationItem? = null

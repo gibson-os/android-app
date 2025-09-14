@@ -115,9 +115,8 @@ class FeedFragment: ListFragment() {
     override fun getListRessource() = R.layout.grow_diary_plant_feed_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(
-            FeedTask.list(
-            this.activity,
+        this.listAdapter.setListResponse(FeedTask.list(
+            this,
             this.fragmentsArguments["plantId"].toString().toLong(),
             start,
             limit,

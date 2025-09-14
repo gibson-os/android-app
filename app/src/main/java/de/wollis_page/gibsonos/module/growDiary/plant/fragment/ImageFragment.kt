@@ -116,7 +116,7 @@ class ImageFragment: GridFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(PlantTask.getImages(
-            this.activity,
+            this,
             this.fragmentsArguments["plantId"].toString().toLong(),
             start,
             limit,

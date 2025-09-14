@@ -65,9 +65,8 @@ class MilestoneFragment: ListFragment() {
     override fun getListRessource() = R.layout.grow_diary_plant_milestone_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(
-            MilestoneTask.getList(
-            this.activity,
+        this.listAdapter.setListResponse(MilestoneTask.getList(
+            this,
             this.fragmentsArguments["plantId"].toString().toLong(),
             start,
             limit,

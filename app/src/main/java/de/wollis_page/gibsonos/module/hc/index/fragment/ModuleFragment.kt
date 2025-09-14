@@ -61,7 +61,7 @@ class ModuleFragment: ListFragment() {
     override fun loadList(start: Long, limit: Long) = this.load {
         val masterId = this.fragmentsArguments["masterId"] as Long
         this.listAdapter.setListResponse(ModuleTask.index(
-            this.activity,
+            this,
             masterId,
             start,
             limit

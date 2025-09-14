@@ -3,6 +3,7 @@ package de.wollis_page.gibsonos.module.growDiary.task
 import android.graphics.Bitmap
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListResponse
+import de.wollis_page.gibsonos.fragment.GibsonOsFragment
 import de.wollis_page.gibsonos.module.growDiary.index.dto.ClimateControl
 import de.wollis_page.gibsonos.task.AbstractTask
 
@@ -15,12 +16,12 @@ object ClimateControlTask: AbstractTask() {
     }
 
     fun list(
-        context: GibsonOsActivity,
+        context: GibsonOsFragment,
         start: Long,
         limit: Long,
         manufactureId: Long? = null,
     ): ListResponse<ClimateControl> {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "climateControls")
+        val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "climateControls")
 
         if (manufactureId != null) {
             dataStore.addParam("manufactureId", manufactureId)

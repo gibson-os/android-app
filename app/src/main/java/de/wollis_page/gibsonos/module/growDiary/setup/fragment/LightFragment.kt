@@ -86,9 +86,8 @@ class LightFragment: ListFragment() {
     override fun getListRessource() = R.layout.grow_diary_setup_light_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(
-            SetupTask.getLights(
-            this.activity,
+        this.listAdapter.setListResponse(SetupTask.getLights(
+            this,
             this.fragmentsArguments["setupId"].toString().toLong(),
             start,
             limit,

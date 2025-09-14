@@ -27,6 +27,7 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface, MenuVisibilityC
     private var filterMenuItem: MenuItem? = null
     private var sortMenuItem: MenuItem? = null
     private lateinit var scrollListener: RecyclerView.OnScrollListener
+    override var selectedFilters: MutableMap<String, MutableList<String>> = mutableMapOf()
 
     override fun getContentView() = R.layout.base_list
 

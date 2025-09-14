@@ -35,6 +35,6 @@ class KeyFragment: ListFragment() {
     override fun getListRessource(): Int = R.layout.hc_module_ir_key_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(IrTask.keys(this.activity, start, limit))
+        this.listAdapter.setListResponse(IrTask.keys(this, start, limit))
     }
 }

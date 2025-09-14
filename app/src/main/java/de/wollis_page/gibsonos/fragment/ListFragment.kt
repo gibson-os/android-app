@@ -24,6 +24,7 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface, MenuVisibilityC
     override lateinit var listView: RecyclerView
     override lateinit var listAdapter: BaseListAdapter
     private lateinit var scrollListener: RecyclerView.OnScrollListener
+    override var selectedFilters: MutableMap<String, MutableList<String>> = mutableMapOf()
 
     override fun getContentView() = R.layout.base_list
 
@@ -107,7 +108,13 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface, MenuVisibilityC
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when(menuItem.itemId){
             R.id.filter_menu_item -> {
-                FilterDialog(this.activity).build(this.listAdapter.filters!!).show()
+                FilterDialog(
+                    this.activity,
+                    { filters ->
+                        this.selectedFilters = filters
+                        this.loadList()
+                    }
+                ).build(this.listAdapter.filters!!).show()
 
                 true
             }

@@ -50,7 +50,7 @@ class MasterFragment: ListFragment() {
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(MasterTask.index(this.activity, start, limit))
+        this.listAdapter.setListResponse(MasterTask.index(this, start, limit))
     }
 
     override fun getListRessource() = R.layout.hc_master_list_item

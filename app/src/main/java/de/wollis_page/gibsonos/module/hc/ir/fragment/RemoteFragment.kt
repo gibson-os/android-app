@@ -49,9 +49,8 @@ class RemoteFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         val module = this.fragmentsArguments["module"] as Module
-        this.listAdapter.setListResponse(
-            IrTask.remotes(
-            this.activity,
+        this.listAdapter.setListResponse(IrTask.remotes(
+            this,
             module.id,
             start,
             limit

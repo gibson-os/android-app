@@ -3,6 +3,7 @@ package de.wollis_page.gibsonos.module.growDiary.task
 import android.graphics.Bitmap
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
 import de.wollis_page.gibsonos.dto.ListResponse
+import de.wollis_page.gibsonos.fragment.GibsonOsFragment
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Manufacture
 import de.wollis_page.gibsonos.task.AbstractTask
 
@@ -14,8 +15,8 @@ object ManufactureTask: AbstractTask() {
         return this.load(context, dataStore)
     }
 
-    fun list(context: GibsonOsActivity, start: Long, limit: Long): ListResponse<Manufacture> {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "index", "manufactures")
+    fun list(context: GibsonOsFragment, start: Long, limit: Long): ListResponse<Manufacture> {
+        val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "manufactures")
 
         return this.loadList(context, dataStore, start, limit)
     }

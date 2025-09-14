@@ -91,7 +91,7 @@ class ManufactureFragment: ListFragment() {
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(ManufactureTask.list(this.activity, start, limit))
+        this.listAdapter.setListResponse(ManufactureTask.list(this, start, limit))
     }
 
     override fun getListRessource() = R.layout.grow_diary_manufacture_list_item

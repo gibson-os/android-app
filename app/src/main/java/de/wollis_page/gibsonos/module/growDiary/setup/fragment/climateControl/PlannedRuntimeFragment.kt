@@ -64,9 +64,8 @@ class PlannedRuntimeFragment: ListFragment() {
     override fun getListRessource() = R.layout.grow_diary_setup_runtime_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(
-            SetupTask.getPlannedClimateCOntrolRuntimes(
-            this.activity,
+        this.listAdapter.setListResponse(SetupTask.getPlannedClimateCOntrolRuntimes(
+            this,
             this.fragmentsArguments["climateControlId"].toString().toLong(),
             start,
             limit,

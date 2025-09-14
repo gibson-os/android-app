@@ -29,7 +29,7 @@ class IndexFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         val moduleId = this.fragmentsArguments["moduleId"] as Long
-        this.listAdapter.setListResponse(IoTask.ports(this.activity, moduleId, start, limit))
+        this.listAdapter.setListResponse(IoTask.ports(this, moduleId, start, limit))
     }
 
     override fun getListRessource() = R.layout.hc_module_io_list_item

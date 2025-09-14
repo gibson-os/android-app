@@ -69,7 +69,7 @@ class CostFragment: ListFragment() {
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(
             PlantTask.getCosts(
-            this.activity,
+            this,
             this.fragmentsArguments["plantId"].toString().toLong(),
         ))
     }

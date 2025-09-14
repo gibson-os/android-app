@@ -68,7 +68,7 @@ class SetupFragment: ListFragment() {
 
     override fun loadList(start: Long, limit: Long) = this.load {
         this.listAdapter.setListResponse(SetupTask.getList(
-            this.activity,
+            this,
             start,
             limit,
         ))
