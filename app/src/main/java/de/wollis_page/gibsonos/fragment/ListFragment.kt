@@ -122,7 +122,7 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface, MenuVisibilityC
                         this.selectedFilters = filters
                         this.loadList()
                     }
-                ).build(this.listAdapter.filters!!).show()
+                ).build(this.listAdapter.filters!!, this.selectedFilters).show()
 
                 true
             }

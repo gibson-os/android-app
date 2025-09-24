@@ -13,11 +13,11 @@ class FilterDialog(
     private val context: GibsonOsActivity,
     private val run: (selectedFilters: MutableMap<String, MutableList<String>>) -> Unit,
 ) {
-    fun build(filters: MutableMap<String, Filter>): AlertListDialog {
+    fun build(filters: MutableMap<String, Filter>, selectedFilters: MutableMap<String, MutableList<String>>): AlertListDialog {
         val options = ArrayList<DialogItem>()
 
         filters.forEach {
-            val filterItem = this.getFilterItem(it.key, it.value)
+            val filterItem = this.getFilterItem(it.key, it.value, selectedFilters)
 
             options.add(filterItem)
         }
@@ -27,7 +27,7 @@ class FilterDialog(
             this.context.getString(R.string.filter),
             options,
             DialogButton("Anwenden") {
-                val selectedFilters: MutableMap<String, MutableList<String>> = mutableMapOf()
+                val checkedFilters: MutableMap<String, MutableList<String>> = mutableMapOf()
 
                 options.forEach { filter ->
                     if (filter.selected) {
@@ -37,7 +37,7 @@ class FilterDialog(
                     val selectedFilter = filters.firstNotNullOf {
                         filterItem -> if (filterItem.value.name == filter.text) filterItem else null
                     }
-                    selectedFilters[selectedFilter.key] = mutableListOf()
+                    checkedFilters[selectedFilter.key] = mutableListOf()
 
                     filter.children?.forEach {
                         try {
@@ -45,27 +45,39 @@ class FilterDialog(
                                 if (option.value == it.id && it.selected) option else null
                             }
 
-                            selectedFilters[selectedFilter.key]?.add(option.value.toString())
+                            checkedFilters[selectedFilter.key]?.add(option.value.toString())
                         } catch (_: NoSuchElementException) {
                         }
                     }
                 }
 
-                this.run(selectedFilters);
+                this.run(checkedFilters)
             },
             DialogButton("Abbrechen") {
             }
         )
     }
 
-    private fun getFilterItem(key: String, filter: Filter): DialogItem {
+    private fun getFilterItem(key: String, filter: Filter, selectedFilters: MutableMap<String, MutableList<String>>): DialogItem {
         val dialogItem = DialogItem(filter.name, key)
+        val selectedItemFilter = selectedFilters[key] ?: mutableListOf()
+        val selectedItemFilterCount = selectedItemFilter.count()
+
         dialogItem.icon = R.drawable.ic_filter_menu
-        dialogItem.expanded = false
+        dialogItem.expanded = true
         dialogItem.fireOnClickOnExpand = false
-        dialogItem.children = this.getOptionItems(filter, dialogItem)
+        dialogItem.children = this.getOptionItems(filter, dialogItem, selectedItemFilter)
         dialogItem.checkbox = true
-        dialogItem.selected = true
+        dialogItem.selected = false
+
+        if (
+            selectedItemFilterCount == 0 ||
+            selectedItemFilterCount == filter.options.count()
+        ) {
+            dialogItem.selected = true
+            dialogItem.expanded = false
+        }
+
         val onClick: ((flattedItem: FlattedDialogItem, adapter: ArrayAdapter<FlattedDialogItem>) -> Any?) = { flattedItem, adapter ->
             dialogItem.children?.forEach {
                 it.selected = dialogItem.selected
@@ -79,14 +91,38 @@ class FilterDialog(
         return dialogItem
     }
 
-    private fun getOptionItems(filter: Filter, parent: DialogItem): MutableList<DialogItem> {
+    private fun getOptionItems(filter: Filter, parent: DialogItem, selectedFilters: MutableList<String>): MutableList<DialogItem> {
         val children = mutableListOf<DialogItem>()
 
         filter.options.forEach {
             val dialogItem = DialogItem(it.name, it.value)
             dialogItem.icon = R.drawable.ic_filter_menu
             dialogItem.checkbox = true
-            dialogItem.selected = true
+            dialogItem.selected = false
+
+            if (
+                selectedFilters.count() == 0 ||
+                selectedFilters.contains(it.value.toString())
+            ) {
+                dialogItem.selected = true
+            }
+
+            val onClick: ((flattedItem: FlattedDialogItem, adapter: ArrayAdapter<FlattedDialogItem>) -> Any?) = { flattedItem, adapter ->
+                var allSelected = true
+
+                parent.children?.forEach loop@{ children ->
+                    if (!children.selected) {
+                        allSelected = false
+
+                        return@loop
+                    }
+                }
+                parent.selected = allSelected
+
+                adapter.notifyDataSetChanged()
+            }
+            dialogItem.onClick = onClick
+            dialogItem.onClickCheckbox = onClick
 
             children.add(dialogItem)
         }

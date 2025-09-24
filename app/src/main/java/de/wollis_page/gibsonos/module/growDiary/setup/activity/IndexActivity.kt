@@ -22,7 +22,7 @@ class IndexActivity : TabActivity() {
             Tab(
                 R.string.grow_diary_plant_tab,
                 PlantFragment::class,
-                hashMapOf("selectedFilters" to mutableMapOf("setup" to mutableListOf(this.getShortcut()?.parameters?.get("setupId"))))
+                hashMapOf("selectedFilters" to mutableMapOf("setup" to mutableListOf(this.getShortcut()?.parameters?.get("setupId").toString())))
             ),
         )
     }
