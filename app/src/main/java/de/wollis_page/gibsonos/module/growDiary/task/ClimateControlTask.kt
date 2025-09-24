@@ -19,13 +19,8 @@ object ClimateControlTask: AbstractTask() {
         context: GibsonOsFragment,
         start: Long,
         limit: Long,
-        manufactureId: Long? = null,
     ): ListResponse<ClimateControl> {
         val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "climateControls")
-
-        if (manufactureId != null) {
-            dataStore.addParam("manufactureId", manufactureId)
-        }
 
         return this.loadList(context, dataStore, start, limit)
     }

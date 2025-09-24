@@ -19,13 +19,8 @@ object LightTask: AbstractTask() {
         context: GibsonOsFragment,
         start: Long,
         limit: Long,
-        manufactureId: Long? = null,
     ): ListResponse<Light> {
         val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "lights")
-
-        if (manufactureId != null) {
-            dataStore.addParam("manufactureId", manufactureId)
-        }
 
         return this.loadList(context, dataStore, start, limit)
     }

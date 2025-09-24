@@ -19,13 +19,8 @@ object SubstrateTask: AbstractTask() {
         context: GibsonOsFragment,
         start: Long,
         limit: Long,
-        manufactureId: Long? = null,
     ): ListResponse<Substrate> {
         val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "substrates")
-
-        if (manufactureId != null) {
-            dataStore.addParam("manufactureId", manufactureId)
-        }
 
         return this.loadList(context, dataStore, start, limit)
     }

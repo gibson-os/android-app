@@ -18,16 +18,17 @@ class IndexActivity : TabActivity() {
 
     override fun getTabs(): Array<Tab> {
         val arguments = hashMapOf("manufactureId" to this.manufactureId)
+        val filters = hashMapOf("selectedFilters" to mutableMapOf("manufacture" to mutableListOf(this.manufactureId.toString())))
 
         return arrayOf(
             Tab(R.string.grow_diary_overview_tab, OverviewFragment::class, arguments),
-            Tab(R.string.grow_diary_seed_tab, SeedFragment::class, arguments),
-            Tab(R.string.grow_diary_climate_tab, ClimateControlFragment::class, arguments),
-            Tab(R.string.grow_diary_fertilizer_tab, FertilizerFragment::class, arguments),
-            Tab(R.string.grow_diary_light_tab, LightFragment::class, arguments),
-            Tab(R.string.grow_diary_pot_tab, PotFragment::class, arguments),
-            Tab(R.string.grow_diary_room_tab, RoomFragment::class, arguments),
-            Tab(R.string.grow_diary_substrate_tab, SubstrateFragment::class, arguments),
+            Tab(R.string.grow_diary_seed_tab, SeedFragment::class, filters),
+            Tab(R.string.grow_diary_climate_tab, ClimateControlFragment::class, filters),
+            Tab(R.string.grow_diary_fertilizer_tab, FertilizerFragment::class, filters),
+            Tab(R.string.grow_diary_light_tab, LightFragment::class, filters),
+            Tab(R.string.grow_diary_pot_tab, PotFragment::class, filters),
+            Tab(R.string.grow_diary_room_tab, RoomFragment::class, filters),
+            Tab(R.string.grow_diary_substrate_tab, SubstrateFragment::class, filters),
         )
     }
 

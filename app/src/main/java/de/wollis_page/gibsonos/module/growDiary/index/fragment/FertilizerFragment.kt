@@ -94,7 +94,6 @@ class FertilizerFragment: ListFragment() {
             this,
             start,
             limit,
-            this.fragmentsArguments["manufactureId"]?.toString()?.toLong(),
         ))
     }
 

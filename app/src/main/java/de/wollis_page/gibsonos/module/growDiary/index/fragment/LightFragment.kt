@@ -95,7 +95,6 @@ class LightFragment: ListFragment() {
             this,
             start,
             limit,
-            this.fragmentsArguments["manufactureId"]?.toString()?.toLong(),
         ))
     }
 

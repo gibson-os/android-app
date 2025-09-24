@@ -19,13 +19,8 @@ object SeedTask: AbstractTask() {
         context: GibsonOsFragment,
         start: Long,
         limit: Long,
-        manufactureId: Long? = null,
     ): ListResponse<Seed> {
         val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "seeds")
-
-        if (manufactureId != null) {
-            dataStore.addParam("manufactureId", manufactureId)
-        }
 
         return this.loadList(context, dataStore, start, limit)
     }

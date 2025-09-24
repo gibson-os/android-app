@@ -19,13 +19,8 @@ object PotTask: AbstractTask() {
         context: GibsonOsFragment,
         start: Long,
         limit: Long,
-        manufactureId: Long? = null,
     ): ListResponse<Pot> {
         val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "pots")
-
-        if (manufactureId != null) {
-            dataStore.addParam("manufactureId", manufactureId)
-        }
 
         return this.loadList(context, dataStore, start, limit)
     }

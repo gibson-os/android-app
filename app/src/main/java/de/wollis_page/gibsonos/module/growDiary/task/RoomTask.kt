@@ -19,13 +19,8 @@ object RoomTask: AbstractTask() {
         context: GibsonOsFragment,
         start: Long,
         limit: Long,
-        manufactureId: Long? = null,
     ): ListResponse<Room> {
         val dataStore = this.getDataStore(context.activity.getAccount(), "growDiary", "index", "rooms")
-
-        if (manufactureId != null) {
-            dataStore.addParam("manufactureId", manufactureId)
-        }
 
         return this.loadList(context, dataStore, start, limit)
     }
