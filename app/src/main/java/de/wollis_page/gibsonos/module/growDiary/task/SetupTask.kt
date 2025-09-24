@@ -128,12 +128,34 @@ object SetupTask: AbstractTask() {
         return this.load(context, dataStore)
     }
 
+    fun climateControlPlannedRuntimeForm(context: GibsonOsActivity, climateControlId: Long, plannedRuntimeId: Long? = null): Form {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "setup", "plannedClimateControlRuntimeForm")
+        dataStore.addParam("climateControlId", climateControlId)
+
+        if (plannedRuntimeId != null) {
+            dataStore.addParam("id", plannedRuntimeId)
+        }
+
+        return this.load(context, dataStore)
+    }
+
     fun lightForm(context: GibsonOsActivity, setupId: Long, lightId: Long? = null): Form {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "setup", "lightForm")
         dataStore.addParam("setupId", setupId)
 
         if (lightId != null) {
             dataStore.addParam("id", lightId)
+        }
+
+        return this.load(context, dataStore)
+    }
+
+    fun lightPlannedRuntimeForm(context: GibsonOsActivity, lightId: Long, plannedRuntimeId: Long? = null): Form {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "setup", "plannedLightRuntimeForm")
+        dataStore.addParam("lightId", lightId)
+
+        if (plannedRuntimeId != null) {
+            dataStore.addParam("id", plannedRuntimeId)
         }
 
         return this.load(context, dataStore)

@@ -42,9 +42,9 @@ class PlannedRuntimeFragment: ListFragment() {
                 this.activity,
                 "growDiary",
                 "setup",
-                "plannedLightRuntimeForm",
+                "lightPlannedRuntimeForm",
                 mapOf(
-                    "id" to item.id,
+                    "plannedRuntimeId" to item.id,
                     "lightId" to this.fragmentsArguments["lightId"].toString().toLong(),
                 ),
                 this.formLauncher,
@@ -82,7 +82,7 @@ class PlannedRuntimeFragment: ListFragment() {
                 this.activity,
                 "growDiary",
                 "setup",
-                "plannedlightRuntimeForm",
+                "lightPlannedRuntimeForm",
                 mapOf(
                     "lightId" to this.fragmentsArguments["lightId"].toString().toLong(),
                 ),

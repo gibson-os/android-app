@@ -42,9 +42,9 @@ class PlannedRuntimeFragment: ListFragment() {
                 this.activity,
                 "growDiary",
                 "setup",
-                "plannedClimateControlRuntimeForm",
+                "climateControlPlannedRuntimeForm",
                 mapOf(
-                    "id" to item.id,
+                    "plannedRuntimeId" to item.id,
                     "climateControlId" to this.fragmentsArguments["climateControlId"].toString().toLong(),
                 ),
                 this.formLauncher,
@@ -82,7 +82,7 @@ class PlannedRuntimeFragment: ListFragment() {
                 this.activity,
                 "growDiary",
                 "setup",
-                "plannedClimateControlRuntimeForm",
+                "climateControlPlannedRuntimeForm",
                 mapOf(
                     "climateControlId" to this.fragmentsArguments["climateControlId"].toString().toLong(),
                 ),
