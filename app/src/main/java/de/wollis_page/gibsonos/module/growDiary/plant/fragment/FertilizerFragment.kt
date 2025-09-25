@@ -59,11 +59,15 @@ class FertilizerFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "plant",
-                "fertilizerForm",
+                "index",
+                "form",
                 mapOf(
-                    "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
-                    "fertilizerId" to item.id
+                    "task" to "plant",
+                    "action" to "fertilizerForm",
+                    "id" to item.id,
+                    "additionalParameters" to hashMapOf(
+                        "plantId" to this.fragmentsArguments["plantId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
@@ -105,10 +109,14 @@ class FertilizerFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "plant",
-                "fertilizerForm",
+                "index",
+                "form",
                 mapOf(
-                    "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
+                    "task" to "plant",
+                    "action" to "fertilizerForm",
+                    "additionalParameters" to hashMapOf(
+                        "plantId" to this.fragmentsArguments["plantId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
