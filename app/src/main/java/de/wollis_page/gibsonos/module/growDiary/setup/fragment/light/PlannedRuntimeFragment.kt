@@ -41,11 +41,15 @@ class PlannedRuntimeFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "setup",
-                "lightPlannedRuntimeForm",
+                "index",
+                "form",
                 mapOf(
-                    "plannedRuntimeId" to item.id,
-                    "lightId" to this.fragmentsArguments["lightId"].toString().toLong(),
+                    "task" to "setup",
+                    "action" to "plannedLightRuntimeForm",
+                    "id" to item.id,
+                    "additionalParameters" to hashMapOf(
+                        "lightId" to this.fragmentsArguments["lightId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
@@ -81,10 +85,14 @@ class PlannedRuntimeFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "setup",
-                "lightPlannedRuntimeForm",
+                "index",
+                "form",
                 mapOf(
-                    "lightId" to this.fragmentsArguments["lightId"].toString().toLong(),
+                    "task" to "setup",
+                    "action" to "plannedLightRuntimeForm",
+                    "additionalParameters" to hashMapOf(
+                        "lightId" to this.fragmentsArguments["lightId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
