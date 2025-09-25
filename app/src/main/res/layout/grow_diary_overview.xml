@@ -4,7 +4,6 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
-        android:id="@+id/overviewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/outter_spacing"
@@ -20,22 +19,13 @@
             android:paddingBottom="@dimen/outter_spacing"
             android:contentDescription="@string/grow_diary_plant_image_description" />
 
-        <TextView
-            android:id="@+id/name"
+        <LinearLayout
+            android:id="@+id/overviewContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/text_spacing"
-            android:layout_marginBottom="@dimen/text_spacing"
-            android:textSize="@dimen/headline_font_size"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/seed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/text_spacing"
-            android:textSize="@dimen/subline_font_size"
-            android:textStyle="bold" />
+        </LinearLayout>
 
     </LinearLayout>
 

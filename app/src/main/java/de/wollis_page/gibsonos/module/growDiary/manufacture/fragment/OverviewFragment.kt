@@ -1,31 +1,30 @@
 package de.wollis_page.gibsonos.module.growDiary.manufacture.fragment
 
-import android.os.Bundle
+import android.content.Intent
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.HeadlineBuilder
+import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.ImageBuilder
+import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.LinkBuilder
+import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TitleBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
 import de.wollis_page.gibsonos.module.growDiary.task.ManufactureTask
 
 class OverviewFragment: AbstractOverviewFragment() {
-    override fun getContentView() = R.layout.grow_diary_manufacture_overview
+    lateinit var formLauncher: ActivityResultLauncher<Intent>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun loadOverviewModel() {
         this.activity.runTask({
             val manufacture = ManufactureTask.get(this.activity, this.fragmentsArguments["manufactureId"].toString().toLong())
+            val image = ManufactureTask.image(this.activity, manufacture.id, this.view?.findViewById<ImageView>(R.id.image)?.width)
+            val viewModel = this.viewModel
 
             this.activity.runOnUiThread {
-                this.view?.findViewById<TextView>(R.id.name)?.text = manufacture.name
-                this.view?.findViewById<TextView>(R.id.url)?.text = manufacture.url
-            }
-
-            val imageView = this.view?.findViewById<ImageView>(R.id.image)
-            val image = ManufactureTask.image(this.activity, manufacture.id, imageView?.width)
-
-            this.activity.runOnUiThread {
-                imageView?.setImageBitmap(image)
+                viewModel.addItem(TitleBuilder(manufacture.name))
+                viewModel.addItem(HeadlineBuilder(manufacture.name))
+                viewModel.addItem(LinkBuilder(manufacture.url))
+                viewModel.addItem(ImageBuilder(image))
             }
         })
     }

@@ -1,16 +1,19 @@
-package de.wollis_page.gibsonos.module.growDiary.setup.fragment
+package de.wollis_page.gibsonos.module.growDiary.room.fragment
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.HeadlineBuilder
+import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.ImageBuilder
+import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.ManufactureBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TitleBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
-import de.wollis_page.gibsonos.module.growDiary.task.SetupTask
+import de.wollis_page.gibsonos.module.growDiary.task.RoomTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class OverviewFragment: AbstractOverviewFragment() {
@@ -32,12 +35,15 @@ class OverviewFragment: AbstractOverviewFragment() {
 
     override fun loadOverviewModel() {
         this.activity.runTask({
-            val setup = SetupTask.get(this.activity, this.fragmentsArguments["setupId"].toString().toLong())
+            val room = RoomTask.get(this.activity, this.fragmentsArguments["roomId"].toString().toLong())
+            val image = RoomTask.image(this.activity, room.id, this.view?.findViewById<ImageView>(R.id.image)?.width)
             val viewModel = this.viewModel
 
             this.activity.runOnUiThread {
-                viewModel.addItem(TitleBuilder(setup.name))
-                viewModel.addItem(HeadlineBuilder(setup.name))
+                viewModel.addItem(TitleBuilder(room.name))
+                viewModel.addItem(HeadlineBuilder(room.name))
+                viewModel.addItem(ManufactureBuilder(room.manufacture))
+                viewModel.addItem(ImageBuilder(image))
             }
         })
     }
@@ -52,8 +58,8 @@ class OverviewFragment: AbstractOverviewFragment() {
                 "index",
                 "form",
                 mapOf(
-                    "task" to "setup",
-                    "id" to this.fragmentsArguments["setupId"].toString().toLong(),
+                    "task" to "room",
+                    "id" to this.fragmentsArguments["roomId"].toString().toLong(),
                 ),
                 this.formLauncher,
             )

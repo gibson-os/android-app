@@ -8,8 +8,9 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Room
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object RoomTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, roomId: Long): Room {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "room", "index")
+
+    fun get(context: GibsonOsActivity, roomId: Long): Room {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "room", "")
         dataStore.addParam("id", roomId)
 
         return this.load(context, dataStore)
