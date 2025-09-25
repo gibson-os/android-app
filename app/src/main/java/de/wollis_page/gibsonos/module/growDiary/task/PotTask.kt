@@ -8,8 +8,8 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Pot
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object PotTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, potId: Long): Pot {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "pot", "index")
+    fun get(context: GibsonOsActivity, potId: Long): Pot {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "pot", "")
         dataStore.addParam("id", potId)
 
         return this.load(context, dataStore)
