@@ -10,6 +10,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.ClimateControl
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Fertilizer
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Light
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Manufacture
+import de.wollis_page.gibsonos.module.growDiary.index.dto.Room
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Seed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Setup
 import de.wollis_page.gibsonos.module.growDiary.index.dto.climate.MeasuringPoint
@@ -59,6 +60,7 @@ object AutoCompleteTask: AbstractTask() {
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\MilestoneAutoComplete" to AutoCompleteMilestone::class.java,
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\ClimateControlAutoComplete" to ClimateControl::class.java,
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\LightAutoComplete" to Light::class.java,
+            "GibsonOS\\Module\\GrowDiary\\AutoComplete\\RoomAutoComplete" to Room::class.java,
         )
     }
 }
