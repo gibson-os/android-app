@@ -205,10 +205,6 @@
             android:icon="@drawable/ic_grow_setup"/>
 
         <activity
-            android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.LightFormActivity"
-            android:icon="@drawable/ic_grow_setup"/>
-
-        <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.LightPlannedRuntimeFormActivity"
             android:icon="@drawable/ic_grow_setup"/>
 

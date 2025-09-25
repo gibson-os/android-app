@@ -103,10 +103,14 @@ class LightFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "setup",
-                "lightForm",
+                "index",
+                "form",
                 mapOf(
-                    "setupId" to this.fragmentsArguments["setupId"].toString().toLong(),
+                    "task" to "setup",
+                    "action" to "lightForm",
+                    "additionalParameters" to hashMapOf(
+                        "setupId" to this.fragmentsArguments["setupId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
