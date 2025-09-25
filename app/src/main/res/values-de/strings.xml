@@ -96,6 +96,7 @@
     <string name="grow_diary_overview_tab">Übersicht</string>
     <string name="grow_diary_planned_runtime_tab">Geplante Laufzeiten</string>
     <string name="grow_diary_runtime_tab">Laufzeiten</string>
+    <string name="grow_diary_watt">Watt</string>
 
     <string name="grow_diary_plant_tab">Pflanzen</string>
 

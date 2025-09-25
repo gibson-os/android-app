@@ -8,8 +8,8 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Light
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object LightTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, lightId: Long): Light {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "light", "index")
+    fun get(context: GibsonOsActivity, lightId: Long): Light {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "light", "")
         dataStore.addParam("id", lightId)
 
         return this.load(context, dataStore)
