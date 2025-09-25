@@ -72,11 +72,14 @@ class FeedFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "feed",
+                "index",
                 "form",
                 mapOf(
-                    "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
-                    "feedId" to item.id,
+                    "task" to "feed",
+                    "id" to item.id,
+                    "additionalParameters" to hashMapOf(
+                        "plantId" to this.fragmentsArguments["plantId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
@@ -128,14 +131,18 @@ class FeedFragment: ListFragment() {
     override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
 
     override fun actionOnClickListener() {
+
         this.runTask({
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "feed",
+                "index",
                 "form",
                 mapOf(
-                    "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
+                    "task" to "feed",
+                    "additionalParameters" to hashMapOf(
+                        "plantId" to this.fragmentsArguments["plantId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
