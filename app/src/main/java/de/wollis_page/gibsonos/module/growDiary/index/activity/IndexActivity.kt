@@ -22,7 +22,7 @@ class IndexActivity : TabActivity() {
         Tab(R.string.grow_diary_seed_tab, SeedFragment::class),
         Tab(R.string.grow_diary_room_tab, RoomFragment::class),
         Tab(R.string.grow_diary_light_tab, LightFragment::class),
-        Tab(R.string.grow_diary_climate_tab, ClimateControlFragment::class),
+        Tab(R.string.grow_diary_climate_control_tab, ClimateControlFragment::class),
         Tab(R.string.grow_diary_pot_tab, PotFragment::class),
         Tab(R.string.grow_diary_substrate_tab, SubstrateFragment::class),
         Tab(R.string.grow_diary_fertilizer_tab, FertilizerFragment::class),

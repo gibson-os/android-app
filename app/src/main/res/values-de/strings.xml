@@ -165,7 +165,8 @@
 
     <string name="grow_diary_light_tab">Lampen</string>
 
-    <string name="grow_diary_climate_tab">Klimatisierung</string>
+    <string name="grow_diary_climate_control_tab">Klimatisierung</string>
+    <string name="grow_diary_climate_control_type">Typ</string>
 
     <string name="grow_diary_pot_tab">Töpfe</string>
 

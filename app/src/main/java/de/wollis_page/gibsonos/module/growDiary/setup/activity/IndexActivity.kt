@@ -17,7 +17,7 @@ class IndexActivity : TabActivity() {
         return arrayOf(
             Tab(R.string.grow_diary_overview_tab, OverviewFragment::class, arguments),
             Tab(R.string.grow_diary_climates_tab, ClimateFragment::class, arguments),
-            Tab(R.string.grow_diary_climate_tab, ClimateControlFragment::class, arguments),
+            Tab(R.string.grow_diary_climate_control_tab, ClimateControlFragment::class, arguments),
             Tab(R.string.grow_diary_light_tab, LightFragment::class, arguments),
             Tab(
                 R.string.grow_diary_plant_tab,

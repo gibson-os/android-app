@@ -8,8 +8,8 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.ClimateControl
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object ClimateControlTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, climateControlId: Long): ClimateControl {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "climateControl", "index")
+    fun get(context: GibsonOsActivity, climateControlId: Long): ClimateControl {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "climateControl", "")
         dataStore.addParam("id", climateControlId)
 
         return this.load(context, dataStore)

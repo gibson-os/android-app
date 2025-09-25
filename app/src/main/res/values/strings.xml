@@ -166,7 +166,8 @@
 
     <string name="grow_diary_light_tab">Lamps</string>
 
-    <string name="grow_diary_climate_tab">Climates</string>
+    <string name="grow_diary_climate_control_tab">Climates</string>
+    <string name="grow_diary_climate_control_type">Type</string>
 
     <string name="grow_diary_pot_tab">Pots</string>
 
