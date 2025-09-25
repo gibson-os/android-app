@@ -201,10 +201,6 @@
             android:icon="@drawable/ic_hemp_plant"/>
 
         <activity
-            android:name="de.wollis_page.gibsonos.module.growDiary.milestone.activity.FormActivity"
-            android:icon="@drawable/ic_hemp"/>
-
-        <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.IndexActivity"
             android:icon="@drawable/ic_grow_setup"/>
 

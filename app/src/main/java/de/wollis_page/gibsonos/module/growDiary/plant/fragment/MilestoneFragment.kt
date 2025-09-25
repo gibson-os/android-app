@@ -41,11 +41,14 @@ class MilestoneFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "milestone",
+                "index",
                 "form",
                 mapOf(
-                    "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
-                    "milestoneId" to item.id
+                    "task" to "milestone",
+                    "id" to item.id,
+                    "additionalParameters" to hashMapOf(
+                        "plantId" to this.fragmentsArguments["plantId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
@@ -82,10 +85,13 @@ class MilestoneFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "milestone",
+                "index",
                 "form",
                 mapOf(
-                    "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
+                    "task" to "milestone",
+                    "additionalParameters" to hashMapOf(
+                        "plantId" to this.fragmentsArguments["plantId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
