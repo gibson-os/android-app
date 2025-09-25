@@ -22,6 +22,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Feed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Milestone
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.feed.Additive
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
+import de.wollis_page.gibsonos.module.growDiary.plant.builder.overview.AdditiveBuilder
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 import kotlin.math.round
@@ -288,23 +289,11 @@ class OverviewFragment: AbstractOverviewFragment() {
     }
 
     private fun addAdditivesViews(additives: List<Additive>) {
-//        additives.forEach {
-//            this.activity.runTask({
-//                val image = FertilizerTask.getImage(
-//                    this.activity,
-//                    it.fertilizer.fertilizer.id,
-//                    this.resources.getDimension(R.dimen.thumb_width).toInt(),
-//                    this.resources.getDimension(R.dimen.thumb_width).toInt(),
-//                )
-//
-//                this.activity.runOnUiThread {
-//                    additiveView.findViewById<ImageView>(R.id.image).setImageBitmap(image)
-//                    additiveView.findViewById<TextView>(R.id.additive).text =
-//                        it.milliliter.toString() + " ml " + it.fertilizer.fertilizer.name
-//                    lastFeedContainer.addView(additiveView)
-//                }
-//            })
-//        }
+        val width = this.resources.getDimension(R.dimen.thumb_width).toInt()
+
+        additives.forEach {
+            this.viewModel.addItem(AdditiveBuilder(it, width))
+        }
     }
 
     private fun addLastMilestoneView(milestone: Milestone) {
