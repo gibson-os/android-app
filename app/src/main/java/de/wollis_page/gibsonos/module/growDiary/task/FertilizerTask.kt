@@ -25,7 +25,7 @@ object FertilizerTask: AbstractTask() {
         return this.loadList(context, dataStore, start, limit)
     }
 
-    fun getImage(
+    fun image(
         context: GibsonOsActivity,
         fertilizerId: Long,
         width: Int? = null,

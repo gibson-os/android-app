@@ -42,7 +42,7 @@ class FeedFragment: ListFragment() {
         this.imageLoaderService = ImageLoaderService(
             this.activity,
             {
-                FertilizerTask.getImage(
+                FertilizerTask.image(
                     this.activity,
                     it.id,
                     this.resources.getDimension(R.dimen.thumb_width).toInt(),

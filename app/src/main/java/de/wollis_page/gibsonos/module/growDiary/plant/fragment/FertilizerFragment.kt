@@ -28,7 +28,7 @@ class FertilizerFragment: ListFragment() {
         this.imageLoaderService = ImageLoaderService(
             this.activity,
             {
-                FertilizerTask.getImage(
+                FertilizerTask.image(
                     this.activity,
                     it.fertilizer.id,
                     this.resources.getDimension(R.dimen.thumb_width).toInt()

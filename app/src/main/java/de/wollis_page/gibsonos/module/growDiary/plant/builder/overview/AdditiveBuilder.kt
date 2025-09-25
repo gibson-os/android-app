@@ -31,7 +31,7 @@ class AdditiveBuilder(
         )
 
         activity.runTask({
-            this.image = this.image ?: FertilizerTask.getImage(
+            this.image = this.image ?: FertilizerTask.image(
                 activity,
                 this.additive.fertilizer.fertilizer.id,
                 this.width,

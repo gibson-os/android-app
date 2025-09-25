@@ -34,7 +34,7 @@ class CostFragment: ListFragment() {
                     CostType.LIGHT -> LightTask.image(this.activity, it.foreignId, thumbWidth)
                     CostType.SUBSTRATE -> SubstrateTask.image(this.activity, it.foreignId, thumbWidth)
                     CostType.CLIMATE_CONTROL -> ClimateControlTask.image(this.activity, it.foreignId, thumbWidth)
-                    CostType.FERTILIZER -> FertilizerTask.getImage(this.activity, it.foreignId, thumbWidth)
+                    CostType.FERTILIZER -> FertilizerTask.image(this.activity, it.foreignId, thumbWidth)
                     else -> null
                 }
             },
