@@ -1,7 +1,5 @@
 package de.wollis_page.gibsonos.module.growDiary.task
 
-import de.wollis_page.gibsonos.activity.GibsonOsActivity
-import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.fragment.GibsonOsFragment
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Climate
@@ -20,23 +18,5 @@ object ClimateTask: AbstractTask() {
         }
 
         return this.loadList(context, dataStore, start, limit)
-    }
-
-    fun getForm(context: GibsonOsActivity, plantId: Long?, setupId: Long?, climateId: Long? = null): Form {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "climate", "form")
-
-        if (plantId != null) {
-            dataStore.addParam("plantId", plantId)
-        }
-
-        if (setupId != null) {
-            dataStore.addParam("setupId", setupId)
-        }
-
-        if (climateId != null) {
-            dataStore.addParam("id", climateId)
-        }
-
-        return this.load(context, dataStore)
     }
 }

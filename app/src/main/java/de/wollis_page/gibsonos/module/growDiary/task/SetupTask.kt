@@ -1,7 +1,6 @@
 package de.wollis_page.gibsonos.module.growDiary.task
 
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
-import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.fragment.GibsonOsFragment
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Setup
@@ -113,50 +112,6 @@ object SetupTask: AbstractTask() {
     fun postSwitchLight(context: GibsonOsActivity, lightId: Long): LightRuntime {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", "setup", "switchLight", "POST")
         dataStore.addParam("id", lightId)
-
-        return this.load(context, dataStore)
-    }
-
-    fun climateControlForm(context: GibsonOsActivity, setupId: Long, climateControlId: Long? = null): Form {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "setup", "climateControlForm")
-        dataStore.addParam("setupId", setupId)
-
-        if (climateControlId != null) {
-            dataStore.addParam("id", climateControlId)
-        }
-
-        return this.load(context, dataStore)
-    }
-
-    fun climateControlPlannedRuntimeForm(context: GibsonOsActivity, climateControlId: Long, plannedRuntimeId: Long? = null): Form {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "setup", "plannedClimateControlRuntimeForm")
-        dataStore.addParam("climateControlId", climateControlId)
-
-        if (plannedRuntimeId != null) {
-            dataStore.addParam("id", plannedRuntimeId)
-        }
-
-        return this.load(context, dataStore)
-    }
-
-    fun lightForm(context: GibsonOsActivity, setupId: Long, lightId: Long? = null): Form {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "setup", "lightForm")
-        dataStore.addParam("setupId", setupId)
-
-        if (lightId != null) {
-            dataStore.addParam("id", lightId)
-        }
-
-        return this.load(context, dataStore)
-    }
-
-    fun lightPlannedRuntimeForm(context: GibsonOsActivity, lightId: Long, plannedRuntimeId: Long? = null): Form {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "setup", "plannedLightRuntimeForm")
-        dataStore.addParam("lightId", lightId)
-
-        if (plannedRuntimeId != null) {
-            dataStore.addParam("id", plannedRuntimeId)
-        }
 
         return this.load(context, dataStore)
     }

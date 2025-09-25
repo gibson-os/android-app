@@ -3,7 +3,6 @@ package de.wollis_page.gibsonos.module.growDiary.task
 import android.graphics.Bitmap
 import android.net.Uri
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
-import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.dto.ListResponse
 import de.wollis_page.gibsonos.fragment.GibsonOsFragment
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
@@ -139,22 +138,6 @@ object PlantTask : AbstractTask() {
         dataStore.addParam("plantId", plantId)
 
         return this.loadList(context, dataStore, start, limit)
-    }
-
-    fun getFertilizerForm(
-        context: GibsonOsActivity,
-        plantId: Long,
-        fertilizerId: Long? = null
-    ): Form {
-        val dataStore =
-            this.getDataStore(context.getAccount(), "growDiary", "plant", "fertilizerForm")
-        dataStore.addParam("plantId", plantId)
-
-        if (fertilizerId != null) {
-            dataStore.addParam("id", fertilizerId)
-        }
-
-        return this.load(context, dataStore)
     }
 
     fun getCosts(context: GibsonOsFragment, plantId: Long): ListResponse<Cost> {
