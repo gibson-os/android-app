@@ -216,10 +216,6 @@
             android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.ClimateControlActivity"
             android:icon="@drawable/ic_grow_setup"/>
 
-        <activity
-            android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.ClimateControlPlannedRuntimeFormActivity"
-            android:icon="@drawable/ic_grow_setup"/>
-
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">

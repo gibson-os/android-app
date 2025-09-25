@@ -41,11 +41,15 @@ class PlannedRuntimeFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "setup",
-                "climateControlPlannedRuntimeForm",
+                "index",
+                "form",
                 mapOf(
-                    "plannedRuntimeId" to item.id,
-                    "climateControlId" to this.fragmentsArguments["climateControlId"].toString().toLong(),
+                    "task" to "setup",
+                    "action" to "plannedClimateControlRuntimeForm",
+                    "id" to item.id,
+                    "additionalParameters" to hashMapOf(
+                        "climateControlId" to this.fragmentsArguments["climateControlId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
@@ -81,10 +85,14 @@ class PlannedRuntimeFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "setup",
-                "climateControlPlannedRuntimeForm",
+                "index",
+                "form",
                 mapOf(
-                    "climateControlId" to this.fragmentsArguments["climateControlId"].toString().toLong(),
+                    "task" to "setup",
+                    "action" to "plannedClimateControlRuntimeForm",
+                    "additionalParameters" to hashMapOf(
+                        "climateControlId" to this.fragmentsArguments["climateControlId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
