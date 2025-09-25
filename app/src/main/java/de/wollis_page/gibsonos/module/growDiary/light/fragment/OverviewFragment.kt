@@ -10,6 +10,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.HeadlineBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.ImageBuilder
+import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.ManufactureBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TextBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TitleBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
@@ -42,6 +43,7 @@ class OverviewFragment: AbstractOverviewFragment() {
             this.activity.runOnUiThread {
                 viewModel.addItem(TitleBuilder(light.name))
                 viewModel.addItem(HeadlineBuilder(light.name))
+                viewModel.addItem(ManufactureBuilder(light.manufacture))
                 viewModel.addItem(TextBuilder("${light.watt}W", this.getString(R.string.grow_diary_watt)))
                 viewModel.addItem(ImageBuilder(image))
             }

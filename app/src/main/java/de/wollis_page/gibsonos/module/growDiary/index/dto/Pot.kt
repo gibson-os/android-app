@@ -6,6 +6,7 @@ data class Pot(
     var id: Long,
     var name: String,
     var liter: String,
+    var manufacture: Manufacture?,
 ): ListItemInterface {
     override fun getId() = this.id
 }

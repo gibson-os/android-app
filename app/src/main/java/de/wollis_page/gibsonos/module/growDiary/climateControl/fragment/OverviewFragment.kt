@@ -10,6 +10,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.HeadlineBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.ImageBuilder
+import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.ManufactureBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TextBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TitleBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
@@ -42,6 +43,7 @@ class OverviewFragment: AbstractOverviewFragment() {
             this.activity.runOnUiThread {
                 viewModel.addItem(TitleBuilder(climateControl.name))
                 viewModel.addItem(HeadlineBuilder(climateControl.name))
+                viewModel.addItem(ManufactureBuilder(climateControl.manufacture))
                 viewModel.addItem(TextBuilder(climateControl.type, this.getString(R.string.grow_diary_climate_control_type)))
                 viewModel.addItem(TextBuilder("${climateControl.watt}W", this.getString(R.string.grow_diary_watt)))
                 viewModel.addItem(ImageBuilder(image))

@@ -5,6 +5,7 @@ import de.wollis_page.gibsonos.dto.ListItemInterface
 data class Fertilizer(
     var id: Long,
     var name: String,
+    var manufacture: Manufacture?,
 ): ListItemInterface {
     override fun getId() = this.id
 }

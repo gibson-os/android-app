@@ -6,6 +6,7 @@ data class Light(
     var id: Long,
     var name: String,
     var watt: Long,
+    var manufacture: Manufacture?,
 ): ListItemInterface {
     override fun getId() = this.id
 }
