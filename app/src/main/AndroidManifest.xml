@@ -217,10 +217,6 @@
             android:icon="@drawable/ic_grow_setup"/>
 
         <activity
-            android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.ClimateControlFormActivity"
-            android:icon="@drawable/ic_grow_setup"/>
-
-        <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.setup.activity.ClimateControlPlannedRuntimeFormActivity"
             android:icon="@drawable/ic_grow_setup"/>
 

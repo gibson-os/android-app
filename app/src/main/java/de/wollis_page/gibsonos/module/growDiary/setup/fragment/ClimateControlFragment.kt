@@ -103,10 +103,14 @@ class ClimateControlFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "setup",
-                "climateControlForm",
+                "index",
+                "form",
                 mapOf(
-                    "setupId" to this.fragmentsArguments["setupId"].toString().toLong(),
+                    "task" to "setup",
+                    "action" to "climateControlForm",
+                    "additionalParameters" to hashMapOf(
+                        "setupId" to this.fragmentsArguments["setupId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
