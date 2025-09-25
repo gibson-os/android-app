@@ -224,6 +224,10 @@
             android:name="de.wollis_page.gibsonos.module.growDiary.pot.activity.IndexActivity"
             android:icon="@drawable/ic_hemp_plant"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.growDiary.substrate.activity.IndexActivity"
+            android:icon="@drawable/ic_hemp_plant"/>
+
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">

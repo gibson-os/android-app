@@ -8,8 +8,8 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Substrate
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object SubstrateTask: AbstractTask() {
-    fun index(context: GibsonOsActivity, substrateId: Long): Substrate {
-        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "substrate", "index")
+    fun get(context: GibsonOsActivity, substrateId: Long): Substrate {
+        val dataStore = this.getDataStore(context.getAccount(), "growDiary", "substrate", "")
         dataStore.addParam("id", substrateId)
 
         return this.load(context, dataStore)
