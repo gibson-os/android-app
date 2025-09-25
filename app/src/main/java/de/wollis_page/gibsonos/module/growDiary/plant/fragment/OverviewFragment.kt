@@ -186,6 +186,10 @@ class OverviewFragment: AbstractOverviewFragment() {
     }
 
     private fun addClimatesView(climates: List<PlantClimate>) {
+        if (climates.isEmpty()) {
+            return
+        }
+
         this.viewModel.addItem(HeadlineBuilder(this.getString(R.string.grow_diary_plant_climates)))
 
         climates.forEach { climate ->
@@ -234,6 +238,10 @@ class OverviewFragment: AbstractOverviewFragment() {
     }
 
     private fun addLastClimatesView(climates: List<Climate>) {
+        if (climates.isEmpty()) {
+            return
+        }
+
         this.viewModel.addItem(HeadlineBuilder(this.getString(R.string.grow_diary_plant_climates_last)))
         climates.forEach { climate ->
             this.viewModel.addItem(SubheadlineBuilder(climate.measuringPoint))
