@@ -5,11 +5,21 @@ import de.wollis_page.gibsonos.dto.Form
 import de.wollis_page.gibsonos.task.AbstractTask
 
 object FormTask: AbstractTask() {
-    fun getForm(context: GibsonOsActivity, task: String, action: String = "form", id: Long? = null): Form {
+    fun getForm(
+        context: GibsonOsActivity,
+        task: String,
+        action: String = "form",
+        id: Long? = null,
+        additionalParameters: HashMap<String, String> = hashMapOf(),
+    ): Form {
         val dataStore = this.getDataStore(context.getAccount(), "growDiary", task, action)
 
         if (id != null) {
             dataStore.addParam("id", id)
+        }
+
+        additionalParameters.forEach {
+            dataStore.addParam(it.key, it.value)
         }
 
         return this.load(context, dataStore)

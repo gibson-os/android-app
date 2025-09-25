@@ -37,25 +37,27 @@ class ClimateFragment: ListFragment() {
             return
         }
 
-        val extras = mutableMapOf(
-            "climateId" to item.id
-        )
+        val additionalParameters = hashMapOf<String, String>()
 
         if (this.fragmentsArguments["plantId"] != null) {
-            extras["plantId"] = this.fragmentsArguments["plantId"].toString().toLong()
+            additionalParameters["plantId"] = this.fragmentsArguments["plantId"].toString()
         }
 
         if (this.fragmentsArguments["setupId"] != null) {
-            extras["setupId"] = this.fragmentsArguments["setupId"].toString().toLong()
+            additionalParameters["setupId"] = this.fragmentsArguments["setupId"].toString()
         }
 
         this.runTask({
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "climate",
+                "index",
                 "form",
-                extras,
+                mapOf(
+                    "task" to "climate",
+                    "id" to item.id,
+                    "additionalParameters" to additionalParameters,
+                ),
                 this.formLauncher,
             )
         })
@@ -93,23 +95,26 @@ class ClimateFragment: ListFragment() {
     override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
 
     override fun actionOnClickListener() {
-        val extras = mutableMapOf<String, Long>()
+        val additionalParameters = hashMapOf<String, String>()
 
         if (this.fragmentsArguments["plantId"] != null) {
-            extras["plantId"] = this.fragmentsArguments["plantId"].toString().toLong()
+            additionalParameters["plantId"] = this.fragmentsArguments["plantId"].toString()
         }
 
         if (this.fragmentsArguments["setupId"] != null) {
-            extras["setupId"] = this.fragmentsArguments["setupId"].toString().toLong()
+            additionalParameters["setupId"] = this.fragmentsArguments["setupId"].toString()
         }
 
         this.runTask({
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "climate",
+                "index",
                 "form",
-                extras,
+                mapOf(
+                    "task" to "climate",
+                    "additionalParameters" to additionalParameters,
+                ),
                 this.formLauncher,
             )
         })

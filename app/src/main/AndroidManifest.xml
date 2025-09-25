@@ -197,10 +197,6 @@
             android:icon="@drawable/ic_hemp"/>
 
         <activity
-            android:name="de.wollis_page.gibsonos.module.growDiary.climate.activity.FormActivity"
-            android:icon="@drawable/ic_hemp"/>
-
-        <activity
             android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.FertilizerFormActivity"
             android:icon="@drawable/ic_hemp_plant"/>
 

@@ -18,6 +18,7 @@ class FormActivity: FormActivity() {
             this.intent.getStringExtra("task")!!,
             this.intent.getStringExtra("action") ?: "form",
             id,
+            this.intent.getSerializableExtra("additionalParameters") as HashMap<String, String>? ?: hashMapOf(),
         )
     }
 
