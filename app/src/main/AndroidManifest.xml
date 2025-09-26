@@ -232,6 +232,10 @@
             android:name="de.wollis_page.gibsonos.module.growDiary.fertilizer.activity.IndexActivity"
             android:icon="@drawable/ic_hemp"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.growDiary.plant.activity.PotActivity"
+            android:icon="@drawable/ic_hemp"/>
+
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">

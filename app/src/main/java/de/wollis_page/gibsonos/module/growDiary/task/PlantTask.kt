@@ -10,6 +10,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Cost
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Fertilizer
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Image
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Pot
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.pot.Substrate
 import de.wollis_page.gibsonos.task.AbstractTask
 import java.io.File
 
@@ -159,5 +160,20 @@ object PlantTask : AbstractTask() {
         dataStore.addParam("id", plantId)
 
         return this.loadList(context, dataStore, 0, 100)
+    }
+
+    fun getSubstrates(
+        context: GibsonOsFragment,
+        plantId: Long,
+        potId: Long,
+        start: Long,
+        limit: Long
+    ): ListResponse<Substrate> {
+        val dataStore =
+            this.getDataStore(context.activity.getAccount(), "growDiary", "plant", "substrates")
+        dataStore.addParam("plantId", plantId)
+        dataStore.addParam("potId", potId)
+
+        return this.loadList(context, dataStore, start, limit)
     }
 }

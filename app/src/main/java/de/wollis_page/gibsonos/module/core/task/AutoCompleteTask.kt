@@ -14,6 +14,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.dto.Pot
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Room
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Seed
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Setup
+import de.wollis_page.gibsonos.module.growDiary.index.dto.Substrate
 import de.wollis_page.gibsonos.module.growDiary.index.dto.climate.MeasuringPoint
 import de.wollis_page.gibsonos.module.growDiary.index.dto.fertilizer.Scheme
 import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.AutoCompleteMilestone
@@ -63,6 +64,7 @@ object AutoCompleteTask: AbstractTask() {
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\LightAutoComplete" to Light::class.java,
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\RoomAutoComplete" to Room::class.java,
             "GibsonOS\\Module\\GrowDiary\\AutoComplete\\PotAutoComplete" to Pot::class.java,
+            "GibsonOS\\Module\\GrowDiary\\AutoComplete\\SubstrateAutoComplete" to Substrate::class.java,
         )
     }
 }

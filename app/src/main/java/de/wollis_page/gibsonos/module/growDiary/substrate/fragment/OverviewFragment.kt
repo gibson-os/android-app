@@ -16,6 +16,7 @@ import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TitleBuil
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
 import de.wollis_page.gibsonos.module.growDiary.task.SubstrateTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
+import java.util.Locale
 
 class OverviewFragment: AbstractOverviewFragment() {
     lateinit var formLauncher: ActivityResultLauncher<Intent>
@@ -44,7 +45,10 @@ class OverviewFragment: AbstractOverviewFragment() {
                 viewModel.addItem(TitleBuilder(substrate.name))
                 viewModel.addItem(HeadlineBuilder(substrate.name))
                 viewModel.addItem(ManufactureBuilder(substrate.manufacture))
-                viewModel.addItem(TextBuilder((substrate.pricePerLiter.toFloat() / 100).toString() + " €/l", this.getString(R.string.grow_diary_substrate_price_per_liter)))
+                viewModel.addItem(TextBuilder(
+                    String.format(Locale.getDefault(), "%.2f €/l", substrate.pricePerLiter.toFloat() / 100),
+                    this.getString(R.string.grow_diary_substrate_price_per_liter),
+                ))
                 viewModel.addItem(ImageBuilder(image))
             }
         })

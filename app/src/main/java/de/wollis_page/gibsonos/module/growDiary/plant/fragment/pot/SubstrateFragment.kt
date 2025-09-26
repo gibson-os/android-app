@@ -1,4 +1,4 @@
-package de.wollis_page.gibsonos.module.growDiary.plant.fragment
+package de.wollis_page.gibsonos.module.growDiary.plant.fragment.pot
 
 import android.app.Activity
 import android.content.Intent
@@ -12,15 +12,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.Pot
+import de.wollis_page.gibsonos.module.growDiary.index.dto.plant.pot.Substrate
 import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
-import de.wollis_page.gibsonos.module.growDiary.task.PotTask
+import de.wollis_page.gibsonos.module.growDiary.task.SubstrateTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
 import de.wollis_page.gibsonos.service.ImageLoaderService
+import java.util.Locale
 
-class PotFragment: ListFragment() {
+class SubstrateFragment: ListFragment() {
     lateinit var formLauncher: ActivityResultLauncher<Intent>
-    private lateinit var imageLoaderService: ImageLoaderService<Pot>
+    private lateinit var imageLoaderService: ImageLoaderService<Substrate>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,21 +39,21 @@ class PotFragment: ListFragment() {
         this.imageLoaderService = ImageLoaderService(
             this.activity,
             {
-                PotTask.image(
+                SubstrateTask.image(
                     this.activity,
-                    it.pot.id,
+                    it.substrate.id,
                     this.resources.getDimension(R.dimen.thumb_width).toInt(),
                     this.resources.getDimension(R.dimen.thumb_width).toInt(),
                 )
             },
-            { pot, image ->
-                this.getViewByItem(pot)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
+            { substrate, image ->
+                this.getViewByItem(substrate)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
             }
         )
     }
 
     override fun onClick(item: ListItemInterface) {
-        if (item !is Pot) {
+        if (item !is Substrate) {
             return
         }
 
@@ -60,11 +61,16 @@ class PotFragment: ListFragment() {
             ActivityLauncherService.startActivity(
                 this.activity,
                 "growDiary",
-                "plant",
-                "pot",
+                "index",
+                "form",
                 mapOf(
-                    "plantId" to this.fragmentsArguments["plantId"].toString().toLong(),
-                    "potId" to item.id,
+                    "task" to "plant",
+                    "action" to "substrateForm",
+                    "id" to item.id,
+                    "additionalParameters" to hashMapOf(
+                        "plantId" to this.fragmentsArguments["plantId"].toString(),
+                        "potId" to this.fragmentsArguments["potId"].toString(),
+                    ),
                 ),
                 this.formLauncher,
             )
@@ -72,14 +78,13 @@ class PotFragment: ListFragment() {
     }
 
     override fun bind(item: ListItemInterface, view: View) {
-        if (item !is Pot) {
+        if (item !is Substrate) {
             return
         }
 
-        view.findViewById<TextView>(R.id.name).text = item.pot.name
-        view.findViewById<TextView>(R.id.from).text = item.from
-        view.findViewById<TextView>(R.id.to).text = item.to ?: ""
-        view.findViewById<TextView>(R.id.liter).text = item.pot.liter
+        view.findViewById<TextView>(R.id.name).text = item.substrate.name
+        view.findViewById<TextView>(R.id.liter).text = "${item.liter} l"
+        view.findViewById<TextView>(R.id.pricePerLiter).text = String.format(Locale.getDefault(), "%.2f €/l", item.substrate.pricePerLiter.toFloat() / 100)
 
         this.imageLoaderService.viewImage(
             item,
@@ -88,12 +93,13 @@ class PotFragment: ListFragment() {
         )
     }
 
-    override fun getListRessource() = R.layout.grow_diary_plant_pot_list_item
+    override fun getListRessource() = R.layout.grow_diary_plant_pot_substrate_list_item
 
     override fun loadList(start: Long, limit: Long) = this.load {
-        this.listAdapter.setListResponse(PlantTask.getPots(
+        this.listAdapter.setListResponse(PlantTask.getSubstrates(
             this,
             this.fragmentsArguments["plantId"].toString().toLong(),
+            this.fragmentsArguments["potId"].toString().toLong(),
             start,
             limit,
         ))
@@ -104,6 +110,7 @@ class PotFragment: ListFragment() {
     override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
 
     override fun actionOnClickListener() {
+
         this.runTask({
             ActivityLauncherService.startActivity(
                 this.activity,
@@ -112,9 +119,10 @@ class PotFragment: ListFragment() {
                 "form",
                 mapOf(
                     "task" to "plant",
-                    "action" to "potForm",
+                    "action" to "substrateForm",
                     "additionalParameters" to hashMapOf(
                         "plantId" to this.fragmentsArguments["plantId"].toString(),
+                        "potId" to this.fragmentsArguments["potId"].toString(),
                     ),
                 ),
                 this.formLauncher,

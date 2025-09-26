@@ -12,7 +12,7 @@ import de.wollis_page.gibsonos.module.growDiary.plant.fragment.MilestoneFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.OverviewFragment
 import de.wollis_page.gibsonos.module.growDiary.plant.fragment.PotFragment
 
-class IndexActivity : TabActivity() {
+class IndexActivity: TabActivity() {
     override fun getTabs(): Array<Tab> {
         val arguments = hashMapOf("plantId" to this.getShortcut()?.parameters?.get("plantId"))
 
