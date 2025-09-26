@@ -1,6 +1,12 @@
 package de.wollis_page.gibsonos.module.growDiary.seed.fragment
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
 import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.HeadlineBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.ImageBuilder
@@ -10,8 +16,25 @@ import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TextBuild
 import de.wollis_page.gibsonos.module.growDiary.index.builder.overview.TitleBuilder
 import de.wollis_page.gibsonos.module.growDiary.index.fragment.AbstractOverviewFragment
 import de.wollis_page.gibsonos.module.growDiary.task.SeedTask
+import de.wollis_page.gibsonos.service.ActivityLauncherService
 
 class OverviewFragment: AbstractOverviewFragment() {
+    lateinit var formLauncher: ActivityResultLauncher<Intent>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        this.formLauncher = this.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            this.reloadOverviewModel()
+        }
+    }
+
     override fun loadOverviewModel() {
         this.activity.runTask({
             val seed = SeedTask.get(this.activity, this.fragmentsArguments["seedId"].toString().toLong())
@@ -76,4 +99,24 @@ class OverviewFragment: AbstractOverviewFragment() {
             }
         })
     }
+
+    override fun actionButton() = R.layout.base_button_edit
+
+    override fun actionOnClickListener() {
+        this.activity.runTask({
+            ActivityLauncherService.startActivity(
+                this.activity,
+                "growDiary",
+                "index",
+                "form",
+                mapOf(
+                    "task" to "seed",
+                    "id" to this.fragmentsArguments["seedId"].toString().toLong(),
+                ),
+                this.formLauncher,
+            )
+        })
+    }
+
+    override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.editButton)
 }
