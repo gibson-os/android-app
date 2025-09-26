@@ -106,7 +106,8 @@
     <string name="grow_diary_plant_milestone_tab">Milestones</string>
     <string name="grow_diary_plant_timeline_tab">Timeline</string>
     <string name="grow_diary_plant_costs_tab">Costs</string>
-    <string name="grow_diary_plant_fertilizer_tab">Fertilizer</string>
+    <string name="grow_diary_plant_pot_tab">Pots</string>
+    <string name="grow_diary_plant_fertilizer_tab">Fertilizers</string>
 
     <string name="grow_diary_plant_image_description">Image</string>
     <string name="grow_diary_plant_grown_at">Grown at</string>

@@ -105,6 +105,7 @@
     <string name="grow_diary_plant_milestone_tab">Meilensteine</string>
     <string name="grow_diary_plant_timeline_tab">Timeline</string>
     <string name="grow_diary_plant_costs_tab">Kosten</string>
+    <string name="grow_diary_plant_pot_tab">Töpfe</string>
     <string name="grow_diary_plant_fertilizer_tab">Nährstoffe</string>
 
     <string name="grow_diary_plant_image_description">Bild</string>

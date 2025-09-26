@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/outter_spacing"
+    android:layout_marginStart="@dimen/inner_spacing"
+    android:layout_marginEnd="@dimen/outter_spacing"
+    android:layout_marginBottom="@dimen/outter_spacing">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="@dimen/thumb_width"
+        android:layout_height="@dimen/thumb_height"
+        android:contentDescription="@string/grow_diary_plant_image_description"
+        app:srcCompat="@drawable/ic_hemp_plant" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/inner_spacing" >
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/text_spacing"
+            android:textSize="@dimen/headline_font_size"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/from"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/to"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:text="@string/grow_diary_pot_liter"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:text="@string/grow_diary_substrate_tab"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/liter"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/substrates"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
