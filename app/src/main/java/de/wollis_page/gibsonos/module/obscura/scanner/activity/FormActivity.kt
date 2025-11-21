@@ -90,18 +90,7 @@ class FormActivity: FormActivity() {
 
             this.runOnUiThread {
                 val messageBuilder = MessageBuilder()
-                messageBuilder.build(this, message) {
-                    if (exception.code == 202) {
-                        val button = this.getButton("scan")
-                        val oldParameters = button.parameters
-                        button.parameters = oldParameters.plus(message.extraParameters)
-                        val buttonView = this.getButtonsView("scan")
-                        buttonView.callOnClick()
-                        button.parameters = oldParameters
-                    }
-
-                    null
-                }.show()
+                messageBuilder.build(this, message).show()
             }
         }
     }

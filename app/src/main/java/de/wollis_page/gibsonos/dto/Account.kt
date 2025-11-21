@@ -33,7 +33,7 @@ class Account(val account: Account) {
         app,
     ))
 
-    fun addNavigationItem(shortcut: Shortcut): NavigationItem {
+    fun addNavigationItem(shortcut: Shortcut): NavigationItem? {
         var apps = this.navigationItems.filter {
             it.isApp() &&
             it.getModule() == shortcut.module
@@ -49,6 +49,10 @@ class Account(val account: Account) {
             apps = apps.filter {
                 it.getAction() == shortcut.action
             }
+        }
+
+        if (apps.size != 1) {
+            return null
         }
 
         return this.addNavigationItem(NavigationItem(

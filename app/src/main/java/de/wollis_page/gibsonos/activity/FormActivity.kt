@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.Form
+import de.wollis_page.gibsonos.dto.Message
 import de.wollis_page.gibsonos.dto.form.Field
 import de.wollis_page.gibsonos.exception.FormException
+import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.form.AutoCompleteField
 import de.wollis_page.gibsonos.form.BoolField
 import de.wollis_page.gibsonos.form.DateField
@@ -18,6 +22,7 @@ import de.wollis_page.gibsonos.form.NumberField
 import de.wollis_page.gibsonos.form.OptionField
 import de.wollis_page.gibsonos.form.StringField
 import de.wollis_page.gibsonos.form.TimeField
+import de.wollis_page.gibsonos.helper.MessageBuilder
 import de.wollis_page.gibsonos.task.FormTask
 import org.json.JSONObject
 import de.wollis_page.gibsonos.dto.form.Button as FormButton
@@ -83,14 +88,26 @@ abstract class FormActivity: GibsonOsActivity() {
                 parameters = parameters.plus(formButton.value.parameters)
 
                 this.runTask({
-                    val response = FormTask.post(
-                        this,
-                        formButton.value.module,
-                        formButton.value.task,
-                        formButton.value.action,
-                        parameters,
-                    )
-                    this.afterButtonClick(formButton.key, formButton.value, button, response)
+                    try {
+                        val response = FormTask.post(
+                            this,
+                            formButton.value.module,
+                            formButton.value.task,
+                            formButton.value.action,
+                            parameters,
+                        )
+                        this.afterButtonClick(formButton.key, formButton.value, button, response)
+                    } catch (exception: ResponseException) {
+                        val response = JSONObject(exception.response)
+                        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                        val message = moshi.adapter(Message::class.java).fromJson(response.getJSONObject("data").toString())
+                            ?: throw exception
+
+                        this.runOnUiThread {
+                            val messageBuilder = MessageBuilder()
+                            messageBuilder.build(this, message).show()
+                        }
+                    }
                 })
             }
 
