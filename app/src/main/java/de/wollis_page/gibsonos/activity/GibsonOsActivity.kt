@@ -83,6 +83,12 @@ abstract class GibsonOsActivity : AppCompatActivity() {
         this.createToolbar()
 
         if (accountModel !== null && shortcutDto !== null) {
+            val navigationItem = this.application.addNavigationItem(accountModel, shortcutDto)
+
+            if (navigationItem != null) {
+                this.navigationItem = navigationItem
+            }
+
             this.navigationItem = this.application.addNavigationItem(accountModel, shortcutDto)
         }
 

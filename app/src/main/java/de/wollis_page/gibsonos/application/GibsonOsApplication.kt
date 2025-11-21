@@ -73,7 +73,7 @@ class GibsonOsApplication : SugarApp() {
         editor.apply()
     }
 
-    fun addNavigationItem(account: AccountModel, shortcut: Shortcut): NavigationItem {
+    fun addNavigationItem(account: AccountModel, shortcut: Shortcut): NavigationItem? {
         val accountDto = this.getAccount(account)
             ?: throw AccountException("Account " + account.id + " not found in store!")
 

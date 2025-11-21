@@ -39,7 +39,7 @@ abstract class AbstractOverviewFragment: GibsonOsFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.items.observe(viewLifecycleOwner, Observer { items ->
+        this.viewModel.items.observe(viewLifecycleOwner, Observer { items ->
             this.rebuildUi(items)
         })
 

@@ -17,6 +17,6 @@ object FormTask: AbstractTask() {
             dataStore.addParam(it.key, it.value.toString())
         }
 
-        return this.run(context, dataStore)
+        return this.run(context, dataStore, catchResponseException = false)
     }
 }
