@@ -126,10 +126,14 @@ abstract class ListActivity : GibsonOsActivity(), ListInterface, MenuVisibilityC
     }
 
     override fun updateFilterVisibility(visible: Boolean) {
-        this.filterMenuItem?.isVisible = visible
+        this.runOnUiThread {
+            this.filterMenuItem?.isVisible = visible
+        }
     }
 
     override fun updateSortVisibility(visible: Boolean) {
-        this.sortMenuItem?.isVisible = visible
+        this.runOnUiThread {
+            this.sortMenuItem?.isVisible = visible
+        }
     }
 }
