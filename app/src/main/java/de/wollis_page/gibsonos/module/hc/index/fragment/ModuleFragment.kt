@@ -28,7 +28,7 @@ class ModuleFragment: ListFragment() {
                 ActivityLauncherService.startActivity(
                     this.activity,
                     "hc",
-                    item.type.lowercase(),
+                    item.type.lowercase().replace("\\W".toRegex(), ""),
                     "index",
                     mapOf<String, Parcelable>(
                         "module" to item,
