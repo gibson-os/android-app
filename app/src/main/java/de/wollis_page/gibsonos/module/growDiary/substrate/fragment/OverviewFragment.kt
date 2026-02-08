@@ -46,7 +46,7 @@ class OverviewFragment: AbstractOverviewFragment() {
                 viewModel.addItem(HeadlineBuilder(substrate.name))
                 viewModel.addItem(ManufactureBuilder(substrate.manufacture))
                 viewModel.addItem(TextBuilder(
-                    String.format(Locale.getDefault(), "%.2f €/l", substrate.pricePerLiter.toFloat() / 100),
+                    String.format(Locale.getDefault(), "%.2f €/%s", substrate.pricePerUnit.toFloat() / 100, substrate.unitSuffix),
                     this.getString(R.string.grow_diary_substrate_price_per_liter),
                 ))
                 viewModel.addItem(ImageBuilder(image))

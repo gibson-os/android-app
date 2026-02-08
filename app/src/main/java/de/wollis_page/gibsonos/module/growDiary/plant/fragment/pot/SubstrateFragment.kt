@@ -84,7 +84,7 @@ class SubstrateFragment: ListFragment() {
 
         view.findViewById<TextView>(R.id.name).text = item.substrate.name
         view.findViewById<TextView>(R.id.liter).text = "${item.liter} l"
-        view.findViewById<TextView>(R.id.pricePerLiter).text = String.format(Locale.getDefault(), "%.2f €/l", item.substrate.pricePerLiter.toFloat() / 100)
+        view.findViewById<TextView>(R.id.pricePerUnit).text = String.format(Locale.getDefault(), "%.2f €/l", item.substrate.pricePerUnit.toFloat() / 100)
 
         this.imageLoaderService.viewImage(
             item,

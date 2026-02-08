@@ -107,7 +107,7 @@ class FeedFragment: ListFragment() {
             )
 
             additiveView.tag = it.fertilizer.fertilizer.id
-            additiveView.findViewById<TextView>(R.id.additive).text = it.milliliter.toString() + " ml " + it.fertilizer.fertilizer.name
+            additiveView.findViewById<TextView>(R.id.additive).text = it.milliliter.toString() + " " + it.fertilizer.fertilizer.formUnit + " " + it.fertilizer.fertilizer.name
             additivesView.addView(additiveView)
 
             val imageView = additiveView.findViewById<ImageView>(R.id.image)

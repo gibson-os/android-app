@@ -7,7 +7,7 @@ data class Substrate(
     var id: Long,
     var substrate: Substrate,
     var liter: Float,
-    var pricePerLiter: Int?,
+    var pricePerUnit: Int?,
 ): ListItemInterface {
     override fun getId() = this.id
 }

@@ -44,7 +44,7 @@ class AdditiveBuilder(
         })
 
         overviewItem.findViewById<TextView>(R.id.additive).text =
-            "${this.additive.milliliter} ml ${this.additive.fertilizer.fertilizer.name}"
+            "${this.additive.milliliter} ${this.additive.fertilizer.fertilizer.formUnit} ${this.additive.fertilizer.fertilizer.name}"
         layout.addView(overviewItem)
     }
 }
