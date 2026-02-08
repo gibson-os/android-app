@@ -8,7 +8,6 @@ data class Substrate(
     var pricePerUnit: Int,
     var unit: String,
     var unitSuffix: String,
-    var formUnit: String,
     var manufacture: Manufacture?,
 ): ListItemInterface {
     override fun getId() = this.id
