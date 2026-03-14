@@ -22,9 +22,30 @@ import de.wollis_page.gibsonos.model.Account as AccountModel
 class GibsonOsApplication : SugarApp() {
     val accounts: MutableList<Account> = ArrayList()
     var firebaseToken: String? = null
+    var currentActivity: GibsonOsActivity? = null
 
     override fun onCreate() {
         super.onCreate()
+
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityResumed(activity: android.app.Activity) {
+                if (activity is GibsonOsActivity) {
+                    currentActivity = activity
+                }
+            }
+
+            override fun onActivityPaused(activity: android.app.Activity) {
+                if (activity == currentActivity) {
+                    currentActivity = null
+                }
+            }
+
+            override fun onActivityCreated(activity: android.app.Activity, savedInstanceState: android.os.Bundle?) {}
+            override fun onActivityStarted(activity: android.app.Activity) {}
+            override fun onActivityStopped(activity: android.app.Activity) {}
+            override fun onActivitySaveInstanceState(activity: android.app.Activity, outState: android.os.Bundle) {}
+            override fun onActivityDestroyed(activity: android.app.Activity) {}
+        })
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 //        AppCompatDelegate.setDefaultNightMode(

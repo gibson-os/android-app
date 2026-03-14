@@ -8,6 +8,7 @@ class Message: SugarRecord, ListItemInterface {
     lateinit var module: String
     lateinit var task: String
     lateinit var action: String
+    lateinit var foreignId: String
     lateinit var title: String
     lateinit var body: String
     lateinit var date: String
@@ -22,6 +23,7 @@ class Message: SugarRecord, ListItemInterface {
         module: String,
         task: String,
         action: String,
+        foreignId: String,
         title: String,
         body: String,
         date: String,
@@ -33,6 +35,7 @@ class Message: SugarRecord, ListItemInterface {
         this.module = module
         this.task = task
         this.action = action
+        this.foreignId = foreignId
         this.title = title
         this.body = body
         this.date = date

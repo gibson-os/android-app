@@ -13,11 +13,13 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.application.GibsonOsApplication
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Message
+import de.wollis_page.gibsonos.module.core.task.DeviceTask
 import de.wollis_page.gibsonos.module.core.task.UserTask
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -49,6 +51,7 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             remoteMessage.data["module"].toString(),
             remoteMessage.data["task"].toString(),
             remoteMessage.data["action"].toString(),
+            remoteMessage.data["foreignId"].toString(),
             remoteMessage.data["title"].toString(),
             remoteMessage.data["body"].toString(),
             now.format(DateTimeFormatter.ISO_LOCAL_DATE) + " " + now.format(DateTimeFormatter.ISO_LOCAL_TIME),
@@ -56,6 +59,22 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             remoteMessage.data["vibrate"].toString(),
             remoteMessage.data["sound"].toString(),
         )
+
+        if (remoteMessage.data["type"] == "update") {
+            val currentActivity = application.currentActivity
+            val applicationName = ActivityMatcher.getActivityName(message.module, message.task, message.action)
+
+            if (
+                currentActivity != null &&
+                currentActivity::class.java.name == applicationName &&
+                currentActivity.getId().toString() == message.foreignId
+            ) {
+                Log.d(Config.LOG_TAG, "Update activity")
+                currentActivity.updateMessage(message)
+
+                return
+            }
+        }
 
         if (!remoteMessage.data["title"].isNullOrEmpty()) {
             message.save()

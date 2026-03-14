@@ -17,10 +17,11 @@ object IoTask: AbstractTask() {
     }
 
     @Throws(TaskException::class)
-    fun toggle(context: GibsonOsActivity, moduleId: Long, id: Long) {
+    fun toggle(context: GibsonOsActivity, moduleId: Long, id: Long): Port {
         val dataStore = this.getDataStore(context.getAccount(), "hc", "io", "toggle", "POST")
         dataStore.addParam("moduleId", moduleId)
         dataStore.addParam("id", id)
-        this.run(context, dataStore)
+
+        return this.load(context, dataStore)
     }
 }

@@ -25,7 +25,7 @@ object ActivityMatcher {
         return Class.forName(this.getActivityName(module, task, action, parameters))
     }
 
-    private fun getActivityName(
+    fun getActivityName(
         module: String,
         task: String,
         action: String,

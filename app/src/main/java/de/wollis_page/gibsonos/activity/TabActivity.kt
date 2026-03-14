@@ -11,7 +11,7 @@ import de.wollis_page.gibsonos.dto.Tab
 
 
 abstract class TabActivity : GibsonOsActivity() {
-    private lateinit var adapter: BaseTabAdapter
+    lateinit var adapter: BaseTabAdapter
 
     abstract fun getTabs(): Array<Tab>
 

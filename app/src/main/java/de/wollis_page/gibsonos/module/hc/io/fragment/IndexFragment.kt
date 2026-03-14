@@ -12,7 +12,13 @@ class IndexFragment: ListFragment() {
     override fun onClick(item: ListItemInterface) = this.load {
         if (item is Port && item.direction == 1) {
             val moduleId = this.fragmentsArguments["moduleId"] as Long
-            IoTask.toggle(this.activity, moduleId, item.id)
+            val port = IoTask.toggle(this.activity, moduleId, item.id)
+
+            item.value = port.value
+
+            this.activity.runOnUiThread {
+                this.listAdapter.notifyItemChanged(this.listAdapter.items.indexOf(item))
+            }
         }
     }
 

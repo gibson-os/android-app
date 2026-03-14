@@ -28,6 +28,7 @@ import de.wollis_page.gibsonos.exception.AccountException
 import de.wollis_page.gibsonos.exception.MessageException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.model.Account
+import de.wollis_page.gibsonos.model.Message
 import de.wollis_page.gibsonos.module.core.desktop.dto.Shortcut
 import de.wollis_page.gibsonos.module.core.task.DeviceTask
 import de.wollis_page.gibsonos.service.AppIntentExtraService
@@ -49,6 +50,9 @@ abstract class GibsonOsActivity : AppCompatActivity() {
     abstract fun getId(): Any
 
     open fun updateData(data: String) {
+    }
+
+    open fun updateMessage(message: Message) {
     }
 
     @Throws(Exception::class)
