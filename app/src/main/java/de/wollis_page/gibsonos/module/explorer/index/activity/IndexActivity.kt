@@ -15,10 +15,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.activity.ListActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
+import de.wollis_page.gibsonos.dto.Update
 import de.wollis_page.gibsonos.exception.ResponseException
 import de.wollis_page.gibsonos.exception.TaskException
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.toHumanReadableByte
+import de.wollis_page.gibsonos.module.core.task.DeviceTask
 import de.wollis_page.gibsonos.module.explorer.index.dialog.DirDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.DirListDialog
 import de.wollis_page.gibsonos.module.explorer.index.dialog.ItemDialog
@@ -29,6 +31,7 @@ import de.wollis_page.gibsonos.module.explorer.service.ChromecastService
 import de.wollis_page.gibsonos.module.explorer.task.DirTask
 import de.wollis_page.gibsonos.module.explorer.task.FileTask
 import de.wollis_page.gibsonos.module.explorer.task.Html5Task
+import de.wollis_page.gibsonos.module.hc.io.dto.Port
 import de.wollis_page.gibsonos.service.ImageLoaderService
 
 
@@ -148,6 +151,16 @@ class IndexActivity: ListActivity() {
     }
 
     fun loadList(directory: String? = "") = this.load {
+        DeviceTask.removePush(
+            this,
+            Update(
+                "explorer",
+                "index",
+                "index",
+                this.loadDir ?: "",
+                Item::class
+            )
+        )
         var cleanDirectory = directory ?: ""
 
         if (cleanDirectory.last() == '/') {
@@ -167,6 +180,16 @@ class IndexActivity: ListActivity() {
 
         this.getShortcut()?.parameters?.set("dir", loadedDir)
         this.setTitle(loadedDir)
+        DeviceTask.addPush(
+            this,
+            Update(
+                "explorer",
+                "index",
+                "index",
+                this.loadDir ?: "",
+                Item::class
+            )
+        )
     }
 
     override fun onClick(item: ListItemInterface) {

@@ -37,27 +37,27 @@ class IndexActivity : ModuleActivity() {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val listType = Types.newParameterizedType(MutableList::class.java, Port::class.java)
         val adapter = moshi.adapter<MutableList<Port>>(listType)
-        val port = adapter.fromJson(message.payload)?.get(0)
-
-        if (port === null) {
-            return
-        }
-
         val indexFragment = this.adapter.fragments[0] as IndexFragment
-        val portItem = indexFragment.listAdapter.items.find {
-            it is Port && it.id == port.id
-        } as Port
+        val ports = adapter.fromJson(message.payload);
 
-        portItem.name = port.name
-        portItem.direction = port.direction
-        portItem.pullUp = port.pullUp
-        portItem.value = port.value
-        portItem.valueNames = port.valueNames
-        portItem.pwm = port.pwm
-        portItem.fadeIn = port.fadeIn
+        ports?.forEach { port ->
+            val portItem = indexFragment.listAdapter.items.find {
+                it is Port && it.id == port.id
+            }
 
-        this.runOnUiThread {
-            indexFragment.listAdapter.notifyItemChanged(indexFragment.listAdapter.items.indexOf(portItem))
+            if (portItem is Port) {
+                portItem.name = port.name
+                portItem.direction = port.direction
+                portItem.pullUp = port.pullUp
+                portItem.value = port.value
+                portItem.valueNames = port.valueNames
+                portItem.pwm = port.pwm
+                portItem.fadeIn = port.fadeIn
+
+                this.runOnUiThread {
+                    indexFragment.listAdapter.notifyItemChanged(indexFragment.listAdapter.items.indexOf(portItem))
+                }
+            }
         }
     }
 }

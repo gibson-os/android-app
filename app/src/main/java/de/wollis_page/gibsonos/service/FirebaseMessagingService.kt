@@ -71,9 +71,9 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             ) {
                 Log.d(Config.LOG_TAG, "Update activity")
                 currentActivity.updateMessage(message)
-
-                return
             }
+
+            return
         }
 
         if (!remoteMessage.data["title"].isNullOrEmpty()) {
