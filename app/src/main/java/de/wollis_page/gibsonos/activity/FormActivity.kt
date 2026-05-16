@@ -71,7 +71,9 @@ abstract class FormActivity: GibsonOsActivity() {
                     return@fieldEach
                 }
 
-                val fieldView = it.build(field, this) { config ->
+                val fieldView = it.build(field, this, {
+                    this.onFieldChange(formField.key)
+                }) { config ->
                     this.formConfig[formField.key] = config
                 }
                 val value = field.value
@@ -134,6 +136,33 @@ abstract class FormActivity: GibsonOsActivity() {
                     messageBuilder.build(this, message, button, formButton).show()
                 }
             }
+        })
+    }
+
+    protected fun onFieldChange(fieldName: String) {
+        val field = this.formFields[fieldName] ?: return
+        val submitOnChange = field.submitOnChange ?: return
+
+        val module = submitOnChange["module"]?.toString() ?: return
+        val task = submitOnChange["task"]?.toString() ?: return
+        val action = submitOnChange["action"]?.toString() ?: return
+
+        var parameters = this.getValues()
+        val extraParams = submitOnChange["parameters"]
+
+        if (extraParams is Map<*, *>) {
+            @Suppress("UNCHECKED_CAST")
+            parameters = parameters.plus(extraParams as Map<String, Any>)
+        }
+
+        this.runTask({
+            FormTask.post(
+                this,
+                module,
+                task,
+                action,
+                parameters,
+            )
         })
     }
 

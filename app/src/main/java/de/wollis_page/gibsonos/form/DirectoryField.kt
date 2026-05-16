@@ -16,6 +16,7 @@ class DirectoryField: FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -28,7 +29,8 @@ class DirectoryField: FieldInterface {
         view.findViewById<TextInputLayout>(R.id.fieldLayout).hint = field.title
 
         val dirListDialogBuilder = DirListDialog(context) { item, dirList ->
-            this.setValue(view, field, dirList.id,)
+            this.setValue(view, field, dirList.id)
+            onValueChange()
         }
         val button = view.findViewById<ImageButton>(R.id.button)
         button.contentDescription = field.title

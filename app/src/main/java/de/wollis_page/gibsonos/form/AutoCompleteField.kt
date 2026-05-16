@@ -21,6 +21,7 @@ class AutoCompleteField: FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -29,6 +30,10 @@ class AutoCompleteField: FieldInterface {
             context.findViewById(android.R.id.content),
             false
         ) as TextInputLayout
+
+        view.findViewById<AutoCompleteTextView>(R.id.field).setOnItemClickListener { _, _, _, _ ->
+            onValueChange()
+        }
 
         this.loadList(field, context, view, getConfig)
         this.addListeners(field, context, view, getConfig)

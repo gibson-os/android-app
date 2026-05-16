@@ -21,6 +21,7 @@ class TimeField: FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -55,6 +56,7 @@ class TimeField: FieldInterface {
                     selectedDate.set(Calendar.MINUTE, minute)
                     selectedDate.set(Calendar.SECOND, 0)
                     textfield.text = formatter.format(selectedDate.time)
+                    onValueChange()
                 },
                 valueDate.get(Calendar.HOUR_OF_DAY),
                 valueDate.get(Calendar.MINUTE),

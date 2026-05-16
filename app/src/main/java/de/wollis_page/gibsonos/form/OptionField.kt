@@ -13,6 +13,7 @@ class OptionField: FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -35,6 +36,8 @@ class OptionField: FieldInterface {
             R.layout.base_dropdown_item,
             items,
         ))
+
+        fieldView.setOnItemClickListener { _, _, _, _ -> onValueChange() }
 
         return view
     }

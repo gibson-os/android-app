@@ -21,6 +21,7 @@ class DateField: FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -53,6 +54,7 @@ class DateField: FieldInterface {
 
                     selectedDate.set(year, monthOfYear, dayOfMonth)
                     textfield.text = formatter.format(selectedDate.time)
+                    onValueChange()
                 },
                 valueDate.get(Calendar.YEAR),
                 valueDate.get(Calendar.MONTH),

@@ -12,6 +12,7 @@ class BoolField: FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -21,7 +22,9 @@ class BoolField: FieldInterface {
             false
         ) as TextInputLayout
 
-        view.findViewById<CheckBox>(R.id.field).text = field.title
+        val checkbox = view.findViewById<CheckBox>(R.id.field)
+        checkbox.text = field.title
+        checkbox.setOnClickListener { onValueChange() }
 
         return view
     }
@@ -29,28 +32,33 @@ class BoolField: FieldInterface {
     override fun supports(field: Field): Boolean =
         field.xtype == "gosCoreComponentFormFieldCheckbox"
 
-    override fun getValue(view: View, field: Field, config: Map<String, Any>?): Any =
-        view.findViewById<CheckBox>(R.id.field).isChecked
+    override fun getValue(view: View, field: Field, config: Map<String, Any>?): Any {
+        val isChecked = view.findViewById<CheckBox>(R.id.field).isChecked
+
+        if (isChecked) {
+            return field.config["inputValue"] ?: true
+        }
+
+        return field.config["uncheckedValue"] ?: false
+    }
 
     override fun setValue(view: View, field: Field, value: Any?, config: Map<String, Any>?) {
         var boolValue = false
 
         if (value is Boolean) {
             boolValue = value
-        }
+        } else if (value != null) {
+            val inputValue = field.config["inputValue"]
+            val uncheckedValue = field.config["uncheckedValue"]
 
-        if (value is String) {
-            if (value.lowercase() == "true") {
+            if (inputValue != null && value.toString() == inputValue.toString()) {
                 boolValue = true
+            } else if (uncheckedValue != null && value.toString() == uncheckedValue.toString()) {
+                boolValue = false
+            } else {
+                val stringValue = value.toString().lowercase()
+                boolValue = stringValue == "true" || stringValue == "1"
             }
-
-            if (value.toInt() == 1) {
-                boolValue = true
-            }
-        }
-
-        if ((value is Int || value is Long) && value == 1) {
-            boolValue = true
         }
 
         view.findViewById<CheckBox>(R.id.field).isChecked = boolValue

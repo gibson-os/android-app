@@ -12,6 +12,7 @@ class SliderField : FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -37,6 +38,15 @@ class SliderField : FieldInterface {
                 slider.stepSize = it
             }
         }
+
+        slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+            }
+
+            override fun onStopTrackingTouch(slider: Slider) {
+                onValueChange()
+            }
+        })
 
         return view
     }

@@ -8,6 +8,7 @@ interface FieldInterface {
     fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View
     fun supports(field: Field): Boolean

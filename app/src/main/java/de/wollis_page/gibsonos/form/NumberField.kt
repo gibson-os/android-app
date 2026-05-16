@@ -18,6 +18,7 @@ class NumberField: FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -27,8 +28,16 @@ class NumberField: FieldInterface {
             false
         ) as TextInputLayout
 
+        val fieldView = view.findViewById<TextInputEditText>(R.id.field)
+
         if (field.config.containsKey("decimals")) {
-            view.findViewById<TextInputEditText>(R.id.field).inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            fieldView.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        }
+
+        fieldView.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                onValueChange()
+            }
         }
 
         this.addListeners(field, context, view)

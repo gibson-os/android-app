@@ -12,6 +12,7 @@ class StringField: FieldInterface {
     override fun build(
         field: Field,
         context: FormActivity,
+        onValueChange: () -> Unit,
         getConfig: (config: Map<String, Any>) -> Unit,
     ): View {
         val inflater = LayoutInflater.from(context)
@@ -20,6 +21,12 @@ class StringField: FieldInterface {
             context.findViewById(android.R.id.content),
             false
         ) as TextInputLayout
+
+        view.findViewById<TextInputEditText>(R.id.field).setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                onValueChange()
+            }
+        }
 
         view.hint = field.title
 
