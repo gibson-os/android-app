@@ -180,4 +180,9 @@
     <string name="grow_diary_manufacture_tab">Hersteller</string>
 
     <string name="grow_diary_climates_tab">Klima</string>
+
+    <string name="tc_title">Traincontrol</string>
+
+    <string name="tc_track_tab">Strecken</string>
+    <string name="tc_train_tab">Züge</string>
 </resources>
