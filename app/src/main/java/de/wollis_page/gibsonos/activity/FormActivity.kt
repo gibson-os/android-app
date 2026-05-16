@@ -20,6 +20,7 @@ import de.wollis_page.gibsonos.form.DirectoryField
 import de.wollis_page.gibsonos.form.FieldInterface
 import de.wollis_page.gibsonos.form.NumberField
 import de.wollis_page.gibsonos.form.OptionField
+import de.wollis_page.gibsonos.form.SliderField
 import de.wollis_page.gibsonos.form.StringField
 import de.wollis_page.gibsonos.form.TimeField
 import de.wollis_page.gibsonos.helper.MessageBuilder
@@ -38,6 +39,7 @@ abstract class FormActivity: GibsonOsActivity() {
         DateTimeField(),
         DateField(),
         TimeField(),
+        SliderField(),
     )
     private lateinit var formContainer: LinearLayout
     private var formViews: MutableMap<String, View> = mutableMapOf()
@@ -46,7 +48,10 @@ abstract class FormActivity: GibsonOsActivity() {
     private var formFieldBuilders: MutableMap<String, FieldInterface> = mutableMapOf()
     private var formConfig: MutableMap<String, Map<String, Any>> = mutableMapOf()
     private var buttonViews: MutableMap<String, Button> = mutableMapOf()
+
     override fun getContentView(): Int = R.layout.base_form
+
+    override fun getId() = 0
 
     protected abstract fun buildForm()
 

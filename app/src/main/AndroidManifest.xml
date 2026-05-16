@@ -241,6 +241,9 @@
         <activity
             android:name="de.wollis_page.gibsonos.module.tc.index.activity.IndexActivity"/>
 
+        <activity
+            android:name="de.wollis_page.gibsonos.module.tc.index.activity.FormActivity"/>
+
         <service
             android:name=".service.FirebaseMessagingService"
             android:exported="false">
