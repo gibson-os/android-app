@@ -1,9 +1,11 @@
 package de.wollis_page.gibsonos.activity
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import com.google.android.material.slider.Slider
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.wollis_page.gibsonos.R
@@ -60,6 +62,41 @@ abstract class FormActivity: GibsonOsActivity() {
 
         this.formContainer = this.findViewById(R.id.form)
         this.buildForm()
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action != KeyEvent.ACTION_DOWN) {
+            return super.dispatchKeyEvent(event)
+        }
+
+        val keyCode = event.keyCode
+
+        if (keyCode != KeyEvent.KEYCODE_VOLUME_UP && keyCode != KeyEvent.KEYCODE_VOLUME_DOWN) {
+            return super.dispatchKeyEvent(event)
+        }
+
+        this.formFields.forEach {
+            val field = it.value
+
+            if (field.config["controlByVolumeControl"] == true) {
+                val slider = this.getView(it.key).findViewById<Slider>(R.id.field) ?: return@forEach
+                val increment = (field.config["increment"] as? Number)?.toFloat() ?: 1.0f
+                val newValue = if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                    slider.value + increment
+                } else {
+                    slider.value - increment
+                }
+
+                if (newValue >= slider.valueFrom && newValue <= slider.valueTo) {
+                    slider.value = newValue
+                    this.onFieldChange(it.key)
+                }
+
+                return true
+            }
+        }
+
+        return super.dispatchKeyEvent(event)
     }
 
     private fun setForm(form: Form) {
