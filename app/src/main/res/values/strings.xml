@@ -186,4 +186,7 @@
 
     <string name="tc_track_tab">Tracks</string>
     <string name="tc_train_tab">Trains</string>
+
+    <string name="tc_train_delete_title">Delete train</string>
+    <string name="tc_train_delete_message">Do you really want to delete train %s?</string>
 </resources>

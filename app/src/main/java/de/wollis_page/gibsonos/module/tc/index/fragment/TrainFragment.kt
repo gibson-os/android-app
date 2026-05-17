@@ -10,11 +10,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
-import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
-import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
-import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.module.tc.index.dto.Train
 import de.wollis_page.gibsonos.module.tc.task.TrainTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
@@ -112,4 +109,25 @@ class TrainFragment: ListFragment() {
     }
 
     override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
+
+    override fun getDeleteTitle() = this.getString(R.string.tc_train_delete_title)
+
+    override fun getDeleteMessage(item: ListItemInterface) = this.getString(
+        R.string.tc_train_delete_message,
+        if (item is Train) item.name.trim() else ""
+    )
+
+    override fun deleteItem(item: ListItemInterface): Boolean {
+        if (item !is Train) {
+            return false
+        }
+
+        this.runTask({
+            TrainTask.delete(this.activity, item)
+        })
+
+        this.loadList()
+
+        return true
+    }
 }

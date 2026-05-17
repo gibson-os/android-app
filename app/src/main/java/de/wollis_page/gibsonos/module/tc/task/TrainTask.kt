@@ -35,4 +35,14 @@ object TrainTask: AbstractTask() {
 
         return dataStore.loadBitmap()
     }
+
+    fun delete(
+        context: GibsonOsActivity,
+        train: Train,
+    ) {
+        val dataStore = this.getDataStore(context.getAccount(), "tc", "train", "", "DELETE")
+        dataStore.addParam("id", train.id)
+
+        this.run(context, dataStore)
+    }
 }
