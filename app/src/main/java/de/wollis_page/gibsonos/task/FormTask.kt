@@ -1,6 +1,7 @@
 package de.wollis_page.gibsonos.task
 
 import de.wollis_page.gibsonos.activity.GibsonOsActivity
+import de.wollis_page.gibsonos.dto.form.FormFile
 import org.json.JSONObject
 
 object FormTask: AbstractTask() {
@@ -14,7 +15,13 @@ object FormTask: AbstractTask() {
         val dataStore = this.getDataStore(context.getAccount(), module, task, action, "POST")
 
         parameters.forEach {
-            dataStore.addParam(it.key, it.value.toString())
+            val value = it.value
+
+            if (value is FormFile) {
+                dataStore.addParam(it.key, value.file, value.mimeType)
+            } else {
+                dataStore.addParam(it.key, it.value.toString())
+            }
         }
 
         return this.run(context, dataStore, catchResponseException = false)

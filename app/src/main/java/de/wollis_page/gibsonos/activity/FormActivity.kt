@@ -1,10 +1,12 @@
 package de.wollis_page.gibsonos.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.slider.Slider
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -20,6 +22,7 @@ import de.wollis_page.gibsonos.form.DateField
 import de.wollis_page.gibsonos.form.DateTimeField
 import de.wollis_page.gibsonos.form.DirectoryField
 import de.wollis_page.gibsonos.form.FieldInterface
+import de.wollis_page.gibsonos.form.FileField
 import de.wollis_page.gibsonos.form.NumberField
 import de.wollis_page.gibsonos.form.OptionField
 import de.wollis_page.gibsonos.form.SliderField
@@ -42,6 +45,7 @@ abstract class FormActivity: GibsonOsActivity() {
         DateField(),
         TimeField(),
         SliderField(),
+        FileField(),
     )
     private lateinit var formContainer: LinearLayout
     private var formViews: MutableMap<String, View> = mutableMapOf()
@@ -52,6 +56,16 @@ abstract class FormActivity: GibsonOsActivity() {
     private var buttonViews: MutableMap<String, Button> = mutableMapOf()
 
     private var closeAfterButtonClick = false;
+
+    private var filePickerCallback: ((Uri?) -> Unit)? = null
+    private val filePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        filePickerCallback?.invoke(uri)
+    }
+
+    fun pickFile(mimeType: String, callback: (Uri?) -> Unit) {
+        filePickerCallback = callback
+        filePickerLauncher.launch(mimeType)
+    }
 
     override fun getContentView(): Int = R.layout.base_form
 
