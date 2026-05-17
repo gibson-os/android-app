@@ -51,6 +51,8 @@ abstract class FormActivity: GibsonOsActivity() {
     private var formConfig: MutableMap<String, Map<String, Any>> = mutableMapOf()
     private var buttonViews: MutableMap<String, Button> = mutableMapOf()
 
+    private var closeAfterButtonClick = false;
+
     override fun getContentView(): Int = R.layout.base_form
 
     override fun getId() = 0
@@ -60,6 +62,7 @@ abstract class FormActivity: GibsonOsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        this.closeAfterButtonClick = this.intent.getBooleanExtra("closeAfterButtonClick", false)
         this.formContainer = this.findViewById(R.id.form)
         this.buildForm()
     }
@@ -212,6 +215,11 @@ abstract class FormActivity: GibsonOsActivity() {
         button: Button,
         response: JSONObject,
     ) {
+        this.setResult(RESULT_OK)
+
+        if (this.closeAfterButtonClick) {
+            this.finish()
+        }
     }
 
     fun getValues(): Map<String, *> {

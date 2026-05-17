@@ -1,10 +1,16 @@
 package de.wollis_page.gibsonos.module.tc.index.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.wollis_page.gibsonos.R
+import de.wollis_page.gibsonos.activity.FormActivity
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
 import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
@@ -16,9 +22,20 @@ import de.wollis_page.gibsonos.service.ImageLoaderService
 
 class TrainFragment: ListFragment() {
     private lateinit var imageLoaderService: ImageLoaderService<Train>
+    lateinit var formLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.formLauncher = this.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            this.loadList()
+        }
 
         this.imageLoaderService = ImageLoaderService(
             this.activity,
@@ -74,4 +91,25 @@ class TrainFragment: ListFragment() {
     }
 
     override fun getListRessource() = R.layout.tc_train_list_item
+
+    override fun actionButton() = R.layout.base_button_add
+
+    override fun actionOnClickListener() {
+        this.runTask({
+            ActivityLauncherService.startActivity(
+                this.activity,
+                "tc",
+                "index",
+                "form",
+                mapOf(
+                    "task" to "train",
+                    "action" to "form",
+                    "closeAfterButtonClick" to true,
+                ),
+                this.formLauncher,
+            )
+        })
+    }
+
+    override fun actionView() = this.activity.findViewById<FloatingActionButton>(R.id.addButton)
 }
