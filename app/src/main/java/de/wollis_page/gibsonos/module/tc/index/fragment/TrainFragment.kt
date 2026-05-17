@@ -117,17 +117,7 @@ class TrainFragment: ListFragment() {
         if (item is Train) item.name.trim() else ""
     )
 
-    override fun deleteItem(item: ListItemInterface): Boolean {
-        if (item !is Train) {
-            return false
-        }
-
-        this.runTask({
-            TrainTask.delete(this.activity, item)
-        })
-
-        this.loadList()
-
-        return true
+    override fun deleteItem(item: ListItemInterface): Boolean = this.delete(item) {
+        TrainTask.delete(this.activity, item as Train)
     }
 }

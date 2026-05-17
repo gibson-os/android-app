@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -17,8 +18,10 @@ import de.wollis_page.gibsonos.adapter.BaseListAdapter
 import de.wollis_page.gibsonos.callback.MenuVisibilityCallback
 import de.wollis_page.gibsonos.dialog.FilterDialog
 import de.wollis_page.gibsonos.dto.Account
+import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.helper.Config
 import de.wollis_page.gibsonos.helper.ListInterface
+import de.wollis_page.gibsonos.helper.ListItemTouchHelper
 
 abstract class ListFragment : GibsonOsFragment(), ListInterface, MenuVisibilityCallback {
     override lateinit var listView: RecyclerView
@@ -66,6 +69,10 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface, MenuVisibilityC
             this,
         )
         this.listView.adapter = this.listAdapter
+
+        if (this.getDeleteTitle() != null) {
+            ItemTouchHelper(ListItemTouchHelper(this)).attachToRecyclerView(this.listView)
+        }
 
         this.loadList()
 
@@ -139,6 +146,17 @@ abstract class ListFragment : GibsonOsFragment(), ListInterface, MenuVisibilityC
 
     fun getAccount(): de.wollis_page.gibsonos.model.Account {
         return this.activity.getAccount()
+    }
+
+    fun delete(item: ListItemInterface, run: () -> Unit): Boolean {
+        this.runTask({
+            run()
+            this.activity.runOnUiThread {
+                this.loadList()
+            }
+        })
+
+        return true
     }
 
     override fun updateFilterVisibility(visible: Boolean) {
