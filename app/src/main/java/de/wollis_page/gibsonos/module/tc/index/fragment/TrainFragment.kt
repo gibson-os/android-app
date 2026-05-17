@@ -1,15 +1,40 @@
 package de.wollis_page.gibsonos.module.tc.index.fragment
 
+import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import de.wollis_page.gibsonos.R
 import de.wollis_page.gibsonos.dto.ListItemInterface
 import de.wollis_page.gibsonos.fragment.ListFragment
+import de.wollis_page.gibsonos.module.growDiary.index.dto.Plant
+import de.wollis_page.gibsonos.module.growDiary.task.PlantTask
 import de.wollis_page.gibsonos.module.tc.index.dto.Train
 import de.wollis_page.gibsonos.module.tc.task.TrainTask
 import de.wollis_page.gibsonos.service.ActivityLauncherService
+import de.wollis_page.gibsonos.service.ImageLoaderService
 
 class TrainFragment: ListFragment() {
+    private lateinit var imageLoaderService: ImageLoaderService<Train>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        this.imageLoaderService = ImageLoaderService(
+            this.activity,
+            {
+                TrainTask.getImage(
+                    this.activity,
+                    it.id,
+                    this.resources.getDimension(R.dimen.thumb_width).toInt()
+                )
+            },
+            { train, image ->
+                this.getViewByItem(train)?.findViewById<ImageView>(R.id.image)?.setImageBitmap(image)
+            }
+        )
+    }
+
     override fun onClick(item: ListItemInterface) {
         if (item !is Train) {
             return
@@ -36,6 +61,12 @@ class TrainFragment: ListFragment() {
         }
 
         view.findViewById<TextView>(R.id.name).text = item.name
+
+        this.imageLoaderService.viewImage(
+            item,
+            view.findViewById(R.id.image),
+            R.drawable.ic_train,
+        )
     }
 
     override fun loadList(start: Long, limit: Long) = this.load {
